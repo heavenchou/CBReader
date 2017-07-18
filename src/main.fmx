@@ -1,30 +1,108 @@
 object fmMain: TfmMain
   Left = 0
   Top = 0
-  Caption = 'CBETA CBReader 2X'
-  ClientHeight = 480
-  ClientWidth = 640
+  Caption = 'CBETA CBReader'
+  ClientHeight = 713
+  ClientWidth = 1009
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnDestroy = FormDestroy
   DesignerMasterStyle = 0
-  object Button1: TButton
-    Position.X = 256.000000000000000000
-    Position.Y = 272.000000000000000000
-    Size.Width = 105.000000000000000000
-    Size.Height = 33.000000000000000000
+  object Panel1: TPanel
+    Align = Left
+    Position.Y = 40.000000000000000000
+    Size.Width = 209.000000000000000000
+    Size.Height = 627.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 1
-    Text = 'OK'
+    TabOrder = 3
+    object TreeView1: TTreeView
+      Align = Client
+      Size.Width = 209.000000000000000000
+      Size.Height = 627.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Viewport.Width = 205.000000000000000000
+      Viewport.Height = 623.000000000000000000
+    end
   end
-  object Label1: TLabel
-    StyledSettings = [Family, Style, FontColor]
-    Position.X = 176.000000000000000000
-    Position.Y = 104.000000000000000000
-    Size.Width = 345.000000000000000000
-    Size.Height = 65.000000000000000000
+  object TabControl1: TTabControl
+    Align = Client
+    Size.Width = 792.000000000000000000
+    Size.Height = 627.000000000000000000
     Size.PlatformDefault = False
-    TextSettings.Font.Size = 30.000000000000000000
-    Text = 'CBReader 2X '#21021#22987#30059#38754
+    TabIndex = 0
+    TabOrder = 4
+    TabPosition = PlatformDefault
+    Sizes = (
+      792s
+      601s)
+    object TabItem1: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 70.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Welcome'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object WebBrowser1: TWebBrowser
+        Align = Client
+        Size.Width = 792.000000000000000000
+        Size.Height = 601.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+  end
+  object Panel2: TPanel
+    Align = Bottom
+    Position.Y = 667.000000000000000000
+    Size.Width = 1009.000000000000000000
+    Size.Height = 46.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+  end
+  object ToolBar1: TToolBar
+    Size.Width = 1009.000000000000000000
+    Size.Height = 40.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 6
+    object CornerButton1: TCornerButton
+      Position.X = 16.000000000000000000
+      Position.Y = 8.000000000000000000
+      Sides = [Top, Left, Bottom, Right]
+      Size.Width = 89.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = #38283#21855#32147#25991
+      XRadius = 3.000000000000000000
+      YRadius = 3.000000000000000000
+      OnClick = CornerButton1Click
+    end
+  end
+  object MainMenu1: TMainMenu
+    Left = 960
+    Top = 16
+    object MenuItem3: TMenuItem
+      Text = #38364#38281
+    end
+    object MenuItem4: TMenuItem
+      Text = #38364#26044
+    end
+  end
+  object Splitter1: TSplitter
+    Align = Left
+    Cursor = crHSplit
+    MinSize = 20.000000000000000000
+    Position.X = 209.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 8.000000000000000000
+    Size.Height = 627.000000000000000000
+    Size.PlatformDefault = False
   end
 end
