@@ -15,6 +15,7 @@
 #include <FMX.Layouts.hpp>
 #include <FMX.TreeView.hpp>
 
+#include <System.Win.Registry.hpp>
 #include "setting.h"
 #include "bookcase.h"
 //---------------------------------------------------------------------------
@@ -47,6 +48,8 @@ public:		// User declarations
 
 	CSetting * Setting;   // 設定檔
 	CBookcase * Bookcase; // 書櫃
+
+	void __fastcall SetPermissions();	// 設定 TWebBrowser 的 IE 版本
 
 	__fastcall TfmMain(TComponent* Owner);
 };
