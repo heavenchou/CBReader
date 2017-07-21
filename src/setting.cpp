@@ -6,12 +6,12 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 //---------------------------------------------------------------------------
-__fastcall CSetting::CSetting()		// 建構式
+__fastcall CSetting::CSetting()		// 建構函式
 {
 	BookcaseDir = "./Bookcase";  // 書櫃的目錄
 }
 //---------------------------------------------------------------------------
-__fastcall CSetting::~CSetting(void)
+__fastcall CSetting::~CSetting(void)		// 解構函式
 {
 
 }

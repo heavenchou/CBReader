@@ -18,6 +18,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner)
 #ifdef _Windows
 	SetPermissions();   // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
 #endif
+
 	MyFullPath = ExtractFilePath(ParamStr(0));
 	SettingFile = "cbreader.ini";
 	Setting = new CSetting;
@@ -30,12 +31,14 @@ __fastcall TfmMain::TfmMain(TComponent* Owner)
 	// 在書櫃選擇叢書
 
 	// 載入叢書的起始目錄
+	NavTree = new CNavTree("nav.xhtml");
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
 {
 	delete Setting;
 	delete Bookcase;
+	delete NavTree;
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::CornerButton1Click(TObject *Sender)

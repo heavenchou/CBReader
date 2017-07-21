@@ -18,8 +18,8 @@
 #include <System.Win.Registry.hpp>
 #include "setting.h"
 #include "bookcase.h"
+#include "navtree.h"
 //---------------------------------------------------------------------------
-using namespace std;
 
 class TfmMain : public TForm
 {
@@ -43,11 +43,12 @@ private:	// User declarations
 
 public:		// User declarations
 
-	string SettingFile;
+	String SettingFile;
 	String MyFullPath;
 
 	CSetting * Setting;   // 設定檔
 	CBookcase * Bookcase; // 書櫃
+	CNavTree * NavTree;  // 導覽文件 (暫時的, 日後會放在 Serial 物件中 ???)
 
 	void __fastcall SetPermissions();	// 設定 TWebBrowser 的 IE 版本
 
