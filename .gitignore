@@ -2,3 +2,6 @@
 /src/Win32
 /src/__history
 /src/__astcache
+/unittest/OSX32
+/unittest/Win32
+__history

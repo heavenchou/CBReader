@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{166B5296-E3CC-49FB-A117-2A12BC3C35C7}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="CBReader.cbproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\unittest\CBReaderTest.cbproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="CBReader">
+        <MSBuild Projects="CBReader.cbproj"/>
+    </Target>
+    <Target Name="CBReader:Clean">
+        <MSBuild Projects="CBReader.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="CBReader:Make">
+        <MSBuild Projects="CBReader.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="CBReaderTest">
+        <MSBuild Projects="..\unittest\CBReaderTest.cbproj"/>
+    </Target>
+    <Target Name="CBReaderTest:Clean">
+        <MSBuild Projects="..\unittest\CBReaderTest.cbproj" Targets="Clean"/>
+    </Target>
+    <Target Name="CBReaderTest:Make">
+        <MSBuild Projects="..\unittest\CBReaderTest.cbproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="CBReader;CBReaderTest"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="CBReader:Clean;CBReaderTest:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="CBReader:Make;CBReaderTest:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

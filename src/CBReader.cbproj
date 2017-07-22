@@ -311,7 +311,7 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_OSX32)'!=''">
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
-        <LinkPackageImports>rtl.bpi;fmx.bpi</LinkPackageImports>
+        <LinkPackageImports>rtl.bpi;fmx.bpi;xmlrtl.bpi</LinkPackageImports>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -420,7 +420,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplfmx240.dylib" Configuration="Debug" Class="DependencyPackage">
+                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplrtl250.dylib" Configuration="Debug" Class="DependencyPackage">
                     <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -436,11 +436,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32240mt.dll" Class="DependencyModule">
                     <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
@@ -449,6 +444,11 @@
                 <DeployFile LocalName=".\OSX32\Debug\CBReader" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="OSX32">
                         <RemoteName>CBReader</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -468,7 +468,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplrtl240.dylib" Configuration="Debug" Class="DependencyPackage">
+                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplfmx250.dylib" Configuration="Debug" Class="DependencyPackage">
                     <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -515,6 +515,11 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx32\libcgstl.dylib" Class="DependencyModule">
+                    <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplxmlrtl250.dylib" Configuration="Debug" Class="DependencyPackage">
                     <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>

@@ -235,6 +235,16 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="$(BDS)\Redist\OSX32\bplxmlrtl250.dylib" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
+            <RemoteName>bplxmlrtl250.dylib</RemoteName>
+            <DeployClass>DependencyPackage</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
         <DeployFile Include=".\OSX32\Debug\CBReader.tds" Condition="'$(Config)'=='Debug'">
             <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
             <RemoteName>CBReader.tds</RemoteName>
