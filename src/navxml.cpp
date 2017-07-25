@@ -22,7 +22,8 @@ __fastcall CNavXML::CNavXML(String sFile) // 建構函式
 // ---------------------------------------------------------------------------
 __fastcall CNavXML::~CNavXML(void) // 解構函式
 {
-	if (Document) delete Document;
+	// 底下的 delete 在 mac 會當掉, 要找正規方法 ???
+	// if (Document) delete Document;
 }
 
 // ---------------------------------------------------------------------------

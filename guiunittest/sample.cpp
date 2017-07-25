@@ -16,8 +16,8 @@ __fastcall CSample::CSample(TStringList * slTitle, TStringList * slResult)
 // 執行全部測試
 void __fastcall CSample::RunAllTest()
 {
-	LogTest("測試一", Test1());
-	LogTest("測試二", Test2());
+	LogTest(u"測試:傳回正確", Test1());
+	LogTest(u"測試:傳回錯誤", Test2());
 }
 //---------------------------------------------------------------------------
 // 儲存測試結果

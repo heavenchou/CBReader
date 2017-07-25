@@ -18,6 +18,10 @@
 #include "setting.h"
 #include "bookcase.h"
 #include "navtree.h"
+#include <FMX.ActnList.hpp>
+#include <FMX.StdActns.hpp>
+#include <System.Actions.hpp>
+#include <FMX.Edit.hpp>
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
@@ -28,18 +32,24 @@ __published: // IDE-managed Components
 	TTabControl *TabControl1;
 	TPanel *Panel2;
 	TTabItem *TabItem1;
-	TWebBrowser *WebBrowser1;
+	TWebBrowser *WebBrowser;
 	TToolBar *ToolBar1;
 	TCornerButton *CornerButton1;
 	TMenuItem *MenuItem3;
 	TMenuItem *MenuItem4;
-	TTreeView *TreeView1;
+	TTreeView *tvNavTree;
 	TSplitter *Splitter1;
+	TEdit *edBookcasePath;
+	TCornerButton *btSetBookcasePath;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall CornerButton1Click(TObject *Sender);
+	void __fastcall btSetBookcasePathClick(TObject *Sender);
 
 private: // User declarations
+
+	void __fastcall SetPermissions(); // 設定 TWebBrowser 的 IE 版本
+	void __fastcall NavTreeItemClick(TObject *Sender); // NavTree Item 點二下的作用
 
 public: // User declarations
 
@@ -49,8 +59,6 @@ public: // User declarations
 	CSetting * Setting; // 設定檔
 	CBookcase * Bookcase; // 書櫃
 	CNavTree * NavTree; // 導覽文件 (暫時的, 日後會放在 Serial 物件中 ???)
-
-	void __fastcall SetPermissions(); // 設定 TWebBrowser 的 IE 版本
 
 	__fastcall TfmMain(TComponent* Owner);
 };

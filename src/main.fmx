@@ -11,32 +11,32 @@ object fmMain: TfmMain
   DesignerMasterStyle = 0
   object Panel1: TPanel
     Align = Left
-    Position.Y = 40.000000000000000000
+    Position.Y = 49.000000000000000000
     Size.Width = 209.000000000000000000
-    Size.Height = 627.000000000000000000
+    Size.Height = 618.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 3
-    object TreeView1: TTreeView
+    object tvNavTree: TTreeView
       Align = Client
       Size.Width = 209.000000000000000000
-      Size.Height = 627.000000000000000000
+      Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
       Viewport.Width = 205.000000000000000000
-      Viewport.Height = 623.000000000000000000
+      Viewport.Height = 614.000000000000000000
     end
   end
   object TabControl1: TTabControl
     Align = Client
     Size.Width = 792.000000000000000000
-    Size.Height = 627.000000000000000000
+    Size.Height = 618.000000000000000000
     Size.PlatformDefault = False
     TabIndex = 0
     TabOrder = 4
     TabPosition = PlatformDefault
     Sizes = (
       792s
-      601s)
+      592s)
     object TabItem1: TTabItem
       CustomIcon = <
         item
@@ -50,10 +50,10 @@ object fmMain: TfmMain
       Text = 'Welcome'
       ExplicitSize.cx = 69.000000000000000000
       ExplicitSize.cy = 26.000000000000000000
-      object WebBrowser1: TWebBrowser
+      object WebBrowser: TWebBrowser
         Align = Client
         Size.Width = 792.000000000000000000
-        Size.Height = 601.000000000000000000
+        Size.Height = 592.000000000000000000
         Size.PlatformDefault = False
       end
     end
@@ -68,7 +68,7 @@ object fmMain: TfmMain
   end
   object ToolBar1: TToolBar
     Size.Width = 1009.000000000000000000
-    Size.Height = 40.000000000000000000
+    Size.Height = 49.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 6
     object CornerButton1: TCornerButton
@@ -76,13 +76,36 @@ object fmMain: TfmMain
       Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
       Size.Width = 89.000000000000000000
-      Size.Height = 25.000000000000000000
+      Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
-      Text = #38283#21855#32147#25991
+      Text = #38283#21855#30446#37636
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
       OnClick = CornerButton1Click
+    end
+    object edBookcasePath: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 2
+      Text = '/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012/'
+      Position.X = 192.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 409.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object btSetBookcasePath: TCornerButton
+      Position.X = 616.000000000000000000
+      Position.Y = 8.000000000000000000
+      Sides = [Top, Left, Bottom, Right]
+      Size.Width = 121.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = 'BookCase '#30446#37636
+      XRadius = 3.000000000000000000
+      YRadius = 3.000000000000000000
+      OnClick = btSetBookcasePathClick
     end
   end
   object MainMenu1: TMainMenu
@@ -100,9 +123,9 @@ object fmMain: TfmMain
     Cursor = crHSplit
     MinSize = 20.000000000000000000
     Position.X = 209.000000000000000000
-    Position.Y = 40.000000000000000000
+    Position.Y = 49.000000000000000000
     Size.Width = 8.000000000000000000
-    Size.Height = 627.000000000000000000
+    Size.Height = 618.000000000000000000
     Size.PlatformDefault = False
   end
 end

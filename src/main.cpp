@@ -27,7 +27,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 #ifdef _Windows
 	MyFullPath = GetCurrentDir();
 #else
-	MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
+	//MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
+    MyFullPath = GetCurrentDir();
 #endif
 
 	MyFullPath += "/";
@@ -41,8 +42,6 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 
 	// 在書櫃選擇叢書
 
-	// 載入叢書的起始目錄
-	NavTree = new CNavTree(MyFullPath + "nav.xhtml");
 }
 
 // ---------------------------------------------------------------------------
@@ -51,14 +50,6 @@ void __fastcall TfmMain::FormDestroy(TObject *Sender)
 	delete Setting;
 	delete Bookcase;
 	delete NavTree;
-}
-
-// ---------------------------------------------------------------------------
-void __fastcall TfmMain::CornerButton1Click(TObject *Sender)
-{
-	WebBrowser1->URL = "file://" + MyFullPath + "Bookcase/Agama/T02n0099_001.htm";
-	// WebBrowser1->URL = "https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_video";
-	WebBrowser1->Navigate();
 }
 
 // ---------------------------------------------------------------------------
@@ -92,4 +83,65 @@ void __fastcall TfmMain::SetPermissions()
 	}
 #endif
 }
-// ---------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------
+// NavTree Item 點二下的作用
+// Item->TagString 儲存 URL
+// Item->Tag 儲存 Type
+// Item->TagObject 儲存 SNavItem
+void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
+{
+	// Item
+	TTreeViewItem * tvItem = (TTreeViewItem *) Sender;
+	String sURL = tvItem->TagString;
+
+	if(sURL == "")  // 沒有 URL
+	{
+		// 如果有子層, 就切換展開或閉合狀態
+		if(tvItem->ChildrenCount > 0)
+		{
+			if(tvItem->IsExpanded)
+				tvItem->Collapse();
+			else
+				tvItem->Expand();
+        }
+		return;
+	}
+
+	int iType = tvItem->Tag;
+
+	// 一般連結
+	if(iType == nit_NormalLink)
+	{
+		if(sURL.SubString(1,4) == "http")
+			WebBrowser->URL = sURL;
+		else
+			WebBrowser->URL = "file://" + MyFullPath + "Bookcase/Agama/" + sURL;
+		WebBrowser->Navigate();
+	}
+
+	// 目錄連結
+	else if(iType == nit_NavLink)
+	{
+		if(NavTree) delete NavTree;     // 這部份應該物件化 ???
+		NavTree = new CNavTree(MyFullPath + "Bookcase/Agama/" + sURL);
+		NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::CornerButton1Click(TObject *Sender)
+{
+	// 載入叢書的起始目錄
+	if(NavTree) delete NavTree;
+	NavTree = new CNavTree(MyFullPath + "Bookcase/Agama/nav.xhtml");
+	NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::btSetBookcasePathClick(TObject *Sender)
+{
+    MyFullPath = edBookcasePath->Text;
+}
+//---------------------------------------------------------------------------
+
