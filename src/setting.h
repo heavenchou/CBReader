@@ -1,23 +1,22 @@
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 #ifndef SettingH
 #define SettingH
 
 #include <string>
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 using namespace std;
 
 class CSetting
 {
-private:	// User declarations
+private: // User declarations
 
-public:		// User declarations
+public: // User declarations
 
-	string BookcaseDir;  // 書櫃的目錄
+	string BookcaseDir; // 書櫃的目錄
 
 	__fastcall CSetting();
 	__fastcall ~CSetting();
 };
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 #endif
-
