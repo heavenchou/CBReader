@@ -18,6 +18,7 @@
 #include <FMX.ListBox.hpp>
 #include "sample.h"
 #include "navtreetest.h"
+#include "cbxmltest.h"
 #include <FMX.TreeView.hpp>
 //---------------------------------------------------------------------------
 class TfmMain : public TForm
@@ -37,7 +38,8 @@ public:		// User declarations
 
 	// 要測試的物件
 	CSample * Sample;
-    CNavTreeTest * NavTreeTest;
+	CNavTreeTest * NavTreeTest;
+    CCBXMLTest * CBXMLTest;
 
     // 在測試結果上加標題, 以便區分
 	void __fastcall ListBoxAddHead(String sHead);

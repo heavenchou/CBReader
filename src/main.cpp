@@ -21,7 +21,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	// 取得設定檔並讀取
 
 #ifdef _Windows
-	SetPermissions(); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
+	//SetPermissions(); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
 #endif
 
 #ifdef _Windows
@@ -119,13 +119,30 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 			WebBrowser->URL = "file://" + MyFullPath + "Bookcase/Agama/" + sURL;
 		WebBrowser->Navigate();
 	}
-
 	// 目錄連結
 	else if(iType == nit_NavLink)
 	{
 		if(NavTree) delete NavTree;     // 這部份應該物件化 ???
 		NavTree = new CNavTree(MyFullPath + "Bookcase/Agama/" + sURL);
 		NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
+	}
+	// CBETA 經文
+	else if(iType == nit_CBLink)
+	{
+		String sFile = MyFullPath + "Bookcase/Agama/" + sURL;
+		CCBXML * CBXML = new CCBXML(sFile);
+
+		// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
+		// windows 是 xxxxxx
+		// 所以日後還是自己寫吧
+		//char cOutFile[14];
+		//std::tmpnam(cOutFile);
+
+		String sOutFile = sFile + ".htm";   // ???? 輸出的檔名暫時湊合著
+		CBXML->SaveToHTML(sOutFile);
+
+		WebBrowser->URL = "file://" + sOutFile;
+		WebBrowser->Navigate();
 	}
 }
 //---------------------------------------------------------------------------

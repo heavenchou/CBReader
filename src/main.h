@@ -18,6 +18,7 @@
 #include "setting.h"
 #include "bookcase.h"
 #include "navtree.h"
+#include "cbxml.h"
 #include <FMX.ActnList.hpp>
 #include <FMX.StdActns.hpp>
 #include <System.Actions.hpp>
