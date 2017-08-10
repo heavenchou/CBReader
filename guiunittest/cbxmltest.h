@@ -5,15 +5,18 @@
 //---------------------------------------------------------------------------
 
 #include "../src/cbxml.h"
+#include "../src/cbxmloption.h"
 class CCBXMLTest
 {
 private: // User declarations
 
+    String MyFullPath;
 	// 傳入要儲存結果的字串列表
 	TStringList * Titles;
 	TStringList * Results;
 
 	CCBXML * CBXML;
+	CCBXMLOption * CBXMLOption; // 經文呈現設定檔
 
 public: // User declarations
 

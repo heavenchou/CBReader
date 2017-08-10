@@ -12,7 +12,17 @@ __fastcall CCBXMLTest::CCBXMLTest(TStringList * slTitle, TStringList * slResult)
 	Titles = slTitle;
 	Results = slResult;
 
-	CBXML = new CCBXML("T01n0003_001.xml");
+#ifdef _Windows
+	MyFullPath = GetCurrentDir();
+#else
+	MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
+#endif
+
+	MyFullPath += "/";
+
+	CBXMLOption = new CCBXMLOption(); // 經文呈現設定檔
+
+	CBXML = new CCBXML(MyFullPath + "T01n0003_001.xml", CBXMLOption);
 }
 //---------------------------------------------------------------------------
 // 執行全部測試
@@ -32,6 +42,7 @@ void __fastcall CCBXMLTest::LogTest(String sTitle, bool bResult)
 //---------------------------------------------------------------------------
 bool __fastcall CCBXMLTest::CBXMLSaveToHTML()
 {
-	CBXML->SaveToHTML("d:/Data/c/_CppBuilder/CBReader/guiunittest/Win32/Debug/T01n0003_001.htm");
+	String sOUT = MyFullPath + "out.htm";
+	CBXML->SaveToHTML(sOUT);
 	return true;
 }

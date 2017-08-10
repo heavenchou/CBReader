@@ -7,10 +7,13 @@
 #pragma package(smart_init)
 
 // ---------------------------------------------------------------------------
-__fastcall CCBXML::CCBXML(String sFile) // 建構函式
+// 建構函式
+// 傳入參數為 XML 檔, 呈現的設定
+__fastcall CCBXML::CCBXML(String sFile, CCBXMLOption * cbxOption)
 {
 	// 初值
 	XMLFile = sFile;
+	CBXMLOption = cbxOption;
 	HTMLText = "";
 
 	Document = interface_cast<Xmlintf::IXMLDocument>(new TXMLDocument(NULL));
@@ -125,7 +128,9 @@ void __fastcall CCBXML::tag_a(_di_IXMLNode Node)
 void __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 {
 	// 處理標記
-	HTMLText += "<br/>\n";
+	if(CBXMLOption->ShowLineFormat) // 呈現原書格式
+		HTMLText += "<br/>\n";
+
 	parseChild(Node); // 處理內容
 	// 結束標記
 }
@@ -141,9 +146,12 @@ void __fastcall CCBXML::tag_pb(_di_IXMLNode Node)
 // 解析 XML 標記
 void __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 {
-	HTMLText += "<p>";
+
+	if(!CBXMLOption->ShowLineFormat) // 不呈現原書格式
+		HTMLText += "<p>";
 	parseChild(Node); // 處理內容
-	HTMLText += "</p>";
+	if(!CBXMLOption->ShowLineFormat) // 不呈現原書格式
+		HTMLText += "</p>";
 }
 
 // ---------------------------------------------------------------------------

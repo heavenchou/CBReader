@@ -42,10 +42,16 @@ __published: // IDE-managed Components
 	TSplitter *Splitter1;
 	TEdit *edBookcasePath;
 	TCornerButton *btSetBookcasePath;
+	TCheckBox *CheckBox1;
+	TCornerButton *CornerButton2;
+	TCornerButton *CornerButton3;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall CornerButton1Click(TObject *Sender);
 	void __fastcall btSetBookcasePathClick(TObject *Sender);
+	void __fastcall CheckBox1Change(TObject *Sender);
+	void __fastcall CornerButton2Click(TObject *Sender);
+	void __fastcall CornerButton3Click(TObject *Sender);
 
 private: // User declarations
 

@@ -88,14 +88,14 @@ object fmMain: TfmMain
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       TabOrder = 2
       Text = '/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012/'
-      Position.X = 192.000000000000000000
+      Position.X = 120.000000000000000000
       Position.Y = 8.000000000000000000
       Size.Width = 409.000000000000000000
       Size.Height = 30.000000000000000000
       Size.PlatformDefault = False
     end
     object btSetBookcasePath: TCornerButton
-      Position.X = 616.000000000000000000
+      Position.X = 536.000000000000000000
       Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
       Size.Width = 121.000000000000000000
@@ -106,6 +106,42 @@ object fmMain: TfmMain
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
       OnClick = btSetBookcasePathClick
+    end
+    object CheckBox1: TCheckBox
+      Position.X = 680.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 65.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      Text = #21407#26360
+      OnChange = CheckBox1Change
+    end
+    object CornerButton2: TCornerButton
+      Position.X = 736.000000000000000000
+      Position.Y = 16.000000000000000000
+      Sides = [Top, Left, Bottom, Right]
+      Size.Width = 57.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      Text = #19978#19968#38913
+      XRadius = 3.000000000000000000
+      YRadius = 3.000000000000000000
+      OnClick = CornerButton2Click
+    end
+    object CornerButton3: TCornerButton
+      Position.X = 800.000000000000000000
+      Position.Y = 16.000000000000000000
+      Sides = [Top, Left, Bottom, Right]
+      Size.Width = 57.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 5
+      Text = #19979#19968#38913
+      XRadius = 3.000000000000000000
+      YRadius = 3.000000000000000000
+      OnClick = CornerButton3Click
     end
   end
   object MainMenu1: TMainMenu

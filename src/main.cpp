@@ -33,7 +33,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 
 	MyFullPath += "/";
 	SettingFile = "cbreader.ini";
-	Setting = new CSetting;
+	Setting = new CSetting();
 
 	// 取得 Bookcase 的目錄
 
@@ -47,9 +47,9 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 // ---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
 {
-	delete Setting;
-	delete Bookcase;
-	delete NavTree;
+	if(Setting) delete Setting;
+	if(Bookcase) delete Bookcase;
+	if(NavTree) delete NavTree;
 }
 
 // ---------------------------------------------------------------------------
@@ -130,7 +130,7 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	else if(iType == nit_CBLink)
 	{
 		String sFile = MyFullPath + "Bookcase/Agama/" + sURL;
-		CCBXML * CBXML = new CCBXML(sFile);
+		CCBXML * CBXML = new CCBXML(sFile, Setting->CBXMLOption);
 
 		// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
 		// windows 是 xxxxxx
@@ -159,6 +159,27 @@ void __fastcall TfmMain::CornerButton1Click(TObject *Sender)
 void __fastcall TfmMain::btSetBookcasePathClick(TObject *Sender)
 {
     MyFullPath = edBookcasePath->Text;
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TfmMain::CheckBox1Change(TObject *Sender)
+{
+
+	Setting->CBXMLOption->ShowLineFormat = CheckBox1->IsChecked;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::CornerButton2Click(TObject *Sender)
+{
+	WebBrowser->GoBack();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::CornerButton3Click(TObject *Sender)
+{
+	WebBrowser->GoForward();
 }
 //---------------------------------------------------------------------------
 

@@ -9,12 +9,13 @@
 // ---------------------------------------------------------------------------
 __fastcall CSetting::CSetting() // 建構函式
 {
-	BookcaseDir = "./Bookcase"; // 書櫃的目錄
+	BookcaseDir = "./Bookcase"; 		// 書櫃的目錄
+	CBXMLOption = new CCBXMLOption();	// CBETA 經文的格式
 }
 
 // ---------------------------------------------------------------------------
 __fastcall CSetting::~CSetting(void) // 解構函式
 {
-
+	if(CBXMLOption) delete CBXMLOption;
 }
 // ---------------------------------------------------------------------------
