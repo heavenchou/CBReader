@@ -18,7 +18,9 @@ TfmMain *fmMain;
 // ---------------------------------------------------------------------------
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
-	// 取得設定檔並讀取
+	// 取得設定檔並讀取所有設定
+
+	// 取得 Bookcase 所有資料區
 
 #ifdef _Windows
 	//SetPermissions(); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
@@ -35,15 +37,27 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	SettingFile = "cbreader.ini";
 	Setting = new CSetting();
 
-	// 取得 Bookcase 的目錄
+	// 載入書櫃
 
 	Bookcase = new CBookcase();
-	// Bookcase->LoadBooks(Setting->BookcaseDir);
+	Bookcase->LoadBookcase(MyFullPath + Setting->BookcaseDir);
 
 	// 在書櫃選擇叢書
-
+	int iBookcaseCount = Bookcase->Count();
+	if(iBookcaseCount == 0)
+	{
+		ShowMessage(u"書櫃中一本書都沒有");
+    }
+	else if(iBookcaseCount == 1)
+	{
+		// 只有一本筆
+		OpenBookcase(0);
+	}
+	else
+	{
+		// 選擇書櫃
+	}
 }
-
 // ---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
 {
@@ -82,6 +96,16 @@ void __fastcall TfmMain::SetPermissions()
 		Reg->Free();
 	}
 #endif
+}
+//---------------------------------------------------------------------------
+// 開啟指定的書櫃
+void __fastcall TfmMain::OpenBookcase(int iID)
+{
+	// 載入叢書的起始目錄
+	if(NavTree) delete NavTree;
+	CSeries * s = (CSeries *) Bookcase->Books->Items[iID];
+	NavTree = new CNavTree(s->Dir + s->NavFile);
+	NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
 }
 
 //---------------------------------------------------------------------------

@@ -17,6 +17,7 @@
 
 #include "setting.h"
 #include "bookcase.h"
+#include "series.h"
 #include "navtree.h"
 #include "cbxml.h"
 #include <FMX.ActnList.hpp>
@@ -66,6 +67,10 @@ public: // User declarations
 	CSetting * Setting; // 設定檔
 	CBookcase * Bookcase; // 書櫃
 	CNavTree * NavTree; // 導覽文件 (暫時的, 日後會放在 Serial 物件中 ???)
+
+
+	// 開啟指定的書櫃
+	void __fastcall OpenBookcase(int iId);
 
 	__fastcall TfmMain(TComponent* Owner);
 };
