@@ -24,6 +24,10 @@
 #include <FMX.StdActns.hpp>
 #include <System.Actions.hpp>
 #include <FMX.Edit.hpp>
+#include <FMX.Controls3D.hpp>
+#include <FMX.Layers3D.hpp>
+#include <FMX.Viewport3D.hpp>
+#include <System.Math.Vectors.hpp>
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
@@ -61,6 +65,8 @@ private: // User declarations
 
 public: // User declarations
 
+
+    int SelectedBook;   // 目前選中的書, -1 表示還沒選
 	String SettingFile;
 	String MyFullPath;
 

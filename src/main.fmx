@@ -22,8 +22,8 @@ object fmMain: TfmMain
       Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
-      Viewport.Width = 205.000000000000000000
-      Viewport.Height = 614.000000000000000000
+      Viewport.Width = 209.000000000000000000
+      Viewport.Height = 618.000000000000000000
     end
   end
   object TabControl1: TTabControl

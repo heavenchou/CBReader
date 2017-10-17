@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "main.h"
+#include "selectbook.h"
 
 #ifdef _Windows
 #include <System.Win.Registry.hpp>
@@ -37,6 +38,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	SettingFile = "cbreader.ini";
 	Setting = new CSetting();
 
+	SelectedBook = -1;   // 目前選中的書, -1 表示還沒選
+
 	// 載入書櫃
 
 	Bookcase = new CBookcase();
@@ -50,12 +53,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
     }
 	else if(iBookcaseCount == 1)
 	{
-		// 只有一本筆
+		// 只有一本書就直接開了
 		OpenBookcase(0);
-	}
-	else
-	{
-		// 選擇書櫃
 	}
 }
 // ---------------------------------------------------------------------------
@@ -101,6 +100,11 @@ void __fastcall TfmMain::SetPermissions()
 // 開啟指定的書櫃
 void __fastcall TfmMain::OpenBookcase(int iID)
 {
+	if(iID == SelectedBook) return;	// 同一本, 不要重開
+	if(iID == -1) return;   	// 沒選書
+
+	SelectedBook = iID;
+
 	// 載入叢書的起始目錄
 	if(NavTree) delete NavTree;
 	CSeries * s = (CSeries *) Bookcase->Books->Items[iID];
@@ -118,6 +122,7 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	// Item
 	TTreeViewItem * tvItem = (TTreeViewItem *) Sender;
 	String sURL = tvItem->TagString;
+	CSeries * sSeries = (CSeries *)Bookcase->Books->Items[SelectedBook];
 
 	if(sURL == "")  // 沒有 URL
 	{
@@ -140,20 +145,22 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 		if(sURL.SubString(1,4) == "http")
 			WebBrowser->URL = sURL;
 		else
-			WebBrowser->URL = "file://" + MyFullPath + "Bookcase/Agama/" + sURL;
+			WebBrowser->URL = "file://" + sSeries->Dir + sURL;
 		WebBrowser->Navigate();
 	}
 	// 目錄連結
 	else if(iType == nit_NavLink)
 	{
 		if(NavTree) delete NavTree;     // 這部份應該物件化 ???
-		NavTree = new CNavTree(MyFullPath + "Bookcase/Agama/" + sURL);
+		NavTree = new CNavTree(sSeries->Dir + sURL);
 		NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
 	}
 	// CBETA 經文
 	else if(iType == nit_CBLink)
 	{
-		String sFile = MyFullPath + "Bookcase/Agama/" + sURL;
+
+		String sFile = sSeries->Dir + sURL;
+
 		CCBXML * CBXML = new CCBXML(sFile, Setting->CBXMLOption);
 
 		// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
@@ -173,10 +180,8 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 
 void __fastcall TfmMain::CornerButton1Click(TObject *Sender)
 {
-	// 載入叢書的起始目錄
-	if(NavTree) delete NavTree;
-	NavTree = new CNavTree(MyFullPath + "Bookcase/Agama/nav.xhtml");
-	NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
+	fmSelectBook->ShowModal();
+	OpenBookcase(fmSelectBook->SelectedBook);
 }
 //---------------------------------------------------------------------------
 
@@ -185,8 +190,6 @@ void __fastcall TfmMain::btSetBookcasePathClick(TObject *Sender)
     MyFullPath = edBookcasePath->Text;
 }
 //---------------------------------------------------------------------------
-
-
 
 void __fastcall TfmMain::CheckBox1Change(TObject *Sender)
 {
@@ -206,4 +209,5 @@ void __fastcall TfmMain::CornerButton3Click(TObject *Sender)
 	WebBrowser->GoForward();
 }
 //---------------------------------------------------------------------------
+
 
