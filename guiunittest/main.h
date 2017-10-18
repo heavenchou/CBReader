@@ -16,10 +16,11 @@
 #include <FMX.Types.hpp>
 #include <FMX.Layouts.hpp>
 #include <FMX.ListBox.hpp>
+#include <FMX.TreeView.hpp>
 #include "sample.h"
 #include "navtreetest.h"
 #include "cbxmltest.h"
-#include <FMX.TreeView.hpp>
+#include "bookcasetest.h"
 //---------------------------------------------------------------------------
 class TfmMain : public TForm
 {
@@ -39,7 +40,8 @@ public:		// User declarations
 	// 要測試的物件
 	CSample * Sample;
 	CNavTreeTest * NavTreeTest;
-    CCBXMLTest * CBXMLTest;
+	CCBXMLTest * CBXMLTest;
+    CBookcaseTest * BookcaseTest;
 
     // 在測試結果上加標題, 以便區分
 	void __fastcall ListBoxAddHead(String sHead);

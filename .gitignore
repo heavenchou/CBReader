@@ -8,3 +8,5 @@ __history
 __astcache
 /guiunittest/Win32
 /guiunittest/OSX32
+/src/Win64
+/guiunittest/Win64

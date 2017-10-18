@@ -8,6 +8,7 @@
 #include <System.StartUpCopy.hpp>
 // ---------------------------------------------------------------------------
 USEFORM("main.cpp", fmMain);
+USEFORM("selectbook.cpp", fmSelectBook);
 //---------------------------------------------------------------------------
 extern "C" int FMXmain()
 {
@@ -15,6 +16,7 @@ extern "C" int FMXmain()
 	{
 		Application->Initialize();
 		Application->CreateForm(__classid(TfmMain), &fmMain);
+		Application->CreateForm(__classid(TfmSelectBook), &fmSelectBook);
 		Application->Run();
 	}
 	catch (Exception &exception)

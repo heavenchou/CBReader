@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "main.h"
+#include "selectbook.h"
 
 #ifdef _Windows
 #include <System.Win.Registry.hpp>
@@ -18,7 +19,9 @@ TfmMain *fmMain;
 // ---------------------------------------------------------------------------
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
-	// 取得設定檔並讀取
+	// 取得設定檔並讀取所有設定
+
+	// 取得 Bookcase 所有資料區
 
 #ifdef _Windows
 	//SetPermissions(); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
@@ -27,23 +30,33 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 #ifdef _Windows
 	MyFullPath = GetCurrentDir();
 #else
-	//MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
-    MyFullPath = GetCurrentDir();
+	MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
+	//MyFullPath = GetCurrentDir();
 #endif
 
 	MyFullPath += "/";
 	SettingFile = "cbreader.ini";
 	Setting = new CSetting();
 
-	// 取得 Bookcase 的目錄
+	SelectedBook = -1;   // 目前選中的書, -1 表示還沒選
+
+	// 載入書櫃
 
 	Bookcase = new CBookcase();
-	// Bookcase->LoadBooks(Setting->BookcaseDir);
+	Bookcase->LoadBookcase(MyFullPath + Setting->BookcaseDir);
 
 	// 在書櫃選擇叢書
-
+	int iBookcaseCount = Bookcase->Count();
+	if(iBookcaseCount == 0)
+	{
+		ShowMessage(u"書櫃中一本書都沒有");
+    }
+	else if(iBookcaseCount == 1)
+	{
+		// 只有一本書就直接開了
+		OpenBookcase(0);
+	}
 }
-
 // ---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
 {
@@ -83,6 +96,21 @@ void __fastcall TfmMain::SetPermissions()
 	}
 #endif
 }
+//---------------------------------------------------------------------------
+// 開啟指定的書櫃
+void __fastcall TfmMain::OpenBookcase(int iID)
+{
+	if(iID == SelectedBook) return;	// 同一本, 不要重開
+	if(iID == -1) return;   	// 沒選書
+
+	SelectedBook = iID;
+
+	// 載入叢書的起始目錄
+	if(NavTree) delete NavTree;
+	CSeries * s = (CSeries *) Bookcase->Books->Items[iID];
+	NavTree = new CNavTree(s->Dir + s->NavFile);
+	NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
+}
 
 //---------------------------------------------------------------------------
 // NavTree Item 點二下的作用
@@ -94,6 +122,7 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	// Item
 	TTreeViewItem * tvItem = (TTreeViewItem *) Sender;
 	String sURL = tvItem->TagString;
+	CSeries * sSeries = (CSeries *)Bookcase->Books->Items[SelectedBook];
 
 	if(sURL == "")  // 沒有 URL
 	{
@@ -116,20 +145,22 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 		if(sURL.SubString(1,4) == "http")
 			WebBrowser->URL = sURL;
 		else
-			WebBrowser->URL = "file://" + MyFullPath + "Bookcase/Agama/" + sURL;
+			WebBrowser->URL = "file://" + sSeries->Dir + sURL;
 		WebBrowser->Navigate();
 	}
 	// 目錄連結
 	else if(iType == nit_NavLink)
 	{
 		if(NavTree) delete NavTree;     // 這部份應該物件化 ???
-		NavTree = new CNavTree(MyFullPath + "Bookcase/Agama/" + sURL);
+		NavTree = new CNavTree(sSeries->Dir + sURL);
 		NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
 	}
 	// CBETA 經文
 	else if(iType == nit_CBLink)
 	{
-		String sFile = MyFullPath + "Bookcase/Agama/" + sURL;
+
+		String sFile = sSeries->Dir + sURL;
+
 		CCBXML * CBXML = new CCBXML(sFile, Setting->CBXMLOption);
 
 		// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
@@ -149,10 +180,8 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 
 void __fastcall TfmMain::CornerButton1Click(TObject *Sender)
 {
-	// 載入叢書的起始目錄
-	if(NavTree) delete NavTree;
-	NavTree = new CNavTree(MyFullPath + "Bookcase/Agama/nav.xhtml");
-	NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
+	fmSelectBook->ShowModal();
+	OpenBookcase(fmSelectBook->SelectedBook);
 }
 //---------------------------------------------------------------------------
 
@@ -161,8 +190,6 @@ void __fastcall TfmMain::btSetBookcasePathClick(TObject *Sender)
     MyFullPath = edBookcasePath->Text;
 }
 //---------------------------------------------------------------------------
-
-
 
 void __fastcall TfmMain::CheckBox1Change(TObject *Sender)
 {
@@ -182,4 +209,5 @@ void __fastcall TfmMain::CornerButton3Click(TObject *Sender)
 	WebBrowser->GoForward();
 }
 //---------------------------------------------------------------------------
+
 

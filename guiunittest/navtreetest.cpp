@@ -15,11 +15,11 @@ __fastcall CNavTreeTest::CNavTreeTest(TStringList * slTitle, TStringList * slRes
 #ifdef _Windows
 	MyFullPath = GetCurrentDir();
 #else
-	MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
+	MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012/gui-test";
 #endif
 
 	MyFullPath += "/";
-	NavTree = new CNavTree(MyFullPath + "nav.xhtml");
+	NavTree = new CNavTree(MyFullPath + "Bookcase/Agama/nav.xhtml");
 }
 //---------------------------------------------------------------------------
 // 執行全部測試

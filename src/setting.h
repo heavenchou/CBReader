@@ -3,10 +3,9 @@
 #ifndef SettingH
 #define SettingH
 
-#include <string>
 #include "cbxmloption.h"
+#include <fmx.h>
 // ---------------------------------------------------------------------------
-using namespace std;
 
 class CSetting
 {
@@ -16,7 +15,7 @@ public: // User declarations
 
 	CCBXMLOption * CBXMLOption; // CBETA 經文的格式
 
-	string BookcaseDir; // 書櫃的目錄
+	String BookcaseDir; // 書櫃的目錄
 
 	__fastcall CSetting();
 	__fastcall ~CSetting();

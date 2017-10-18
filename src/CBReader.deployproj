@@ -143,6 +143,16 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include=".\Win64\Debug\CBReader.exe" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>CBReader\</RemoteDir>
+            <RemoteName>CBReader.exe</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
         <DeployFile Include="$(BDS)\bin64\cc64250.dll" Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'">
             <RemoteDir>CBReader\</RemoteDir>
             <RemoteName>cc64250.dll</RemoteName>
@@ -173,6 +183,15 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include=".\OSX32\Debug\CBReader.entitlements" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>CBReader.app\..\</RemoteDir>
+            <RemoteName>CBReader.entitlements</RemoteName>
+            <DeployClass>ProjectOSXEntitlements</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include=".\OSX32\Debug\CBReader" Condition="'$(Config)'=='Debug'">
             <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
             <RemoteName>CBReader</RemoteName>
@@ -182,15 +201,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
             <Required>True</Required>
-        </DeployFile>
-        <DeployFile Include=".\OSX32\Debug\CBReader.entitlements" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>CBReader.app\..\</RemoteDir>
-            <RemoteName>CBReader.entitlements</RemoteName>
-            <DeployClass>ProjectOSXEntitlements</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
         </DeployFile>
         <DeployFile Include="$(BDS)\Redist\OSX32\bplfmx250.dylib" Condition="'$(Config)'=='Debug'">
             <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>

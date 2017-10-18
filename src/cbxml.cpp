@@ -43,7 +43,7 @@ void __fastcall CCBXML::ParseXML()
 	Node = Document->DocumentElement->ChildNodes->Nodes["text"];
 
 	if (Node->ChildNodes->Count == 0)
-		ShowMessage("錯誤：導覽文件找不到 text 標記。");
+		ShowMessage(u"錯誤：導覽文件找不到 text 標記。");
 	else
 	{
 		ParseNode(Node);
@@ -182,7 +182,7 @@ void __fastcall CCBXML::SaveToHTML(String sFile)
 // 先產生 html 的 head
 void __fastcall CCBXML::MakeHTMLHead()
 {
-	HTMLText = "<!DOCTYPE html>\n"
+	HTMLText = u"<!DOCTYPE html>\n"
 	"<html>\n"
 	"<head>\n"
 	"	<meta charset=\"utf-8\">\n"

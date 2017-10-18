@@ -17,12 +17,17 @@
 
 #include "setting.h"
 #include "bookcase.h"
+#include "series.h"
 #include "navtree.h"
 #include "cbxml.h"
 #include <FMX.ActnList.hpp>
 #include <FMX.StdActns.hpp>
 #include <System.Actions.hpp>
 #include <FMX.Edit.hpp>
+#include <FMX.Controls3D.hpp>
+#include <FMX.Layers3D.hpp>
+#include <FMX.Viewport3D.hpp>
+#include <System.Math.Vectors.hpp>
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
@@ -60,12 +65,18 @@ private: // User declarations
 
 public: // User declarations
 
+
+    int SelectedBook;   // 目前選中的書, -1 表示還沒選
 	String SettingFile;
 	String MyFullPath;
 
 	CSetting * Setting; // 設定檔
 	CBookcase * Bookcase; // 書櫃
 	CNavTree * NavTree; // 導覽文件 (暫時的, 日後會放在 Serial 物件中 ???)
+
+
+	// 開啟指定的書櫃
+	void __fastcall OpenBookcase(int iId);
 
 	__fastcall TfmMain(TComponent* Owner);
 };
