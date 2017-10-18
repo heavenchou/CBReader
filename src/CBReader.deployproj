@@ -143,6 +143,16 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include=".\Win64\Debug\CBReader.exe" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>CBReader\</RemoteDir>
+            <RemoteName>CBReader.exe</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
+        </DeployFile>
         <DeployFile Include="$(BDS)\bin64\cc64250.dll" Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'">
             <RemoteDir>CBReader\</RemoteDir>
             <RemoteName>cc64250.dll</RemoteName>

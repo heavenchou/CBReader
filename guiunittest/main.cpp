@@ -24,6 +24,10 @@ __fastcall TfmMain::TfmMain(TComponent* Owner)
 	Sample = new CSample(Titles, Results);
 	Sample->RunAllTest();
 
+	ListBoxAddHead(u"Bookcase 書櫃及 Series 套書測試");
+	BookcaseTest = new CBookcaseTest(Titles, Results);
+	BookcaseTest->RunAllTest();
+
 	ListBoxAddHead(u"NavTree 測試");
 	NavTreeTest = new CNavTreeTest(Titles, Results);
 	NavTreeTest->RunAllTest();

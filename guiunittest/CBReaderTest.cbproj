@@ -6,7 +6,7 @@
         <MainSource>CBReaderTest.cpp</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Platform Condition="'$(Platform)'==''">OSX32</Platform>
         <TargetedPlatforms>7</TargetedPlatforms>
         <AppType>Application</AppType>
     </PropertyGroup>
@@ -191,12 +191,14 @@
         <AppEnableHighDPI>true</AppEnableHighDPI>
     </PropertyGroup>
     <ItemGroup>
+        <CppCompile Include="bookcasetest.cpp">
+            <BuildOrder>11</BuildOrder>
+        </CppCompile>
         <CppCompile Include="CBReaderTest.cpp">
             <BuildOrder>0</BuildOrder>
         </CppCompile>
         <PCHCompile Include="CBReaderTestPCH1.h">
             <BuildOrder>2</BuildOrder>
-            <PCH>true</PCH>
         </PCHCompile>
         <CppCompile Include="cbxmltest.cpp">
             <DependentOn>cbxmltest.h</DependentOn>
@@ -214,6 +216,10 @@
         <CppCompile Include="sample.cpp">
             <DependentOn>sample.h</DependentOn>
             <BuildOrder>3</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\src\bookcase.cpp">
+            <DependentOn>..\src\bookcase.h</DependentOn>
+            <BuildOrder>12</BuildOrder>
         </CppCompile>
         <CppCompile Include="..\src\cbxml.cpp">
             <DependentOn>..\src\cbxml.h</DependentOn>
@@ -233,6 +239,10 @@
         <CppCompile Include="..\src\navxml.cpp">
             <DependentOn>..\src\navxml.h</DependentOn>
             <BuildOrder>7</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\src\series.cpp">
+            <DependentOn>..\src\series.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
         </CppCompile>
         <FormResources Include="main.fmx"/>
         <FormResources Include="main.Macintosh.fmx"/>

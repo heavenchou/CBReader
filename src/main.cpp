@@ -30,8 +30,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 #ifdef _Windows
 	MyFullPath = GetCurrentDir();
 #else
-	//MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
-    MyFullPath = GetCurrentDir();
+	MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
+	//MyFullPath = GetCurrentDir();
 #endif
 
 	MyFullPath += "/";
