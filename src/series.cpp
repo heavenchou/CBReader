@@ -18,6 +18,8 @@ __fastcall CSeries::CSeries(String sDir)
 	TocFile = "";     // 目錄文件
 	SpineFile = "";   // 遍歷文件
 
+	Catalog = 0;	  // 目錄
+
 	//--------------
 
 	Dir = sDir + "/";         // 本書的目錄
@@ -30,6 +32,12 @@ __fastcall CSeries::CSeries(String sDir)
 	if (!asFileName.IsEmpty())
 	{
 		LoadMetaData(asFileName);
+	}
+
+	Catalog = new CCatalog(); // 載入目錄資料
+	if(!TocFile.IsEmpty())
+	{
+		Catalog->LoadCatalog(Dir + TocFile);
 	}
 }
 // ---------------------------------------------------------------------------

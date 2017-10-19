@@ -13,6 +13,8 @@
 
 #include <Xml.XMLDoc.hpp>
 #include <fmx.h>
+
+#include "catalog.h"
 // ---------------------------------------------------------------------------
 
 class CSeries
@@ -29,6 +31,8 @@ public: // User declarations
 	String NavFile;     // 導覽文件
 	String TocFile;     // 目錄文件
 	String SpineFile;   // 遍歷文件
+
+	CCatalog * Catalog; // 目錄
 
 	void __fastcall LoadMetaData(String sMeta);	// 載入後設文件
 	__fastcall CSeries(String sDir);    // 傳入目錄, 進行初值化

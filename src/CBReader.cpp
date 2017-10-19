@@ -7,8 +7,8 @@
 #pragma hdrstop
 #include <System.StartUpCopy.hpp>
 // ---------------------------------------------------------------------------
-USEFORM("main.cpp", fmMain);
 USEFORM("selectbook.cpp", fmSelectBook);
+USEFORM("main.cpp", fmMain);
 //---------------------------------------------------------------------------
 extern "C" int FMXmain()
 {
