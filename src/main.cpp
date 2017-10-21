@@ -209,5 +209,54 @@ void __fastcall TfmMain::CornerButton3Click(TObject *Sender)
 	WebBrowser->GoForward();
 }
 //---------------------------------------------------------------------------
+// 是否有選擇套書了?
+bool __fastcall TfmMain::IsSelectedBook()
+{
+	if(SelectedBook == -1) return false;
+	else return true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
+{
+	String sSutraName = edFindSutraName->Text;
+	String sByline = edFindSutraByline->Text;
+
+	// 逐一搜尋目錄
+	if(IsSelectedBook())
+	{
+		CSeries * Series = (CSeries *) Bookcase->Books->Items[SelectedBook];
+		CCatalog * Catalog = Series->Catalog;
+		int iCount = Catalog->ID->Count;
+		// 逐一檢查
+		sgFindSutra->BeginUpdate();
+		int iGridIndex = 0;
+		sgFindSutra->RowCount = 10;
+		for(int i=0; i<iCount; i++)
+		{
+			bool bFound = true;
+
+			// 找經名
+			if(!sSutraName.IsEmpty())
+				if(Catalog->SutraName->Strings[i].Pos(sSutraName) <= 0)
+					continue;
+			// 找譯者
+			if(!sByline.IsEmpty())
+				if(Catalog->Byline->Strings[i].Pos(sByline) <= 0)
+					continue;
+
+			// 找到了
+
+			sgFindSutra->Cells[0][iGridIndex]=Catalog->SutraName->Strings[i];
+			sgFindSutra->Cells[1][iGridIndex]=Catalog->Byline->Strings[i];
+			iGridIndex++;
+
+			if(iGridIndex >= sgFindSutra->RowCount)
+				sgFindSutra->RowCount += 10;
+		}
+		sgFindSutra->RowCount = iGridIndex;
+        sgFindSutra->EndUpdate();
+	}
+}
+//---------------------------------------------------------------------------
 
 
