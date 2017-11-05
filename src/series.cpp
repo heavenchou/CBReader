@@ -15,11 +15,12 @@ __fastcall CSeries::CSeries(String sDir)
 	Title = "";       // 標題
 	Creator = "";     // 作者
 	NavFile = "";     // 導覽文件
-	TocFile = "";     // 目錄文件
+	CatalogFile = "";     // 目錄文件
 	SpineFile = "";   // 遍歷文件
 
 	Catalog = 0;	  // 目錄
-
+	Spine = 0;    		// 遍歷文件
+	JuanLine = 0;   	// 各卷與頁欄行的關係物件, CBETA 專用
 	//--------------
 
 	Dir = sDir + "/";         // 本書的目錄
@@ -35,16 +36,31 @@ __fastcall CSeries::CSeries(String sDir)
 	}
 
 	Catalog = new CCatalog(); // 載入目錄資料
-	if(!TocFile.IsEmpty())
+	if(!CatalogFile.IsEmpty())
 	{
-		Catalog->LoadCatalog(Dir + TocFile);
+		Catalog->LoadCatalog(Dir + CatalogFile);
+	}
+
+	Spine = new CSpine();
+	if(!SpineFile.IsEmpty())
+	{
+		Spine->LoadSpineFile(Dir + SpineFile);
+	}
+
+	// CBETA 專用, 要處理 JuanLine 資料
+	if(ID == "CBETA")
+	{
+		JuanLine = new CJuanLine();
+		JuanLine->LoadFromSpine(Spine);
 	}
 }
 // ---------------------------------------------------------------------------
 // 解構函式
 __fastcall CSeries::~CSeries()
 {
-
+	if(Catalog) delete Catalog;
+	if(Spine) delete Spine;
+	if(JuanLine) delete JuanLine;
 }
 // ---------------------------------------------------------------------------
 // 載入後設文件
@@ -57,6 +73,14 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	Document = interface_cast<Xmlintf::IXMLDocument>(new TXMLDocument(NULL));
 	Document->FileName = sMeta;
 	Document->Active = true;
+
+	// 讀 ID
+
+	Node = Document->DocumentElement->ChildNodes->Nodes["id"];
+	if(Node->ChildNodes->Count > 0)
+	{
+		ID = Node->ChildNodes->Get(0)->Text;
+	}
 
 	// 讀 Title
 
@@ -84,10 +108,10 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 
 	// 讀 toc
 
-	Node = Document->DocumentElement->ChildNodes->Nodes["toc"];
+	Node = Document->DocumentElement->ChildNodes->Nodes["catalog"];
 	if(Node->HasAttribute("src"))
 	{
-		TocFile = Node->GetAttribute("src");
+		CatalogFile = Node->GetAttribute("src");
 	}
 
 	// 讀 Spine

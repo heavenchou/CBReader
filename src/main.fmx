@@ -467,7 +467,7 @@ object fmMain: TfmMain
             TabOrder = 21
             TextSettings.Font.Size = 18.000000000000000000
             Position.X = 16.000000000000000000
-            Position.Y = 392.000000000000000000
+            Position.Y = 384.000000000000000000
             Size.Width = 209.000000000000000000
             Size.Height = 25.000000000000000000
             Size.PlatformDefault = False

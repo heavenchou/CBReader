@@ -37,6 +37,7 @@
 #include <FMX.Grid.Style.hpp>
 #include <FMX.ScrollBox.hpp>
 #include <System.Rtti.hpp>
+#include <FMX.MultiView.hpp>
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
