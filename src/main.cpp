@@ -158,22 +158,7 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	// CBETA 經文
 	else if(iType == nit_CBLink)
 	{
-
-		String sFile = sSeries->Dir + sURL;
-
-		CCBXML * CBXML = new CCBXML(sFile, Setting->CBXMLOption);
-
-		// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
-		// windows 是 xxxxxx
-		// 所以日後還是自己寫吧
-		//char cOutFile[14];
-		//std::tmpnam(cOutFile);
-
-		String sOutFile = sFile + ".htm";   // ???? 輸出的檔名暫時湊合著
-		CBXML->SaveToHTML(sOutFile);
-
-		WebBrowser->URL = "file://" + sOutFile;
-		WebBrowser->Navigate();
+		ShowCBXML(sURL);
 	}
 }
 //---------------------------------------------------------------------------
@@ -193,7 +178,6 @@ void __fastcall TfmMain::btSetBookcasePathClick(TObject *Sender)
 
 void __fastcall TfmMain::CheckBox1Change(TObject *Sender)
 {
-
 	Setting->CBXMLOption->ShowLineFormat = CheckBox1->IsChecked;
 }
 //---------------------------------------------------------------------------
@@ -258,5 +242,63 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+// 由經卷頁欄行呈現經文
+void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
+{
+	String sBook = "T";
+	String sSutraNum = edGoSutra_SutraNum->Text;
+	String sJuan = edGoSutra_Juan->Text;
+	String sPage = edGoSutra_Page->Text;
+	String sField = edGoSutra_Field->Text;
+	String sLine = edGoSutra_Line->Text;
 
+	CSeries * csCBETA = Bookcase->CBETA;
+
+	String sFile = csCBETA->CBGetFileNameBySutraNumJuan(sBook, sSutraNum, sJuan);
+	ShowCBXML(sFile);
+
+}
+//---------------------------------------------------------------------------
+// 載入 XML 並處理成網頁
+void __fastcall TfmMain::ShowCBXML(String sFile)
+{
+	if(sFile == "")
+	{
+		ShowMessage("沒有找到正確檔案");
+        return;
+    }
+	sFile = Bookcase->CBETA->Dir + sFile;
+	CCBXML * CBXML = new CCBXML(sFile, Setting->CBXMLOption);
+
+	// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
+	// windows 是 xxxxxx
+	// 所以日後還是自己寫吧
+	//char cOutFile[14];
+	//std::tmpnam(cOutFile);
+
+	String sOutFile = sFile + ".htm";   // ???? 輸出的檔名暫時湊合著
+	CBXML->SaveToHTML(sOutFile);
+
+	WebBrowser->URL = "file://" + sOutFile;
+	WebBrowser->Navigate();
+}
+//---------------------------------------------------------------------------
+// 由冊頁欄行呈現經文
+void __fastcall TfmMain::btGoBookClick(TObject *Sender)
+{
+	String sBook = "T";
+	String sVol = edGoBook_Vol->Text;
+	String sPage = edGoBook_Page->Text;
+	String sField = edGoBook_Field->Text;
+	String sLine = edGoBook_Line->Text;
+
+	CSeries * csCBETA = Bookcase->CBETA;
+
+	// 傳入 T, 1 , 傳回 "T01" 這種標準的冊數
+	sVol = csCBETA->BookData->GetFullVolString(sBook, sVol);
+
+	String sFile = csCBETA->CBGetFileNameByVolPageFieldLine(sBook, sVol, sPage, sField, sLine);
+	ShowCBXML(sFile);
+}
+//---------------------------------------------------------------------------
 

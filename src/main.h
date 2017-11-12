@@ -88,20 +88,20 @@ __published: // IDE-managed Components
 	TLabel *Label13;
 	TLabel *Label14;
 	TComboBox *ComboBox1;
-	TEdit *Edit1;
-	TEdit *Edit2;
-	TEdit *Edit3;
-	TEdit *Edit4;
-	TEdit *Edit5;
-	TEdit *Edit6;
-	TEdit *Edit7;
-	TEdit *Edit8;
-	TEdit *Edit9;
-	TEdit *Edit10;
+	TEdit *edGoSutra_SutraNum;
+	TEdit *edGoSutra_Juan;
+	TEdit *edGoSutra_Page;
+	TEdit *edGoSutra_Field;
+	TEdit *edGoSutra_Line;
+	TEdit *edGoBook_Vol;
+	TEdit *edGoBook_Page;
+	TEdit *edGoBook_Field;
+	TEdit *edGoBook_Line;
+	TEdit *edGoByKeyword;
 	TComboBox *ComboBox2;
-	TButton *Button1;
-	TButton *Button2;
-	TButton *Button3;
+	TButton *btGoSutra;
+	TButton *btGoBook;
+	TButton *btGoByKeyword;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall CornerButton1Click(TObject *Sender);
@@ -110,6 +110,8 @@ __published: // IDE-managed Components
 	void __fastcall CornerButton2Click(TObject *Sender);
 	void __fastcall CornerButton3Click(TObject *Sender);
 	void __fastcall btFindSutraClick(TObject *Sender);
+	void __fastcall btGoSutraClick(TObject *Sender);
+	void __fastcall btGoBookClick(TObject *Sender);
 
 private: // User declarations
 
@@ -131,6 +133,9 @@ public: // User declarations
 	bool __fastcall IsSelectedBook(); // 是否有選擇套書了?
 	// 開啟指定的書櫃
 	void __fastcall OpenBookcase(int iId);
+
+	// 載入 XML 並處理成網頁
+	void __fastcall ShowCBXML(String sFile);
 
 	__fastcall TfmMain(TComponent* Owner);
 };

@@ -16,7 +16,6 @@ private: // User declarations
 
 public: // User declarations
 
-	vector <int> a;
 	vector <TStringList *> Field;
 
 	TStringList * ID;         // ÂÃ¸g¥N½X

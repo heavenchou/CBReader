@@ -46,6 +46,16 @@ private: // User declarations
 public: // User declarations
 
 	void __fastcall LoadFromSpine(CSpine * Spine);      	// 更ゅン
+
+	String __fastcall GetNormalPage(String sPage);  // 眔夹非 4 计絏
+	String __fastcall GetNormalField(String sField);  // 眔夹非 1 计逆
+	String __fastcall GetNormalLine(String sLine);  // 眔夹非 2 计︽计
+	// 穝︽, 程玡 a-m 玥 "1" , ㄤ玥 "2"
+	String __fastcall GetNewPageLine(String sPageLine);
+
+	// パ逆︽т Spine  Index
+	int __fastcall CBGetSpineIndexByVolPageFieldLine(String sBook, String sVol = "", String sPage = "", String sField = "", String sLine = "");
+
 	__fastcall CJuanLine();
 	__fastcall ~CJuanLine();
 };

@@ -3,6 +3,8 @@
 #pragma hdrstop
 
 #include "juanline.h"
+#include <vector>
+#include <iterator>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 // ---------------------------------------------------------------------------
@@ -21,6 +23,8 @@ __fastcall CJuanLine::~CJuanLine()
 // ボ竒琌パ 0001a01 秨﹍
 void __fastcall CJuanLine::LoadFromSpine(CSpine * Spine)
 {
+	Spine->BookID = new TStringList();
+	Spine->VolNum = new TStringList();
 	Spine->Vol = new TStringList();
 	Spine->Sutra = new TStringList();
 	Spine->Juan = new TStringList();
@@ -38,13 +42,17 @@ void __fastcall CJuanLine::LoadFromSpine(CSpine * Spine)
 
         TMatchCollection mycoll;
 		TGroupCollection mygrps;
-		mycoll = TRegEx::Matches(da[0], "[\\/]([A-Z]+\d+)n(.{4,5}?)_?(...)\.xml");
+		mycoll = TRegEx::Matches(Spine->Files->Strings[i], "[\\/]([A-Z]+)(\\d+)n(.{4,5}?)_?(...)\\.xml");
 
-		String sVol = mycoll.Item[0].Groups.Item[1].Value;
-		String sSutra = mycoll.Item[0].Groups.Item[2].Value;
-		String sJuan = mycoll.Item[0].Groups.Item[3].Value;
+		String sBookID = mycoll.Item[0].Groups.Item[1].Value;
+		String sVolNum = mycoll.Item[0].Groups.Item[2].Value;
+		String sVol = sBookID + sVolNum;
+		String sSutra = mycoll.Item[0].Groups.Item[3].Value;
+		String sJuan = mycoll.Item[0].Groups.Item[4].Value;
 
 		// 癘魁–竒, 竒, 
+		Spine->BookID->Add(sBookID);
+		Spine->VolNum->Add(sVolNum);
 		Spine->Vol->Add(sVol);
 		Spine->Sutra->Add(sSutra);
 		Spine->Juan->Add(sJuan);
@@ -63,3 +71,126 @@ void __fastcall CJuanLine::LoadFromSpine(CSpine * Spine)
 	}
 }
 // ---------------------------------------------------------------------------
+// パ逆︽т Spine  Index
+int __fastcall CJuanLine::CBGetSpineIndexByVolPageFieldLine(String sBook, String sVol, String sPage, String sField, String sLine)
+{
+	SPageLineSerialNo * plPageLine;
+	if(Vol.count(sVol))
+		plPageLine = Vol[sVol];
+	else
+		return -1;
+
+	// 璶舱夹非 逆︽
+
+	sPage = GetNormalPage(sPage);		// 矪瞶
+	sField = GetNormalField(sField);	// 逆
+	sLine = GetNormalLine(sLine);		// ︽
+	String sPageLine = sPage + sField + sLine;
+
+	// ゑ癸よ猭
+	// 絏Τㄇ琌Τ abc 玡
+	// 硄盽 abc 穦程玡, 摸, xyz 程, 摸禰
+	// ┮ a001 эΘ 1a001
+	//      0001 эΘ 20001
+	//      z001 эΘ 2z001
+	// 硂妓碞ゑ耕
+
+	String sNewPageLine = GetNewPageLine(sPageLine);
+
+	int cCount = plPageLine->PageLine->Count;
+	for(int i=0 ; i < cCount ; i++)
+	{
+		String sNowPageLine = GetNewPageLine(plPageLine->PageLine->Strings[i]);
+
+		if(sNewPageLine < sNowPageLine)
+			if(i == 0)
+				return plPageLine->SerialNo[i];
+			else
+				return plPageLine->SerialNo[i-1];
+    }
+
+	return plPageLine->SerialNo[cCount - 1];
+}
+// ---------------------------------------------------------------------------
+// 眔夹非 4 计絏
+String __fastcall CJuanLine::GetNormalPage(String sPage)
+{
+	if(sPage == "") return u"0001";
+	int iPageLen = sPage.Length();
+	if(iPageLen == 4) return sPage;
+
+	String::iterator it = sPage.begin();
+
+	if(*it >= '0' && *it <= '9')
+	{
+		// 场常计, 干 0  4 计
+		if(iPageLen < 4)
+			sPage = UnicodeString().StringOfChar('0',4-iPageLen) + sPage;
+		else
+			// セ碞禬筁4
+			sPage = UnicodeString(it+iPageLen-4,4);
+	}
+	else
+	{
+		// 材琌璣ゅダ
+		String sHead = UnicodeString(it,1);
+
+		if(iPageLen < 4)
+		{
+			String sTail = UnicodeString(it+1,iPageLen-1);
+			sPage = sHead + UnicodeString().StringOfChar('0',4-iPageLen) + sTail;
+		}
+		else
+		{
+			// セ碞禬筁4
+			sPage = sHead + UnicodeString(it+iPageLen-3,3);
+        }
+	}
+	return sPage;
+}
+// ---------------------------------------------------------------------------
+// 眔夹非 1 计逆
+String __fastcall CJuanLine::GetNormalField(String sField)
+{
+	if(sField == "") return u"a";
+
+	int iFieldLen = sField.Length();
+
+	String::iterator it = sField.end();
+	if(iFieldLen > 1) sField = UnicodeString(it-1,1);
+	sField = sField.LowerCase();
+	it = sField.begin();
+	if(*it >= '0' && *it <= '9') *it = *it - '1' + 'a';
+	if(sField == "0") return u"a";
+	return sField;
+}
+// ---------------------------------------------------------------------------
+// 眔夹非 2 计︽计
+String __fastcall CJuanLine::GetNormalLine(String sLine)
+{
+	if(sLine == "") return u"01";
+
+	int iLineLen = sLine.Length();
+
+	if(iLineLen == 1) return "0" + sLine;
+	if(iLineLen == 2) return sLine;
+	//if(iLineLen > 2)
+	{
+		String::iterator it = sLine.end();
+		return UnicodeString(it-2,2);
+	}
+}
+// ---------------------------------------------------------------------------
+// 穝︽, 程玡 a-m 玥 "1" , ㄤ玥 "2"
+String __fastcall CJuanLine::GetNewPageLine(String sPageLine)
+{
+	auto it = sPageLine.begin();
+	if(*it >= 'a' && *it <= 'm') sPageLine = u"1" + sPageLine;
+	else sPageLine = u"2" + sPageLine;
+
+	return sPageLine;
+}
+// ---------------------------------------------------------------------------
+
+
+

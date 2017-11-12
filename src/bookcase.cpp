@@ -10,6 +10,7 @@
 __fastcall CBookcase::CBookcase() // 建構式
 {
 	BookcaseDir = ""; // 書櫃的目錄
+	CBETA = 0;    // 專指向 CBETA 的指標
 	Books = new TList;
 }
 // ---------------------------------------------------------------------------
@@ -49,7 +50,11 @@ void __fastcall CBookcase::LoadBookcase(String sDir)
 		// 嘗試建立套書物件
 		CSeries * s = new CSeries(list[i]);
 		if(s->NavFile != "")
+		{
 			Books->Add(s);   // 至少要找到導覽文件 NavFile
+			if(s->ID == "CBETA")
+                CBETA = s;
+		}
 		else
 			delete s;
 	}

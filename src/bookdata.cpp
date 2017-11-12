@@ -53,3 +53,35 @@ void __fastcall CBookData::LoadBookDataFile(String sFile)
     }
 }
 // ---------------------------------------------------------------------------
+// 肚 T, 1 , 肚 "T01" 硂贺夹非计
+String __fastcall CBookData::GetFullVolString(String sBook, String sVol)
+{
+	int iVol = sVol.ToIntDef(0);
+
+	if(iVol == 0) return "";
+
+	int iVolLen = GetVolLen(sBook); // 眔﹚旅竒计计, ㄒタ旅琌 2 计
+
+	for(int i=0; i<iVolLen - sVol.Length(); i++)
+	{
+		sVol = "0" + sVol;
+	}
+
+	sVol = sBook + sVol;
+	return sVol;
+}
+// ---------------------------------------------------------------------------
+// 眔﹚旅竒计计, ㄒタ旅琌 2 计
+int __fastcall CBookData::GetVolLen(String sBook)
+{
+	for(int i=0; i<ID->Count; i++)
+	{
+		if(ID->Strings[i] == sBook)
+		{
+			return VolCount->Strings[i].ToInt();
+		}
+	}
+	return 0;
+}
+// ---------------------------------------------------------------------------
+

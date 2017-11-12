@@ -53,7 +53,7 @@ object fmMain: TfmMain
       Size.Width = 241.000000000000000000
       Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 0
+      TabIndex = 2
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -67,7 +67,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 44.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -172,7 +172,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 32.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -363,7 +363,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TabOrder = 16
           end
-          object Edit1: TEdit
+          object edGoSutra_SutraNum: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 26
             TextSettings.Font.Size = 18.000000000000000000
@@ -374,7 +374,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             StyledSettings = [Family, Style, FontColor]
           end
-          object Edit2: TEdit
+          object edGoSutra_Juan: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 20
             TextSettings.Font.Size = 18.000000000000000000
@@ -385,7 +385,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             StyledSettings = [Family, Style, FontColor]
           end
-          object Edit3: TEdit
+          object edGoSutra_Page: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 19
             TextSettings.Font.Size = 18.000000000000000000
@@ -396,7 +396,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             StyledSettings = [Family, Style, FontColor]
           end
-          object Edit4: TEdit
+          object edGoSutra_Field: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 18
             TextSettings.Font.Size = 18.000000000000000000
@@ -407,7 +407,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             StyledSettings = [Family, Style, FontColor]
           end
-          object Edit5: TEdit
+          object edGoSutra_Line: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 17
             TextSettings.Font.Size = 18.000000000000000000
@@ -418,7 +418,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             StyledSettings = [Family, Style, FontColor]
           end
-          object Edit6: TEdit
+          object edGoBook_Vol: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 25
             TextSettings.Font.Size = 18.000000000000000000
@@ -429,7 +429,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             StyledSettings = [Family, Style, FontColor]
           end
-          object Edit7: TEdit
+          object edGoBook_Page: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 24
             TextSettings.Font.Size = 18.000000000000000000
@@ -440,7 +440,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             StyledSettings = [Family, Style, FontColor]
           end
-          object Edit8: TEdit
+          object edGoBook_Field: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 23
             TextSettings.Font.Size = 18.000000000000000000
@@ -451,7 +451,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             StyledSettings = [Family, Style, FontColor]
           end
-          object Edit9: TEdit
+          object edGoBook_Line: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 22
             TextSettings.Font.Size = 18.000000000000000000
@@ -462,7 +462,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             StyledSettings = [Family, Style, FontColor]
           end
-          object Edit10: TEdit
+          object edGoByKeyword: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 21
             TextSettings.Font.Size = 18.000000000000000000
@@ -481,7 +481,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TabOrder = 15
           end
-          object Button1: TButton
+          object btGoSutra: TButton
             StyledSettings = [Family, Style, FontColor]
             Position.X = 192.000000000000000000
             Position.Y = 16.000000000000000000
@@ -491,8 +491,9 @@ object fmMain: TfmMain
             TabOrder = 29
             Text = 'Go'
             TextSettings.Font.Size = 18.000000000000000000
+            OnClick = btGoSutraClick
           end
-          object Button2: TButton
+          object btGoBook: TButton
             StyledSettings = [Family, Style, FontColor]
             Position.X = 192.000000000000000000
             Position.Y = 192.000000000000000000
@@ -502,8 +503,9 @@ object fmMain: TfmMain
             TabOrder = 28
             Text = 'Go'
             TextSettings.Font.Size = 18.000000000000000000
+            OnClick = btGoBookClick
           end
-          object Button3: TButton
+          object btGoByKeyword: TButton
             StyledSettings = [Family, Style, FontColor]
             Position.X = 192.000000000000000000
             Position.Y = 352.000000000000000000
@@ -568,6 +570,7 @@ object fmMain: TfmMain
       OnClick = btSetBookcasePathClick
     end
     object CheckBox1: TCheckBox
+      IsChecked = True
       Position.X = 680.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 65.000000000000000000
