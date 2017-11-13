@@ -74,9 +74,10 @@ void __fastcall CJuanLine::LoadFromSpine(CSpine * Spine)
 // 由冊頁欄行找 Spine 的 Index
 int __fastcall CJuanLine::CBGetSpineIndexByVolPageFieldLine(String sBook, String sVol, String sPage, String sField, String sLine)
 {
+	String sFullVol = sBook + sVol; // 此時 sVol 要是標準的位數才行
 	SPageLineSerialNo * plPageLine;
-	if(Vol.count(sVol))
-		plPageLine = Vol[sVol];
+	if(Vol.count(sFullVol))
+		plPageLine = Vol[sFullVol];
 	else
 		return -1;
 
@@ -184,7 +185,7 @@ String __fastcall CJuanLine::GetNormalLine(String sLine)
 // 新的行首, 最前面 a-m 則在字首加 "1" , 其他則加 "2"
 String __fastcall CJuanLine::GetNewPageLine(String sPageLine)
 {
-	auto it = sPageLine.begin();
+	String::iterator it = sPageLine.begin();
 	if(*it >= 'a' && *it <= 'm') sPageLine = u"1" + sPageLine;
 	else sPageLine = u"2" + sPageLine;
 

@@ -56,17 +56,7 @@ void __fastcall CBookData::LoadBookDataFile(String sFile)
 // 傳入 T, 1 , 傳回 "T01" 這種標準的冊數
 String __fastcall CBookData::GetFullVolString(String sBook, String sVol)
 {
-	int iVol = sVol.ToIntDef(0);
-
-	if(iVol == 0) return "";
-
-	int iVolLen = GetVolLen(sBook); // 取得指定藏經的冊數位數, 例如大正藏是 2 位數
-
-	for(int i=0; i<iVolLen - sVol.Length(); i++)
-	{
-		sVol = "0" + sVol;
-	}
-
+	sVol = GetNormalVolNumString(sBook, sVol);
 	sVol = sBook + sVol;
 	return sVol;
 }
@@ -82,6 +72,27 @@ int __fastcall CBookData::GetVolLen(String sBook)
 		}
 	}
 	return 0;
+}
+// ---------------------------------------------------------------------------
+// 傳入 T, 1 , 傳回 "01" 這種標準的冊數
+String __fastcall CBookData::GetNormalVolNumString(String sBook, String sVol)
+{
+	int iVol = sVol.ToIntDef(0);
+	if(iVol == 0) return "";
+	int iVolLen = GetVolLen(sBook); // 取得指定藏經的冊數位數, 例如大正藏是 2 位數
+	int iMyLen = sVol.Length();
+
+	if(iMyLen < iVolLen)
+	{
+		sVol = String().StringOfChar(L'0',iVolLen-iMyLen) + sVol;
+	}
+	else if(iMyLen > iVolLen)
+	{
+		String::iterator it = sVol.end();
+        sVol = String(it-iVolLen,iVolLen);
+    }
+
+	return sVol;
 }
 // ---------------------------------------------------------------------------
 

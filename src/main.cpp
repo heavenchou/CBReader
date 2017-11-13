@@ -294,9 +294,6 @@ void __fastcall TfmMain::btGoBookClick(TObject *Sender)
 
 	CSeries * csCBETA = Bookcase->CBETA;
 
-	// 傳入 T, 1 , 傳回 "T01" 這種標準的冊數
-	sVol = csCBETA->BookData->GetFullVolString(sBook, sVol);
-
 	String sFile = csCBETA->CBGetFileNameByVolPageFieldLine(sBook, sVol, sPage, sField, sLine);
 	ShowCBXML(sFile);
 }

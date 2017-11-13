@@ -109,18 +109,25 @@ String __fastcall CSpine::CBGetFileNameBySutraNumJuan(String sBookID,String sSut
 // 傳回標準的經號格式, "0001" 或 "0001a"
 String __fastcall CSpine::CBGetSutraNumFormat(String sSutraNum)
 {
-	int iLen;
-	wchar_t * w = sSutraNum.LastChar();
-	if(*w >= '0' && *w <= '9')
-		iLen = 4;	// 最後一個字是數字, 要填 0 直至四位數
-	else
-		iLen = 5;
+	if(sSutraNum == "") return "";
+	int iMyLen = sSutraNum.Length();
 
-	int iStrLen = sSutraNum.Length();
-	for(int i=0; i<iLen-iStrLen; i++)
+	int iStdLen;
+	String::iterator it = sSutraNum.end();
+	if(*(it-1) >= '0' && *(it-1) <= '9')
+		iStdLen = 4;	// 最後一個字是數字, 要填 0 直至四位數
+	else
+		iStdLen = 5;
+
+	if(iMyLen > iStdLen)
 	{
-		sSutraNum = "0" + sSutraNum;
+		sSutraNum = String(it-iStdLen,iStdLen);
 	}
+	else if(iMyLen < iStdLen)
+	{
+		sSutraNum = String().StringOfChar(L'0',iStdLen-iMyLen) + sSutraNum;
+    }
+
 	return sSutraNum;
 }
 // ---------------------------------------------------------------------------

@@ -22,7 +22,7 @@ __fastcall CCBXMLTest::CCBXMLTest(TStringList * slTitle, TStringList * slResult)
 
 	CBXMLOption = new CCBXMLOption(); // 經文呈現設定檔
 
-	CBXML = new CCBXML(MyFullPath + "Bookcase/Agama/T01n0003_001.xml", CBXMLOption);
+	CBXML = new CCBXML(MyFullPath + "Bookcase/CBETA/XML/T/T01/T01n0001_001.xml", CBXMLOption);
 }
 //---------------------------------------------------------------------------
 // 執行全部測試
@@ -42,7 +42,14 @@ void __fastcall CCBXMLTest::LogTest(String sTitle, bool bResult)
 //---------------------------------------------------------------------------
 bool __fastcall CCBXMLTest::CBXMLSaveToHTML()
 {
-	String sOUT = MyFullPath + "Bookcase/Agama/T01n0003_001.htm";
+	String sOutPath = MyFullPath + "Bookcase/Temp";
+
+	if(!TDirectory::Exists(sOutPath))
+	{
+		TDirectory::CreateDirectory(sOutPath);
+	}
+
+	String sOUT = MyFullPath + "Bookcase/Temp/T01n0001_001.htm";
 
 	if(TFile::Exists(sOUT))
 	{
@@ -56,3 +63,4 @@ bool __fastcall CCBXMLTest::CBXMLSaveToHTML()
 	else
 		return false;
 }
+//---------------------------------------------------------------------------

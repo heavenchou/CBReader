@@ -155,6 +155,9 @@ String __fastcall CSeries::CBGetFileNameBySutraNumJuan(String sBookID, String sS
 // 由冊頁欄行找經文
 String __fastcall CSeries::CBGetFileNameByVolPageFieldLine(String sBook, String sVol, String sPage, String sField, String sLine)
 {
+	// 傳入 T, 1 , 傳回 "01" 這種標準的冊數
+	sVol = BookData->GetNormalVolNumString(sBook, sVol);
+
 	int iIndex = JuanLine->CBGetSpineIndexByVolPageFieldLine(sBook, sVol, sPage, sField, sLine);
 	if(iIndex == -1) return "";
 

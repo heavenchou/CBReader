@@ -19,7 +19,7 @@ __fastcall CNavTreeTest::CNavTreeTest(TStringList * slTitle, TStringList * slRes
 #endif
 
 	MyFullPath += "/";
-	NavTree = new CNavTree(MyFullPath + "Bookcase/Agama/nav.xhtml");
+	NavTree = new CNavTree(MyFullPath + "Bookcase/Test/nav.xhtml");
 }
 //---------------------------------------------------------------------------
 // 執行全部測試
@@ -51,7 +51,7 @@ bool __fastcall CNavTreeTest::NavTreeReadTitle()
 	// 檢查結果
 	SNavItem * it = (SNavItem * ) TreeRoot->Items[0];
 	s = String(it->Level) + "," + it->Type + "," + it->Title + "," + it->URL;
-	return (s == u"0,0,目錄,");
+	return (s == u"0,0,佛教資料,");
 }
 //---------------------------------------------------------------------------
 bool __fastcall CNavTreeTest::NavTreeReadLink()
@@ -60,10 +60,10 @@ bool __fastcall CNavTreeTest::NavTreeReadLink()
 	String s = "";
 
 	// 檢查結果
-	SNavItem * it = (SNavItem * ) TreeRoot->Items[5];
+	SNavItem * it = (SNavItem * ) TreeRoot->Items[2];
 	s = String(it->Level) + "," + it->Type + "," + it->Title + "," + it->URL;
 	// s 應該是 "2,3,CBETA經文,T01n0001_001#p0001a01"
-	return (s == u"1,1,第一卷,chap1.xhtml");
+	return (s == u"2,1,Unicode Test,Book/unicodetest.htm");
 }
 //---------------------------------------------------------------------------
 bool __fastcall CNavTreeTest::NavTreeReadNavLink()
@@ -72,10 +72,10 @@ bool __fastcall CNavTreeTest::NavTreeReadNavLink()
 	String s = "";
 
 	// 檢查結果
-	SNavItem * it = (SNavItem * ) TreeRoot->Items[3];
+	SNavItem * it = (SNavItem * ) TreeRoot->Items[9];
 	s = String(it->Level) + "," + it->Type + "," + it->Title + "," + it->URL;
 	// s 應該是 "2,3,連結大正藏導覽文件,Taisho.xml"
-	return (s == u"2,2,連結大正藏導覽文件,Taisho.xml");
+	return (s == u"1,2,第二個目錄,nav2.xhtml");
 }
 //---------------------------------------------------------------------------
 bool __fastcall CNavTreeTest::NavTreeReadCBLink()
@@ -84,10 +84,10 @@ bool __fastcall CNavTreeTest::NavTreeReadCBLink()
 	String s = "";
 
 	// 檢查結果
-	SNavItem * it = (SNavItem * ) TreeRoot->Items[2];
+	SNavItem * it = (SNavItem * ) TreeRoot->Items[11];
 	s = String(it->Level) + "," + it->Type + "," + it->Title + "," + it->URL;
 	// s 應該是 "2,3,CBETA經文,T01n0001_001#p0001a01"
-	return (s == u"2,3,CBETA經文,T01n0001_001#p0001a01");
+	return (s == u"1,3,毘婆尸佛經,Book/T01n0003_001.xml");
 }
 //---------------------------------------------------------------------------
 

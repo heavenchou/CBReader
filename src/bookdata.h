@@ -27,6 +27,8 @@ public: // User declarations
 	int __fastcall GetVolLen(String sBook);
 	// 傳入 T, 1 , 傳回 "T01" 這種標準的冊數
 	String __fastcall GetFullVolString(String sBook, String sVol);
+	// 傳入 T, 1 , 傳回 "01" 這種標準的冊數
+	String __fastcall GetNormalVolNumString(String sBook, String sVol);
 	__fastcall CBookData();
 	__fastcall ~CBookData();
 };
