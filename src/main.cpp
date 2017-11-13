@@ -158,22 +158,7 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	// CBETA 經文
 	else if(iType == nit_CBLink)
 	{
-
-		String sFile = sSeries->Dir + sURL;
-
-		CCBXML * CBXML = new CCBXML(sFile, Setting->CBXMLOption);
-
-		// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
-		// windows 是 xxxxxx
-		// 所以日後還是自己寫吧
-		//char cOutFile[14];
-		//std::tmpnam(cOutFile);
-
-		String sOutFile = sFile + ".htm";   // ???? 輸出的檔名暫時湊合著
-		CBXML->SaveToHTML(sOutFile);
-
-		WebBrowser->URL = "file://" + sOutFile;
-		WebBrowser->Navigate();
+		ShowCBXML(sURL);
 	}
 }
 //---------------------------------------------------------------------------
@@ -193,7 +178,6 @@ void __fastcall TfmMain::btSetBookcasePathClick(TObject *Sender)
 
 void __fastcall TfmMain::CheckBox1Change(TObject *Sender)
 {
-
 	Setting->CBXMLOption->ShowLineFormat = CheckBox1->IsChecked;
 }
 //---------------------------------------------------------------------------
@@ -209,5 +193,109 @@ void __fastcall TfmMain::CornerButton3Click(TObject *Sender)
 	WebBrowser->GoForward();
 }
 //---------------------------------------------------------------------------
+// 是否有選擇套書了?
+bool __fastcall TfmMain::IsSelectedBook()
+{
+	if(SelectedBook == -1) return false;
+	else return true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
+{
+	String sSutraName = edFindSutraName->Text;
+	String sByline = edFindSutraByline->Text;
 
+	// 逐一搜尋目錄
+	if(IsSelectedBook())
+	{
+		CSeries * Series = (CSeries *) Bookcase->Books->Items[SelectedBook];
+		CCatalog * Catalog = Series->Catalog;
+		int iCount = Catalog->ID->Count;
+		// 逐一檢查
+		sgFindSutra->BeginUpdate();
+		int iGridIndex = 0;
+		sgFindSutra->RowCount = 10;
+		for(int i=0; i<iCount; i++)
+		{
+			bool bFound = true;
+
+			// 找經名
+			if(!sSutraName.IsEmpty())
+				if(Catalog->SutraName->Strings[i].Pos(sSutraName) <= 0)
+					continue;
+			// 找譯者
+			if(!sByline.IsEmpty())
+				if(Catalog->Byline->Strings[i].Pos(sByline) <= 0)
+					continue;
+
+			// 找到了
+
+			sgFindSutra->Cells[0][iGridIndex]=Catalog->SutraName->Strings[i];
+			sgFindSutra->Cells[1][iGridIndex]=Catalog->Byline->Strings[i];
+			iGridIndex++;
+
+			if(iGridIndex >= sgFindSutra->RowCount)
+				sgFindSutra->RowCount += 10;
+		}
+		sgFindSutra->RowCount = iGridIndex;
+        sgFindSutra->EndUpdate();
+	}
+}
+//---------------------------------------------------------------------------
+// 由經卷頁欄行呈現經文
+void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
+{
+	String sBook = "T";
+	String sSutraNum = edGoSutra_SutraNum->Text;
+	String sJuan = edGoSutra_Juan->Text;
+	String sPage = edGoSutra_Page->Text;
+	String sField = edGoSutra_Field->Text;
+	String sLine = edGoSutra_Line->Text;
+
+	CSeries * csCBETA = Bookcase->CBETA;
+
+	String sFile = csCBETA->CBGetFileNameBySutraNumJuan(sBook, sSutraNum, sJuan);
+	ShowCBXML(sFile);
+
+}
+//---------------------------------------------------------------------------
+// 載入 XML 並處理成網頁
+void __fastcall TfmMain::ShowCBXML(String sFile)
+{
+	if(sFile == "")
+	{
+		ShowMessage("沒有找到正確檔案");
+        return;
+    }
+	sFile = Bookcase->CBETA->Dir + sFile;
+	CCBXML * CBXML = new CCBXML(sFile, Setting->CBXMLOption);
+
+	// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
+	// windows 是 xxxxxx
+	// 所以日後還是自己寫吧
+	//char cOutFile[14];
+	//std::tmpnam(cOutFile);
+
+	String sOutFile = sFile + ".htm";   // ???? 輸出的檔名暫時湊合著
+	CBXML->SaveToHTML(sOutFile);
+
+	WebBrowser->URL = "file://" + sOutFile;
+	WebBrowser->Navigate();
+}
+//---------------------------------------------------------------------------
+// 由冊頁欄行呈現經文
+void __fastcall TfmMain::btGoBookClick(TObject *Sender)
+{
+	String sBook = "T";
+	String sVol = edGoBook_Vol->Text;
+	String sPage = edGoBook_Page->Text;
+	String sField = edGoBook_Field->Text;
+	String sLine = edGoBook_Line->Text;
+
+	CSeries * csCBETA = Bookcase->CBETA;
+
+	String sFile = csCBETA->CBGetFileNameByVolPageFieldLine(sBook, sVol, sPage, sField, sLine);
+	ShowCBXML(sFile);
+}
+//---------------------------------------------------------------------------
 

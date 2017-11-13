@@ -97,7 +97,7 @@ void __fastcall TfmMain::TreeViewRunAllTest(void)
 	bool bResult = false;
 	// Click 會在 TestString 傳回結果
 	NavTreeItemClick(TreeView->Items[0]->Items[0]->Items[0]);
-	if(TestString == u"3,CBETA經文,T01n0001_001#p0001a01") bResult = true;
+	if(TestString == u"1,Unicode Test,Book/unicodetest.htm") bResult = true;
 
 	LogTest(u"讀取樹狀目錄資料", bResult);
 }

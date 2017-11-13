@@ -169,6 +169,7 @@
         <LinkPackageImports>rtl.bpi;fmx.bpi;xmlrtl.bpi</LinkPackageImports>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
+        <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -221,6 +222,14 @@
             <DependentOn>..\src\bookcase.h</DependentOn>
             <BuildOrder>12</BuildOrder>
         </CppCompile>
+        <CppCompile Include="..\src\bookdata.cpp">
+            <DependentOn>..\src\bookdata.h</DependentOn>
+            <BuildOrder>16</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\src\catalog.cpp">
+            <DependentOn>..\src\catalog.h</DependentOn>
+            <BuildOrder>17</BuildOrder>
+        </CppCompile>
         <CppCompile Include="..\src\cbxml.cpp">
             <DependentOn>..\src\cbxml.h</DependentOn>
             <BuildOrder>9</BuildOrder>
@@ -228,6 +237,10 @@
         <CppCompile Include="..\src\cbxmloption.cpp">
             <DependentOn>..\src\cbxmloption.h</DependentOn>
             <BuildOrder>10</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\src\juanline.cpp">
+            <DependentOn>..\src\juanline.h</DependentOn>
+            <BuildOrder>14</BuildOrder>
         </CppCompile>
         <None Include="..\src\navitem.h">
             <BuildOrder>7</BuildOrder>
@@ -243,6 +256,10 @@
         <CppCompile Include="..\src\series.cpp">
             <DependentOn>..\src\series.h</DependentOn>
             <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\src\spine.cpp">
+            <DependentOn>..\src\spine.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
         </CppCompile>
         <FormResources Include="main.fmx"/>
         <FormResources Include="main.Macintosh.fmx"/>

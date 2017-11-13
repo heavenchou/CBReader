@@ -174,6 +174,7 @@
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=0.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <LinkPackageImports>rtl.bpi;fmx.bpi;xmlrtl.bpi</LinkPackageImports>
+        <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -203,6 +204,14 @@
             <DependentOn>bookcase.h</DependentOn>
             <BuildOrder>4</BuildOrder>
         </CppCompile>
+        <CppCompile Include="bookdata.cpp">
+            <DependentOn>bookdata.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="catalog.cpp">
+            <DependentOn>catalog.h</DependentOn>
+            <BuildOrder>12</BuildOrder>
+        </CppCompile>
         <CppCompile Include="CBReader.cpp">
             <BuildOrder>0</BuildOrder>
         </CppCompile>
@@ -217,6 +226,10 @@
         <CppCompile Include="cbxmloption.cpp">
             <DependentOn>cbxmloption.h</DependentOn>
             <BuildOrder>9</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="juanline.cpp">
+            <DependentOn>juanline.h</DependentOn>
+            <BuildOrder>14</BuildOrder>
         </CppCompile>
         <CppCompile Include="main.cpp">
             <Form>fmMain</Form>
@@ -249,8 +262,12 @@
             <DependentOn>setting.h</DependentOn>
             <BuildOrder>3</BuildOrder>
         </CppCompile>
-        <FormResources Include="selectbook.fmx"/>
+        <CppCompile Include="spine.cpp">
+            <DependentOn>spine.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
         <FormResources Include="main.fmx"/>
+        <FormResources Include="selectbook.fmx"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -301,13 +318,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
-                    <Platform Name="OSX32">
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
+                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
+                    <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
