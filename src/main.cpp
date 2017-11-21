@@ -30,11 +30,22 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 #ifdef _Windows
 	MyFullPath = GetCurrentDir();
 #else
-	MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
-	//MyFullPath = GetCurrentDir();
+	// MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
+	// MyFullPath = GetCurrentDir();
+	//MyFullPath = StringReplace(MyFullPath, "/CBReader.app/Contents/MacOS", "", TReplaceFlags() << rfReplaceAll);
+
+	MyFullPath = System::Ioutils::TPath::GetHomePath();
+	MyFullPath += "/Desktop";
+
 #endif
 
 	MyFullPath += "/";
+	MyTempPath = MyFullPath + "_Temp_/";
+	if(!TDirectory::Exists(MyTempPath))
+	{
+		TDirectory::CreateDirectory(MyTempPath);
+	}
+
 	SettingFile = "cbreader.ini";
 	Setting = new CSetting();
 
@@ -170,11 +181,6 @@ void __fastcall TfmMain::CornerButton1Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfmMain::btSetBookcasePathClick(TObject *Sender)
-{
-    MyFullPath = edBookcasePath->Text;
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TfmMain::CheckBox1Change(TObject *Sender)
 {
@@ -202,13 +208,21 @@ bool __fastcall TfmMain::IsSelectedBook()
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 {
-	String sSutraName = edFindSutraName->Text;
-	String sByline = edFindSutraByline->Text;
+	String sVolFrom = edFindSutra_VolFrom->Text;
+	String sVolTo = edFindSutra_VolTo->Text;
+	String sSutraFrom = edFindSutra_SutraFrom->Text;
+	String sSutraTo = edFindSutra_SutraTo->Text;
+	String sSutraName = edFindSutra_SutraName->Text;
+	String sByline = edFindSutra_Byline->Text;
 
+	// 先用 CBETA 版 ???
 	// 逐一搜尋目錄
-	if(IsSelectedBook())
+	//if(IsSelectedBook())
 	{
-		CSeries * Series = (CSeries *) Bookcase->Books->Items[SelectedBook];
+		// 先用 CBETA 版 ???
+		// CSeries * Series = (CSeries *) Bookcase->Books->Items[SelectedBook];
+		CSeries * Series = Bookcase->CBETA;
+
 		CCatalog * Catalog = Series->Catalog;
 		int iCount = Catalog->ID->Count;
 		// 逐一檢查
@@ -219,6 +233,40 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 		{
 			bool bFound = true;
 
+			// 找冊數
+			if(!sVolFrom.IsEmpty())
+				if(Catalog->Vol->Strings[i].ToInt() < sVolFrom.ToInt())
+					continue;
+			// 找冊數
+			if(!sVolTo.IsEmpty())
+				if(Catalog->Vol->Strings[i].ToInt() > sVolTo.ToInt())
+					continue;
+			// 找經號
+			if(!sSutraFrom.IsEmpty())
+			{
+				// 經號標準化
+				sSutraFrom = Series->Spine->CBGetSutraNumFormat(sSutraFrom);
+				String sSutra = Series->Spine->CBGetSutraNumFormat(Catalog->SutraNum->Strings[i]);
+				sSutraFrom = sSutraFrom.LowerCase();
+				sSutra = sSutra.LowerCase();
+				if(sSutra < sSutraFrom)
+					continue;
+			}
+			// 找經號
+			if(!sSutraTo.IsEmpty())
+			{
+				// 經號標準化
+				sSutraTo = Series->Spine->CBGetSutraNumFormat(sSutraTo);
+				String sSutra = Series->Spine->CBGetSutraNumFormat(Catalog->SutraNum->Strings[i]);
+				sSutraTo = sSutraTo.LowerCase();
+				sSutra = sSutra.LowerCase();
+				if(sSutraTo.Length() == 4 && sSutra.Length() == 5)
+				{
+					sSutraTo += "z";
+                }
+				if(sSutra > sSutraTo)
+					continue;
+			}
 			// 找經名
 			if(!sSutraName.IsEmpty())
 				if(Catalog->SutraName->Strings[i].Pos(sSutraName) <= 0)
@@ -231,7 +279,13 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 			// 找到了
 
 			sgFindSutra->Cells[0][iGridIndex]=Catalog->SutraName->Strings[i];
-			sgFindSutra->Cells[1][iGridIndex]=Catalog->Byline->Strings[i];
+			sgFindSutra->Cells[1][iGridIndex]=Catalog->ID->Strings[i];
+			sgFindSutra->Cells[2][iGridIndex]=Catalog->Vol->Strings[i];
+			sgFindSutra->Cells[3][iGridIndex]=Catalog->Part->Strings[i];
+			sgFindSutra->Cells[4][iGridIndex]=Catalog->SutraNum->Strings[i];
+			sgFindSutra->Cells[5][iGridIndex]=Catalog->JuanNum->Strings[i];
+			sgFindSutra->Cells[6][iGridIndex]=Catalog->Byline->Strings[i];
+			sgFindSutra->Cells[7][iGridIndex]=i;
 			iGridIndex++;
 
 			if(iGridIndex >= sgFindSutra->RowCount)
@@ -267,8 +321,8 @@ void __fastcall TfmMain::ShowCBXML(String sFile)
 		ShowMessage("沒有找到正確檔案");
         return;
     }
-	sFile = Bookcase->CBETA->Dir + sFile;
-	CCBXML * CBXML = new CCBXML(sFile, Setting->CBXMLOption);
+	String sXMLFile = Bookcase->CBETA->Dir + sFile;
+	CCBXML * CBXML = new CCBXML(sXMLFile, Setting->CBXMLOption);
 
 	// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
 	// windows 是 xxxxxx
@@ -276,7 +330,12 @@ void __fastcall TfmMain::ShowCBXML(String sFile)
 	//char cOutFile[14];
 	//std::tmpnam(cOutFile);
 
-	String sOutFile = sFile + ".htm";   // ???? 輸出的檔名暫時湊合著
+
+	String sOutFile = sFile + ".htm";
+	sOutFile = StringReplace(sOutFile, "/", "_", TReplaceFlags() << rfReplaceAll);
+	sOutFile = StringReplace(sOutFile, "\\", "_", TReplaceFlags() << rfReplaceAll);
+	sOutFile = MyTempPath + sOutFile;
+
 	CBXML->SaveToHTML(sOutFile);
 
 	WebBrowser->URL = "file://" + sOutFile;
@@ -295,6 +354,19 @@ void __fastcall TfmMain::btGoBookClick(TObject *Sender)
 	CSeries * csCBETA = Bookcase->CBETA;
 
 	String sFile = csCBETA->CBGetFileNameByVolPageFieldLine(sBook, sVol, sPage, sField, sLine);
+	ShowCBXML(sFile);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::sgFindSutraCellDblClick(TColumn * const Column, const int Row)
+{
+	int iIndex = sgFindSutra->Cells[7][Row].ToInt();
+
+	CCatalog * cbCatalog = Bookcase->CBETA->Catalog;
+	String sBookID = cbCatalog->ID->Strings[iIndex];
+	String sSutra = cbCatalog->SutraNum->Strings[iIndex];
+
+	String sFile = Bookcase->CBETA->CBGetFileNameBySutraNumJuan(sBookID, sSutra);
 	ShowCBXML(sFile);
 }
 //---------------------------------------------------------------------------

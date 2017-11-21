@@ -54,8 +54,6 @@ __published: // IDE-managed Components
 	TMenuItem *MenuItem3;
 	TMenuItem *MenuItem4;
 	TSplitter *Splitter1;
-	TEdit *edBookcasePath;
-	TCornerButton *btSetBookcasePath;
 	TCheckBox *CheckBox1;
 	TCornerButton *CornerButton2;
 	TCornerButton *CornerButton3;
@@ -64,8 +62,8 @@ __published: // IDE-managed Components
 	TTreeView *tvNavTree;
 	TTabItem *TabItem3;
 	TPanel *Panel3;
-	TEdit *edFindSutraName;
-	TEdit *edFindSutraByline;
+	TEdit *edFindSutra_SutraName;
+	TEdit *edFindSutra_Byline;
 	TButton *btFindSutra;
 	TSplitter *Splitter2;
 	TTabItem *TabItem4;
@@ -102,16 +100,35 @@ __published: // IDE-managed Components
 	TButton *btGoSutra;
 	TButton *btGoBook;
 	TButton *btGoByKeyword;
+	TStringColumn *StringColumn3;
+	TStringColumn *StringColumn4;
+	TStringColumn *StringColumn5;
+	TStringColumn *StringColumn6;
+	TStringColumn *StringColumn7;
+	TEdit *edFindSutra_VolFrom;
+	TEdit *edFindSutra_VolTo;
+	TEdit *edFindSutra_SutraFrom;
+	TEdit *edFindSutra_SutraTo;
+	TLabel *Label15;
+	TLabel *經號;
+	TLabel *經名;
+	TLabel *作譯者;
+	TLabel *Label16;
+	TComboBox *ComboBox3;
+	TLabel *Label17;
+	TLabel *Label18;
+	TStringColumn *StringColumn8;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall CornerButton1Click(TObject *Sender);
-	void __fastcall btSetBookcasePathClick(TObject *Sender);
 	void __fastcall CheckBox1Change(TObject *Sender);
 	void __fastcall CornerButton2Click(TObject *Sender);
 	void __fastcall CornerButton3Click(TObject *Sender);
 	void __fastcall btFindSutraClick(TObject *Sender);
 	void __fastcall btGoSutraClick(TObject *Sender);
 	void __fastcall btGoBookClick(TObject *Sender);
+	void __fastcall sgFindSutraCellDblClick(TColumn * const Column, const int Row);
+
 
 private: // User declarations
 
@@ -124,6 +141,7 @@ public: // User declarations
     int SelectedBook;   // 目前選中的書, -1 表示還沒選
 	String SettingFile;
 	String MyFullPath;
+	String MyTempPath;  // 存放暫時檔的目錄
 
 	CSetting * Setting; // 設定檔
 	CBookcase * Bookcase; // 書櫃
