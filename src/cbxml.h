@@ -11,7 +11,7 @@
 #include <fmx.h>
 #include <Xml.XMLDoc.hpp>
 #include <System.IOUtils.hpp>
-#include "cbxmloption.h"
+#include "setting.h"
 
 // ---------------------------------------------------------------------------
 // 這是一個讀取導覽文件的物件
@@ -22,7 +22,7 @@ private: // User declarations
 
 	String XMLFile; // XML 檔名
 	UnicodeString HTMLText;	// HTML 的結果
-	CCBXMLOption * CBXMLOption; // 呈現用的設定
+	CSetting * Setting; // 呈現用的設定
 
 	_di_IXMLDocument Document;
 
@@ -48,7 +48,7 @@ public: // User declarations
 	void __fastcall SaveToHTML(String sFile);	// 儲存至 HTML
 
 	// 傳入參數為 XML 檔, 呈現的設定
-	__fastcall CCBXML(String sFile, CCBXMLOption * CBXMLOption);
+	__fastcall CCBXML(String sFile, CSetting * csSetting);
 	__fastcall ~CCBXML();
 };
 // ---------------------------------------------------------------------------

@@ -1,0 +1,194 @@
+object fmOption: TfmOption
+  Left = 0
+  Top = 0
+  Caption = #35373#23450
+  ClientHeight = 648
+  ClientWidth = 865
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object TreeView1: TTreeView
+    Align = Left
+    Size.Width = 209.000000000000000000
+    Size.Height = 584.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Viewport.Width = 205.000000000000000000
+    Viewport.Height = 580.000000000000000000
+    object TreeViewItem1: TTreeViewItem
+      StyledSettings = [Family, Style, FontColor]
+      TextSettings.Font.Size = 18.000000000000000000
+      IsChecked = False
+      IsExpanded = False
+      IsSelected = False
+      TabOrder = 0
+      Text = 'TreeViewItem1'
+    end
+    object TreeViewItem2: TTreeViewItem
+      StyledSettings = [Family, Style, FontColor]
+      TextSettings.Font.Size = 18.000000000000000000
+      IsChecked = False
+      IsExpanded = False
+      IsSelected = False
+      TabOrder = 1
+      Text = 'TreeViewItem2'
+    end
+    object TreeViewItem3: TTreeViewItem
+      StyledSettings = [Family, Style, FontColor]
+      TextSettings.Font.Size = 18.000000000000000000
+      IsChecked = False
+      IsExpanded = False
+      IsSelected = False
+      TabOrder = 2
+      Text = 'TreeViewItem3'
+    end
+  end
+  object TabControl1: TTabControl
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 584.000000000000000000
+    Size.PlatformDefault = False
+    TabIndex = 2
+    TabOrder = 2
+    TabPosition = PlatformDefault
+    Sizes = (
+      640s
+      558s
+      640s
+      558s
+      640s
+      558s)
+    object TabItem1: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 69.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem1'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+    end
+    object TabItem2: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 69.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem2'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+    end
+    object TabItem3: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 69.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem3'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object gbSutraFormat: TGroupBox
+        Position.X = 24.000000000000000000
+        Position.Y = 22.000000000000000000
+        Size.Width = 185.000000000000000000
+        Size.Height = 155.000000000000000000
+        Size.PlatformDefault = False
+        Text = #32147#25991#26684#24335
+        TabOrder = 0
+        object cbShowLineFormat: TCheckBox
+          Position.X = 16.000000000000000000
+          Position.Y = 24.000000000000000000
+          TabOrder = 4
+          Text = #20381#21407#26360#26684#24335#21576#29694
+        end
+        object cbShowLineHead: TCheckBox
+          Position.X = 16.000000000000000000
+          Position.Y = 48.000000000000000000
+          Size.Width = 153.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 3
+          Text = #21152#19978#12300#38913#12289#27396#12289#34892#12301#36039#35338
+        end
+        object cbShowPunc: TCheckBox
+          Position.X = 16.000000000000000000
+          Position.Y = 72.000000000000000000
+          Size.Width = 105.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          Text = #39023#31034#27161#40670#31526#34399
+        end
+        object cbNoShowLgPunc: TCheckBox
+          Position.X = 40.000000000000000000
+          Position.Y = 96.000000000000000000
+          Size.Width = 73.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = #20552#38924#38500#22806
+        end
+        object cbVerticalMode: TCheckBox
+          Position.X = 16.000000000000000000
+          Position.Y = 120.000000000000000000
+          TabOrder = 0
+          Text = #30452#25490
+        end
+      end
+    end
+  end
+  object Splitter1: TSplitter
+    Align = Left
+    Cursor = crHSplit
+    MinSize = 20.000000000000000000
+    Position.X = 209.000000000000000000
+    ShowGrip = False
+    Size.Width = 16.000000000000000000
+    Size.Height = 584.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Panel1: TPanel
+    Align = Bottom
+    Position.Y = 584.000000000000000000
+    Size.Width = 865.000000000000000000
+    Size.Height = 64.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object btOK: TButton
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 384.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = #30906#35469
+      TextSettings.Font.Size = 18.000000000000000000
+      OnClick = btOKClick
+    end
+    object btCancel: TButton
+      Position.X = 760.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 64.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = #21462#28040
+      OnClick = btCancelClick
+    end
+  end
+end

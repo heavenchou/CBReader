@@ -24,7 +24,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	// 取得 Bookcase 所有資料區
 
 #ifdef _Windows
-	//SetPermissions(); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
+	SetPermissions(11001); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
 #endif
 
 #ifdef _Windows
@@ -83,12 +83,12 @@ void __fastcall TfmMain::FormDestroy(TObject *Sender)
 //
 // 參考 MSDN
 // https://msdn.microsoft.com/en-us/library/ee330730%28v=vs.85%29.aspx#browser_emulation
-void __fastcall TfmMain::SetPermissions()
+void __fastcall TfmMain::SetPermissions(int iIE)
 {
 #ifdef _Windows
 	UnicodeString cHomePath = "SOFTWARE";
 	UnicodeString cFeatureBrowserEmulation = "Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BROWSER_EMULATION\\";
-	int cIE11 = 11001;
+	//int cIE11 = 11001;
 	UnicodeString sKey = ExtractFileName(ParamStr(0));
 	TRegIniFile *Reg = new TRegIniFile(cHomePath);
 	__try
@@ -96,9 +96,9 @@ void __fastcall TfmMain::SetPermissions()
 		TRegistry *reg1 = dynamic_cast<TRegistry*>(Reg);
 		if (Reg->OpenKey(cFeatureBrowserEmulation,
 			true) && !(reg1->KeyExists(sKey) && reg1->ReadInteger(sKey)
-			== cIE11))
+			== iIE))
 		{
-			reg1->WriteInteger(sKey, cIE11);
+			reg1->WriteInteger(sKey, iIE);
 		}
 	}
 	__finally
@@ -181,12 +181,6 @@ void __fastcall TfmMain::CornerButton1Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
-void __fastcall TfmMain::CheckBox1Change(TObject *Sender)
-{
-	Setting->CBXMLOption->ShowLineFormat = CheckBox1->IsChecked;
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TfmMain::CornerButton2Click(TObject *Sender)
 {
@@ -322,7 +316,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile)
         return;
     }
 	String sXMLFile = Bookcase->CBETA->Dir + sFile;
-	CCBXML * CBXML = new CCBXML(sXMLFile, Setting->CBXMLOption);
+	CCBXML * CBXML = new CCBXML(sXMLFile, Setting);
 
 	// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
 	// windows 是 xxxxxx
@@ -368,6 +362,20 @@ void __fastcall TfmMain::sgFindSutraCellDblClick(TColumn * const Column, const i
 
 	String sFile = Bookcase->CBETA->CBGetFileNameBySutraNumJuan(sBookID, sSutra);
 	ShowCBXML(sFile);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::btOptionClick(TObject *Sender)
+{
+    fmOption->ShowModal();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::FormClose(TObject *Sender, TCloseAction &Action)
+{
+#ifdef _Windows
+	SetPermissions(7000); // 設定為 IE 7
+#endif
 }
 //---------------------------------------------------------------------------
 

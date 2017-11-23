@@ -7,6 +7,7 @@
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnClose = FormClose
   OnDestroy = FormDestroy
   DesignerMasterStyle = 0
   object TabControl1: TTabControl
@@ -53,7 +54,7 @@
       Size.Width = 241.000000000000000000
       Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 2
+      TabIndex = 0
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -67,7 +68,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 44.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -82,8 +83,8 @@
           Size.Height = 592.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          Viewport.Width = 237.000000000000000000
-          Viewport.Height = 588.000000000000000000
+          Viewport.Width = 241.000000000000000000
+          Viewport.Height = 592.000000000000000000
         end
       end
       object TabItem3: TTabItem
@@ -282,8 +283,8 @@
           RowCount = 0
           Options = [ColumnResize, ColumnMove, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 237.000000000000000000
-          Viewport.Height = 389.000000000000000000
+          Viewport.Width = 241.000000000000000000
+          Viewport.Height = 414.000000000000000000
           object StringColumn1: TStringColumn
             Header = #32147#21517
             Size.Width = 130.000000000000000000
@@ -316,7 +317,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 32.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -700,17 +701,6 @@
       YRadius = 3.000000000000000000
       OnClick = CornerButton1Click
     end
-    object CheckBox1: TCheckBox
-      IsChecked = True
-      Position.X = 248.000000000000000000
-      Position.Y = 16.000000000000000000
-      Size.Width = 65.000000000000000000
-      Size.Height = 19.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 2
-      Text = #21407#26360
-      OnChange = CheckBox1Change
-    end
     object CornerButton2: TCornerButton
       Position.X = 304.000000000000000000
       Position.Y = 16.000000000000000000
@@ -718,7 +708,7 @@
       Size.Width = 57.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 4
+      TabOrder = 3
       Text = #19978#19968#38913
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
@@ -731,11 +721,24 @@
       Size.Width = 57.000000000000000000
       Size.Height = 22.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 3
+      TabOrder = 2
       Text = #19979#19968#38913
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
       OnClick = CornerButton3Click
+    end
+    object btOption: TCornerButton
+      Position.X = 120.000000000000000000
+      Position.Y = 8.000000000000000000
+      Sides = [Top, Left, Bottom, Right]
+      Size.Width = 80.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      Text = #35373#23450
+      XRadius = 3.000000000000000000
+      YRadius = 3.000000000000000000
+      OnClick = btOptionClick
     end
   end
   object MainMenu1: TMainMenu

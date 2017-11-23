@@ -9,11 +9,11 @@
 // ---------------------------------------------------------------------------
 // 建構函式
 // 傳入參數為 XML 檔, 呈現的設定
-__fastcall CCBXML::CCBXML(String sFile, CCBXMLOption * cbxOption)
+__fastcall CCBXML::CCBXML(String sFile, CSetting * cSetting)
 {
 	// 初值
 	XMLFile = sFile;
-	CBXMLOption = cbxOption;
+	Setting = cSetting;
 	HTMLText = "";
 
 	Document = interface_cast<Xmlintf::IXMLDocument>(new TXMLDocument(NULL));
@@ -49,7 +49,6 @@ void __fastcall CCBXML::ParseXML()
 		ParseNode(Node);
 	}
 }
-
 // ---------------------------------------------------------------------------
 // 解析 XML Node
 void __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
@@ -113,7 +112,6 @@ void __fastcall CCBXML::tag_default(_di_IXMLNode Node)
 {
 	parseChild(Node); // 處理內容
 }
-
 // ---------------------------------------------------------------------------
 // 解析 XML 標記
 void __fastcall CCBXML::tag_a(_di_IXMLNode Node)
@@ -128,8 +126,8 @@ void __fastcall CCBXML::tag_a(_di_IXMLNode Node)
 void __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 {
 	// 處理標記
-	if(CBXMLOption->ShowLineFormat) // 呈現原書格式
-		HTMLText += "<br/>\n";
+	///if(Setting->ShowLineFormat) // 呈現原書格式
+	HTMLText += "<br class=\"lb_br\"/>";
 
 	parseChild(Node); // 處理內容
 	// 結束標記
@@ -147,10 +145,10 @@ void __fastcall CCBXML::tag_pb(_di_IXMLNode Node)
 void __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 {
 
-	if(!CBXMLOption->ShowLineFormat) // 不呈現原書格式
+	//if(!Setting->ShowLineFormat) // 不呈現原書格式
 		HTMLText += "<p>";
 	parseChild(Node); // 處理內容
-	if(!CBXMLOption->ShowLineFormat) // 不呈現原書格式
+	//if(!Setting->ShowLineFormat) // 不呈現原書格式
 		HTMLText += "</p>";
 }
 
@@ -187,8 +185,63 @@ void __fastcall CCBXML::MakeHTMLHead()
 	"<head>\n"
 	"	<meta charset=\"utf-8\">\n"
 	"	<title>CBETA 線上閱讀</title>\n"
+	"   <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>\n"
+	"	<style>\n"
+	"		body { background:#DDF1DC; font-weight: normal; line-height:20pt; color:#000000; font-size:16pt;}\n"
+	"		span.SearchWord1 {color:#0000ff; background: #ffff66;}\n"
+	"		span.SearchWord2 {color:#0000ff; background: #a0ffff;}\n"
+	"		span.SearchWord3 {color:#0000ff; background: #99ff99;}\n"
+	"		span.SearchWord4 {color:#0000ff; background: #ff9999;}\n"
+	"		span.SearchWord5 {color:#0000ff; background: #ff66ff;}\n"
+	"		span.guess1 {background: #fff0a0;}\n"
+	"		span.guess2 {background: #ffd080;}\n"
+	"		span.guess3 {background: #ffb060;}\n"
+	"		span.guess4 {background: #ff9040;}\n"
+	"		a.hover	{color:#0000ff;}\n"
+	"		a:visited 	{color:#0000ff;}\n"
+	"		a:link		{color:#0000ff;}\n"
+	"		a:active	{color:#0000ff;}\n"
+	"		.nonhan	{font-family:\"Times New Roman\", \"Gandhari Unicode\";}\n"
+	"		.juannum {color:#008000; font-weight: normal; font-size:16pt;}\n"
+	"		.juanname {color:#0000FF; font-weight: bold; font-size:18pt;}\n"
+	"		.xu {color:#0000A0; font-weight: normal; font-size:16pt;}\n"
+	"		.w {color:#0000A0; font-weight: normal; font-size:16pt;}\n"
+	"		.byline {color:#408080; font-weight: normal; font-size:16pt;}\n"
+	"		.headname {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
+	"		.linehead {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
+	"		.lg {color:#008040; font-weight: normal; font-size:16pt;}\n"
+	"		.corr {color:#FF0000; font-weight: normal; }\n"
+	"		.note {color:#9F5000; font-weight: normal; font-size:14pt;}\n";
+
+	if(Setting->ShowLineFormat)
+		HTMLText += u"		p {display:inline;}\n";
+	else
+		HTMLText += u"		p {display:block;}\n"
+					"		br.lb_br {display:none;}\n";
+
+	HTMLText += u"	</style>\n"
 	"</head>\n"
 	"<body>\n";
+
+	// 檔頭程式
+
+	HTMLText += u"<script>\n"
+	"function ShowLine()\n"
+	"{\n"
+	"	$(\"p\").css(\"display\",\"inline\");\n"
+	"	$(\"br.lb_br\").css(\"display\",\"inline\");\n"
+	"}\n"
+	"function ShowPara()\n"
+	"{\n"
+	"	$(\"p\").css(\"display\",\"block\");\n"
+	"	$(\"br.lb_br\").css(\"display\",\"none\");\n"
+	"}\n"
+	"</script>\n"
+	"<div align=\"right\" style=\"position:fixed; border:1px; ; margin:10px; padding:10px; background-color:#1e7e7e; right:0px;\">\n"
+	"		<input type=\"button\" value=\"原書\" onclick=\"ShowLine()\"/>\n"
+	"		<input type=\"button\" value=\"段落\" onclick=\"ShowPara()\"/>\n"
+	"</div>\n";
+
 }
 // ---------------------------------------------------------------------------
 

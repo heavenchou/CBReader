@@ -38,6 +38,7 @@
 #include <FMX.ScrollBox.hpp>
 #include <System.Rtti.hpp>
 #include <FMX.MultiView.hpp>
+#include "option.h"
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
@@ -54,7 +55,6 @@ __published: // IDE-managed Components
 	TMenuItem *MenuItem3;
 	TMenuItem *MenuItem4;
 	TSplitter *Splitter1;
-	TCheckBox *CheckBox1;
 	TCornerButton *CornerButton2;
 	TCornerButton *CornerButton3;
 	TTabControl *TabControl2;
@@ -118,21 +118,23 @@ __published: // IDE-managed Components
 	TLabel *Label17;
 	TLabel *Label18;
 	TStringColumn *StringColumn8;
+	TCornerButton *btOption;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall CornerButton1Click(TObject *Sender);
-	void __fastcall CheckBox1Change(TObject *Sender);
 	void __fastcall CornerButton2Click(TObject *Sender);
 	void __fastcall CornerButton3Click(TObject *Sender);
 	void __fastcall btFindSutraClick(TObject *Sender);
 	void __fastcall btGoSutraClick(TObject *Sender);
 	void __fastcall btGoBookClick(TObject *Sender);
 	void __fastcall sgFindSutraCellDblClick(TColumn * const Column, const int Row);
+	void __fastcall btOptionClick(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 
 
 private: // User declarations
 
-	void __fastcall SetPermissions(); // 設定 TWebBrowser 的 IE 版本
+	void __fastcall SetPermissions(int iIE); // 設定 TWebBrowser 的 IE 版本
 	void __fastcall NavTreeItemClick(TObject *Sender); // NavTree Item 點二下的作用
 
 public: // User declarations
