@@ -54,7 +54,7 @@
       Size.Width = 241.000000000000000000
       Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 0
+      TabIndex = 2
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -68,7 +68,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 44.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -83,8 +83,8 @@
           Size.Height = 592.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          Viewport.Width = 241.000000000000000000
-          Viewport.Height = 592.000000000000000000
+          Viewport.Width = 237.000000000000000000
+          Viewport.Height = 588.000000000000000000
         end
       end
       object TabItem3: TTabItem
@@ -283,8 +283,8 @@
           RowCount = 0
           Options = [ColumnResize, ColumnMove, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 241.000000000000000000
-          Viewport.Height = 414.000000000000000000
+          Viewport.Width = 237.000000000000000000
+          Viewport.Height = 389.000000000000000000
           object StringColumn1: TStringColumn
             Header = #32147#21517
             Size.Width = 130.000000000000000000
@@ -317,7 +317,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 32.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -515,6 +515,7 @@
           object edGoSutra_SutraNum: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 26
+            Text = '99'
             TextSettings.Font.Size = 18.000000000000000000
             Position.X = 72.000000000000000000
             Position.Y = 80.000000000000000000
@@ -526,6 +527,7 @@
           object edGoSutra_Juan: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 20
+            Text = '2'
             TextSettings.Font.Size = 18.000000000000000000
             Position.X = 72.000000000000000000
             Position.Y = 112.000000000000000000

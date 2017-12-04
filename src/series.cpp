@@ -18,6 +18,7 @@ __fastcall CSeries::CSeries(String sDir)
 	CatalogFile = "";     // 目錄文件
 	SpineFile = "";   // 遍歷文件
 	BookDataFile = "";   // Bookdata 文件
+	JSFile = "";          // CBReader 專用的 js 檔
 
 	Catalog = 0;	  // 目錄
 	Spine = 0;    		// 遍歷文件
@@ -143,6 +144,13 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	if(Node->HasAttribute("src"))
 	{
 		BookDataFile = Node->GetAttribute("src");
+	}
+
+	// 讀 JSFile
+	Node = Document->DocumentElement->ChildNodes->Nodes["javascript"];
+	if(Node->HasAttribute("src"))
+	{
+		JSFile = Node->GetAttribute("src");
 	}
 }
 // ---------------------------------------------------------------------------

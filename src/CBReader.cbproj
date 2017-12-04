@@ -282,6 +282,10 @@
             <DependentOn>spine.h</DependentOn>
             <BuildOrder>13</BuildOrder>
         </CppCompile>
+        <CppCompile Include="subutil.cpp">
+            <DependentOn>subutil.h</DependentOn>
+            <BuildOrder>16</BuildOrder>
+        </CppCompile>
         <FormResources Include="option.fmx"/>
         <FormResources Include="selectbook.fmx"/>
         <FormResources Include="main.fmx"/>
@@ -487,6 +491,13 @@
                 </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin64\cc64250mt.dll" Class="DependencyModule">
                     <Platform Name="Win64">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName=".\OSX32\Debug\CBReader.tds" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="OSX32">
+                        <RemoteDir>Contents\MacOS\</RemoteDir>
+                        <RemoteName>CBReader.tds</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

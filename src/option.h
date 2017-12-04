@@ -36,6 +36,10 @@ __published:	// IDE-managed Components
 	TCheckBox *cbVerticalMode;
 	TButton *btOK;
 	TButton *btCancel;
+	TGroupBox *gbCollationType;
+	TRadioButton *rbNoCollation;
+	TRadioButton *rbOrigCollation;
+	TRadioButton *rbCBETACollation;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btOKClick(TObject *Sender);
 	void __fastcall btCancelClick(TObject *Sender);

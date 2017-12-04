@@ -37,6 +37,7 @@ public: // User declarations
 	String CatalogFile;	// 目錄文件
 	String SpineFile;   // 遍歷文件
 	String BookDataFile;   // BookData 文件
+    String JSFile;          // CBReader 專用的 js 檔
 
 	CCatalog * Catalog; // 目錄
 	CSpine * Spine;		// 遍歷文件

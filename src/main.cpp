@@ -316,7 +316,8 @@ void __fastcall TfmMain::ShowCBXML(String sFile)
         return;
     }
 	String sXMLFile = Bookcase->CBETA->Dir + sFile;
-	CCBXML * CBXML = new CCBXML(sXMLFile, Setting);
+	String sJSFile = Bookcase->CBETA->Dir + Bookcase->CBETA->JSFile;
+	CCBXML * CBXML = new CCBXML(sXMLFile, Setting, sJSFile);
 
 	// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
 	// windows 是 xxxxxx

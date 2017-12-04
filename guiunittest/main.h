@@ -40,7 +40,7 @@ public:		// User declarations
 	// 要測試的物件
 	CSample * Sample;
 	CNavTreeTest * NavTreeTest;
-	CCBXMLTest * CBXMLTest;
+	//CCBXMLTest * CBXMLTest;
     CBookcaseTest * BookcaseTest;
 
     // 在測試結果上加標題, 以便區分

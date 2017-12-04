@@ -37,9 +37,9 @@ __fastcall TfmMain::TfmMain(TComponent* Owner)
 	NavTreeTest->NavTree->SaveToTreeView(TreeView, NavTreeItemClick);
 	TreeViewRunAllTest();	// Nav 樹狀目錄測試
 
-	ListBoxAddHead(u"XML 轉 HTML 測試");
-	CBXMLTest = new CCBXMLTest(Titles, Results);
-	CBXMLTest->RunAllTest();
+	//ListBoxAddHead(u"XML 轉 HTML 測試");
+	//CBXMLTest = new CCBXMLTest(Titles, Results);
+	//CBXMLTest->RunAllTest();
 }
 //---------------------------------------------------------------------------
 // 在測試結果上加標題, 以便區分

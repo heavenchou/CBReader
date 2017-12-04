@@ -6,7 +6,7 @@
 #include "cbxmloption.h"
 #include <fmx.h>
 // ---------------------------------------------------------------------------
-
+enum ctCollationType {ctNoCollation, ctOrigCollation, ctCBETACollation};
 class CSetting
 {
 private: // User declarations
@@ -17,6 +17,25 @@ public: // User declarations
 
 	String BookcaseDir; // 書櫃的目錄
 
+
+    // 經文格式
+
+	bool ShowLineFormat;	// 是否依大正藏切行
+	bool ShowLineHead;		// 是否行首加上行首資訊
+    int  CorrSelect;		// 修訂選擇 0:修訂用字, 1:二者皆要 [底本>修訂], 2:底本用字
+    int ShowCorrWarning;    // 是否要秀出修訂選擇的注意事項, 預設是 0
+    bool ShowJKData;		// 顯示校勘資料
+	int  CopyMode;			// 1. 有校勘, 經名在前. 2.有校勘, 經名在後. 3. 無校勘, 經名在前. 4.無校勘, 經名在後.
+    bool CBCopyWithJuanNum; // 引用複製是否呈現卷數
+
+	bool VerticalMode;		// 垂直顯示
+    bool ShowPunc;          // 呈現標點與段落
+    bool NoShowLgPunc;      // 不呈現偈頌的標點
+    int LgType;             // 這是2016新的暫時功能, 設定偈頌呈現的方式, 0 為舊的方式用空格, 1 為非標準偈頌用 <p> 呈現編排
+
+	// 校勘格式
+
+	ctCollationType CollationType;      // 校勘格式 0:無, 1:原書, 2:CBETA
 
 	// 經文呈現的顏色, 背景
 
@@ -84,22 +103,7 @@ public: // User declarations
 	bool   UseCSSFile;     		// 使用 CSS 檔案
 	String CSSFileName;
 
-    // 經文格式
-
-	bool ShowLineFormat;	// 是否依大正藏切行
-	bool ShowLineHead;		// 是否行首加上行首資訊
-    int  CorrSelect;		// 修訂選擇 0:修訂用字, 1:二者皆要 [底本>修訂], 2:底本用字
-    int ShowCorrWarning;    // 是否要秀出修訂選擇的注意事項, 預設是 0
-    bool ShowJKData;		// 顯示校勘資料
-	int  CopyMode;			// 1. 有校勘, 經名在前. 2.有校勘, 經名在後. 3. 無校勘, 經名在前. 4.無校勘, 經名在後.
-    bool CBCopyWithJuanNum; // 引用複製是否呈現卷數
-
-	bool VerticalMode;		// 垂直顯示
-    bool ShowPunc;          // 呈現標點與段落
-    bool NoShowLgPunc;      // 不呈現偈頌的標點
-    int LgType;             // 這是2016新的暫時功能, 設定偈頌呈現的方式, 0 為舊的方式用空格, 1 為非標準偈頌用 <p> 呈現編排
-
-    // 缺字處理
+	// 缺字處理
 
 	int GaijiID[4];			// 4種處理缺字的方法, 分別是"通用字","組字式","Unicode", "圖型"
 	bool GaijiUse[4];		// 4種缺字是否使用

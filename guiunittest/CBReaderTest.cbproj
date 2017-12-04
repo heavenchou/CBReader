@@ -6,7 +6,7 @@
         <MainSource>CBReaderTest.cpp</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">OSX32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>7</TargetedPlatforms>
         <AppType>Application</AppType>
     </PropertyGroup>
@@ -200,11 +200,8 @@
         </CppCompile>
         <PCHCompile Include="CBReaderTestPCH1.h">
             <BuildOrder>2</BuildOrder>
+            <PCH>true</PCH>
         </PCHCompile>
-        <CppCompile Include="cbxmltest.cpp">
-            <DependentOn>cbxmltest.h</DependentOn>
-            <BuildOrder>8</BuildOrder>
-        </CppCompile>
         <CppCompile Include="main.cpp">
             <Form>fmMain</Form>
             <FormType>fmx</FormType>
@@ -229,14 +226,6 @@
         <CppCompile Include="..\src\catalog.cpp">
             <DependentOn>..\src\catalog.h</DependentOn>
             <BuildOrder>17</BuildOrder>
-        </CppCompile>
-        <CppCompile Include="..\src\cbxml.cpp">
-            <DependentOn>..\src\cbxml.h</DependentOn>
-            <BuildOrder>9</BuildOrder>
-        </CppCompile>
-        <CppCompile Include="..\src\cbxmloption.cpp">
-            <DependentOn>..\src\cbxmloption.h</DependentOn>
-            <BuildOrder>10</BuildOrder>
         </CppCompile>
         <CppCompile Include="..\src\juanline.cpp">
             <DependentOn>..\src\juanline.h</DependentOn>

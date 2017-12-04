@@ -108,7 +108,7 @@ object fmOption: TfmOption
         Size.Height = 155.000000000000000000
         Size.PlatformDefault = False
         Text = #32147#25991#26684#24335
-        TabOrder = 0
+        TabOrder = 1
         object cbShowLineFormat: TCheckBox
           Position.X = 16.000000000000000000
           Position.Y = 24.000000000000000000
@@ -147,6 +147,34 @@ object fmOption: TfmOption
           Position.Y = 120.000000000000000000
           TabOrder = 0
           Text = #30452#25490
+        end
+      end
+      object gbCollationType: TGroupBox
+        Position.X = 240.000000000000000000
+        Position.Y = 22.000000000000000000
+        Size.Width = 185.000000000000000000
+        Size.Height = 107.000000000000000000
+        Size.PlatformDefault = False
+        Text = #26657#21208#26684#24335
+        TabOrder = 0
+        object rbNoCollation: TRadioButton
+          Position.X = 16.000000000000000000
+          Position.Y = 24.000000000000000000
+          TabOrder = 2
+          Text = #28961#26657#21208
+        end
+        object rbOrigCollation: TRadioButton
+          Position.X = 16.000000000000000000
+          Position.Y = 48.000000000000000000
+          TabOrder = 1
+          Text = #21407#26360#26657#21208
+        end
+        object rbCBETACollation: TRadioButton
+          IsChecked = True
+          Position.X = 16.000000000000000000
+          Position.Y = 72.000000000000000000
+          TabOrder = 0
+          Text = 'CBETA'#29256#26657#21208
         end
       end
     end
