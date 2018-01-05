@@ -54,10 +54,12 @@
       Size.Width = 241.000000000000000000
       Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 2
+      TabIndex = 3
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
+        241s
+        592s
         241s
         592s
         241s
@@ -317,7 +319,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 32.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -672,6 +674,109 @@
             TabOrder = 27
             Text = 'Go'
             TextSettings.Font.Size = 18.000000000000000000
+          end
+        end
+      end
+      object TabItem5: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 68.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = #20840#25991#27298#32034
+        ExplicitSize.cx = 68.000000000000000000
+        ExplicitSize.cy = 26.000000000000000000
+        object Panel5: TPanel
+          Align = Top
+          Size.Width = 241.000000000000000000
+          Size.Height = 97.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object Label19: TLabel
+            StyledSettings = [Family, Style, FontColor]
+            Position.X = 8.000000000000000000
+            Position.Y = 8.000000000000000000
+            Size.Width = 81.000000000000000000
+            Size.Height = 25.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 18.000000000000000000
+            Text = #27298#32034#23383#20018
+            TabOrder = 11
+          end
+          object edTextSearch: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            TabOrder = 5
+            Position.X = 8.000000000000000000
+            Position.Y = 40.000000000000000000
+            Size.Width = 217.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object btTextSearch: TButton
+            Position.X = 192.000000000000000000
+            Position.Y = 8.000000000000000000
+            Size.Width = 33.000000000000000000
+            Size.Height = 25.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Text = #25214
+            OnClick = btTextSearchClick
+          end
+          object lbSearchMsg: TLabel
+            Position.X = 8.000000000000000000
+            Position.Y = 72.000000000000000000
+            Size.Width = 217.000000000000000000
+            Size.Height = 17.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 12
+          end
+        end
+        object sgTextSearch: TStringGrid
+          Align = Client
+          CanFocus = True
+          ClipChildren = True
+          Size.Width = 241.000000000000000000
+          Size.Height = 495.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          RowCount = 0
+          Options = [ColumnResize, ColumnMove, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
+          OnCellDblClick = sgFindSutraCellDblClick
+          Viewport.Width = 237.000000000000000000
+          Viewport.Height = 470.000000000000000000
+          object StringColumn17: TStringColumn
+            Header = #31558#25976
+            Size.Width = 49.000000000000000000
+          end
+          object StringColumn9: TStringColumn
+            Header = #32147#21517
+            Size.Width = 130.000000000000000000
+          end
+          object StringColumn10: TStringColumn
+            Header = #34255
+            Size.Width = 31.000000000000000000
+          end
+          object StringColumn11: TStringColumn
+            Header = #20874
+          end
+          object StringColumn12: TStringColumn
+            Header = #37096
+          end
+          object StringColumn13: TStringColumn
+            Header = #32147
+          end
+          object StringColumn14: TStringColumn
+            Header = #21367
+          end
+          object StringColumn15: TStringColumn
+            Header = #20316#35695#32773
+          end
+          object StringColumn16: TStringColumn
+            Visible = False
           end
         end
       end

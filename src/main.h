@@ -39,6 +39,7 @@
 #include <System.Rtti.hpp>
 #include <FMX.MultiView.hpp>
 #include "option.h"
+#include "../../Monster/src/monster.h"
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
@@ -119,6 +120,22 @@ __published: // IDE-managed Components
 	TLabel *Label18;
 	TStringColumn *StringColumn8;
 	TCornerButton *btOption;
+	TTabItem *TabItem5;
+	TPanel *Panel5;
+	TLabel *Label19;
+	TEdit *edTextSearch;
+	TStringGrid *sgTextSearch;
+	TStringColumn *StringColumn9;
+	TStringColumn *StringColumn10;
+	TStringColumn *StringColumn11;
+	TStringColumn *StringColumn12;
+	TStringColumn *StringColumn13;
+	TStringColumn *StringColumn14;
+	TStringColumn *StringColumn15;
+	TStringColumn *StringColumn16;
+	TButton *btTextSearch;
+	TLabel *lbSearchMsg;
+	TStringColumn *StringColumn17;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall CornerButton1Click(TObject *Sender);
@@ -130,6 +147,7 @@ __published: // IDE-managed Components
 	void __fastcall sgFindSutraCellDblClick(TColumn * const Column, const int Row);
 	void __fastcall btOptionClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall btTextSearchClick(TObject *Sender);
 
 
 private: // User declarations
@@ -148,6 +166,9 @@ public: // User declarations
 	CSetting * Setting; // 設定檔
 	CBookcase * Bookcase; // 書櫃
 	CNavTree * NavTree; // 導覽文件 (暫時的, 日後會放在 Serial 物件中 ???)
+
+	TStringList * SearchWordList;	// 存放每一個檢索的詞, 日後塗色會用到
+    String SearchSentence;	// 搜尋字串
 
 
 	bool __fastcall IsSelectedBook(); // 是否有選擇套書了?

@@ -25,6 +25,8 @@ __fastcall CSeries::CSeries(String sDir)
 	JuanLine = 0;   	// 各卷與頁欄行的關係物件, CBETA 專用
 	BookData = 0;   // 每本書的資訊, 例如 T , 大正藏, 2
 
+	SearchEngine = 0;   // 全文檢索引擎
+
 	//--------------
 
 	Dir = sDir + "/";         // 本書的目錄
@@ -69,6 +71,20 @@ __fastcall CSeries::CSeries(String sDir)
 		JuanLine = new CJuanLine();
 		JuanLine->LoadFromSpine(Spine);
 	}
+
+	// 載入全文檢索
+
+	if(TDirectory::Exists(Dir + "index"))
+	{
+		String sWordIndexFile = Dir + "index/wordindex.ndx";
+		String sMainIndexFile = Dir + "index/main.ndx";
+		if(TFile::Exists(Dir + SpineFile) &&
+			TFile::Exists(sWordIndexFile) &&
+			TFile::Exists(sMainIndexFile))
+		{
+			SearchEngine = new TmyMonster(Dir + SpineFile, sWordIndexFile, sMainIndexFile);
+        }
+	}
 }
 // ---------------------------------------------------------------------------
 // 解構函式
@@ -78,6 +94,11 @@ __fastcall CSeries::~CSeries()
 	if(Spine) delete Spine;
 	if(JuanLine) delete JuanLine;
 	if(BookData) delete BookData;
+	if(SearchEngine)
+	{
+		delete SearchEngine;
+		SearchEngine = 0;
+	}
 }
 // ---------------------------------------------------------------------------
 // 載入後設文件

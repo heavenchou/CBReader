@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{575CF682-9534-4D18-BC8F-9D988479DE8B}</ProjectGuid>
-        <ProjectVersion>18.2</ProjectVersion>
+        <ProjectVersion>18.3</ProjectVersion>
         <FrameworkType>FMX</FrameworkType>
         <MainSource>CBReader.cpp</MainSource>
         <Base>True</Base>
@@ -93,8 +93,8 @@
         <AUP_INTERNET>true</AUP_INTERNET>
         <AUP_READ_PHONE_STATE>true</AUP_READ_PHONE_STATE>
         <AUP_ACCESS_COARSE_LOCATION>true</AUP_ACCESS_COARSE_LOCATION>
-        <ILINK_LibraryPath>D:\Data\c\_CppBuilder\CBReader\src\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
-        <IncludePath>D:\Data\c\_CppBuilder\CBReader\src\;$(IncludePath)</IncludePath>
+        <ILINK_LibraryPath>..\..\Monster\src\;D:\Data\c\_CppBuilder\CBReader\src\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <IncludePath>..\..\Monster\src\;D:\Data\c\_CppBuilder\CBReader\src\;$(IncludePath)</IncludePath>
         <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
         <DynamicRTL>true</DynamicRTL>
         <UsePackages>true</UsePackages>
@@ -286,6 +286,50 @@
             <DependentOn>subutil.h</DependentOn>
             <BuildOrder>16</BuildOrder>
         </CppCompile>
+        <CppCompile Include="..\..\Monster\src\BitList.cpp">
+            <DependentOn>..\..\Monster\src\BitList.h</DependentOn>
+            <BuildOrder>17</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\FileList.cpp">
+            <DependentOn>..\..\Monster\src\FileList.h</DependentOn>
+            <BuildOrder>18</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\Int2List.cpp">
+            <DependentOn>..\..\Monster\src\Int2List.h</DependentOn>
+            <BuildOrder>19</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\IntList.cpp">
+            <DependentOn>..\..\Monster\src\IntList.h</DependentOn>
+            <BuildOrder>20</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\MainIndex.cpp">
+            <DependentOn>..\..\Monster\src\MainIndex.h</DependentOn>
+            <BuildOrder>21</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\Monster.cpp">
+            <DependentOn>..\..\Monster\src\Monster.h</DependentOn>
+            <BuildOrder>26</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\PostfixStack.cpp">
+            <DependentOn>..\..\Monster\src\PostfixStack.h</DependentOn>
+            <BuildOrder>23</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\SearchWord.cpp">
+            <DependentOn>..\..\Monster\src\SearchWord.h</DependentOn>
+            <BuildOrder>24</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\WordData.cpp">
+            <DependentOn>..\..\Monster\src\WordData.h</DependentOn>
+            <BuildOrder>25</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\WordIndex.cpp">
+            <DependentOn>..\..\Monster\src\WordIndex.h</DependentOn>
+            <BuildOrder>26</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\wordtool.cpp">
+            <DependentOn>..\..\Monster\src\wordtool.h</DependentOn>
+            <BuildOrder>27</BuildOrder>
+        </CppCompile>
         <FormResources Include="option.fmx"/>
         <FormResources Include="selectbook.fmx"/>
         <FormResources Include="main.fmx"/>
@@ -356,13 +400,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
+                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
+                    <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
-                    <Platform Name="OSX32">
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

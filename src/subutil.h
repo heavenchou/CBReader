@@ -46,6 +46,9 @@ public:
 	// 傳入字串, 傳回無符號長整數, 例 StrToULong("FFFF",16) => 65535;
 	static unsigned long __fastcall StrToULong(String s, int iBase=10);
 
+	// 將傳入字串去除頭尾指定字元
+	static String __fastcall Trim(String sStr, wchar_t wChar);
+
 };
 //---------------------------------------------------------------------------
 #endif

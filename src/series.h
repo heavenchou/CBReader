@@ -19,6 +19,7 @@
 #include "bookdata.h"
 #include "juanline.h"
 #include <utility>  // for std::pair
+#include "../../Monster/src/monster.h"
 // ---------------------------------------------------------------------------
 
 class CSeries
@@ -43,6 +44,9 @@ public: // User declarations
 	CSpine * Spine;		// 遍歷文件
 	CJuanLine * JuanLine;	// 各卷與頁欄行的關係物件, CBETA 專用
 	CBookData * BookData;   // 每本書的資訊, 例如 T , 大正藏, 2
+
+	TmyMonster * SearchEngine;   // 全文檢索引擎
+
 
 	void __fastcall LoadMetaData(String sMeta);	// 載入後設文件
 

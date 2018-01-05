@@ -19,6 +19,9 @@ TfmMain *fmMain;
 // ---------------------------------------------------------------------------
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
+	SearchSentence = "";    // 搜尋字串
+	SearchWordList = new TStringList;	    // 存放每一個檢索的詞, 日後塗色會用到
+
 	// 取得設定檔並讀取所有設定
 
 	// 取得 Bookcase 所有資料區
@@ -71,6 +74,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 // ---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
 {
+	if(SearchWordList) delete SearchWordList;
 	if(Setting) delete Setting;
 	if(Bookcase) delete Bookcase;
 	if(NavTree) delete NavTree;
@@ -377,6 +381,117 @@ void __fastcall TfmMain::FormClose(TObject *Sender, TCloseAction &Action)
 #ifdef _Windows
 	SetPermissions(7000); // 設定為 IE 7
 #endif
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
+{
+	SearchSentence = edTextSearch->Text;
+
+	// 去除頭尾的萬用字元
+	SearchSentence = CMyStrUtil::Trim(SearchSentence, u'?');
+
+	if(SearchSentence == "") return;    // 沒輸入
+
+	//RememberWord(cbSearchWord);		// 將查詢的字存起來
+	//UpdateSearchHistory = true;
+
+	//SearchSentenceOrig = cbSearchWord->Text;        // 最原始的檢索句字, 可能包含 unicode
+
+
+	// 改變滑鼠
+	TCursor csOldCursor = Cursor;
+	Cursor = crHourGlass;
+
+	clock_t t1 = clock();
+	bool bHasRange = false;     // 有範圍就要設定 ????
+
+	TmyMonster * SearchEngine = Bookcase->CBETA->SearchEngine;
+	CCatalog * Catalog = Bookcase->CBETA->Catalog;
+	CSpine * Spine = Bookcase->CBETA->Spine;
+	bool bFindOK = SearchEngine->Find(SearchSentence,bHasRange);      // 在找囉.........................................
+	clock_t t2 = clock();
+
+	int iFoundCount = SearchEngine->FileFound->Total;
+
+    // 秀出找到幾個的訊息
+
+	lbSearchMsg->Text = u"找到" + String(iFoundCount) + u"筆，共花時間：" + String(t2-t1);
+
+    int iTotalSearchFileNum = 0;
+    bool bShowAll = false;
+    int iMaxSearchNum = 0;
+
+    if(bFindOK)
+    {
+		SearchWordList->Clear();
+		for(int i=0; i<SearchEngine->SearchWordList->Count; i++)
+			SearchWordList->Add(SearchEngine->SearchWordList->Strings[i]);	// 存起查詢的詞
+
+        // 先檢查有沒有超過限制
+
+        for (int i=0; i<BuildFileList->FileCount; i++)
+    	{
+	    	if(SearchEngine->FileFound->Ints[i])
+		    {
+			    iTotalSearchFileNum++;
+            }
+        }
+
+        // 將結果放入 list 列表中
+	}
+
+	sgTextSearch->BeginUpdate();
+	int iGridIndex = 0;
+	sgTextSearch->RowCount = 10;
+
+	for (int i=0; i<BuildFileList->FileCount; i++)
+	{
+		// 找到了
+        if(SearchEngine->FileFound->Ints[i])
+		{
+			String sSutraNum  = BuildFileList->SutraNum[i];		// 取得經號
+			String sBook = BuildFileList->Book[i];
+
+			// 這裡可能找到 T220 第 600 卷, 卻傳回 T05 而不是 T07
+			// 有待改進處理 ????
+			int iCatalogIndex = Catalog->FindIndexBySutraNum(sBook,sSutraNum);	// 取得 TripitakaMenu 的編號
+
+			// 找到了
+
+			sgTextSearch->Cells[0][iGridIndex]=SearchEngine->FileFound->Ints[i];
+			sgTextSearch->Cells[1][iGridIndex]=Catalog->SutraName->Strings[iCatalogIndex];
+			sgTextSearch->Cells[2][iGridIndex]=Catalog->ID->Strings[iCatalogIndex];
+			sgTextSearch->Cells[3][iGridIndex]=Spine->VolNum->Strings[i];
+			sgTextSearch->Cells[4][iGridIndex]=Catalog->Part->Strings[iCatalogIndex];
+			sgTextSearch->Cells[5][iGridIndex]=Catalog->SutraNum->Strings[iCatalogIndex];
+			sgTextSearch->Cells[6][iGridIndex]=BuildFileList->JuanNum[i];
+			sgTextSearch->Cells[7][iGridIndex]=Catalog->Byline->Strings[iCatalogIndex];
+			sgTextSearch->Cells[8][iGridIndex]=i;
+			iGridIndex++;
+
+			if(iGridIndex >= sgTextSearch->RowCount)
+				sgTextSearch->RowCount += 10;
+		}
+    }
+
+	sgTextSearch->RowCount = iGridIndex;
+	sgTextSearch->EndUpdate();
+
+	// 還原滑鼠
+	Cursor=csOldCursor;
+
+    if(bFindOK)
+    {
+		if(sgTextSearch->RowCount == 0)
+	    {
+			ShowMessage(u"找不到任何資料");
+    	}
+    }
+    else
+	{
+		ShowMessage(u"查詢字串語法有問題，請再檢查看看。");
+	}
 }
 //---------------------------------------------------------------------------
 
