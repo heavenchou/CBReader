@@ -15,6 +15,9 @@
 #include <map>
 #include "setting.h"
 #include "subutil.h"
+#include "highlight.h"
+#include "../../Monster/src/monster.h"
+
 using namespace std;
 // ---------------------------------------------------------------------------
 // 這是一個讀取導覽文件的物件
@@ -29,10 +32,10 @@ private: // User declarations
 	CSetting * Setting; // 呈現用的設定
 	String JSFile;  	// javascript 的位置
 
-
 	_di_IXMLDocument Document;
 
 	String __fastcall MakeHTMLHead(); 	// 先產生 html 的 head
+
 	// --------------------------
 
 	// 處理標記
@@ -70,13 +73,15 @@ public: // User declarations
 	//map<String, String> RJ2char;    // 蘭札字 RJ 碼查對映 TTF 字型的字
 	//map<String, String> RJ2big5;    // 蘭札字 RJ 碼查 Big5
 
+    bool ShowHighlight; 	// 是否塗色
+
 	void __fastcall SaveToHTML(String sFile);	// 儲存至 HTML
 
 	inline String __fastcall GetAttr(_di_IXMLNode Node, String sAttr); // 取得屬性
 	String __fastcall NoteId2Num(String sId); // 把校勘ID 變成校勘數字 0001001 -> 1
 	void __fastcall ReadGaiji(_di_IXMLNode xmlNodeGaijis); // 讀取缺字
 	// 傳入參數為 XML 檔, 呈現的設定
-	__fastcall CCBXML(String sFile, CSetting * csSetting, String sJSFile);
+	__fastcall CCBXML(String sFile, CSetting * csSetting, String sJSFile, bool bShowHighlight = false, TmyMonster * seSearchEngine = 0);
 	__fastcall ~CCBXML();
 };
 // ---------------------------------------------------------------------------

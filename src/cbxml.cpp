@@ -9,20 +9,37 @@
 // ---------------------------------------------------------------------------
 // 建構函式
 // 傳入參數為 XML 檔, 呈現的設定
-__fastcall CCBXML::CCBXML(String sFile, CSetting * cSetting, String sJSFile)
+__fastcall CCBXML::CCBXML(String sFile, CSetting * cSetting, String sJSFile , bool bShowHighlight, TmyMonster * seSearchEngine)
 {
 	// 初值
 	XMLFile = sFile;
 	Setting = cSetting;
 	HTMLText = "";
 	HTMLCollation = "";    // HTML 校註
-    JSFile = sJSFile;
+	JSFile = sJSFile;
+	ShowHighlight = bShowHighlight;    // 是否塗色
 
 	Document = interface_cast<Xmlintf::IXMLDocument>(new TXMLDocument(NULL));
 	Document->FileName = XMLFile;
 
 	HTMLText += MakeHTMLHead(); // 先產生 html 的 head
-	HTMLText += ParseXML();
+
+	// 是否有塗色? 有就表示有檢索字串
+	if(bShowHighlight)
+	{
+		// 加上搜尋字串的 <div>
+		HTMLText += u"<div id=\"SearchHead\">檢索字串：" + seSearchEngine->SearchSentence + u"<hr></div>";
+    }
+
+	HTMLText += ParseXML();     		// 處理內文
+
+	// 塗色否?
+	if(bShowHighlight)
+	{
+		CHighlight * HL = new CHighlight(seSearchEngine);
+		HTMLText = HL->AddHighlight(&HTMLText);
+        delete HL;
+	}
 
 	// 記錄校勘
 	HTMLText += "<div id=\"CollationList\" style=\"display:none\">\n";
@@ -401,11 +418,11 @@ String __fastcall CCBXML::MakeHTMLHead()
 	sHtml += u"\"></script>\n"
 	"	<style>\n"
 	"		body { background:#DDF1DC; font-weight: normal; line-height:20pt; color:#000000; font-size:16pt;}\n"
-	"		span.SearchWord1 {color:#0000ff; background: #ffff66;}\n"
-	"		span.SearchWord2 {color:#0000ff; background: #a0ffff;}\n"
-	"		span.SearchWord3 {color:#0000ff; background: #99ff99;}\n"
-	"		span.SearchWord4 {color:#0000ff; background: #ff9999;}\n"
-	"		span.SearchWord5 {color:#0000ff; background: #ff66ff;}\n"
+	"		a.SearchWord0 {color:#0000ff; background: #ffff66;}\n"
+	"		a.SearchWord1 {color:#0000ff; background: #a0ffff;}\n"
+	"		a.SearchWord2 {color:#0000ff; background: #99ff99;}\n"
+	"		a.SearchWord3 {color:#0000ff; background: #ff9999;}\n"
+	"		a.SearchWord4 {color:#0000ff; background: #ff66ff;}\n"
 	"		span.guess1 {background: #fff0a0;}\n"
 	"		span.guess2 {background: #ffd080;}\n"
 	"		span.guess3 {background: #ffb060;}\n"
