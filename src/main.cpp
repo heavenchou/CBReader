@@ -312,7 +312,7 @@ void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 // 載入 XML 並處理成網頁
-void __fastcall TfmMain::ShowCBXML(String sFile)
+void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster * seSearchEngine)
 {
 	if(sFile == "")
 	{
@@ -321,7 +321,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile)
     }
 	String sXMLFile = Bookcase->CBETA->Dir + sFile;
 	String sJSFile = Bookcase->CBETA->Dir + Bookcase->CBETA->JSFile;
-	CCBXML * CBXML = new CCBXML(sXMLFile, Setting, sJSFile);
+	CCBXML * CBXML = new CCBXML(sXMLFile, Setting, sJSFile, bShowHighlight, seSearchEngine);
 
 	// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
 	// windows 是 xxxxxx
@@ -492,6 +492,16 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 	{
 		ShowMessage(u"查詢字串語法有問題，請再檢查看看。");
 	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::sgTextSearchCellDblClick(TColumn * const Column, const int Row)
+
+{
+	int iIndex = sgTextSearch->Cells[8][Row].ToInt();
+
+	String sFile = Bookcase->CBETA->Spine->Files->Strings[iIndex];
+    // 要塗色
+	ShowCBXML(sFile, true, Bookcase->CBETA->SearchEngine);
 }
 //---------------------------------------------------------------------------
 

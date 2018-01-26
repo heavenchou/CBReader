@@ -237,6 +237,10 @@
             <DependentOn>cbxml.h</DependentOn>
             <BuildOrder>8</BuildOrder>
         </CppCompile>
+        <CppCompile Include="highlight.cpp">
+            <DependentOn>highlight.h</DependentOn>
+            <BuildOrder>28</BuildOrder>
+        </CppCompile>
         <CppCompile Include="juanline.cpp">
             <DependentOn>juanline.h</DependentOn>
             <BuildOrder>14</BuildOrder>

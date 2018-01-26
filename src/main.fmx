@@ -745,7 +745,7 @@
           TabOrder = 0
           RowCount = 0
           Options = [ColumnResize, ColumnMove, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
-          OnCellDblClick = sgFindSutraCellDblClick
+          OnCellDblClick = sgTextSearchCellDblClick
           Viewport.Width = 237.000000000000000000
           Viewport.Height = 470.000000000000000000
           object StringColumn17: TStringColumn

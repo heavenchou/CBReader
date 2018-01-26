@@ -148,6 +148,8 @@ __published: // IDE-managed Components
 	void __fastcall btOptionClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall btTextSearchClick(TObject *Sender);
+	void __fastcall sgTextSearchCellDblClick(TColumn * const Column, const int Row);
+
 
 
 private: // User declarations
@@ -176,7 +178,7 @@ public: // User declarations
 	void __fastcall OpenBookcase(int iId);
 
 	// 載入 XML 並處理成網頁
-	void __fastcall ShowCBXML(String sFile);
+	void __fastcall ShowCBXML(String sFile, bool bShowHighlight = false, TmyMonster * SearchEngine = 0);
 
 	__fastcall TfmMain(TComponent* Owner);
 };
