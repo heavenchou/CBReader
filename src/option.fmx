@@ -108,7 +108,7 @@ object fmOption: TfmOption
         Size.Height = 155.000000000000000000
         Size.PlatformDefault = False
         Text = #32147#25991#26684#24335
-        TabOrder = 1
+        TabOrder = 2
         object cbShowLineFormat: TCheckBox
           Position.X = 16.000000000000000000
           Position.Y = 24.000000000000000000
@@ -150,31 +150,105 @@ object fmOption: TfmOption
         end
       end
       object gbCollationType: TGroupBox
-        Position.X = 240.000000000000000000
+        Position.X = 232.000000000000000000
         Position.Y = 22.000000000000000000
         Size.Width = 185.000000000000000000
         Size.Height = 107.000000000000000000
         Size.PlatformDefault = False
         Text = #26657#21208#26684#24335
-        TabOrder = 0
+        TabOrder = 1
         object rbNoCollation: TRadioButton
+          GroupName = '3'
           Position.X = 16.000000000000000000
           Position.Y = 24.000000000000000000
           TabOrder = 2
           Text = #28961#26657#21208
         end
         object rbOrigCollation: TRadioButton
+          GroupName = '3'
           Position.X = 16.000000000000000000
           Position.Y = 48.000000000000000000
           TabOrder = 1
           Text = #21407#26360#26657#21208
         end
         object rbCBETACollation: TRadioButton
+          GroupName = '3'
           IsChecked = True
           Position.X = 16.000000000000000000
           Position.Y = 72.000000000000000000
           TabOrder = 0
           Text = 'CBETA'#29256#26657#21208
+        end
+      end
+      object GroupBox1: TGroupBox
+        Position.X = 24.000000000000000000
+        Position.Y = 198.000000000000000000
+        Size.Width = 185.000000000000000000
+        Size.Height = 259.000000000000000000
+        Size.PlatformDefault = False
+        Text = #32570#23383#26684#24335
+        TabOrder = 0
+        object cbGaijiUseUniExt: TCheckBox
+          IsChecked = True
+          Position.X = 24.000000000000000000
+          Position.Y = 24.000000000000000000
+          TabOrder = 3
+          Text = #20351#29992' Unicode Ext'
+        end
+        object cbGaijiUseNormal: TCheckBox
+          IsChecked = True
+          Position.X = 24.000000000000000000
+          Position.Y = 48.000000000000000000
+          TabOrder = 2
+          Text = #20351#29992#36890#29992#23383
+        end
+        object GroupBox2: TGroupBox
+          Position.X = 16.000000000000000000
+          Position.Y = 80.000000000000000000
+          Size.Width = 153.000000000000000000
+          Size.Height = 75.000000000000000000
+          Size.PlatformDefault = False
+          Text = #20309#32773#20778#20808
+          TabOrder = 4
+          object rbGaijiUniExtFirst: TRadioButton
+            GroupName = '1'
+            IsChecked = True
+            Position.X = 16.000000000000000000
+            Position.Y = 24.000000000000000000
+            TabOrder = 1
+            Text = 'Unicode Ext'
+          end
+          object rbGaijiNormalFirst: TRadioButton
+            GroupName = '1'
+            Position.X = 16.000000000000000000
+            Position.Y = 48.000000000000000000
+            TabOrder = 0
+            Text = #36890#29992#23383
+          end
+        end
+        object GroupBox3: TGroupBox
+          Position.X = 16.000000000000000000
+          Position.Y = 168.000000000000000000
+          Size.Width = 153.000000000000000000
+          Size.Height = 75.000000000000000000
+          Size.PlatformDefault = False
+          Text = #28961'Unicode'#21450#36890#29992#23383#26178
+          TabOrder = 0
+          object rbGaijiDesFirst: TRadioButton
+            GroupName = '2'
+            IsChecked = True
+            Position.X = 16.000000000000000000
+            Position.Y = 24.000000000000000000
+            TabOrder = 1
+            Text = #32068#23383#24335
+          end
+          object rbGaijiImageFirst: TRadioButton
+            GroupName = '2'
+            Position.X = 16.000000000000000000
+            Position.Y = 48.000000000000000000
+            TabOrder = 0
+            Text = #22294#27284
+          end
         end
       end
     end

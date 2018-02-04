@@ -18,6 +18,7 @@ __fastcall CCBXML::CCBXML(String sFile, CSetting * cSetting, String sJSFile , bo
 	HTMLCollation = "";    // HTML 校註
 	JSFile = sJSFile;
 	ShowHighlight = bShowHighlight;    // 是否塗色
+	mOrigNote.clear();
 
 	Document = interface_cast<Xmlintf::IXMLDocument>(new TXMLDocument(NULL));
 	Document->FileName = XMLFile;
@@ -32,6 +33,8 @@ __fastcall CCBXML::CCBXML(String sFile, CSetting * cSetting, String sJSFile , bo
     }
 
 	HTMLText += ParseXML();     		// 處理內文
+
+	HTMLText = AddOrigNote(HTMLText);   // 原本的 orig 校勘還沒加入, 此時才要加入
 
 	// 塗色否?
 	if(bShowHighlight)
@@ -120,6 +123,7 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 		else if (sTagName == "p")		sHtml = tag_p(Node);
 		else if (sTagName == "pb")		sHtml = tag_pb(Node);
 		else if (sTagName == "rdg")		sHtml = tag_rdg(Node);
+		else if (sTagName == "cb:t")	sHtml = tag_t(Node);
 		else                      		sHtml = tag_default(Node);
 	}
 	else if (nodetype == 3)
@@ -337,9 +341,17 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 		else sIdNum = NoteId2Num(sId);	// 0001001a 取得 1a
 
 		// <a id="note_orig_0001001" class="note_orig" href="" onclick="return false;">
-		sHtml += "<a id=\"note_orig_" + sId +
-				 "\" class=\"note_orig\" href=\"\" onclick=\"return false;\">[" +
+
+		// note 要暫存起來, 要同時有 note_orig 和 mod
+		// 等到真的遇到 mod , 再把 class 的 note_mod 移除
+
+		String sTmp = "<a id=\"note_orig_" + sId +
+				 "\" class=\"note_orig note_mod\" href=\"\" onclick=\"return false;\">[" +
 				 sIdNum + "]</a>";
+
+		sHtml += "<<tmp_note_orig_" + sId + ">>"; // 先做個記錄
+
+		mOrigNote[sId] = sTmp;
 
 		String sNoteText = parseChild(Node);
 		// <div id="txt_note_orig_0001001">校勘內容</div>
@@ -356,6 +368,10 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 				 sIdNum + "]</a>";
 		String sNoteText = parseChild(Node);
 		HTMLCollation += "<div id=\"txt_note_mod_" + sId + "\">" + sNoteText + "</div>\n";
+
+		String sIdNormal = sId.SubString0(0,7); // 取出標準的 ID, 因為有些有 abc...
+
+		ThisNoteHasMod(sIdNormal);  // 通知 note orig , 此校勘有 mod 版
 
 	}
 
@@ -382,6 +398,19 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 String __fastcall CCBXML::tag_pb(_di_IXMLNode Node)
 {
 	String sHtml = "";
+	sHtml = parseChild(Node); // 處理內容
+
+	return sHtml;
+}
+
+// ---------------------------------------------------------------------------
+// 解析 XML 標記
+String __fastcall CCBXML::tag_t(_di_IXMLNode Node)
+{
+	String sHtml = "";
+	String sAttrPlace = GetAttr(Node, "place");
+	if(sAttrPlace == u"foot") return "";
+
 	sHtml = parseChild(Node); // 處理內容
 
 	return sHtml;
@@ -455,9 +484,11 @@ String __fastcall CCBXML::MakeHTMLHead()
 		sHtml += u"		.note_orig {display:none;}\n"
 				  "		.note_mod {display:none;}\n";
 	else if(Setting->CollationType == ctOrigCollation)
-		sHtml += u"		.note_mod {display:none;}\n";
+		sHtml += u"		.note_mod {display:none;}\n"
+				  "		.note_orig {display:inline;}\n";
 	else if(Setting->CollationType == ctCBETACollation)
-		sHtml += u"		.note_orig {display:none;}\n";
+		sHtml += u"		.note_orig {display:none;}\n"
+				  "		.note_mod {display:inline;}\n";
 
 	sHtml += u"	</style>\n"
 	"</head>\n"
@@ -657,4 +688,59 @@ void __fastcall CCBXML::ReadGaiji(_di_IXMLNode NodeGaijis)
 
 }
 // ---------------------------------------------------------------------------
+// 通知 note orig , 此校勘有 mod 版
+// 就會把 orig note 中 class 的 note_mod 移除
+void __fastcall CCBXML::ThisNoteHasMod(String sIdNormal)
+{
+	if(mOrigNote.find(sIdNormal) != mOrigNote.end())
+	{
+		mOrigNote[sIdNormal] = StringReplace(mOrigNote[sIdNormal],
+		u"class=\"note_orig note_mod\"", u"class=\"note_orig\"", TReplaceFlags());
+	}
+}
+// ---------------------------------------------------------------------------
+// 原本的 orig 校勘還沒加入, 此時才要加入
+String __fastcall CCBXML::AddOrigNote(String HTMLText)
+{
+	vector<wchar_t> vOut;
 
+	wchar_t * pPoint = HTMLText.FirstChar();
+
+	// 標記用的 <<tmp_note_orig_xxxxxxx>>
+	while(*pPoint)
+	{
+		if(*pPoint != u'<' && *(pPoint+1) != u'<')
+		{
+			vOut.push_back(*pPoint);
+			pPoint++;
+		}
+		else
+		{
+			// 也許找到校勘記號
+			String sNote = String(pPoint,16);
+			if(sNote == u"<<tmp_note_orig_")
+			{
+				// 找到校勘記號
+				String sId = String(pPoint+16,7);
+				pPoint+=25;
+				String sNote = mOrigNote[sId];  // 取出真正的校勘
+
+				wchar_t * pNote = sNote.FirstChar();
+				while(*pNote)
+				{
+					vOut.push_back(*pNote);
+					pNote++;
+				}
+			}
+			else
+			{
+				// 不是校勘記號
+				vOut.push_back(*pPoint);
+				pPoint++;
+            }
+		}
+	}
+
+	String sOut = String(&(vOut[0]),vOut.size());
+	return sOut;
+}

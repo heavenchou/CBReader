@@ -40,6 +40,15 @@ __published:	// IDE-managed Components
 	TRadioButton *rbNoCollation;
 	TRadioButton *rbOrigCollation;
 	TRadioButton *rbCBETACollation;
+	TGroupBox *GroupBox1;
+	TCheckBox *cbGaijiUseUniExt;
+	TCheckBox *cbGaijiUseNormal;
+	TGroupBox *GroupBox2;
+	TRadioButton *rbGaijiUniExtFirst;
+	TRadioButton *rbGaijiNormalFirst;
+	TGroupBox *GroupBox3;
+	TRadioButton *rbGaijiDesFirst;
+	TRadioButton *rbGaijiImageFirst;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btOKClick(TObject *Sender);
 	void __fastcall btCancelClick(TObject *Sender);
