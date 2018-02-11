@@ -105,8 +105,17 @@ public: // User declarations
 
 	// 缺字處理
 
-	int GaijiID[4];			// 4種處理缺字的方法, 分別是"通用字","組字式","Unicode", "圖型"
-	bool GaijiUse[4];		// 4種缺字是否使用
+	bool GaijiUseUniExt;    // 是否使用 Unicode Ext
+	bool GaijiUseNormal;    // 是否使用通用字
+
+	bool GaijiUniExtFirst;  // 優先使用 Unicode Ext
+	bool GaijiNormalFirst;  // 優先使用 通用字
+
+	bool GaijiDesFirst;     // 優先使用組字式
+	bool GaijiImageFirst;   // 優先使用缺字圖檔
+
+	//int GaijiID[4];			// 4種處理缺字的方法, 分別是"通用字","組字式","Unicode", "圖型"
+	//bool GaijiUse[4];		// 4種缺字是否使用
 
 	int ShowSiddamWay;		// 悉曇字處理法 0:悉曇字型(siddam.ttf) 1:羅馬轉寫(unicode) 2:羅馬轉寫(純文字) 3:悉曇圖檔 4:自訂符號 5:CB碼
 	int ShowPaliWay;		// 梵巴字處理法 0:Unicode 1:純文字 2:Ent 碼

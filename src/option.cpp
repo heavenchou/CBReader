@@ -119,19 +119,20 @@ void __fastcall TfmOption::LoadFromSetting()
 
     cbCSSFile->Checked = Setting->UseCSSFile;
     edCSSFile->Text = Setting->CSSFileName;
-
+	*/
 
     // 缺字處理
 
-	for(int i=0; i<clbGaiji->Items->Count; i++)
-    {
-        GaijiID[i] = Setting->GaijiID[i];
-		clbGaiji->Items->Strings[i] = GaijiIDName[GaijiID[i]];	// 六種處理缺字的方法
-    }
+	cbGaijiUseUniExt->IsChecked = Setting->GaijiUseUniExt;    // 是否使用 Unicode Ext
+	cbGaijiUseNormal->IsChecked = Setting->GaijiUseNormal;    // 是否使用通用字
 
-	for(int i=0; i<clbGaiji->Items->Count; i++)
-		clbGaiji->Checked[i] = Setting->GaijiUse[i];	// 六種缺字是否使用
+	rbGaijiUniExtFirst->IsChecked = Setting->GaijiUniExtFirst;  // 優先使用 Unicode Ext
+	rbGaijiNormalFirst->IsChecked = Setting->GaijiNormalFirst;  // 優先使用 通用字
 
+	rbGaijiDesFirst->IsChecked = Setting->GaijiDesFirst;     // 優先使用組字式
+	rbGaijiImageFirst->IsChecked = Setting->GaijiImageFirst;   // 優先使用缺字圖檔
+
+	/*
 	// 悉曇字處理法 0:悉曇字型(siddam.ttf) 1:羅馬轉寫(unicode) 2:羅馬轉寫(純文字) 3:悉曇圖檔 4:自訂符號 5:CB碼 6:悉曇羅馬對照
 	switch( Setting->ShowSiddamWay)
     {
@@ -308,18 +309,23 @@ void __fastcall TfmOption::SaveToSetting()
 	Setting->UseFootFontColor = cbFootFontColor->Checked;
 	Setting->UseFootFontSize = cbFootFontSize->Checked;
 
-    Setting->UseCSSFile = cbCSSFile->Checked;
+	Setting->UseCSSFile = cbCSSFile->Checked;
     Setting->CSSFileName = edCSSFile->Text;
+	*/
 
 	// 缺字處理
 
-	for(int i=0; i<clbGaiji->Items->Count; i++)
-	    // Setting->GaijiID[i] = clbGaiji->Items->Strings[i];	// 五種處理缺字的方法
-		Setting->GaijiID[i] = GaijiID[i];	// 六種處理缺字的方法, 分別是"通用字","組字式","Unicode","文字鏡","&M碼", "缺字圖檔"
+	Setting->GaijiUseUniExt = cbGaijiUseUniExt->IsChecked;    // 是否使用 Unicode Ext
+	Setting->GaijiUseNormal = cbGaijiUseNormal->IsChecked;    // 是否使用通用字
 
-	for(int i=0; i<clbGaiji->Items->Count; i++)
-		Setting->GaijiUse[i] = clbGaiji->Checked[i];	// 六種缺字是否使用
+	Setting->GaijiUniExtFirst = rbGaijiUniExtFirst->IsChecked;  // 優先使用 Unicode Ext
+	Setting->GaijiNormalFirst = rbGaijiNormalFirst->IsChecked;  // 優先使用 通用字
 
+	Setting->GaijiDesFirst = rbGaijiDesFirst->IsChecked;     // 優先使用組字式
+	Setting->GaijiImageFirst = rbGaijiImageFirst->IsChecked;   // 優先使用缺字圖檔
+
+
+	/*
     // 悉曇字處理法 0:悉曇字型(siddam.ttf) 1:羅馬轉寫(unicode) 2:羅馬轉寫(純文字) 3:悉曇圖檔 4:自訂符號 5:CB碼 6:悉曇羅馬對照
 	if(rbUseSiddamFont->Checked)        Setting->ShowSiddamWay = 0;
 	else if(rbUseSiddamRomeU->Checked)	Setting->ShowSiddamWay = 1;

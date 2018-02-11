@@ -227,10 +227,54 @@ String __fastcall CCBXML::tag_g(_di_IXMLNode Node)
 		sHtml += ">";
 
 		// 顯示的文字
-		if(!sUni.IsEmpty()) sHtml += sUni;
-		else if(!sNorUni.IsEmpty()) sHtml += sNorUni;
-		else if(!sNor.IsEmpty()) sHtml += sNor;
-		else if(!sDes.IsEmpty()) sHtml += sDes;
+		// 1. 如果 unicode 優先
+		// 2. 如果 通用字 優先
+
+		bool bHasGaiji = true;
+		if(Setting->GaijiUniExtFirst)
+		{
+			if(Setting->GaijiUseUniExt && !sUni.IsEmpty())
+				// unicode 優先
+				sHtml += sUni;
+			else if(Setting->GaijiUseUniExt && Setting->GaijiUseNormal && !sNorUni.IsEmpty())
+				// 通用 unicode 次之
+				sHtml += sNorUni;
+			else if(Setting->GaijiUseNormal && !sNor.IsEmpty())
+				// 通用字最後
+				sHtml += sNor;
+			else bHasGaiji = false;
+		}
+		else
+		{
+			if(Setting->GaijiUseNormal && !sNor.IsEmpty())
+				// 通用字優先
+				sHtml += sNor;
+			else if(Setting->GaijiUseUniExt && !sUni.IsEmpty())
+				// unicode 次之
+				sHtml += sUni;
+			else if(Setting->GaijiUseUniExt && Setting->GaijiUseNormal && !sNorUni.IsEmpty())
+				// 通用 unicode 最後
+				sHtml += sNorUni;
+			else bHasGaiji = false;
+		}
+
+		if(bHasGaiji == false)
+		{
+			// 還沒有 unicode 及通用字
+			if(Setting->GaijiDesFirst)
+			{
+				// 優先使用組字式
+				if(!sDes.IsEmpty()) sHtml += sDes;
+				//else
+					// 圖檔, 暫時不用 ????
+			}
+			else
+			{
+				// 圖檔優先 , 暫時不用 ????
+				if(!sDes.IsEmpty()) sHtml += sDes;
+            }
+
+        }
 
 		// 結束標記
 		sHtml += "</span>";

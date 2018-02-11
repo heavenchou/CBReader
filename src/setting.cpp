@@ -91,16 +91,14 @@ __fastcall CSetting::CSetting() // 建構函式
 
     // 缺字處理
 
-	//for(int i=0; i<4; i++)
-	GaijiID[0] = 2;	// 4種處理缺字的方法, 分別是"通用字","組字式","Unicode", "圖檔"
-    GaijiID[1] = 0;
-    GaijiID[2] = 1;
-    GaijiID[3] = 3;
+	GaijiUseUniExt = true;    // 是否使用 Unicode Ext
+	GaijiUseNormal = true;    // 是否使用通用字
 
-	GaijiUse[0] = true;	// 4種缺字是否使用
-	GaijiUse[1] = true;	// 4種缺字是否使用
-	GaijiUse[2] = true;	// 4種缺字是否使用
-	GaijiUse[3] = true;	// 4種缺字是否使用
+	GaijiUniExtFirst = true;  // 優先使用 Unicode Ext
+	GaijiNormalFirst = false;  // 優先使用 通用字
+
+	GaijiDesFirst = true;     // 優先使用組字式
+	GaijiImageFirst = false;   // 優先使用缺字圖檔
 
 	ShowSiddamWay = 6;		// 悉曇字處理法 0:悉曇字型(siddam.ttf) 1:羅馬轉寫(unicode) 2:羅馬轉寫(純文字) 3:悉曇圖檔 4:自訂符號 5:CB碼 6:悉曇羅馬對照
 	UserSiddamSign = "◇";	// 使用者自訂悉曇字符號
