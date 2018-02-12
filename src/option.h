@@ -49,9 +49,12 @@ __published:	// IDE-managed Components
 	TGroupBox *GroupBox3;
 	TRadioButton *rbGaijiDesFirst;
 	TRadioButton *rbGaijiImageFirst;
+	TButton *btSave;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btOKClick(TObject *Sender);
 	void __fastcall btCancelClick(TObject *Sender);
+	void __fastcall btSaveClick(TObject *Sender);
+	void __fastcall cbShowPuncChange(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 

@@ -132,6 +132,7 @@ object fmOption: TfmOption
           Size.PlatformDefault = False
           TabOrder = 2
           Text = #39023#31034#27161#40670#31526#34399
+          OnChange = cbShowPuncChange
         end
         object cbNoShowLgPunc: TCheckBox
           Position.X = 40.000000000000000000
@@ -272,13 +273,13 @@ object fmOption: TfmOption
     TabOrder = 0
     object btOK: TButton
       StyledSettings = [Family, Style, FontColor]
-      Position.X = 384.000000000000000000
+      Position.X = 496.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 80.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 0
-      Text = #30906#35469
+      TabOrder = 1
+      Text = #30906#23450
       TextSettings.Font.Size = 18.000000000000000000
       OnClick = btOKClick
     end
@@ -288,9 +289,21 @@ object fmOption: TfmOption
       Size.Width = 64.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 1
+      TabOrder = 2
       Text = #21462#28040
       OnClick = btCancelClick
+    end
+    object btSave: TButton
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 400.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = #20786#23384
+      TextSettings.Font.Size = 18.000000000000000000
+      OnClick = btSaveClick
     end
   end
 end

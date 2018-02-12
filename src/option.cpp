@@ -403,13 +403,26 @@ void __fastcall TfmOption::FormShow(TObject *Sender)
 void __fastcall TfmOption::btOKClick(TObject *Sender)
 {
 	SaveToSetting();
-    Close();
+	Close();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfmOption::btCancelClick(TObject *Sender)
 {
 	Close();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmOption::btSaveClick(TObject *Sender)
+{
+	SaveToSetting();
+    Setting->SaveToFile();
+	Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmOption::cbShowPuncChange(TObject *Sender)
+{
+	cbNoShowLgPunc->Enabled = cbShowPunc->IsChecked;
 }
 //---------------------------------------------------------------------------
 

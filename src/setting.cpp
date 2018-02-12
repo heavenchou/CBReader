@@ -7,23 +7,25 @@
 #pragma package(smart_init)
 
 // ---------------------------------------------------------------------------
-__fastcall CSetting::CSetting() // 建構函式
+__fastcall CSetting::CSetting(String sFile) // 建構函式
 {
-	BookcaseDir = "Bookcase"; 		// 書櫃的目錄
+	SettingFile = sFile;            // 設定檔的位置
 
 	// 設定預設值
+
+	BookcaseDir = "Bookcase"; 		// 書櫃的目錄
 
     // 經文格式
 
 	ShowLineFormat = false;         // 是否依大正藏切行
 	ShowLineHead = true;			// 是否行首加上行首資訊
-    CorrSelect = 0;					// 勘誤選擇 0:修訂用字, 1:二者皆要 [底本>修訂], 2:底本用字
-    ShowCorrWarning = 0;            // 是否要秀出修訂選擇的注意事項, 預設是 0
-    ShowJKData = true;				// 顯示校勘資料
-    VerticalMode = false;			// 垂直顯示
-    ShowPunc = true;                // 呈現標點
-    NoShowLgPunc = false;           // 不呈現偈頌的標點
-    LgType = 1;                     // 這是2016新的暫時功能, 設定偈頌呈現的方式, 0 為舊的方式用空格, 1 為非標準偈頌用 <p> 呈現編排
+	//CorrSelect = 0;					// 勘誤選擇 0:修訂用字, 1:二者皆要 [底本>修訂], 2:底本用字
+	//ShowCorrWarning = 0;            // 是否要秀出修訂選擇的注意事項, 預設是 0
+	//ShowJKData = true;				// 顯示校勘資料
+	VerticalMode = false;			// 垂直顯示
+	ShowPunc = true;                // 呈現標點
+	NoShowLgPunc = false;           // 不呈現偈頌的標點
+	//LgType = 1;                     // 這是2016新的暫時功能, 設定偈頌呈現的方式, 0 為舊的方式用空格, 1 為非標準偈頌用 <p> 呈現編排
 
 	CollationType = ctCBETACollation;      // 校勘格式 0:無, 1:原書, 2:CBETA
 
@@ -150,6 +152,7 @@ __fastcall CSetting::CSetting() // 建構函式
     XMLJuanPosPath = "JuanPos\\";	// 每一卷經文移位的資料檔
 	JuanLinePath = "JuanLine\\";	// 每一卷經文第一行行首的資訊
 
+    LoadFromFile(SettingFile);  // 載入設定檔
 }
 
 // ---------------------------------------------------------------------------
@@ -157,3 +160,109 @@ __fastcall CSetting::~CSetting(void) // 解構函式
 {
 }
 // ---------------------------------------------------------------------------
+// 載入設定檔
+void __fastcall CSetting::LoadFromFile()
+{
+	LoadFromFile(SettingFile);
+}
+// ---------------------------------------------------------------------------
+// 載入設定檔
+void __fastcall CSetting::LoadFromFile(String sFile)
+{
+	TIniFile *IniFile = new TIniFile(sFile);
+
+	String Section;
+
+	// Ini file 結構是
+    // [section]
+    // Ident = Value
+
+    Section = "ShowFormat";
+
+	ShowLineFormat = IniFile->ReadBool(Section, "ShowLineFormat", ShowLineFormat);
+	ShowLineHead = IniFile->ReadBool(Section, "ShowLineHead", ShowLineHead);
+	ShowPunc = IniFile->ReadBool(Section, "ShowPunc", ShowPunc);
+	NoShowLgPunc = IniFile->ReadBool(Section, "NoShowLgPunc", NoShowLgPunc);
+	VerticalMode = IniFile->ReadBool(Section, "VerticalMode", VerticalMode);
+
+	CollationType = (ctCollationType)IniFile->ReadInteger(Section, "CollationType", CollationType);
+
+	// 缺字處理
+
+	Section = "Gaiji";
+
+	GaijiUseUniExt = IniFile->ReadBool(Section, "GaijiUseUniExt" ,GaijiUseUniExt);    // 是否使用 Unicode Ext
+	GaijiUseNormal = IniFile->ReadBool(Section, "GaijiUseNormal" ,GaijiUseNormal);      // 是否使用通用字
+
+	GaijiUniExtFirst = IniFile->ReadBool(Section, "GaijiUniExtFirst" ,GaijiUniExtFirst);  // 優先使用 Unicode Ext
+	GaijiNormalFirst = !GaijiUniExtFirst;  // 優先使用 通用字
+
+	GaijiDesFirst = IniFile->ReadBool(Section, "GaijiDesFirst" ,GaijiDesFirst);     // 優先使用組字式
+	GaijiImageFirst = !GaijiDesFirst;   // 優先使用缺字圖檔
+
+	// 系統資訊
+
+	Section = "SystemInfo";
+
+	BookcaseDir = IniFile->ReadString(Section, "BookcaseDir", BookcaseDir);
+
+	delete IniFile;
+}
+// ---------------------------------------------------------------------------
+// 儲存設定
+void __fastcall CSetting::SaveToFile()
+{
+	SaveToFile(SettingFile);
+}
+// ---------------------------------------------------------------------------
+// 儲存設定
+void __fastcall CSetting::SaveToFile(String sFile)
+{
+	TIniFile *IniFile = new TIniFile(sFile);
+
+    AnsiString Section;
+
+    // Ini file 結構是
+    // [section]
+    // Ident = Value
+
+	Section = "Version";
+    try
+    {
+		IniFile->WriteString(Section, "Version", "0.1");
+    }
+    catch(...)
+    {
+		delete IniFile;     // 先關掉再說
+
+		return;
+	}
+
+    Section = "ShowFormat";
+
+	IniFile->WriteBool(Section, "ShowLineFormat", ShowLineFormat);
+	IniFile->WriteBool(Section, "ShowLineHead", ShowLineHead);
+	IniFile->WriteBool(Section, "ShowPunc", ShowPunc);
+	IniFile->WriteBool(Section, "NoShowLgPunc", NoShowLgPunc);
+	IniFile->WriteBool(Section, "VerticalMode", VerticalMode);
+	IniFile->WriteInteger(Section, "CollationType", CollationType);
+
+	// 缺字處理
+
+	Section = "Gaiji";
+
+	IniFile->WriteBool(Section, "GaijiUseUniExt", GaijiUseUniExt);
+	IniFile->WriteBool(Section, "GaijiUseNormal", GaijiUseNormal);
+	IniFile->WriteBool(Section, "GaijiUniExtFirst", GaijiUniExtFirst);
+	IniFile->WriteBool(Section, "GaijiDesFirst", GaijiDesFirst);
+
+	// 系統資訊
+
+	Section = "SystemInfo";
+
+	IniFile->WriteString(Section, "BookcaseDir", BookcaseDir);
+
+	delete IniFile;
+}
+// ---------------------------------------------------------------------------
+

@@ -164,6 +164,7 @@ public: // User declarations
 	String SettingFile;
 	String MyFullPath;
 	String MyTempPath;  // 存放暫時檔的目錄
+    String MyHomePath;  // 私人目錄, 要放設定檔
 
 	CSetting * Setting; // 設定檔
 	CBookcase * Bookcase; // 書櫃
@@ -172,6 +173,8 @@ public: // User declarations
 	TStringList * SearchWordList;	// 存放每一個檢索的詞, 日後塗色會用到
     String SearchSentence;	// 搜尋字串
 
+
+	void __fastcall InitialPath(); // 	路徑初值設定
 
 	bool __fastcall IsSelectedBook(); // 是否有選擇套書了?
 	// 開啟指定的書櫃

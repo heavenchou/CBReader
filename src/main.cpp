@@ -19,54 +19,21 @@ TfmMain *fmMain;
 // ---------------------------------------------------------------------------
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
-	SearchSentence = "";    // 搜尋字串
-	SearchWordList = new TStringList;	    // 存放每一個檢索的詞, 日後塗色會用到
-
-	// 取得設定檔並讀取所有設定
-
-	// 取得 Bookcase 所有資料區
+	InitialPath();  // 設定目錄初值
 
 #ifdef _Windows
 	SetPermissions(11001); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
 #endif
 
-#ifdef _Windows
-	MyFullPath = GetCurrentDir();
-#else
-	// MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
-	// MyFullPath = GetCurrentDir();
-	// MyFullPath = StringReplace(MyFullPath, "/CBReader.app/Contents/MacOS", "", TReplaceFlags() << rfReplaceAll);
+	SearchSentence = "";    // 搜尋字串
+	SearchWordList = new TStringList;	    // 存放每一個檢索的詞, 日後塗色會用到
 
-	/*
-	https://stackoverflow.com/questions/15218979/getting-application-path-in-firemonkey
-	Try using ParamStr(0) instead of Application.ExeName.
-
-	X.Env.SearchPath - Returns the currently registered search path on the system.
-	X.Env.AppFilename - Returns the "app" name of the application.  On OS X this is the application package in which the exe resides.  On Windows, this is the name of the folder in which the exe resides.
-	X.Env.ExeFilename - Returns the actual filename of the running executable.
-	X.Env.AppFolder - Returns the folder path to the executable, stopping at the level of the application package on OSX.
-	X.Env.ExeFolder - Returns the full folder path to the executable.
-	X.Env.TempFolder - Returns a writable temp folder path that can be used by your application.
-	X.Env.HomeFolder - Returns the user's writable home folder.  On OS X this equates to /Users/username and on Windows,  C:\Users\username\AppData\Roaming or the appropriate path as set on the system.
-	*/
-
-	MyFullPath = System::Ioutils::TPath::GetHomePath();
-	MyFullPath += "/Desktop";
-
-#endif
-
-	MyFullPath += "/";
-	MyTempPath = MyFullPath + "_Temp_/";
-	if(!TDirectory::Exists(MyTempPath))
-	{
-		TDirectory::CreateDirectory(MyTempPath);
-	}
-
-	SettingFile = "cbreader.ini";
-	Setting = new CSetting();
+	// 取得設定檔並讀取所有設定
+	Setting = new CSetting(SettingFile);
 
 	SelectedBook = -1;   // 目前選中的書, -1 表示還沒選
 
+	// 取得 Bookcase 所有資料區
 	// 載入書櫃
 
 	Bookcase = new CBookcase();
@@ -92,7 +59,43 @@ void __fastcall TfmMain::FormDestroy(TObject *Sender)
 	if(Bookcase) delete Bookcase;
 	if(NavTree) delete NavTree;
 }
+// ---------------------------------------------------------------------------
+// 	路徑初值設定
+void __fastcall TfmMain::InitialPath()
+{
+	// 程式主目錄
+#ifdef _Windows
+	MyFullPath = GetCurrentDir();
+#else
+	// MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
+	// MyFullPath = GetCurrentDir();
+	// MyFullPath = StringReplace(MyFullPath, "/CBReader.app/Contents/MacOS", "", TReplaceFlags() << rfReplaceAll);
 
+	MyFullPath = System::Ioutils::TPath::GetHomePath();
+	MyFullPath += "/Application/CBETA/CBReader";
+
+#endif
+	MyFullPath += "/";
+
+	// Temp 目錄
+	MyTempPath = System::Ioutils::TPath::GetTempPath();
+	MyTempPath = MyTempPath + "CBReader/";
+
+	if(!TDirectory::Exists(MyTempPath))
+		TDirectory::CreateDirectory(MyTempPath);
+
+	// 使用者個人目錄
+	MyHomePath = System::Ioutils::TPath::GetHomePath();
+	MyHomePath += "/CBETA/";
+	if(!TDirectory::Exists(MyHomePath))
+		TDirectory::CreateDirectory(MyHomePath);
+	MyHomePath += "CBReader2X/";
+	if(!TDirectory::Exists(MyHomePath))
+		TDirectory::CreateDirectory(MyHomePath);
+
+	// 設定檔
+	SettingFile = MyHomePath + u"cbreader.ini";
+}
 // ---------------------------------------------------------------------------
 // 將 IE 設定為 IE 11
 // copy from

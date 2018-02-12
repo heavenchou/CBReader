@@ -5,6 +5,7 @@
 
 #include "cbxmloption.h"
 #include <fmx.h>
+#include <System.IniFiles.hpp>
 // ---------------------------------------------------------------------------
 enum ctCollationType {ctNoCollation, ctOrigCollation, ctCBETACollation};
 class CSetting
@@ -12,6 +13,8 @@ class CSetting
 private: // User declarations
 
 public: // User declarations
+
+	String SettingFile;     // 設定檔的位置
 
 	//CCBXMLOption * CBXMLOption; // CBETA 經文的格式
 
@@ -164,8 +167,12 @@ public: // User declarations
     String XMLJuanPosPath;		// 每一卷經文移位的資料檔
 	String JuanLinePath;		// 每一卷經文第一行行首的資訊
 
+	void __fastcall LoadFromFile();
+	void __fastcall SaveToFile();
+	void __fastcall LoadFromFile(String sFile);
+	void __fastcall SaveToFile(String sFile);
 
-	__fastcall CSetting();
+	__fastcall CSetting(String sFile);
 	__fastcall ~CSetting();
 };
 // ---------------------------------------------------------------------------
