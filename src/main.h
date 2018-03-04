@@ -136,6 +136,12 @@ __published: // IDE-managed Components
 	TButton *btTextSearch;
 	TLabel *lbSearchMsg;
 	TStringColumn *StringColumn17;
+	TSplitter *Splitter3;
+	TPanel *Panel6;
+	TPanel *Panel7;
+	TButton *Button1;
+	TLabel *Label20;
+	TTreeView *tvMuluTree;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall CornerButton1Click(TObject *Sender);
@@ -169,6 +175,7 @@ public: // User declarations
 	CSetting * Setting; // 設定檔
 	CBookcase * Bookcase; // 書櫃
 	CNavTree * NavTree; // 導覽文件 (暫時的, 日後會放在 Serial 物件中 ???)
+	CNavTree * MuluTree; // 單經導覽文件 (暫時的, 日後會放在 Serial 物件中 ???)
 
 	TStringList * SearchWordList;	// 存放每一個檢索的詞, 日後塗色會用到
     String SearchSentence;	// 搜尋字串

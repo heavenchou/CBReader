@@ -15,10 +15,10 @@ private: // User declarations
 	TTreeView * TreeView;   // 傳入的 TreeView
 	TList * TreeRoot; // 樹狀目錄, 內容即是 NavItem
 	CNavXML * NavXML;
-	String XMLFile; // XML 檔名
 
 public: // User declarations
 
+	String XMLFile; // XML 檔名
 	TList * __fastcall GetTreeRoot(void);
 
 	// 將資料呈現在樹狀目錄上, 傳入樹及要連結的函式

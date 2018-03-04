@@ -50,6 +50,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 		// 只有一本書就直接開了
 		OpenBookcase(0);
 	}
+
+	MuluTree = 0;
 }
 // ---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
@@ -58,6 +60,7 @@ void __fastcall TfmMain::FormDestroy(TObject *Sender)
 	if(Setting) delete Setting;
 	if(Bookcase) delete Bookcase;
 	if(NavTree) delete NavTree;
+	if(MuluTree) delete MuluTree;
 }
 // ---------------------------------------------------------------------------
 // 	路徑初值設定
@@ -153,6 +156,9 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	// Item
 	TTreeViewItem * tvItem = (TTreeViewItem *) Sender;
 	String sURL = tvItem->TagString;
+	// ???? 這行取巧, 日後要拿掉
+	// 因為從單經書目點選時, 有時沒有開啟 SelectedBook
+	if(SelectedBook <0) SelectedBook = 0;
 	CSeries * sSeries = (CSeries *)Bookcase->Books->Items[SelectedBook];
 
 	if(sURL == "")  // 沒有 URL
@@ -334,7 +340,19 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	{
 		ShowMessage("沒有找到正確檔案");
         return;
+	}
+
+	// 如果傳來的是 XML/T/T01/T01n0001_001.xml#p0001a01
+	// 則要把 p0001a01 分離出來
+
+	String sLink = "";
+	int iPos = sFile.Pos0("#");
+	if(iPos >= 0)
+	{
+		sLink = sFile.SubString0(iPos,sFile.Length()-iPos);
+		sFile = sFile.SubString0(0,iPos);
     }
+
 	String sXMLFile = Bookcase->CBETA->Dir + sFile;
 	String sJSFile = Bookcase->CBETA->Dir + Bookcase->CBETA->JSFile;
 	CCBXML * CBXML = new CCBXML(sXMLFile, Setting, sJSFile, bShowHighlight, seSearchEngine);
@@ -355,6 +373,20 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 
 	WebBrowser->URL = "file://" + sOutFile;
 	WebBrowser->Navigate();
+
+	// 產生目錄
+
+	String sMulu = StringReplace(sFile, "XML", "Toc", TReplaceFlags() << rfReplaceAll);
+	int iLen = sMulu.Length();
+	sMulu = sMulu.SubString0(0,iLen-8); // 扣掉最後的 _001.xml
+	sMulu = Bookcase->CBETA->Dir + sMulu + ".xhtml";
+
+	if(MuluTree == 0 || sMulu != MuluTree->XMLFile)
+	{
+        if(MuluTree) delete MuluTree;
+		MuluTree = new CNavTree(sMulu);
+		MuluTree->SaveToTreeView(tvMuluTree, NavTreeItemClick);
+	}
 }
 //---------------------------------------------------------------------------
 // 由冊頁欄行呈現經文

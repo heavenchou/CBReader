@@ -186,21 +186,22 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 		{
 			// 特殊狀況, 遇到行首標記
 
-			if (wcsncmp(pPoint, L"<span class=\"linehead\">", 23) == 0)
+			if (wcsncmp(pPoint, L"<span class=\"linehead\">", 23) == 0 ||
+			    wcsncmp(pPoint, L"<span class=\"parahead\">", 23) == 0)
 			{
                 // <span class="linehead">GA009n0008_p0003a01║</span>
             	// <span class="linehead">ZS01n0001_p0001a01║</span>
             	// <span class="linehead">ZW01n0001_p0001a01║</span>
                 // <span class="linehead">A001n0001_p0001a01║</span>
 				// <span class="linehead">T30n1579_p0279a10║</span>
-				// <span class="linehead">[0279a09] </span>
+				// <span class="parahead">[0279a09] </span>
 
 				if(pPoint[23] == u'[') pPoint += 40;
-				else if(pPoint[36] == u'p') pPoint += 53;
-				else if(pPoint[35] == u'p') pPoint += 52;
-				else if(pPoint[34] == u'p') pPoint += 51;
-				else if(pPoint[33] == u'p') pPoint += 50;
-				else if(pPoint[32] == u'p') pPoint += 49;
+				else if(pPoint[36] == u'p') pPoint += 52;
+				else if(pPoint[35] == u'p') pPoint += 51;
+				else if(pPoint[34] == u'p') pPoint += 50;
+				else if(pPoint[33] == u'p') pPoint += 49;
+				else if(pPoint[32] == u'p') pPoint += 48;
 				else
                 {
                     if(!bShowError)

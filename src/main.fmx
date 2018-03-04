@@ -36,9 +36,57 @@
       ExplicitSize.cy = 26.000000000000000000
       object WebBrowser: TWebBrowser
         Align = Client
-        Size.Width = 760.000000000000000000
+        Size.Width = 543.000000000000000000
         Size.Height = 592.000000000000000000
         Size.PlatformDefault = False
+      end
+      object Splitter3: TSplitter
+        Align = Left
+        Cursor = crHSplit
+        MinSize = 20.000000000000000000
+        Position.X = 209.000000000000000000
+        ShowGrip = False
+        Size.Width = 8.000000000000000000
+        Size.Height = 592.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object Panel6: TPanel
+        Align = Left
+        Size.Width = 209.000000000000000000
+        Size.Height = 592.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        object Panel7: TPanel
+          Align = Top
+          Size.Width = 209.000000000000000000
+          Size.Height = 33.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object Button1: TButton
+            Size.Width = 25.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Text = '<-'
+          end
+          object Label20: TLabel
+            Position.X = 32.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 33.000000000000000000
+            Size.PlatformDefault = False
+            Text = #26412#26360#30446#37636
+            TabOrder = 1
+          end
+        end
+        object tvMuluTree: TTreeView
+          Align = Client
+          Size.Width = 209.000000000000000000
+          Size.Height = 559.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Viewport.Width = 205.000000000000000000
+          Viewport.Height = 555.000000000000000000
+        end
       end
     end
   end
@@ -54,7 +102,7 @@
       Size.Width = 241.000000000000000000
       Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 3
+      TabIndex = 0
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -70,7 +118,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 44.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -681,7 +729,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 68.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False

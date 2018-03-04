@@ -20,6 +20,8 @@ __fastcall CCBXML::CCBXML(String sFile, CSetting * cSetting, String sJSFile , bo
 	ShowHighlight = bShowHighlight;    // 是否塗色
 	mOrigNote.clear();
 
+	GetInitialFromFileName();   // 由經名取得一切相關資訊
+
 	Document = interface_cast<Xmlintf::IXMLDocument>(new TXMLDocument(NULL));
 	Document->FileName = XMLFile;
 
@@ -48,6 +50,13 @@ __fastcall CCBXML::CCBXML(String sFile, CSetting * cSetting, String sJSFile , bo
 	HTMLText += "<div id=\"CollationList\" style=\"display:none\">\n";
 	HTMLText += HTMLCollation;
 	HTMLText += "</div>\n";
+
+	if(true)
+	{
+		HTMLText += "<script>\n"
+		"location.href=\"#heaven\";"
+		"</script>\n";
+	}
 
 	HTMLText += "\n</body>\n</html>";
 }
@@ -186,11 +195,9 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 }
 
 // ---------------------------------------------------------------------------
-// 解析 XML 標記
+// <g ref="#CB00166"/>
 String __fastcall CCBXML::tag_g(_di_IXMLNode Node)
 {
-	// 處理標記 <g ref="#CB00166"/>
-
 	String sHtml = "";
 	String sCBCode = GetAttr(Node, "ref");
 	sCBCode = CMyStrUtil::SubString(sCBCode,1);
@@ -284,13 +291,19 @@ String __fastcall CCBXML::tag_g(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
-// 解析 XML 標記
+// <lb>
+// <lb n="0150b09" ed="T"/>
 String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 {
 	String sHtml = "";
 	// 處理標記
 	sHtml = "<br class=\"lb_br\"/>";
-	sHtml += parseChild(Node); // 處理內容
+
+	String sn = GetAttr(Node, "n");
+	PageLine = sn;
+	LineHead = BookVolnSutra + "p" + PageLine + "║";
+	sHtml += "<a\nname=\"" + PageLine + "\"></a><span class=\"linehead\">" + LineHead + "</span>";
+	// sHtml += parseChild(Node); // 處理內容
 	// 結束標記
 
 	return sHtml;
@@ -430,7 +443,7 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 {
 
 	String sHtml = "";
-	sHtml = "<p>";
+	sHtml = "<p><span class=\"parahead\">[" + PageLine + "] </span>";
 	sHtml += parseChild(Node); // 處理內容
 	sHtml += "</p>";
 
@@ -512,6 +525,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		.byline {color:#408080; font-weight: normal; font-size:16pt;}\n"
 	"		.headname {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
 	"		.linehead {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
+	"		.parahead {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
 	"		.lg {color:#008040; font-weight: normal; font-size:16pt;}\n"
 	"		.corr {color:#FF0000; font-weight: normal; }\n"
 	"		.note {color:#9F5000; font-weight: normal; font-size:14pt;}\n";
@@ -522,6 +536,22 @@ String __fastcall CCBXML::MakeHTMLHead()
 	else
 		sHtml += u"		p {display:block;}\n"
 				  "		br.lb_br {display:none;}\n";
+
+	if(Setting->ShowLineHead)
+	{
+		if(Setting->ShowLineFormat)
+			sHtml += u"		.linehead {display:inline;}\n"
+					  "		.parahead {display:none;}\n";
+		else
+			sHtml += u"		.linehead {display:none;}\n"
+					  "		.parahead {display:inline;}\n";
+	}
+	else
+	{
+		sHtml += u"		.linehead {display:none;}\n"
+				  "		.parahead {display:none;}\n";
+    }
+
 
 	// 校勘呈現
 	if(Setting->CollationType == ctNoCollation)
@@ -788,3 +818,34 @@ String __fastcall CCBXML::AddOrigNote(String HTMLText)
 	String sOut = String(&(vOut[0]),vOut.size());
 	return sOut;
 }
+// ---------------------------------------------------------------------------
+// 由經名取得一切相關資訊
+void __fastcall CCBXML::GetInitialFromFileName()
+{
+	// 檔名是 T01n0001_001.xml
+	String sPatten = "([^\\\\/\\d]+)(\\d+)n(.*?)_(\\d\\d\\d)\\.xml";
+	TRegEx *regex;
+	TMatchCollection mycoll;
+	TGroupCollection mygrps;
+
+	regex = new TRegEx();
+	mycoll = regex->Matches(XMLFile, sPatten);
+
+	if(mycoll.Count != 1)   // 失敗
+	{
+		ShowMessage(L"檔名格式不正確, 無法分析");
+		return;
+    }
+
+	mygrps = mycoll.Item[0].Groups;
+
+	BookId = mygrps.Item[1].Value;		// 內容是 'T'(大正藏), 'X'(卍續藏)
+	VolId = mygrps.Item[2].Value;      // 內容是 01
+	SutraId = mygrps.Item[3].Value;		// 內容是 "0001" or "0143a"
+	SutraId_ = SutraId;
+	if(SutraId.Length() == 4) SutraId_ += L"_";
+	JuanNum = String(mygrps.Item[4].Value).ToInt();		// 第幾卷
+	BookVolnSutra = BookId + VolId + "n" + SutraId_;	// 內容是 T01n0001_
+}
+// ---------------------------------------------------------------------------
+

@@ -16,6 +16,7 @@
 #include "setting.h"
 #include "subutil.h"
 #include "highlight.h"
+#include "System.RegularExpressions.hpp"
 #include "../../Monster/src/monster.h"
 
 using namespace std;
@@ -82,7 +83,24 @@ public: // User declarations
 
     map<String, String> mOrigNote;  // 暫存的 orig note
 
-    bool ShowHighlight; 	// 是否塗色
+	// 處理 XML 過程需要的變數
+
+	String BookId;		// 內容是 'T'(大正藏), 'X'(卍續藏)
+	String VolId;      // 內容是 01
+	String SutraId;		// 內容是 "0001" or "0143a"
+	String SutraId_;	// 內容是 "0001_" or "0143a"
+	String SutraName;	// 經名
+	int    JuanNum;		// 第幾卷
+
+	String GotoPageLine;	// 本網頁要跳到的地點 (因為不一定是卷首)
+
+	String BookVolnSutra;	// 內容是 T01n0001_
+	String PageLine;	// 內容是 0001a01
+	String LineHead;	// 內容是 T01n0001_p0001a01║
+
+	bool ShowHighlight; 	// 是否塗色
+
+	void __fastcall GetInitialFromFileName();   // 由經名取得一切相關資訊
 
 	void __fastcall SaveToHTML(String sFile);	// 儲存至 HTML
 
