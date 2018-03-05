@@ -51,9 +51,12 @@ public: // User declarations
 	void __fastcall LoadMetaData(String sMeta);	// 載入後設文件
 
 	// 由經卷去找經文
-	String __fastcall CBGetFileNameBySutraNumJuan(String sBookID, String sSutraNum, String sJuan = "");
+	String __fastcall CBGetFileNameBySutraNumJuan(String sBookID, String sSutraNum, String sJuan = "", String sPage = "", String sField = "", String sLine = "");
 	// 由冊頁欄行找經文
 	String __fastcall CBGetFileNameByVolPageFieldLine(String sBook, String sVol = "", String sPage = "", String sField = "", String sLine = "");
+	// 由頁欄行取得標準 0001a01 格式的字串
+	String __fastcall CBGetPageLine(String sPage, String sField, String sLine);
+
 	__fastcall CSeries(String sDir);    // 傳入目錄, 進行初值化
 	__fastcall ~CSeries();
 };

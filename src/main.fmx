@@ -17,17 +17,17 @@
     Size.PlatformDefault = False
     TabIndex = 0
     TabOrder = 4
-    TabPosition = PlatformDefault
+    TabPosition = None
     Sizes = (
       760s
-      592s)
+      618s)
     object TabItem1: TTabItem
       CustomIcon = <
         item
         end>
       IsSelected = True
-      Size.Width = 70.000000000000000000
-      Size.Height = 26.000000000000000000
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -37,7 +37,7 @@
       object WebBrowser: TWebBrowser
         Align = Client
         Size.Width = 543.000000000000000000
-        Size.Height = 592.000000000000000000
+        Size.Height = 618.000000000000000000
         Size.PlatformDefault = False
       end
       object Splitter3: TSplitter
@@ -47,13 +47,13 @@
         Position.X = 209.000000000000000000
         ShowGrip = False
         Size.Width = 8.000000000000000000
-        Size.Height = 592.000000000000000000
+        Size.Height = 618.000000000000000000
         Size.PlatformDefault = False
       end
       object Panel6: TPanel
         Align = Left
         Size.Width = 209.000000000000000000
-        Size.Height = 592.000000000000000000
+        Size.Height = 618.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 2
         object Panel7: TPanel
@@ -81,11 +81,11 @@
         object tvMuluTree: TTreeView
           Align = Client
           Size.Width = 209.000000000000000000
-          Size.Height = 559.000000000000000000
+          Size.Height = 585.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
           Viewport.Width = 205.000000000000000000
-          Viewport.Height = 555.000000000000000000
+          Viewport.Height = 581.000000000000000000
         end
       end
     end
@@ -102,7 +102,7 @@
       Size.Width = 241.000000000000000000
       Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 1
+      TabIndex = 2
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -141,7 +141,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 44.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -367,7 +367,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 32.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -666,11 +666,9 @@
           object edGoByKeyword: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             TabOrder = 21
-            Text = '('#26045#24037#20013'...)'
             TextSettings.Font.Size = 18.000000000000000000
             Position.X = 16.000000000000000000
             Position.Y = 384.000000000000000000
-            Enabled = False
             Size.Width = 209.000000000000000000
             Size.Height = 25.000000000000000000
             Size.PlatformDefault = False
@@ -722,6 +720,7 @@
             TabOrder = 27
             Text = 'Go'
             TextSettings.Font.Size = 18.000000000000000000
+            OnClick = btGoByKeywordClick
           end
         end
       end
@@ -866,10 +865,10 @@
     end
     object CornerButton2: TCornerButton
       Position.X = 304.000000000000000000
-      Position.Y = 16.000000000000000000
+      Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
       Size.Width = 57.000000000000000000
-      Size.Height = 22.000000000000000000
+      Size.Height = 30.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 3
       Text = #19978#19968#38913
@@ -879,10 +878,10 @@
     end
     object CornerButton3: TCornerButton
       Position.X = 368.000000000000000000
-      Position.Y = 16.000000000000000000
+      Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
       Size.Width = 57.000000000000000000
-      Size.Height = 22.000000000000000000
+      Size.Height = 30.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 2
       Text = #19979#19968#38913

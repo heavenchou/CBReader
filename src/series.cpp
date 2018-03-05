@@ -176,9 +176,19 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 }
 // ---------------------------------------------------------------------------
 // 則由經卷去找 XML 檔名
-String __fastcall CSeries::CBGetFileNameBySutraNumJuan(String sBookID, String sSutraNum, String sJuan)
+String __fastcall CSeries::CBGetFileNameBySutraNumJuan(String sBookID, String sSutraNum, String sJuan, String sPage, String sField, String sLine)
 {
-	return Spine->CBGetFileNameBySutraNumJuan(sBookID, sSutraNum, sJuan);
+	String sFileName = Spine->CBGetFileNameBySutraNumJuan(sBookID, sSutraNum, sJuan);
+
+ 	// 檔名要補上 #p0001a01 這種格式的位置
+
+	String sPageLine = CBGetPageLine(sPage, sField, sLine);
+	if(sPageLine != "")
+	{
+		sFileName += "#p" + sPageLine;
+	}
+
+	return sFileName;
 }
 // ---------------------------------------------------------------------------
 // 由冊頁欄行找經文
@@ -190,9 +200,68 @@ String __fastcall CSeries::CBGetFileNameByVolPageFieldLine(String sBook, String 
 	int iIndex = JuanLine->CBGetSpineIndexByVolPageFieldLine(sBook, sVol, sPage, sField, sLine);
 	if(iIndex == -1) return "";
 
-	return Spine->CBGetFileNameBySpineIndex(iIndex);
+	String sFileName = Spine->CBGetFileNameBySpineIndex(iIndex);
+
+	// 檔名要補上 #p0001a01 這種格式的位置
+
+	String sPageLine = CBGetPageLine(sPage, sField, sLine);
+	if(sPageLine != "")
+	{
+		sFileName += "#p" + sPageLine;
+	}
+
+	return sFileName;
 }
 // ---------------------------------------------------------------------------
+// 由頁欄行取得標準 0001a01 格式的字串
+String __fastcall CSeries::CBGetPageLine(String sPage, String sField, String sLine)
+{
+	if(sPage != "" || sField != "" || sLine != "")
+	{
+		if(sPage == "") sPage = "0001";
+		int iLen = sPage.Length();
+		if(iLen < 4)
+		{
+			// 補 0 , 不過若第一個字是英文字, 要保留
+			if(*sPage.begin() >= '0' && *sPage.begin() <= '9')
+				sPage = String().StringOfChar(L'0', 4 - iLen) + sPage;
+			else
+			{
+				// 第一字不是數字
+				String sFirst = *sPage.begin();
+				sPage.Delete0(0,1);
+				sPage = sFirst + String().StringOfChar(L'0', 4 - iLen) + sPage;
+            }
+		}
+		else if(iLen > 4)
+		{
+			sPage.Delete0(0,iLen-4);
+		}
 
+		if(sField == "") sField = "a";
+		iLen = sField.Length();
+		if(iLen > 1)
+		{
+			sField.Delete0(0,iLen-1);
+		}
+
+		if(sLine == "") sLine = "01";
+		iLen = sLine.Length();
+		if(iLen < 2)
+		{
+			sLine = String().StringOfChar(L'0', 2 - iLen) + sLine;
+		}
+		else if(iLen > 2)
+		{
+			sLine.Delete0(0,iLen-2);
+		}
+
+		return sPage + sField + sLine;
+	}
+	else
+	{
+		return "";
+    }
+}
 
 

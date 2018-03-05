@@ -15,7 +15,6 @@ __fastcall CSpine::CSpine()
 	Vol = 0;		// 冊, 例如 T01
 	Sutra = 0;		// 經
 	Juan = 0;		// 卷
-	SearchMe = 0;    // 判斷要不要檢索
 }
 // ---------------------------------------------------------------------------
 // 解構函式
@@ -27,7 +26,6 @@ __fastcall CSpine::~CSpine()
 	if(Vol) delete Vol;
 	if(Sutra) delete Sutra;
 	if(Juan) delete Juan;
-	if(SearchMe) delete SearchMe;
 }
 // ---------------------------------------------------------------------------
 // 載入文件
@@ -41,7 +39,6 @@ void __fastcall CSpine::LoadSpineFile(String sFile)
 
 	Files->LoadFromFile(sFile);
 
-	SearchMe = new bool[Files->Count];
 }
 
 // ---------------------------------------------------------------------------
@@ -144,9 +141,4 @@ String __fastcall CSpine::CBGetFileNameBySpineIndex(int iIndex)
 		return Files->Strings[iIndex];
 }
 // ---------------------------------------------------------------------------
-// 全部設為檢索或不檢索
-void __fastcall CSpine::SearchMeAll(bool b)
-{
-	for(int i=0; i<Files->Count; i++)
-        SearchMe[i] = b;
-}
+

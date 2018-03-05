@@ -109,7 +109,7 @@ public: // User declarations
 	void __fastcall ReadGaiji(_di_IXMLNode xmlNodeGaijis); // 讀取缺字
 
 	// 傳入參數為 XML 檔, 呈現的設定
-	__fastcall CCBXML(String sFile, CSetting * csSetting, String sJSFile, bool bShowHighlight = false, TmyMonster * seSearchEngine = 0);
+	__fastcall CCBXML(String sFile, String sLink, CSetting * csSetting, String sJSFile, bool bShowHighlight = false, TmyMonster * seSearchEngine = 0);
 	__fastcall ~CCBXML();
 };
 // ---------------------------------------------------------------------------

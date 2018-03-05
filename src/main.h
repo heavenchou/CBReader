@@ -157,6 +157,7 @@ __published: // IDE-managed Components
 	void __fastcall btTextSearchClick(TObject *Sender);
 	void __fastcall sgTextSearchCellDblClick(TColumn * const Column, const int Row);
 	void __fastcall cbSearchRangeChange(TObject *Sender);
+	void __fastcall btGoByKeywordClick(TObject *Sender);
 
 
 

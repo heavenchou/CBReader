@@ -24,7 +24,6 @@ public: // User declarations
 	TStringList * Vol;		// 冊
 	TStringList * Sutra;	// 經
 	TStringList * Juan;		// 卷
-	bool * SearchMe;        // 判斷要不要檢索
 
 	void __fastcall LoadSpineFile(String sFile);      	// 載入文件
 
@@ -37,8 +36,7 @@ public: // User declarations
 	String __fastcall CBGetFileNameBySutraNumJuan(String sBookID,String sSutraNum,String sJuan = "");
 	// 由 Spine 的 Index 去找 XML 檔名
 	String __fastcall CBGetFileNameBySpineIndex(int iIndex);
-	// 全部設為檢索或不檢索
-	void __fastcall SearchMeAll(bool b);
+
 
 	__fastcall CSpine();
 	__fastcall ~CSpine();

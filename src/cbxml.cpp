@@ -9,7 +9,7 @@
 // ---------------------------------------------------------------------------
 // 建構函式
 // 傳入參數為 XML 檔, 呈現的設定
-__fastcall CCBXML::CCBXML(String sFile, CSetting * cSetting, String sJSFile , bool bShowHighlight, TmyMonster * seSearchEngine)
+__fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, String sJSFile , bool bShowHighlight, TmyMonster * seSearchEngine)
 {
 	// 初值
 	XMLFile = sFile;
@@ -51,10 +51,10 @@ __fastcall CCBXML::CCBXML(String sFile, CSetting * cSetting, String sJSFile , bo
 	HTMLText += HTMLCollation;
 	HTMLText += "</div>\n";
 
-	if(true)
+	if(sLink != "")
 	{
 		HTMLText += "<script>\n"
-		"location.href=\"#heaven\";"
+		"location.href=\"#" + sLink + "\";"
 		"</script>\n";
 	}
 
@@ -302,7 +302,7 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 	String sn = GetAttr(Node, "n");
 	PageLine = sn;
 	LineHead = BookVolnSutra + "p" + PageLine + "║";
-	sHtml += "<a\nname=\"" + PageLine + "\"></a><span class=\"linehead\">" + LineHead + "</span>";
+	sHtml += "<a\nname=\"p" + PageLine + "\"></a><span class=\"linehead\">" + LineHead + "</span>";
 	// sHtml += parseChild(Node); // 處理內容
 	// 結束標記
 

@@ -333,7 +333,7 @@ void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
 
 	CSeries * csCBETA = Bookcase->CBETA;
 
-	String sFile = csCBETA->CBGetFileNameBySutraNumJuan(sBook, sSutraNum, sJuan);
+	String sFile = csCBETA->CBGetFileNameBySutraNumJuan(sBook, sSutraNum, sJuan, sPage, sField, sLine);
 	ShowCBXML(sFile);
 
 }
@@ -354,13 +354,13 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	int iPos = sFile.Pos0("#");
 	if(iPos >= 0)
 	{
-		sLink = sFile.SubString0(iPos,sFile.Length()-iPos);
+		sLink = sFile.SubString0(iPos+1,sFile.Length()-iPos-1);
 		sFile = sFile.SubString0(0,iPos);
     }
 
 	String sXMLFile = Bookcase->CBETA->Dir + sFile;
 	String sJSFile = Bookcase->CBETA->Dir + Bookcase->CBETA->JSFile;
-	CCBXML * CBXML = new CCBXML(sXMLFile, Setting, sJSFile, bShowHighlight, seSearchEngine);
+	CCBXML * CBXML = new CCBXML(sXMLFile, sLink, Setting, sJSFile, bShowHighlight, seSearchEngine);
 
 	// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
 	// windows 是 xxxxxx
@@ -558,7 +558,6 @@ void __fastcall TfmMain::sgTextSearchCellDblClick(TColumn * const Column, const 
 	ShowCBXML(sFile, true, Bookcase->CBETA->SearchEngine);
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TfmMain::cbSearchRangeChange(TObject *Sender)
 {
 	if(cbSearchRange->IsChecked)
@@ -567,10 +566,41 @@ void __fastcall TfmMain::cbSearchRangeChange(TObject *Sender)
 		TModalResult mr = fmSearchRange->ShowModal();
 		if(mr == mrCancel) cbSearchRange->IsChecked = false;
 	}
-	else
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btGoByKeywordClick(TObject *Sender)
+{
+	// 判斷各種直接前往指定經文的方法
+	// 1. 行首 T01n0001_p0001a01
+	// 2. 引用複製 T01,no.1,p.1,b5
+	// 3. 特定的代碼, 例如 : SN1.1
+
+	TRegEx *regex;
+	TMatchCollection reMatch;
+	TGroupCollection reGroup;
+
+	String sKey = edGoByKeyword->Text;
+	// T01n0001_p0001a01
+	String sPatten = "(\\D+)(\\d+)n.{5}p(.{4})(.)(\\d\\d)";
+
+	regex = new TRegEx();
+	reMatch = regex->Matches(sKey, sPatten);
+	if(reMatch.Count)
 	{
-		// 取消全部搜尋範圍的限制
-	}
+		reGroup = reMatch.Item[0].Groups;
+
+		String sBook = reGroup.Item[1].Value;
+		String sVol = reGroup.Item[2].Value;
+		String sPage = reGroup.Item[3].Value;
+		String sField = reGroup.Item[4].Value;
+		String sLine = reGroup.Item[5].Value;
+
+		CSeries * csCBETA = Bookcase->CBETA;
+
+		String sFile = csCBETA->CBGetFileNameByVolPageFieldLine(sBook, sVol, sPage, sField, sLine);
+		ShowCBXML(sFile);
+    }
+
 }
 //---------------------------------------------------------------------------
 
