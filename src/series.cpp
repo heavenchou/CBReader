@@ -16,14 +16,14 @@ __fastcall CSeries::CSeries(String sDir)
 	Creator = "";     // 作者
 	NavFile = "";     // 導覽文件
 	CatalogFile = "";     // 目錄文件
-	SpineFile = "";   // 遍歷文件
+	SpineFile = "";   	// 遍歷文件
 	BookDataFile = "";   // Bookdata 文件
 	JSFile = "";          // CBReader 專用的 js 檔
 
-	Catalog = 0;	  // 目錄
+	Catalog = 0;	  	// 目錄
 	Spine = 0;    		// 遍歷文件
 	JuanLine = 0;   	// 各卷與頁欄行的關係物件, CBETA 專用
-	BookData = 0;   // 每本書的資訊, 例如 T , 大正藏, 2
+	BookData = 0;   	// 每本書的資訊, 例如 T , 大正藏, 2
 
 	SearchEngine = 0;   // 全文檢索引擎
 

@@ -5,6 +5,7 @@
 
 #include "main.h"
 #include "selectbook.h"
+#include "searchrange.h"
 
 #ifdef _Windows
 #include <System.Win.Registry.hpp>
@@ -52,6 +53,10 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	}
 
 	MuluTree = 0;
+
+    // 這要先處理, 動一下內容, 不然欄位標題就還可以移動
+	sgTextSearch->RowCount = 1;
+	sgFindSutra->RowCount = 1;
 }
 // ---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
@@ -452,7 +457,8 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 	Cursor = crHourGlass;
 
 	clock_t t1 = clock();
-	bool bHasRange = false;     // 有範圍就要設定 ????
+	bool bHasRange = false;     // 有範圍就要設定
+	if(cbSearchRange->IsChecked) bHasRange = true;
 
 	TmyMonster * SearchEngine = Bookcase->CBETA->SearchEngine;
 	CCatalog * Catalog = Bookcase->CBETA->Catalog;
@@ -550,6 +556,21 @@ void __fastcall TfmMain::sgTextSearchCellDblClick(TColumn * const Column, const 
 	String sFile = Bookcase->CBETA->Spine->Files->Strings[iIndex];
     // 要塗色
 	ShowCBXML(sFile, true, Bookcase->CBETA->SearchEngine);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::cbSearchRangeChange(TObject *Sender)
+{
+	if(cbSearchRange->IsChecked)
+	{
+		// 設定檢索範圍
+		TModalResult mr = fmSearchRange->ShowModal();
+		if(mr == mrCancel) cbSearchRange->IsChecked = false;
+	}
+	else
+	{
+		// 取消全部搜尋範圍的限制
+	}
 }
 //---------------------------------------------------------------------------
 

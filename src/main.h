@@ -142,6 +142,7 @@ __published: // IDE-managed Components
 	TButton *Button1;
 	TLabel *Label20;
 	TTreeView *tvMuluTree;
+	TCheckBox *cbSearchRange;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall CornerButton1Click(TObject *Sender);
@@ -155,6 +156,7 @@ __published: // IDE-managed Components
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall btTextSearchClick(TObject *Sender);
 	void __fastcall sgTextSearchCellDblClick(TColumn * const Column, const int Row);
+	void __fastcall cbSearchRangeChange(TObject *Sender);
 
 
 

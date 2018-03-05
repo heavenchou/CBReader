@@ -1,0 +1,234 @@
+object fmSearchRange: TfmSearchRange
+  Left = 0
+  Top = 0
+  BorderStyle = Single
+  Caption = #35373#23450#27298#32034#31684#22285
+  ClientHeight = 618
+  ClientWidth = 797
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Panel1: TPanel
+    Align = Left
+    Size.Width = 236.603759765625000000
+    Size.Height = 618.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object lbSearchRangeList: TListBox
+      Align = Client
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 10.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Size.Width = 216.603759765625000000
+      Size.Height = 598.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      DisableFocusEffect = True
+      ItemIndex = 0
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      Viewport.Width = 212.600000000000000000
+      Viewport.Height = 594.000000000000000000
+      object ListBoxItem1: TListBoxItem
+        TextSettings.Font.Size = 16.000000000000000000
+        StyledSettings = [Family, Style, FontColor, Other]
+        IsSelected = True
+        Size.Width = 212.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = #20381#37096#39006#36984#25799
+        OnClick = ListBoxItem1Click
+      end
+      object ListBoxItem2: TListBoxItem
+        TextSettings.Font.Size = 16.000000000000000000
+        StyledSettings = [Family, Style, FontColor, Other]
+        Position.Y = 40.000000000000000000
+        Size.Width = 212.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = #20381#34255#32147#36984#25799
+        OnClick = ListBoxItem2Click
+      end
+    end
+  end
+  object Splitter1: TSplitter
+    Align = Left
+    Cursor = crHSplit
+    MinSize = 20.000000000000000000
+    Position.X = 236.603759765625000000
+    Size.Width = 8.000000000000000000
+    Size.Height = 618.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Panel2: TPanel
+    Align = Client
+    Size.Width = 552.396240234375000000
+    Size.Height = 618.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object TabControl1: TTabControl
+      Align = Client
+      Size.Width = 552.396240234375000000
+      Size.Height = 552.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'tabcontrolstyle'
+      TabIndex = 1
+      TabOrder = 1
+      TabPosition = None
+      Sizes = (
+        552.396240234375s
+        552s
+        552.396240234375s
+        552s)
+      object TabItem1: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = False
+        Size.Width = 8.000000000000000000
+        Size.Height = 8.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'TabItem1'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
+        object tvBulei: TTreeView
+          Align = Client
+          Margins.Left = 10.000000000000000000
+          Margins.Top = 10.000000000000000000
+          Margins.Right = 10.000000000000000000
+          Margins.Bottom = 10.000000000000000000
+          Size.Width = 532.396240234375000000
+          Size.Height = 532.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'treeviewstyle'
+          TabOrder = 0
+          ShowCheckboxes = True
+          Viewport.Width = 528.400000000000000000
+          Viewport.Height = 528.000000000000000000
+          object triBulei0: TTreeViewItem
+            StyledSettings = [Family, Style, FontColor]
+            TextSettings.Font.Size = 16.000000000000000000
+            IsChecked = False
+            IsExpanded = False
+            IsSelected = False
+            TabOrder = 0
+            Text = #38463#21547#37096#39006
+          end
+          object triBulei1: TTreeViewItem
+            Tag = 1
+            StyledSettings = [Family, Style, FontColor]
+            TextSettings.Font.Size = 16.000000000000000000
+            IsChecked = False
+            IsExpanded = False
+            IsSelected = False
+            TabOrder = 1
+            Text = #26412#32227#37096#39006
+          end
+          object triBulei2: TTreeViewItem
+            Tag = 2
+            StyledSettings = [Family, Style, FontColor]
+            TextSettings.Font.Size = 16.000000000000000000
+            IsChecked = False
+            IsExpanded = False
+            IsSelected = False
+            TabOrder = 2
+            Text = #33324#33509#37096#39006
+          end
+        end
+      end
+      object TabItem2: TTabItem
+        CustomIcon = <
+          item
+          end>
+        IsSelected = True
+        Size.Width = 8.000000000000000000
+        Size.Height = 8.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'TabItem2'
+        ExplicitSize.cx = 8.000000000000000000
+        ExplicitSize.cy = 8.000000000000000000
+        object tvBook: TTreeView
+          Align = Client
+          Margins.Left = 10.000000000000000000
+          Margins.Top = 10.000000000000000000
+          Margins.Right = 10.000000000000000000
+          Margins.Bottom = 10.000000000000000000
+          Size.Width = 532.396240234375000000
+          Size.Height = 532.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'treeviewstyle'
+          TabOrder = 0
+          ShowCheckboxes = True
+          Viewport.Width = 528.400000000000000000
+          Viewport.Height = 528.000000000000000000
+          object tviT: TTreeViewItem
+            StyledSettings = [Family, Style, FontColor]
+            TextSettings.Font.Size = 16.000000000000000000
+            IsChecked = False
+            IsExpanded = False
+            IsSelected = False
+            TabOrder = 0
+            Text = 'T '#22823#27491#26032#33065#22823#34255#32147
+          end
+          object tviX: TTreeViewItem
+            StyledSettings = [Family, Style, FontColor]
+            TextSettings.Font.Size = 16.000000000000000000
+            IsChecked = False
+            IsExpanded = False
+            IsSelected = False
+            TabOrder = 1
+            Text = 'X '#26032#32386#21325#32396#34255
+          end
+          object tviY: TTreeViewItem
+            StyledSettings = [Family, Style, FontColor]
+            TextSettings.Font.Size = 16.000000000000000000
+            IsChecked = False
+            IsExpanded = False
+            IsSelected = False
+            TabOrder = 2
+            Text = 'Y '#21360#38918#27861#24107#33879#20316#20840#38598
+          end
+        end
+      end
+    end
+    object Panel3: TPanel
+      Align = Bottom
+      Position.Y = 552.000000000000000000
+      Size.Width = 552.396240234375000000
+      Size.Height = 66.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object btOK: TButton
+        Align = Center
+        StyledSettings = [Family, Style, FontColor]
+        ModalResult = 1
+        Size.Width = 81.000000000000000000
+        Size.Height = 41.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = #30906#23450
+        TextSettings.Font.Size = 16.000000000000000000
+        OnClick = btOKClick
+      end
+      object btCancle: TButton
+        ModalResult = 2
+        Position.X = 464.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 72.000000000000000000
+        Size.Height = 41.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = #21462#28040
+      end
+    end
+  end
+end

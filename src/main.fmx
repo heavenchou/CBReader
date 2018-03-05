@@ -102,7 +102,7 @@
       Size.Width = 241.000000000000000000
       Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 0
+      TabIndex = 1
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -118,7 +118,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 44.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -141,7 +141,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 44.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -331,7 +331,7 @@
           Size.PlatformDefault = False
           TabOrder = 0
           RowCount = 0
-          Options = [ColumnResize, ColumnMove, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
+          Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
           Viewport.Width = 237.000000000000000000
           Viewport.Height = 389.000000000000000000
@@ -741,7 +741,7 @@
         object Panel5: TPanel
           Align = Top
           Size.Width = 241.000000000000000000
-          Size.Height = 97.000000000000000000
+          Size.Height = 121.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
           object Label19: TLabel
@@ -776,11 +776,19 @@
           end
           object lbSearchMsg: TLabel
             Position.X = 8.000000000000000000
-            Position.Y = 72.000000000000000000
+            Position.Y = 96.000000000000000000
             Size.Width = 217.000000000000000000
             Size.Height = 17.000000000000000000
             Size.PlatformDefault = False
+            Text = '......'
             TabOrder = 12
+          end
+          object cbSearchRange: TCheckBox
+            Position.X = 8.000000000000000000
+            Position.Y = 72.000000000000000000
+            TabOrder = 13
+            Text = #25351#23450#27298#32034#31684#22285
+            OnChange = cbSearchRangeChange
           end
         end
         object sgTextSearch: TStringGrid
@@ -788,14 +796,14 @@
           CanFocus = True
           ClipChildren = True
           Size.Width = 241.000000000000000000
-          Size.Height = 495.000000000000000000
+          Size.Height = 471.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
           RowCount = 0
-          Options = [ColumnResize, ColumnMove, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
+          Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
           Viewport.Width = 237.000000000000000000
-          Viewport.Height = 470.000000000000000000
+          Viewport.Height = 446.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000

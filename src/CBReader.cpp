@@ -10,6 +10,7 @@
 USEFORM("option.cpp", fmOption);
 USEFORM("selectbook.cpp", fmSelectBook);
 USEFORM("main.cpp", fmMain);
+USEFORM("searchrange.cpp", fmSearchRange);
 //---------------------------------------------------------------------------
 extern "C" int FMXmain()
 {
@@ -19,6 +20,7 @@ extern "C" int FMXmain()
 		Application->CreateForm(__classid(TfmMain), &fmMain);
 		Application->CreateForm(__classid(TfmSelectBook), &fmSelectBook);
 		Application->CreateForm(__classid(TfmOption), &fmOption);
+		Application->CreateForm(__classid(TfmSearchRange), &fmSearchRange);
 		Application->Run();
 	}
 	catch (Exception &exception)
