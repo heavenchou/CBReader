@@ -36,7 +36,7 @@ void __fastcall TfmSearchRange::btOKClick(TObject *Sender)
 	{
 		// 處理原書
 		BookSelect();
-    }
+	}
 }
 //---------------------------------------------------------------------------
 // 處理部類
@@ -85,4 +85,44 @@ void __fastcall TfmSearchRange::BookSelect()
 	}
 }
 //---------------------------------------------------------------------------
+// 全部選取
+void __fastcall TfmSearchRange::btCheckAllClick(TObject *Sender)
+{
+	if(lbSearchRangeList->ItemIndex == 0)
+	{
+		// 處理部類
+		TreeViewCheckAll(tvBulei, true);
+	}
+	else
+	{
+		// 處理原書
+		TreeViewCheckAll(tvBook, true);
+	}
+}
+//---------------------------------------------------------------------------
+// 全部不選取
+void __fastcall TfmSearchRange::btUnCheckAllClick(TObject *Sender)
+{
+ 	if(lbSearchRangeList->ItemIndex == 0)
+	{
+		// 處理部類
+		TreeViewCheckAll(tvBulei, false);
+	}
+	else
+	{
+		// 處理原書
+		TreeViewCheckAll(tvBook, false);
+	}
+}
+//---------------------------------------------------------------------------
+// 某 Treeview 全選
+void __fastcall TfmSearchRange::TreeViewCheckAll(TTreeView * tvTreeView, bool bChecked)
+{
+	for(int i=0; i<tvTreeView->Count; i++)
+	{
+		tvTreeView->Items[i]->IsChecked = bChecked;
+	}
+}
+//---------------------------------------------------------------------------
+
 
