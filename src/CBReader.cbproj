@@ -222,6 +222,12 @@
             <DependentOn>bookdata.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
+        <CppCompile Include="buildindex.cpp">
+            <Form>fmBuildIndex</Form>
+            <FormType>fmx</FormType>
+            <DependentOn>buildindex.h</DependentOn>
+            <BuildOrder>30</BuildOrder>
+        </CppCompile>
         <CppCompile Include="catalog.cpp">
             <DependentOn>catalog.h</DependentOn>
             <BuildOrder>12</BuildOrder>
@@ -300,9 +306,17 @@
             <DependentOn>..\..\Monster\src\BitList.h</DependentOn>
             <BuildOrder>17</BuildOrder>
         </CppCompile>
+        <CppCompile Include="..\..\Monster\src\builder.cpp">
+            <DependentOn>..\..\Monster\src\builder.h</DependentOn>
+            <BuildOrder>31</BuildOrder>
+        </CppCompile>
         <CppCompile Include="..\..\Monster\src\FileList.cpp">
             <DependentOn>..\..\Monster\src\FileList.h</DependentOn>
             <BuildOrder>18</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Monster\src\gaiji.cpp">
+            <DependentOn>..\..\Monster\src\gaiji.h</DependentOn>
+            <BuildOrder>33</BuildOrder>
         </CppCompile>
         <CppCompile Include="..\..\Monster\src\Int2List.cpp">
             <DependentOn>..\..\Monster\src\Int2List.h</DependentOn>
@@ -338,12 +352,17 @@
         </CppCompile>
         <CppCompile Include="..\..\Monster\src\wordtool.cpp">
             <DependentOn>..\..\Monster\src\wordtool.h</DependentOn>
-            <BuildOrder>27</BuildOrder>
+            <BuildOrder>33</BuildOrder>
         </CppCompile>
+        <CppCompile Include="..\..\Monster\src\xmltag.cpp">
+            <DependentOn>..\..\Monster\src\xmltag.h</DependentOn>
+            <BuildOrder>32</BuildOrder>
+        </CppCompile>
+        <FormResources Include="buildindex.fmx"/>
         <FormResources Include="option.fmx"/>
+        <FormResources Include="searchrange.fmx"/>
         <FormResources Include="selectbook.fmx"/>
         <FormResources Include="main.fmx"/>
-        <FormResources Include="searchrange.fmx"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -394,9 +413,8 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\bin\cbuilder_PROJECTICNS.icns" Configuration="Debug" Class="ProjectOSXResource">
+                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplfmx250.dylib" Configuration="Release" Class="DependencyPackage">
                     <Platform Name="OSX32">
-                        <RemoteName>CBReader.icns</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -406,13 +424,9 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplfmx250.dylib" Configuration="Release" Class="DependencyPackage">
+                <DeployFile LocalName="$(BDS)\bin\cbuilder_PROJECTICNS.icns" Configuration="Debug" Class="ProjectOSXResource">
                     <Platform Name="OSX32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
-                    <Platform Name="OSX32">
+                        <RemoteName>CBReader.icns</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -421,14 +435,20 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\OSX32\Debug\CBReader" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="OSX32">
-                        <RemoteName>CBReader</RemoteName>
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32240mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32240mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
+                <DeployFile LocalName="c:\program files (x86)\embarcadero\studio\19.0\bin\Artwork\Windows\UWP\cppreg_UwpDefault_44.png" Configuration="Release" Class="UWP_CppLogo44">
+                    <Platform Name="OSX32">
+                        <RemoteDir>Assets\</RemoteDir>
+                        <RemoteName>Logo44x44.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
+                    <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -437,10 +457,9 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="c:\program files (x86)\embarcadero\studio\19.0\bin\Artwork\Windows\UWP\cppreg_UwpDefault_44.png" Configuration="Release" Class="UWP_CppLogo44">
+                <DeployFile LocalName=".\OSX32\Debug\CBReader" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="OSX32">
-                        <RemoteDir>Assets\</RemoteDir>
-                        <RemoteName>Logo44x44.png</RemoteName>
+                        <RemoteName>CBReader</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

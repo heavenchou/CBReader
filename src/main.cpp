@@ -6,6 +6,7 @@
 #include "main.h"
 #include "selectbook.h"
 #include "searchrange.h"
+#include "buildindex.h"
 
 #ifdef _Windows
 #include <System.Win.Registry.hpp>
@@ -601,6 +602,26 @@ void __fastcall TfmMain::btGoByKeywordClick(TObject *Sender)
 		ShowCBXML(sFile);
     }
 
+}
+//---------------------------------------------------------------------------
+// 建立索引檔
+void __fastcall TfmMain::btBuildIndexClick(TObject *Sender)
+{
+	// 先關掉全文檢索引擎
+
+	Bookcase->CBETA->FreeSearchEngine();
+
+	// 產生索引
+
+	fmBuildIndex->edBuildListDir->Text = Bookcase->CBETA->Dir;
+	fmBuildIndex->edBuildList->Text = Bookcase->CBETA->Dir + Bookcase->CBETA->SpineFile;
+	fmBuildIndex->edWordIndex->Text = Bookcase->CBETA->Dir + "index/wordindex.ndx";
+	fmBuildIndex->edMainIndex->Text = Bookcase->CBETA->Dir + "index/main.ndx";
+	fmBuildIndex->ShowModal();
+
+	// 重新建立全文檢索引擎
+
+	Bookcase->CBETA->LoadSearchEngine();
 }
 //---------------------------------------------------------------------------
 

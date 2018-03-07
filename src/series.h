@@ -57,6 +57,11 @@ public: // User declarations
 	// 由頁欄行取得標準 0001a01 格式的字串
 	String __fastcall CBGetPageLine(String sPage, String sField, String sLine);
 
+	// 載入全文檢索引擎
+	void __fastcall LoadSearchEngine();
+	// 釋放全文檢索引擎
+	void __fastcall FreeSearchEngine();
+
 	__fastcall CSeries(String sDir);    // 傳入目錄, 進行初值化
 	__fastcall ~CSeries();
 };

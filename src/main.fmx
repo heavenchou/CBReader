@@ -4,6 +4,7 @@
   Caption = 'CBETA CBReader'
   ClientHeight = 713
   ClientWidth = 1009
+  StyleBook = StyleBook1
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -102,7 +103,7 @@
       Size.Width = 241.000000000000000000
       Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 2
+      TabIndex = 0
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -118,7 +119,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 44.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -222,7 +223,6 @@
             Size.PlatformDefault = False
           end
           object Label15: TLabel
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 40.000000000000000000
             Size.Width = 65.000000000000000000
@@ -233,7 +233,6 @@
             TabOrder = 12
           end
           object 經號: TLabel
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 72.000000000000000000
             Size.Width = 57.000000000000000000
@@ -244,7 +243,6 @@
             TabOrder = 9
           end
           object 經名: TLabel
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 104.000000000000000000
             Size.Width = 41.000000000000000000
@@ -255,7 +253,6 @@
             TabOrder = 8
           end
           object 作譯者: TLabel
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 136.000000000000000000
             Size.Width = 57.000000000000000000
@@ -267,11 +264,10 @@
           end
           object Label16: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 8.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
@@ -290,7 +286,6 @@
             TabOrder = 17
           end
           object Label17: TLabel
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 136.000000000000000000
             Position.Y = 40.000000000000000000
             Size.Width = 25.000000000000000000
@@ -301,7 +296,6 @@
             TabOrder = 11
           end
           object Label18: TLabel
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 136.000000000000000000
             Position.Y = 72.000000000000000000
             Size.Width = 25.000000000000000000
@@ -367,7 +361,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 32.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -384,11 +378,10 @@
           TabOrder = 2
           object Label1: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 16.000000000000000000
             Size.Width = 89.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#21367#32080#27083
@@ -396,11 +389,10 @@
           end
           object Label2: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 48.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
@@ -408,11 +400,10 @@
           end
           object Label3: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 80.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#34399
@@ -420,11 +411,10 @@
           end
           object Label4: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 112.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21367#25976
@@ -432,11 +422,10 @@
           end
           object Label5: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 128.000000000000000000
             Position.Y = 80.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #38913#25976
@@ -444,11 +433,10 @@
           end
           object Label6: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 128.000000000000000000
             Position.Y = 112.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #27396
@@ -456,11 +444,10 @@
           end
           object Label7: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 128.000000000000000000
             Position.Y = 144.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34892#25976
@@ -468,11 +455,10 @@
           end
           object Label8: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 192.000000000000000000
             Size.Width = 89.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #26360#26412#32080#27083
@@ -480,11 +466,10 @@
           end
           object Label9: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 224.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
@@ -492,11 +477,10 @@
           end
           object Label10: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 256.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #20874#25976
@@ -504,11 +488,10 @@
           end
           object Label11: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 288.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #38913#25976
@@ -516,11 +499,10 @@
           end
           object Label12: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 128.000000000000000000
             Position.Y = 256.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #27396
@@ -528,11 +510,10 @@
           end
           object Label13: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 128.000000000000000000
             Position.Y = 288.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34892#25976
@@ -540,11 +521,10 @@
           end
           object Label14: TLabel
             AutoSize = True
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 16.000000000000000000
             Position.Y = 352.000000000000000000
             Size.Width = 185.000000000000000000
-            Size.Height = 23.000000000000000000
+            Size.Height = 21.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21069#24448#25351#23450#32147#25991
@@ -744,7 +724,6 @@
           Size.PlatformDefault = False
           TabOrder = 1
           object Label19: TLabel
-            StyledSettings = [Family, Style, FontColor]
             Position.X = 8.000000000000000000
             Position.Y = 8.000000000000000000
             Size.Width = 81.000000000000000000
@@ -902,6 +881,19 @@
       YRadius = 3.000000000000000000
       OnClick = btOptionClick
     end
+    object btBuildIndex: TCornerButton
+      Position.X = 480.000000000000000000
+      Position.Y = 8.000000000000000000
+      Sides = [Top, Left, Bottom, Right]
+      Size.Width = 89.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      Text = #29986#29983#32034#24341#27284
+      XRadius = 3.000000000000000000
+      YRadius = 3.000000000000000000
+      OnClick = btBuildIndexClick
+    end
   end
   object MainMenu1: TMainMenu
     Left = 952
@@ -927,5 +919,27 @@
     Size.Width = 8.000000000000000000
     Size.Height = 618.000000000000000000
     Size.PlatformDefault = False
+  end
+  object StyleBook1: TStyleBook
+    Styles = <
+      item
+      end
+      item
+        Platform = 'Windows 10 Desktop'
+        ResourcesBin = {
+          464D585F5354594C4520322E3501060A4C6162656C7374796C65032901005450
+          463007544C61796F757400095374796C654E616D65060A4C6162656C7374796C
+          6505416C69676E070643656E7465720A53697A652E5769647468050000000000
+          0000B906400B53697A652E48656967687405000000000000008003401453697A
+          652E506C6174666F726D44656661756C7408085461624F726465720200000554
+          5465787400095374796C654E616D6506047465787405416C69676E0706436C69
+          656E74064C6F636B6564090748697454657374080A53697A652E576964746805
+          00000000000000B906400B53697A652E48656967687405000000000000008003
+          401453697A652E506C6174666F726D44656661756C7408045465787406045465
+          7874165465787453657474696E67732E466F6E742E53697A6505000000000000
+          00800340000000}
+      end>
+    Left = 904
+    Top = 8
   end
 end

@@ -73,18 +73,7 @@ __fastcall CSeries::CSeries(String sDir)
 	}
 
 	// 載入全文檢索
-
-	if(TDirectory::Exists(Dir + "index"))
-	{
-		String sWordIndexFile = Dir + "index/wordindex.ndx";
-		String sMainIndexFile = Dir + "index/main.ndx";
-		if(TFile::Exists(Dir + SpineFile) &&
-			TFile::Exists(sWordIndexFile) &&
-			TFile::Exists(sMainIndexFile))
-		{
-			SearchEngine = new TmyMonster(Dir + SpineFile, sWordIndexFile, sMainIndexFile);
-        }
-	}
+	LoadSearchEngine();
 }
 // ---------------------------------------------------------------------------
 // 解構函式
@@ -263,5 +252,32 @@ String __fastcall CSeries::CBGetPageLine(String sPage, String sField, String sLi
 		return "";
     }
 }
+// ---------------------------------------------------------------------------
+// 載入全文檢索引擎
+void __fastcall CSeries::LoadSearchEngine()
+{
+	if(TDirectory::Exists(Dir + "index"))
+	{
+		String sWordIndexFile = Dir + "index/wordindex.ndx";
+		String sMainIndexFile = Dir + "index/main.ndx";
+		if(TFile::Exists(Dir + SpineFile) &&
+			TFile::Exists(sWordIndexFile) &&
+			TFile::Exists(sMainIndexFile))
+		{
+			SearchEngine = new TmyMonster(Dir + SpineFile, sWordIndexFile, sMainIndexFile);
+		}
+	}
+}
+// ---------------------------------------------------------------------------
+// 釋放全文檢索引擎
+void __fastcall CSeries::FreeSearchEngine()
+{
+	if(SearchEngine)
+	{
+		delete SearchEngine;
+		SearchEngine = 0;
+	}
+}
+// ---------------------------------------------------------------------------
 
 
