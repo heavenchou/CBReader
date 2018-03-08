@@ -52,12 +52,10 @@ __published: // IDE-managed Components
 	TTabItem *TabItem1;
 	TWebBrowser *WebBrowser;
 	TToolBar *ToolBar1;
-	TCornerButton *CornerButton1;
+	TCornerButton *btOpenBookcase;
 	TMenuItem *MenuItem3;
 	TMenuItem *MenuItem4;
 	TSplitter *Splitter1;
-	TCornerButton *CornerButton2;
-	TCornerButton *CornerButton3;
 	TTabControl *TabControl2;
 	TTabItem *TabItem2;
 	TTreeView *tvNavTree;
@@ -145,11 +143,14 @@ __published: // IDE-managed Components
 	TCheckBox *cbSearchRange;
 	TCornerButton *btBuildIndex;
 	TStyleBook *StyleBook1;
+	TPanel *Panel8;
+	TButton *btOpenBuleiNav;
+	TButton *btOpenBookNav;
+	TCornerButton *btPrevJuan;
+	TCornerButton *btNextJuan;
 
 	void __fastcall FormDestroy(TObject *Sender);
-	void __fastcall CornerButton1Click(TObject *Sender);
-	void __fastcall CornerButton2Click(TObject *Sender);
-	void __fastcall CornerButton3Click(TObject *Sender);
+	void __fastcall btOpenBookcaseClick(TObject *Sender);
 	void __fastcall btFindSutraClick(TObject *Sender);
 	void __fastcall btGoSutraClick(TObject *Sender);
 	void __fastcall btGoBookClick(TObject *Sender);
@@ -161,6 +162,10 @@ __published: // IDE-managed Components
 	void __fastcall cbSearchRangeChange(TObject *Sender);
 	void __fastcall btGoByKeywordClick(TObject *Sender);
 	void __fastcall btBuildIndexClick(TObject *Sender);
+	void __fastcall btOpenBuleiNavClick(TObject *Sender);
+	void __fastcall btOpenBookNavClick(TObject *Sender);
+	void __fastcall btPrevJuanClick(TObject *Sender);
+	void __fastcall btNextJuanClick(TObject *Sender);
 
 
 
@@ -186,12 +191,20 @@ public: // User declarations
 	TStringList * SearchWordList;	// 存放每一個檢索的詞, 日後塗色會用到
     String SearchSentence;	// 搜尋字串
 
+    int SpineID;    // 目前開啟的檔案, 用來處理上一卷和下一卷用的
 
 	void __fastcall InitialPath(); // 	路徑初值設定
 
 	bool __fastcall IsSelectedBook(); // 是否有選擇套書了?
 	// 開啟指定的書櫃
 	void __fastcall OpenBookcase(int iId);
+	// 開啟CBETA書櫃
+	void __fastcall OpenCBETABook();
+
+	// 將檔案載入導覽樹
+	void __fastcall LoadNavTree(String sFile);
+	// 將檔案載入目錄樹
+	void __fastcall LoadMuluTree(String sFile);
 
 	// 載入 XML 並處理成網頁
 	void __fastcall ShowCBXML(String sFile, bool bShowHighlight = false, TmyMonster * SearchEngine = 0);

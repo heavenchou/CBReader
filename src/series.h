@@ -35,6 +35,7 @@ public: // User declarations
 	String Creator;     // 作者
 
 	String NavFile;     // 導覽文件
+	String Nav2File;     // 導覽文件 (CBETA 特有的, 未來再考慮如何處理多目錄)
 	String CatalogFile;	// 目錄文件
 	String SpineFile;   // 遍歷文件
 	String BookDataFile;   // BookData 文件

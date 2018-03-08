@@ -61,6 +61,7 @@ object fmSearchRange: TfmSearchRange
     Cursor = crHSplit
     MinSize = 20.000000000000000000
     Position.X = 169.000000000000000000
+    ShowGrip = False
     Size.Width = 8.000000000000000000
     Size.Height = 648.000000000000000000
     Size.PlatformDefault = False

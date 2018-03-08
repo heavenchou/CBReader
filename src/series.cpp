@@ -133,6 +133,14 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 		NavFile = Node->GetAttribute("src");
 	}
 
+	// Ū nav
+
+	Node = Document->DocumentElement->ChildNodes->Nodes["nav2"];
+	if(Node->HasAttribute("src"))
+	{
+		Nav2File = Node->GetAttribute("src");
+	}
+
 	// Ū toc
 
 	Node = Document->DocumentElement->ChildNodes->Nodes["catalog"];

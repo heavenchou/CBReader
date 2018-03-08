@@ -50,14 +50,20 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	else if(iBookcaseCount == 1)
 	{
 		// 只有一本書就直接開了
-		OpenBookcase(0);
+		// OpenBookcase(0); // ???? 暫時取消, 這一版要直接開啟 CBETA
 	}
+	OpenCBETABook();    // ???? 取消上面, 因為這一版要直接開啟 CBETA
 
 	MuluTree = 0;
 
     // 這要先處理, 動一下內容, 不然欄位標題就還可以移動
 	sgTextSearch->RowCount = 1;
 	sgFindSutra->RowCount = 1;
+
+	lbSearchMsg->Text = ""; // 清空搜尋訊息
+	btOpenBookcase->Visible = false;
+	btBuildIndex->Visible = false;
+    SpineID = -1;	// 初值表示沒開啟
 }
 // ---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
@@ -151,7 +157,22 @@ void __fastcall TfmMain::OpenBookcase(int iID)
 	NavTree = new CNavTree(s->Dir + s->NavFile);
 	NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
 }
-
+//---------------------------------------------------------------------------
+// 開啟CBETA書櫃
+void __fastcall TfmMain::OpenCBETABook()
+{
+	for(int i=0; i<Bookcase->Count(); i++)
+	{
+		if(Bookcase->Books->Items[i] == Bookcase->CBETA)
+		{
+			// 找到 CBETA 了
+			OpenBookcase(i);
+			return;
+		}
+	}
+	ShowMessage("找不到 CBETA 資料");
+    return;
+}
 //---------------------------------------------------------------------------
 // NavTree Item 點二下的作用
 // Item->TagString 儲存 URL
@@ -194,9 +215,7 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	// 目錄連結
 	else if(iType == nit_NavLink)
 	{
-		if(NavTree) delete NavTree;     // 這部份應該物件化 ???
-		NavTree = new CNavTree(sSeries->Dir + sURL);
-		NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
+		LoadNavTree(sSeries->Dir + sURL);
 	}
 	// CBETA 經文
 	else if(iType == nit_CBLink)
@@ -206,7 +225,7 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfmMain::CornerButton1Click(TObject *Sender)
+void __fastcall TfmMain::btOpenBookcaseClick(TObject *Sender)
 {
 	fmSelectBook->ShowModal();
 	OpenBookcase(fmSelectBook->SelectedBook);
@@ -214,17 +233,6 @@ void __fastcall TfmMain::CornerButton1Click(TObject *Sender)
 //---------------------------------------------------------------------------
 
 
-void __fastcall TfmMain::CornerButton2Click(TObject *Sender)
-{
-	WebBrowser->GoBack();
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfmMain::CornerButton3Click(TObject *Sender)
-{
-	WebBrowser->GoForward();
-}
-//---------------------------------------------------------------------------
 // 是否有選擇套書了?
 bool __fastcall TfmMain::IsSelectedBook()
 {
@@ -363,12 +371,11 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	String sJSFile = Bookcase->CBETA->Dir + Bookcase->CBETA->JSFile;
 	CCBXML * CBXML = new CCBXML(sXMLFile, sLink, Setting, sJSFile, bShowHighlight, seSearchEngine);
 
-	// 先不用, 因為 mac os 產生出來的檔名是 /var/tmp/xxxxx
-	// windows 是 xxxxxx
-	// 所以日後還是自己寫吧
-	//char cOutFile[14];
-	//std::tmpnam(cOutFile);
-
+	// 找出 spine id
+	if(!Bookcase->CBETA->Spine->Files->Find(sFile, SpineID))
+	{
+		SpineID = -1;	// 表示沒找到
+	}
 
 	String sOutFile = sFile + ".htm";
 	sOutFile = StringReplace(sOutFile, "/", "_", TReplaceFlags() << rfReplaceAll);
@@ -385,13 +392,11 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	String sMulu = StringReplace(sFile, "XML", "Toc", TReplaceFlags() << rfReplaceAll);
 	int iLen = sMulu.Length();
 	sMulu = sMulu.SubString0(0,iLen-8); // 扣掉最後的 _001.xml
-	sMulu = Bookcase->CBETA->Dir + sMulu + ".xhtml";
+	sMulu = Bookcase->CBETA->Dir + sMulu + ".xml";
 
 	if(MuluTree == 0 || sMulu != MuluTree->XMLFile)
 	{
-        if(MuluTree) delete MuluTree;
-		MuluTree = new CNavTree(sMulu);
-		MuluTree->SaveToTreeView(tvMuluTree, NavTreeItemClick);
+		LoadMuluTree(sMulu);
 	}
 }
 //---------------------------------------------------------------------------
@@ -600,7 +605,7 @@ void __fastcall TfmMain::btGoByKeywordClick(TObject *Sender)
 
 		String sFile = csCBETA->CBGetFileNameByVolPageFieldLine(sBook, sVol, sPage, sField, sLine);
 		ShowCBXML(sFile);
-    }
+	}
 
 }
 //---------------------------------------------------------------------------
@@ -622,6 +627,56 @@ void __fastcall TfmMain::btBuildIndexClick(TObject *Sender)
 	// 重新建立全文檢索引擎
 
 	Bookcase->CBETA->LoadSearchEngine();
+}
+//---------------------------------------------------------------------------
+// 將檔案載入導覽樹
+void __fastcall TfmMain::LoadNavTree(String sFile)
+{
+	if(NavTree != 0 && NavTree->XMLFile == sFile) return;
+
+	if(NavTree) delete NavTree;
+	NavTree = new CNavTree(sFile);
+	NavTree->SaveToTreeView(tvNavTree, NavTreeItemClick);
+}
+//---------------------------------------------------------------------------
+// 將檔案載入目錄樹
+void __fastcall TfmMain::LoadMuluTree(String sFile)
+{
+	if(MuluTree != 0 && MuluTree->XMLFile == sFile) return;
+
+	if(MuluTree) delete MuluTree;
+	MuluTree = new CNavTree(sFile);
+	MuluTree->SaveToTreeView(tvMuluTree, NavTreeItemClick);
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btOpenBuleiNavClick(TObject *Sender)
+{
+	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->NavFile);
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btOpenBookNavClick(TObject *Sender)
+{
+	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->Nav2File);
+}
+//---------------------------------------------------------------------------
+// 上一卷
+void __fastcall TfmMain::btPrevJuanClick(TObject *Sender)
+{
+	if(SpineID > 0)
+	{
+		String sFile = Bookcase->CBETA->Spine->CBGetFileNameBySpineIndex(SpineID-1);
+		ShowCBXML(sFile);
+	}
+}
+//---------------------------------------------------------------------------
+// 下一卷
+void __fastcall TfmMain::btNextJuanClick(TObject *Sender)
+{
+	if(SpineID + 1 < Bookcase->CBETA->Spine->Files->Count)
+	{
+		String sFile = Bookcase->CBETA->Spine->CBGetFileNameBySpineIndex(SpineID+1);
+		ShowCBXML(sFile);
+	}
 }
 //---------------------------------------------------------------------------
 
