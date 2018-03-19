@@ -63,7 +63,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	lbSearchMsg->Text = ""; // 清空搜尋訊息
 	btOpenBookcase->Visible = false;
 	btBuildIndex->Visible = false;
-    SpineID = -1;	// 初值表示沒開啟
+	SpineID = -1;	// 初值表示沒開啟
 }
 // ---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
@@ -392,11 +392,17 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	String sMulu = StringReplace(sFile, "XML", "Toc", TReplaceFlags() << rfReplaceAll);
 	int iLen = sMulu.Length();
 	sMulu = sMulu.SubString0(0,iLen-8); // 扣掉最後的 _001.xml
-	sMulu = Bookcase->CBETA->Dir + sMulu + ".xml";
 
-	if(MuluTree == 0 || sMulu != MuluTree->XMLFile)
+	// Toc/T/T01/T01n0001 => Toc/T/T0001
+	TRegEx *regex = new TRegEx();
+	sMulu = regex->Replace(sMulu, "\\d+[\\/][A-Z]+\\d+n", "");
+	sMulu = Bookcase->CBETA->Dir + sMulu + ".xml";
+	if(TFile::Exists(sMulu))
 	{
-		LoadMuluTree(sMulu);
+		if(MuluTree == 0 || sMulu != MuluTree->XMLFile)
+		{
+			LoadMuluTree(sMulu);
+		}
 	}
 }
 //---------------------------------------------------------------------------
@@ -677,6 +683,12 @@ void __fastcall TfmMain::btNextJuanClick(TObject *Sender)
 		String sFile = Bookcase->CBETA->Spine->CBGetFileNameBySpineIndex(SpineID+1);
 		ShowCBXML(sFile);
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::MenuItem1Click(TObject *Sender)
+{
+    ShowMessage("CBETA CBReader 2X");
 }
 //---------------------------------------------------------------------------
 

@@ -15,6 +15,7 @@ object fmOption: TfmOption
     Size.Height = 584.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
+    Visible = False
     Viewport.Width = 205.000000000000000000
     Viewport.Height = 580.000000000000000000
     object TreeViewItem1: TTreeViewItem
@@ -47,26 +48,26 @@ object fmOption: TfmOption
   end
   object TabControl1: TTabControl
     Align = Client
-    Size.Width = 640.000000000000000000
+    Size.Width = 849.000000000000000000
     Size.Height = 584.000000000000000000
     Size.PlatformDefault = False
     TabIndex = 2
     TabOrder = 2
-    TabPosition = PlatformDefault
+    TabPosition = None
     Sizes = (
-      640s
-      558s
-      640s
-      558s
-      640s
-      558s)
+      849s
+      584s
+      849s
+      584s
+      849s
+      584s)
     object TabItem1: TTabItem
       CustomIcon = <
         item
         end>
       IsSelected = False
-      Size.Width = 69.000000000000000000
-      Size.Height = 26.000000000000000000
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -79,8 +80,8 @@ object fmOption: TfmOption
         item
         end>
       IsSelected = False
-      Size.Width = 69.000000000000000000
-      Size.Height = 26.000000000000000000
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -93,8 +94,8 @@ object fmOption: TfmOption
         item
         end>
       IsSelected = True
-      Size.Width = 69.000000000000000000
-      Size.Height = 26.000000000000000000
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -258,7 +259,6 @@ object fmOption: TfmOption
     Align = Left
     Cursor = crHSplit
     MinSize = 20.000000000000000000
-    Position.X = 209.000000000000000000
     ShowGrip = False
     Size.Width = 16.000000000000000000
     Size.Height = 584.000000000000000000

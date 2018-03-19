@@ -38,6 +38,7 @@
 #include <FMX.ScrollBox.hpp>
 #include <System.Rtti.hpp>
 #include <FMX.MultiView.hpp>
+#include <System.RegularExpressions.hpp>
 #include "option.h"
 #include "../../Monster/src/monster.h"
 // ---------------------------------------------------------------------------
@@ -54,7 +55,6 @@ __published: // IDE-managed Components
 	TToolBar *ToolBar1;
 	TCornerButton *btOpenBookcase;
 	TMenuItem *MenuItem3;
-	TMenuItem *MenuItem4;
 	TSplitter *Splitter1;
 	TTabControl *TabControl2;
 	TTabItem *TabItem2;
@@ -148,6 +148,8 @@ __published: // IDE-managed Components
 	TButton *btOpenBookNav;
 	TCornerButton *btPrevJuan;
 	TCornerButton *btNextJuan;
+	TMenuItem *MenuItem1;
+	TMenuItem *MenuItem2;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -166,6 +168,7 @@ __published: // IDE-managed Components
 	void __fastcall btOpenBookNavClick(TObject *Sender);
 	void __fastcall btPrevJuanClick(TObject *Sender);
 	void __fastcall btNextJuanClick(TObject *Sender);
+	void __fastcall MenuItem1Click(TObject *Sender);
 
 
 
