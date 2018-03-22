@@ -99,4 +99,24 @@ String __fastcall CMyStrUtil::Trim(String sStr, wchar_t wChar)
 	return sStr;
 }
 //---------------------------------------------------------------------------
+// 比對指定長度的字串
+bool __fastcall CMyStrUtil::StrnCmp(System::WideChar * p1, System::WideChar * p2, int len)
+{
+	String s1 = String(p1,len);
+	String s2 = String(p2,len);
+	if(s1 == s2) return true;
+	else return false;
+}
+//---------------------------------------------------------------------------
+// 第一個字串是否包含第二個字串
+bool __fastcall CMyStrUtil::StrHas(System::WideChar * wp, String s)
+{
+	int l = s.Length();
+	String s1 = String(wp,l);
+	if(s == s1) return true;
+    else return false;
+}
+//---------------------------------------------------------------------------
+
+
 

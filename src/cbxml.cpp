@@ -574,7 +574,13 @@ String __fastcall CCBXML::MakeHTMLHead()
 // 取得屬性
 inline String __fastcall CCBXML::GetAttr(_di_IXMLNode Node, String sAttr)
 {
-	return Node->HasAttribute(sAttr) ? Node->Attributes[sAttr] : "";
+	//return Node->HasAttribute(sAttr) ? Node->Attributes[sAttr] : "";
+
+	if(Node->HasAttribute(sAttr))
+		return Node->Attributes[sAttr];
+	else
+		return "";
+
 }
 // ---------------------------------------------------------------------------
 // 把校勘ID 變成校勘數字 0001001 -> 1 , 0001001a -> 1a
@@ -582,7 +588,7 @@ String __fastcall CCBXML::NoteId2Num(String sId)
 {
 	if(sId == "") return "";
 
-	int iLen = sId.Length();
+	//int iLen = sId.Length();
 
 	int iStdLen;
 	String::iterator it = sId.begin();
@@ -776,9 +782,9 @@ void __fastcall CCBXML::ThisNoteHasMod(String sIdNormal)
 // 原本的 orig 校勘還沒加入, 此時才要加入
 String __fastcall CCBXML::AddOrigNote(String HTMLText)
 {
-	vector<wchar_t> vOut;
+	vector<System::WideChar> vOut;
 
-	wchar_t * pPoint = HTMLText.FirstChar();
+	System::WideChar * pPoint = HTMLText.FirstChar();
 
 	// 標記用的 <<tmp_note_orig_xxxxxxx>>
 	while(*pPoint)
@@ -799,7 +805,7 @@ String __fastcall CCBXML::AddOrigNote(String HTMLText)
 				pPoint+=25;
 				String sNote = mOrigNote[sId];  // 取出真正的校勘
 
-				wchar_t * pNote = sNote.FirstChar();
+				System::WideChar * pNote = sNote.FirstChar();
 				while(*pNote)
 				{
 					vOut.push_back(*pNote);

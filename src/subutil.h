@@ -49,6 +49,11 @@ public:
 	// 將傳入字串去除頭尾指定字元
 	static String __fastcall Trim(String sStr, wchar_t wChar);
 
+	// 比對指定長度的字串
+	static bool __fastcall StrnCmp(System::WideChar * p1, System::WideChar * p2, int len);
+
+	// 第一個字串是否包含第二個字串
+	static bool __fastcall StrHas(System::WideChar * wp, String s);
 };
 //---------------------------------------------------------------------------
 #endif

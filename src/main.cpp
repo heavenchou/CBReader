@@ -87,7 +87,7 @@ void __fastcall TfmMain::InitialPath()
 	// MyFullPath = StringReplace(MyFullPath, "/CBReader.app/Contents/MacOS", "", TReplaceFlags() << rfReplaceAll);
 
 	MyFullPath = System::Ioutils::TPath::GetHomePath();
-	MyFullPath += "/Application/CBETA/CBReader";
+	MyFullPath += "/Desktop";
 
 #endif
 	MyFullPath += "/";

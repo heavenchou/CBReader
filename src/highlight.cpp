@@ -16,7 +16,7 @@ __fastcall CHighlight::CHighlight(TmyMonster * seSearchEngine)
 	FoundPos = 0;					// 儲存找到的位置
 	FoundPosIndex = 0;
 	PosToReal.clear();
-	PosToReal[0] = make_pair((wchar_t *)0,0);   // 如果傳入 0 , 也傳回 0, 這在最後一筆塗色之後會用到
+	PosToReal[0] = make_pair((System::WideChar *)0,0);   // 如果傳入 0 , 也傳回 0, 這在最後一筆塗色之後會用到
 }
 // ---------------------------------------------------------------------------
 // 解構函式
@@ -133,16 +133,16 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 	bool bMatching = false;		// 判斷是否在比對中
 	int iPos = -1;		// 去掉標記及標點之後的字數, 第一個字由 0 開始 (初值為0是因為一開始還可能不是字, 是標記或標點)
 	int iPosTmp;
-	wchar_t * pPoint = HTMLSource->FirstChar();		// 遊走在 HTMLSource 的指標
-	wchar_t * pPointTmp;
+	System::WideChar * pPoint = HTMLSource->FirstChar();		// 遊走在 HTMLSource 的指標
+	System::WideChar * pPointTmp;
 
 	// 處理缺字用的
-	wchar_t * pDesPoint = 0;
-	wchar_t * pUniPoint = 0;
+	System::WideChar * pDesPoint = 0;
+	System::WideChar * pUniPoint = 0;
 	int iDesLen = 0;
 	int iUniLen = 0;
 
-	wchar_t * pFindWord = sWord.c_str();		// 要塗色的字
+	System::WideChar * pFindWord = sWord.c_str();		// 要塗色的字
 	pFindWord = NextFindPoint(pFindWord); 	// 移到下一個可以查詢的字
 
 	// 例如搜尋 "雜阿含 + 阿含" , 這個字串會出現在 HTML 最上方.
@@ -161,7 +161,8 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 
 	while(*pPoint)
 	{
-		if (wcsncmp(pPoint, L"<div id=\"SearchHead\">", 21) == 0)
+		//if (wcsncmp(pPoint, u"<div id=\"SearchHead\">", 21) == 0)
+		if (CMyStrUtil::StrHas(pPoint, u"<div id=\"SearchHead\">"))
 		{
 			pPoint += 21;
 			break;
@@ -186,8 +187,10 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 		{
 			// 特殊狀況, 遇到行首標記
 
-			if (wcsncmp(pPoint, L"<span class=\"linehead\">", 23) == 0 ||
-			    wcsncmp(pPoint, L"<span class=\"parahead\">", 23) == 0)
+			// if (wcsncmp(pPoint, u"<span class=\"linehead\">", 23) == 0 ||
+			// 	wcsncmp(pPoint, u"<span class=\"parahead\">", 23) == 0)
+			if (CMyStrUtil::StrHas(pPoint, u"<span class=\"linehead\">") ||
+				CMyStrUtil::StrHas(pPoint, u"<span class=\"parahead\">"))
 			{
                 // <span class="linehead">GA009n0008_p0003a01║</span>
             	// <span class="linehead">ZS01n0001_p0001a01║</span>
@@ -215,7 +218,7 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 			}
 
 			// 處理缺字
-			if (wcsncmp(pPoint, L"<span class=\"gaiji\"", 19) == 0)
+			if (CMyStrUtil::StrHas(pPoint, u"<span class=\"gaiji\""))
 			{
 				AnalysisGiajiTag(&pPoint, &pDesPoint, &pUniPoint, &iDesLen, &iUniLen); // 處理缺字標記
 			}
@@ -243,7 +246,7 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 			}
 
 			// 2.星號 [＊]
-			if (wcsncmp(pPoint, L"[＊]", 3) == 0)
+			if (CMyStrUtil::StrHas(pPoint, u"[＊]"))
 			{
 				pPoint += 3;
 				continue;
@@ -252,10 +255,10 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 			// 3.純數字 [01] , 這在卍續藏出現
 			if(*pPoint == u'[')
 			{
-				wchar_t * pTmp = pPoint;
+				System::WideChar * pTmp = pPoint;
 				pPoint++;
 
-				if (wcsncmp(pPoint, L"P.", 2) == 0)  // 南傳有 [P.nn] 的 PTS 頁碼
+				if (CMyStrUtil::StrHas(pPoint, u"P."))  // 南傳有 [P.nn] 的 PTS 頁碼
                     pPoint += 2;
 
 				if(*pPoint >= u'0' && *pPoint <= u'9')
@@ -276,7 +279,7 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 			// ???? 這個新版的會改
 			if(*pPoint == u'[')
 			{
-				wchar_t * pTmp = pPoint;
+				System::WideChar * pTmp = pPoint;
 				pPoint++;
 
 				if(*pPoint == u'<')
@@ -318,7 +321,7 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 						{
 							pPoint += 1;
 						}
-						if (wcsncmp(pPoint, L"</a>]", 5) == 0)
+						if (CMyStrUtil::StrHas(pPoint, u"</a>]"))
 						{
 							pPoint += 5;
 							continue;
@@ -371,9 +374,9 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 			pFindWord++;
 		}
 		else if(iPos>iAfterThisPos &&
-				((wcsncmp(pPoint,pFindWord,iThisWordLen)==0 && iThisWordLen == iFindWordLen) ||
-				(iDesLen == iFindWordLen && wcsncmp(pDesPoint,pFindWord,iDesLen)==0)||
-				(iUniLen == iFindWordLen && wcsncmp(pUniPoint,pFindWord,iUniLen)==0 )))
+				((CMyStrUtil::StrnCmp(pPoint,pFindWord,iThisWordLen)==0 && iThisWordLen == iFindWordLen) ||
+				(iDesLen == iFindWordLen && CMyStrUtil::StrnCmp(pDesPoint,pFindWord,iDesLen)==0)||
+				(iUniLen == iFindWordLen && CMyStrUtil::StrnCmp(pUniPoint,pFindWord,iUniLen)==0 )))
 
 		{
 			// 找到了 (包括缺字中的組字式或unicode)
@@ -556,8 +559,8 @@ String __fastcall CHighlight::MakeHighlight()
 	3.若此字有定位, 就處理定位, 有連結、塗色, 也一一處理
 */
 
-	vector< wchar_t > vOutput;
-	wchar_t * pPoint = HTMLSource->FirstChar();		// 遊走在 HTMLSource 的指標
+	vector< System::WideChar > vOutput;
+	System::WideChar * pPoint = HTMLSource->FirstChar();		// 遊走在 HTMLSource 的指標
 
 	while(*pPoint)
 	{
@@ -591,10 +594,10 @@ String __fastcall CHighlight::MakeHighlight()
 
 			// 結束
 
-			vOutput.push_back(L'<');
-			vOutput.push_back(L'/');
-			vOutput.push_back(L'a');
-			vOutput.push_back(L'>');
+			vOutput.push_back(u'<');
+			vOutput.push_back(u'/');
+			vOutput.push_back(u'a');
+			vOutput.push_back(u'>');
 		}
 		else
 		{
@@ -610,7 +613,7 @@ String __fastcall CHighlight::MakeHighlight()
 // 並留下下個連結的位置, 此屬性可留給 javascript 應用
 // <a name="Search_iNum_iTime" href="#Search_iNum_iNext"></a>
 // 傳入的 vector 三組一個單位, 分別是 第 x 組, 第 y 次出現, 下一次出現 (最後則回到 0)
-void __fastcall CHighlight::AddWordAnchor(vector<wchar_t> * vOutput, wchar_t * pPoint)
+void __fastcall CHighlight::AddWordAnchor(vector<System::WideChar> * vOutput, System::WideChar * pPoint)
 {
 	vector<int> * vData = &(mpWordAnchor[pPoint]);
 	for(int i=0; i<vData->size(); i+=3)
@@ -618,7 +621,7 @@ void __fastcall CHighlight::AddWordAnchor(vector<wchar_t> * vOutput, wchar_t * p
 		String sTag = u"<a name=\"Search_" + String((*vData)[i]) + u"_" +
 			String((*vData)[i+1]) + u"\" href=\"Search_" + String((*vData)[i]) +
 			u"_" + String((*vData)[i+2]) + "\"></a>";
-		wchar_t * wc = sTag.FirstChar();
+		System::WideChar * wc = sTag.FirstChar();
 		while(*wc)
 		{
 			vOutput->push_back(*wc);
@@ -633,7 +636,7 @@ void __fastcall CHighlight::AddWordAnchor(vector<wchar_t> * vOutput, wchar_t * p
 // map <wchar_t *, pair<int,int>> mpWordLink;
 // 塗色, 每個字都可能好幾個顏色
 // map <wchar_t *, vector<int>> mpWordClass;
-void __fastcall CHighlight::AddWordLink(vector<wchar_t> * vOutput, wchar_t * pPoint)
+void __fastcall CHighlight::AddWordLink(vector<System::WideChar> * vOutput, System::WideChar * pPoint)
 {
 	int iNum = mpWordLink[pPoint].first;    // 第幾個詞組
 	int iTime = mpWordLink[pPoint].second;  // 連結到第幾次出現
@@ -647,7 +650,7 @@ void __fastcall CHighlight::AddWordLink(vector<wchar_t> * vOutput, wchar_t * pPo
 
 	vector<int> * vClass = &(mpWordClass[pPoint]);
 
-	for(int i=0; i<vClass->size(); i++)
+	for(unsigned int i=0; i<vClass->size(); i++)
 	{
 		int iMod = (*vClass)[i];
 
@@ -657,7 +660,7 @@ void __fastcall CHighlight::AddWordLink(vector<wchar_t> * vOutput, wchar_t * pPo
 
 	sTag = sTag + u"\">";
 
-	wchar_t * wc = sTag.FirstChar();
+	System::WideChar * wc = sTag.FirstChar();
 	while(*wc)
 	{
 		vOutput->push_back(*wc);
@@ -721,7 +724,7 @@ void __fastcall CHighlight::GetEveryWordInfo(void)
 			TPoint * tpPtr = (TPoint *) FoundPos[i]->Int2s->Items[j];
 
 			// 1. 一個詞出現, 先定位, 找出此詞第一個字的真實位置
-			wchar_t * wc = PosToReal[tpPtr->x].first;
+			System::WideChar * wc = PosToReal[tpPtr->x].first;
 
 			int iNext = j+1;    // 這是下一次出現的次序, 若下一個是最後, 就回到 0
 			if(iNext == FoundPos[i]->Int2s->Count) iNext = 0;
@@ -736,7 +739,7 @@ void __fastcall CHighlight::GetEveryWordInfo(void)
 			for(int k=tpPtr->x; k<=tpPtr->y; k++)
 			{
 				// 此詞每個字的真實位置
-				pair<wchar_t *, int> word = PosToReal[k];
+				pair<System::WideChar *, int> word = PosToReal[k];
 				wc = word.first;
 
 				// 2. 每個字都要記錄下一個連結, 這只能記錄一次
@@ -758,7 +761,7 @@ void __fastcall CHighlight::GetEveryWordInfo(void)
 // 移到下一個可以查詢的字
 // 例如查詢的字串是 "ABC XYA 如是，我聞"
 // 目前指標可能在空白或標點，要往下一個可查詢的字移到動
-wchar_t * CHighlight::NextFindPoint(wchar_t * pFindWord)
+System::WideChar * CHighlight::NextFindPoint(System::WideChar * pFindWord)
 {
 	while(1)
 	{
@@ -780,14 +783,14 @@ wchar_t * CHighlight::NextFindPoint(wchar_t * pFindWord)
 }
 // ---------------------------------------------------------------------------
 // 分析一個 <span class="gaiji"....> 標記
-void CHighlight::AnalysisGiajiTag(wchar_t ** pPoint, wchar_t ** pDesPoint, wchar_t ** pUniPoint, int * iDesLen, int * iUniLen)
+void CHighlight::AnalysisGiajiTag(System::WideChar ** pPoint, System::WideChar ** pDesPoint, System::WideChar ** pUniPoint, int * iDesLen, int * iUniLen)
 {
 	// <span class="gaiji" data-des="[組字式]" data-uni="xx" data-nor="xx" data-noruni="xx">
 
 	// 先取出整個 Tag
 
 	int iTagLen=1;
-	wchar_t * pTmp = *pPoint;
+	System::WideChar * pTmp = *pPoint;
 	while(*pTmp != u'>')
 	{
 		iTagLen++;
