@@ -856,7 +856,7 @@
     Size.PlatformDefault = False
     TabOrder = 6
     object btOpenBookcase: TCornerButton
-      Position.X = 768.000000000000000000
+      Position.X = 360.000000000000000000
       Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
       Size.Width = 113.000000000000000000
@@ -882,7 +882,7 @@
       OnClick = btOptionClick
     end
     object btBuildIndex: TCornerButton
-      Position.X = 648.000000000000000000
+      Position.X = 240.000000000000000000
       Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
       Size.Width = 113.000000000000000000

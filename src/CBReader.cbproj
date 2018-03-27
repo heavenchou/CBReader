@@ -6,7 +6,7 @@
         <MainSource>CBReader.cpp</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">OSX32</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>7</TargetedPlatforms>
         <AppType>Application</AppType>
     </PropertyGroup>
@@ -240,6 +240,7 @@
         </CppCompile>
         <PCHCompile Include="CBReaderPCH1.h">
             <BuildOrder>2</BuildOrder>
+            <PCH>true</PCH>
         </PCHCompile>
         <CppCompile Include="cbxml.cpp">
             <DependentOn>cbxml.h</DependentOn>
@@ -275,6 +276,10 @@
             <FormType>fmx</FormType>
             <DependentOn>option.h</DependentOn>
             <BuildOrder>16</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="rendattr.cpp">
+            <DependentOn>rendattr.h</DependentOn>
+            <BuildOrder>34</BuildOrder>
         </CppCompile>
         <CppCompile Include="searchrange.cpp">
             <Form>fmSearchRange</Form>
@@ -432,13 +437,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
+                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
+                    <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
-                    <Platform Name="OSX32">
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
