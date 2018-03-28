@@ -65,9 +65,7 @@ private: // User declarations
 	String LMarginLeft;	    // L的空格
 
 		bool InTTNormal;		// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 , T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
-		bool InMulu;			// 在 <cb:mulu>...</cb:mulu> 的範圍內, 文字則不呈現,
-		bool InMuluPin;			// 在 <cb:mulu>...</cb:mulu> 的範圍內, 而且是 "品" , 則文字不呈現, 但要記錄至 MuluLabel
-		int  PreFormatCount;	// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
+			int  PreFormatCount;	// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
 	String MarginLeft;		// 移位
 		String NormalWords; 	// 通用詞處理法, 若是 orig , 就是呈現 <orig> 中的字, 若是 "reg" 就是呈現 <reg> 中的字, 這是在 choice 標記中判斷
 
@@ -77,10 +75,12 @@ private: // User declarations
 	int CellNum;            // 計算第幾個 Cell, 用來判斷要在普及版寫幾個空格
 	int OtherColspan;       // 因本 cell 佔 n 格以上, 所以和後面的 cell 要空 (n-1)*3 的空格, 此即記錄 n-1 的數字
 
-		// 要判斷品的範圍, 若出現品的 mulu, 則記錄 level, 等到 level 數字再次大於或等於時, 此品才結束
-		//<mulu level="3" label="3 轉輪聖王品" type="品"/>
-		int MuluLevel;          // 目錄的層次
-		String MuluLabel;    // 目錄的名稱
+	// 要判斷品的範圍, 若出現品的 mulu, 則記錄 level, 等到 level 數字再次大於或等於時, 此品才結束
+	//<mulu level="3" label="3 轉輪聖王品" type="品"/>
+	int MuluLevel;          // 目錄的層次
+	String MuluLabel;    // 目錄的名稱
+    bool InMulu;			// 在 <cb:mulu>...</cb:mulu> 的範圍內, 文字則不呈現,
+	bool InMuluPin;			// 在 <cb:mulu>...</cb:mulu> 的範圍內, 而且是 "品" , 則文字不呈現, 但要記錄至 MuluLabel
 
 	// --------------------------
 
@@ -89,6 +89,7 @@ private: // User declarations
 	// --------------------------
 
 	// 處理標記
+	String __fastcall tag_anchor(_di_IXMLNode Node);
 	String __fastcall tag_app(_di_IXMLNode Node);
 	String __fastcall tag_byline(_di_IXMLNode Node);
 	String __fastcall tag_cell(_di_IXMLNode Node);
@@ -113,12 +114,15 @@ private: // User declarations
 	String __fastcall tag_p(_di_IXMLNode Node);
 	String __fastcall tag_pb(_di_IXMLNode Node);
 	String __fastcall tag_rdg(_di_IXMLNode Node);
+	String __fastcall tag_ref(_di_IXMLNode Node);
 	String __fastcall tag_row(_di_IXMLNode Node);
 	String __fastcall tag_sg(_di_IXMLNode Node);
+	String __fastcall tag_space(_di_IXMLNode Node);
 	String __fastcall tag_t(_di_IXMLNode Node);
 	String __fastcall tag_table(_di_IXMLNode Node);
 	String __fastcall tag_term(_di_IXMLNode Node);
 	String __fastcall tag_trailer(_di_IXMLNode Node);
+	String __fastcall tag_unclear(_di_IXMLNode Node);
 	String __fastcall tag_default(_di_IXMLNode Node);
 
 	// 處理 XML

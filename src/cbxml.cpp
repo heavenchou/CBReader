@@ -57,8 +57,13 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 		InTTNormal = false;		// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 , T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
 		PreFormatCount = 0;		// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
 	NoNormal = 0;          // 用來判斷是否可用通用字 , 大於 0 就不用通用字, 這二種就不用通用字 <text rend="no_nor"> 及 <term rend="no_nor">
-		InMulu = false;         // 判斷是不是在 <cb:mulu> 之中.
-		InMuluPin = false;      // 判斷是不是在 <cb:mulu> 之中, 且是 "品" 目錄.
+
+	// 要判斷品的範圍, 若出現品的 mulu, 則記錄 level, 等到 level 數字再次大於或等於時, 此品才結束
+	// <mulu level="3" label="3 轉輪聖王品" type="品"/>
+	MuluLevel = 999;      // 目錄的層次, 一開始要設到最小
+	MuluLabel = u"";      // 目錄的名稱
+	InMulu = false;         // 判斷是不是在 <cb:mulu> 之中.
+	InMuluPin = false;      // 判斷是不是在 <cb:mulu> 之中, 且是 "品" 目錄.
 
 
 	Document = interface_cast<Xmlintf::IXMLDocument>(new TXMLDocument(NULL));
@@ -146,6 +151,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		.headname4 {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
 	"		.linehead {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
 	"		.parahead {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
+	"		.pts_head {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
 	"		.lg {color:#008040; font-weight: normal; font-size:16pt;}\n"
 	"		.corr {color:#FF0000; font-weight: normal; }\n"
 	"		.note {color:#9F5000; font-weight: normal; font-size:14pt;}\n";
@@ -193,24 +199,29 @@ String __fastcall CCBXML::MakeHTMLHead()
 		else
 			sHtml += u"		.linehead {display:none;}\n"
 					  "		.parahead {display:inline;}\n";
+		sHtml += u"		.pts_head {display:inline;}\n";
 	}
 	else
 	{
 		sHtml += u"		.linehead {display:none;}\n"
-				  "		.parahead {display:none;}\n";
+				  "		.parahead {display:none;}\n"
+				  "		.pts_head {display:none;}\n";
     }
 
 
 	// 校勘呈現
 	if(Setting->CollationType == ctNoCollation)
 		sHtml += u"		.note_orig {display:none;}\n"
-				  "		.note_mod {display:none;}\n";
+				  "		.note_mod {display:none;}\n"
+				  "		.note_star {display:none;}\n";
 	else if(Setting->CollationType == ctOrigCollation)
 		sHtml += u"		.note_mod {display:none;}\n"
-				  "		.note_orig {display:inline;}\n";
+				  "		.note_orig {display:inline;}\n"
+				  "		.note_star {display:inline;}\n";
 	else if(Setting->CollationType == ctCBETACollation)
 		sHtml += u"		.note_orig {display:none;}\n"
-				  "		.note_mod {display:inline;}\n";
+				  "		.note_mod {display:inline;}\n"
+				  "		.note_star {display:inline;}\n";
 
 	sHtml += u"	</style>\n"
 	"</head>\n"
@@ -272,39 +283,43 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 		// 一般節點
 		String sTagName = Node->NodeName;
 
-		if (sTagName == "app")		sHtml = tag_app(Node);
-		else if (sTagName == "byline")	sHtml = tag_byline(Node);
-		else if (sTagName == "cell")	sHtml = tag_cell(Node);
-		else if (sTagName == "div")		sHtml = tag_div(Node);
-		else if (sTagName == "cb:docNumber")	sHtml = tag_docNumber(Node);
-		else if (sTagName == "entry")	sHtml = tag_entry(Node);
-		else if (sTagName == "foreign")	sHtml = tag_foreign(Node);
-		else if (sTagName == "form")	sHtml = tag_form(Node);
-		else if (sTagName == "formula")	sHtml = tag_formula(Node);
-		else if (sTagName == "g")		sHtml = tag_g(Node);
-		else if (sTagName == "graphic")	sHtml = tag_graphic(Node);
-		else if (sTagName == "head")	sHtml = tag_head(Node);
-		else if (sTagName == "hi")		sHtml = tag_formula(Node);  // 二標記處理法相同
-		else if (sTagName == "item")	sHtml = tag_item(Node);
-		else if (sTagName == "cb:juan") sHtml = tag_juan(Node);
-		else if (sTagName == "l")		sHtml = tag_l(Node);
-		else if (sTagName == "lb")		sHtml = tag_lb(Node);
-		else if (sTagName == "lem")		sHtml = tag_lem(Node);
-		else if (sTagName == "lg")		sHtml = tag_lg(Node);
-		else if (sTagName == "list")	sHtml = tag_list(Node);
-		else if (sTagName == "cb:mulu")	sHtml = tag_mulu(Node);
-		else if (sTagName == "note")	sHtml = tag_note(Node);
-		else if (sTagName == "p")		sHtml = tag_p(Node);
-		else if (sTagName == "pb")		sHtml = tag_pb(Node);
-		else if (sTagName == "rdg")		sHtml = tag_rdg(Node);
-		else if (sTagName == "row")		sHtml = tag_row(Node);
-		else if (sTagName == "cb:sg")	sHtml = tag_sg(Node);
-		else if (sTagName == "cb:t")	sHtml = tag_t(Node);
-		else if (sTagName == "table")	sHtml = tag_table(Node);
-		else if (sTagName == "term")	sHtml = tag_term(Node);
-		else if (sTagName == "text")	sHtml = tag_term(Node); // text 和 term 處理法相同
-		else if (sTagName == "trailer")	sHtml = tag_trailer(Node);
-		else                      		sHtml = tag_default(Node);
+		if (sTagName == u"anchor")			sHtml = tag_anchor(Node);
+		else if (sTagName == u"app")		sHtml = tag_app(Node);
+		else if (sTagName == u"byline")		sHtml = tag_byline(Node);
+		else if (sTagName == u"cell")		sHtml = tag_cell(Node);
+		else if (sTagName == u"div")		sHtml = tag_div(Node);
+		else if (sTagName == u"cb:docNumber")	sHtml = tag_docNumber(Node);
+		else if (sTagName == u"entry")		sHtml = tag_entry(Node);
+		else if (sTagName == u"foreign")	sHtml = tag_foreign(Node);
+		else if (sTagName == u"form")		sHtml = tag_form(Node);
+		else if (sTagName == u"formula")	sHtml = tag_formula(Node);
+		else if (sTagName == u"g")			sHtml = tag_g(Node);
+		else if (sTagName == u"graphic")	sHtml = tag_graphic(Node);
+		else if (sTagName == u"head")		sHtml = tag_head(Node);
+		else if (sTagName == u"hi")			sHtml = tag_formula(Node);  // 二標記處理法相同
+		else if (sTagName == u"item")		sHtml = tag_item(Node);
+		else if (sTagName == u"cb:juan") 	sHtml = tag_juan(Node);
+		else if (sTagName == u"l")			sHtml = tag_l(Node);
+		else if (sTagName == u"lb")			sHtml = tag_lb(Node);
+		else if (sTagName == u"lem")		sHtml = tag_lem(Node);
+		else if (sTagName == u"lg")			sHtml = tag_lg(Node);
+		else if (sTagName == u"list")		sHtml = tag_list(Node);
+		else if (sTagName == u"cb:mulu")	sHtml = tag_mulu(Node);
+		else if (sTagName == u"note")		sHtml = tag_note(Node);
+		else if (sTagName == u"p")			sHtml = tag_p(Node);
+		else if (sTagName == u"pb")			sHtml = tag_pb(Node);
+		else if (sTagName == u"rdg")		sHtml = tag_rdg(Node);
+		else if (sTagName == u"ref")		sHtml = tag_ref(Node);
+		else if (sTagName == u"row")		sHtml = tag_row(Node);
+		else if (sTagName == u"cb:sg")		sHtml = tag_sg(Node);
+		else if (sTagName == u"cb:space")	sHtml = tag_space(Node);
+		else if (sTagName == u"cb:t")		sHtml = tag_t(Node);
+		else if (sTagName == u"table")		sHtml = tag_table(Node);
+		else if (sTagName == u"term")		sHtml = tag_term(Node);
+		else if (sTagName == u"text")		sHtml = tag_term(Node); // text 和 term 處理法相同
+		else if (sTagName == u"trailer")	sHtml = tag_trailer(Node);
+		else if (sTagName == u"unclear")	sHtml = tag_unclear(Node);
+		else                      			sHtml = tag_default(Node);
 	}
 	else if (nodetype == 3)
 	{
@@ -336,9 +351,36 @@ String __fastcall CCBXML::parseChild(_di_IXMLNode Node)
 // ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_default(_di_IXMLNode Node)
 {
-	String sHtml = "";
-	//String sXXX = GetAttr(Node, "xxx");
+	String sHtml = u"";
+	//String sXXX = GetAttr(Node, u"xxx");
 	sHtml = parseChild(Node); // 處理內容
+	return sHtml;
+}
+// ---------------------------------------------------------------------------
+// 舊版 CBReader 有很多種 anchor , 現在剩二種
+// 1. 沒有處理的星號
+// <anchor xml:id="fxT01p0009a09"/>
+// 2. 雙圈 ◎
+// <anchor type="circle"/>
+String __fastcall CCBXML::tag_anchor(_di_IXMLNode Node)
+{
+	String sHtml = u"";
+	String sXMLId = GetAttr(Node, u"xml:id");
+	String sType = GetAttr(Node, u"type");
+
+	// 沒有處理的星號 <anchor xml:id="fxT01p0009a09"/>
+	if(sXMLId.SubString0(0,2) == u"fx")
+	{
+		sHtml += u"<span class=\"note_star\">[＊]</span>";
+	}
+
+	// 雙圈 ◎ <anchor type="circle"/>
+	if(sType == u"circle")
+	{
+		sHtml += u"◎";
+	}
+
+	//sHtml = parseChild(Node); // 處理內容
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -517,7 +559,7 @@ String __fastcall CCBXML::tag_foreign(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	String sPlace = GetAttr(Node, u"cb:place");
-	if(sPlace == u"foot") return "";
+	if(sPlace == u"foot") return u"";
 
 	sHtml = parseChild(Node); // 處理內容
 	return sHtml;
@@ -1015,6 +1057,8 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 
 	// 行首空格待處理 ????
 
+    // 目錄品名待處理 ????
+
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -1310,12 +1354,70 @@ String __fastcall CCBXML::tag_list(_di_IXMLNode Node)
 }
 // ---------------------------------------------------------------------------
 // 目錄
+// 要判斷品的範圍, 若出現品的 mulu, 則記錄 level, 等到 level 數字再次大於或等於時, 此品才結束
+
+// <mulu level="3" label="1 閻浮提州品" type="品"/>
+// <mulu n="001" type="卷"/>
+
+// <cb:mulu level="3" type="品">1 閻浮提州品</cb:mulu>
+// <cb:mulu level="1" type="序">序</cb:mulu>
+// <cb:mulu level="1" type="分">1 分</cb:mulu>
+// <cb:mulu n="001" type="卷"></cb:mulu>
 String __fastcall CCBXML::tag_mulu(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
+	String sLevel = GetAttr(Node, u"level");
+	String sType = GetAttr(Node, u"type");
+	int iLevel = sLevel.ToIntDef(0);
+
+	InMulu = true;
+
+	if(sLevel == u"") return u"";     // 不是品這種格式(應該是卷的格式), 不管它
+
+	// 處理法
+	// 1. 之前是不是品?
+	//    是 : 比較 level , 若 level >= 之前的, 前面的品結束.
+	// 2. 檢查自己是不是品, 若是, 就加進去, 並記錄起來.
+
+	if(MuluLabel != u"")     // 之前是品
+	{
+		if(iLevel <= MuluLevel)     // 目前的比較小, 所以舊的品要結束
+		{
+			sHtml += u"<a pin_name=\"\"></a>";
+			MuluLabel = u"";
+			MuluLevel = 0;
+		}
+		else return u"";     // 之前雖然是品, 但層次不夠, 保持現況
+	}
+
+	if(sType == u"品")   // 而目前是品, 就記錄下來
+	{
+		MuluLabel = u"";
+		MuluLevel = iLevel;
+
+		sHtml += u"<a pin_name=\"";
+		InMuluPin = true;
+
+		// 目錄的內容有可能有這些標記, 要處理掉 ????
+		// 1. 羅馬拼音加上 <span class="nonhan">xx</span>
+		// 2. 缺字會加上 <span class="gaiji">...</span>
+		// 3. 缺字的 <!--gaiji,缽,1[金*本],2&#Xxxxx;,3-->
+
+		// 同時要注意, 若在校註中, 目錄的內容會不會跑到校註中? (舊版CBR會把文字送到校註中)
+		// MuluLabel 的處理也要注意, 這大概是在 lb 會處理????
+
+		String sMulu = parseChild(Node); // 處理內容
+
+		MuluLabel = sMulu;
+		sHtml += sMulu;
+
+		InMulu = false;
+		InMuluPin = false;	// 先設成 false, 以免底下的內容被記錄至 MuluLabel 中 (舊版才會啦)
+		sHtml += u"\"></a>";
+	}
+
 	return sHtml;
 }
-
 // ---------------------------------------------------------------------------
 // 校註標記
 String __fastcall CCBXML::tag_note(_di_IXMLNode Node)
@@ -1473,6 +1575,35 @@ String __fastcall CCBXML::tag_sg(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
+// 空格 <space quantity="1" unit="chars"/>
+// 沒有字 <space quantity="0"/>
+String __fastcall CCBXML::tag_space(_di_IXMLNode Node)
+{
+	String sHtml = u"";
+	String sUnit = GetAttr(Node, u"unit");
+
+	if(sUnit != u"")
+	{
+		if(sUnit == u"chars")
+		{
+			String sQuantity = GetAttr(Node, u"quantity");
+			int iSpace = sQuantity.ToIntDef(0);
+			sHtml += String::StringOfChar(u'　',iSpace);
+		}
+	}
+	else
+	{
+		// 隔行對照時, 沒有字的地方也要秀出空格, 以便與悉曇字對應
+		if(true) // if(NextLineOfTT->InNextLineTT) // ???? 隔行對照待處理
+			sHtml += u"　";
+		else
+			sHtml += u"";
+	}
+
+	//sHtml = parseChild(Node); // 處理內容
+	return sHtml;
+}
+// ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_t(_di_IXMLNode Node)
 {
 	String sHtml = "";
@@ -1534,7 +1665,40 @@ String __fastcall CCBXML::tag_trailer(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
-// 解析 XML 標記
+// 百品新的標記, 表示猜測字 <unclear reason="damage" cert="high"></unclear>
+// 依據猜測程度 , cert 有如下內容 高:high 中高:above_medium 中:medium 低:low
+// <unclear/> 無法辨別的字, 呈現 ▆
+String __fastcall CCBXML::tag_unclear(_di_IXMLNode Node)
+{
+	String sHtml = u"";
+	String sCert = GetAttr(Node, u"cert");
+
+	if(sCert == u"high")
+	{
+		sHtml += u"<span class=\"guess1\" title=\"本字為推測字，信心程度：高\">";
+	}
+	else if(sCert == u"above_medium")
+	{
+		sHtml += u"<span class=\"guess2\" title=\"本字為推測字，信心程度：中高\">";
+	}
+	else if(sCert == u"medium")
+	{
+		sHtml += u"<span class=\"guess3\" title=\"本字為推測字，信心程度：中\">";
+	}
+	else if(sCert == u"low")
+	{
+		sHtml += u"<span class=\"guess4\" title=\"本字為推測字，信心程度：低\">";
+	}
+
+	if(Node->HasChildNodes)
+		sHtml += parseChild(Node); // 處理內容
+	else
+		sHtml += u"<span title=\"未知的文字\">▆";
+
+	sHtml += u"</span>";
+	return sHtml;
+}
+// ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_rdg(_di_IXMLNode Node)
 {
 	String sHtml = "";
@@ -1542,7 +1706,43 @@ String __fastcall CCBXML::tag_rdg(_di_IXMLNode Node)
 
 	return sHtml;
 }
+// ---------------------------------------------------------------------------
+// 南傳經文的巴利藏對照頁數
+// <ref target="#PTS.Vin.3.1"></ref>
+// 呈現 [P.1]
+// 實際上則是 <span class="linehead" title="PTS.Vin.3.1">[P.1]</span>
 
+// 不過在各卷最前面, 可能有一個隱形的標記, 記錄著上一卷最後一個 PTS 頁碼, 這個就不要呈現出來
+// 它的格式是 <ref target="#PTS.Vin.3.109" type="PTS_hide"></ref>
+String __fastcall CCBXML::tag_ref(_di_IXMLNode Node)
+{
+	String sHtml = u"";
+	String sType= GetAttr(Node, u"type");
+	String sTarget= GetAttr(Node, u"target");
+
+	bool bHidePTS = false;  // 判斷是不是隱藏版的 PTS 標記
+	if(sType == u"PTS_hide") bHidePTS = true;
+
+	if(sTarget != u"")
+	{
+		if(sTarget.SubString0(0,4) == u"#PTS")
+		{
+			sTarget.Delete(0,1);
+			String sPage = sTarget;
+			int iPos = sPage.LastDelimiter0(u".");	// 找到最後.的位置
+			sPage.Delete0(0,iPos+1);   // 最後一個數字, 也就是頁碼
+
+			// 隱藏的加要寫? 可能是引用複製要用的吧, 我也忘了....
+			String sMsg = u"<span class=\"pts_head\" title=\"" + sTarget + "\">";
+			if(bHidePTS == false)
+				sMsg += u" [P." + sPage + u"] ";
+			sMsg += u"</span>";
+			sHtml += sMsg;
+		}
+	}
+	sHtml += parseChild(Node); // 處理內容
+	return sHtml;
+}
 // ---------------------------------------------------------------------------
 // 儲存至 HTML
 void __fastcall CCBXML::SaveToHTML(String sFile)
