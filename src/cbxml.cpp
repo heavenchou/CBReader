@@ -3,6 +3,7 @@
 #pragma hdrstop
 
 #include "cbxml.h"
+
 // ---------------------------------------------------------------------------
 #pragma package(smart_init)
 
@@ -20,8 +21,8 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	ShowHighlight = bShowHighlight;    // 是否塗色
 	mOrigNote.clear();
 
-	SerialPath = "";    // 系列(書)的主要位置
-
+	SerialPath = u"";    // 系列(書)的主要位置
+	BookVerName = u"";
 	GetInitialFromFileName();   // 由經名取得一切相關資訊
 
 	// 初值
@@ -48,14 +49,14 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
     CellNum = 0;        // cell 格式數量歸 0
 	OtherColspan = 0;   // 因本 cell 佔 n 格以上, 所以和後面的 cell 要空 (n-1)*3 的空格, 此即記錄 n-1 的數字
 
-		InFuWen = 0;			// 用來判斷是否是附文, 因為有巢狀, 所以用 int
-		InSutraNum = false;		// 用來判斷本行是否是經號
-		InPinHead = false;		// 用來判斷本行是否是品名
-		InFuWenHead = false;	// 用來判斷本行是否是附文標題
-		InOtherHead = false;	// 用來判斷本行是否是其它標題
-		InHead = false;			// 用來判斷本行是否是標題
+	FuWenCount = 0;			// 用來判斷是否是附文, 因為有巢狀, 所以用 int
+	InSutraNum = false;		// 用來判斷本行是否是經號
+	InPinHead = false;		// 用來判斷本行是否是品名
+	InFuWenHead = false;	// 用來判斷本行是否是附文標題
+	InOtherHead = false;	// 用來判斷本行是否是其它標題
+	InHead = false;			// 用來判斷本行是否是標題
 		InTTNormal = false;		// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 , T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
-		PreFormatCount = 0;		// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
+	PreFormatCount = 0;		// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
 	NoNormal = 0;          // 用來判斷是否可用通用字 , 大於 0 就不用通用字, 這二種就不用通用字 <text rend="no_nor"> 及 <term rend="no_nor">
 
 	// 要判斷品的範圍, 若出現品的 mulu, 則記錄 level, 等到 level 數字再次大於或等於時, 此品才結束
@@ -64,7 +65,14 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	MuluLabel = u"";      // 目錄的名稱
 	InMulu = false;         // 判斷是不是在 <cb:mulu> 之中.
 	InMuluPin = false;      // 判斷是不是在 <cb:mulu> 之中, 且是 "品" 目錄.
+	NoteAddNum = 0;     // 自訂校註 <note type="add" 的流水號, 由 1 開始
 
+
+
+
+	NextLine = new CNextLine;		// 用來處理隔行 <tt> 的物件
+
+	// 處理 XML -----------------------------------------------------------
 
 	Document = interface_cast<Xmlintf::IXMLDocument>(new TXMLDocument(NULL));
 	Document->FileName = XMLFile;
@@ -115,12 +123,16 @@ __fastcall CCBXML::~CCBXML(void) // 解構函式
 // 先產生 html 的 head
 String __fastcall CCBXML::MakeHTMLHead()
 {
+
+	String sJqueryFile = StringReplace(JSFile, u"cbreader.js", "jquery.min.js", TReplaceFlags() << rfReplaceAll << rfIgnoreCase);
 	String sHtml = u"<!DOCTYPE html>\n"
 	"<html>\n"
 	"<head>\n"
 	"	<meta charset=\"utf-8\">\n"
 	"	<title>CBETA 線上閱讀</title>\n"
-	"   <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>\n"
+	"   <script src=\"";
+	sHtml += sJqueryFile;
+	sHtml += "\"></script>\n"
 	"   <script src=\"";
 	sHtml += JSFile;
 	sHtml += u"\"></script>\n"
@@ -210,7 +222,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 
 
 	// 校勘呈現
-	if(Setting->CollationType == ctNoCollation)
+	if(Setting->ShowCollation == false)
 		sHtml += u"		.note_orig {display:none;}\n"
 				  "		.note_mod {display:none;}\n"
 				  "		.note_star {display:none;}\n";
@@ -384,12 +396,75 @@ String __fastcall CCBXML::tag_anchor(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
+// 校勘中的校勘 , 這個要處理 ????
+// <app from="#beg0101004" to="#end0101004">
+//    <lem wit="#wit1">得法眼淨。猶如淨潔白
+//        <app n="0101005">
+//            <lem wit="#wit1">疊</lem>
+//            <rdg resp="#resp1" wit="#wit2 #wit3 #wit4"><g ref="#CB00626">?</g></rdg>
+//        </app>
+//    </lem>
+//    <rdg resp="#resp1" wit="#wit5">諸法法眼生譬如新衣</rdg>
+// </app>
+
+// tt 中的校勘
+// <cb:tt type="app" from="#beg0001026" to="#end0001026">
+// 	<cb:t resp="#resp1" xml:lang="zh"><app n="0001026"><lem wit="#wit1">拘樓孫</lem><rdg resp="#resp1" wit="#wit2 #wit3 #wit4">拘留孫</rdg></app></cb:t>
+// 	<cb:t resp="#resp1" xml:lang="pi" place="foot">Kakusandha.</cb:t>
+// </cb:tt>
+
+// 星號
+// <app from="#beg_1" to="#end_1" corresp="#0001004"><lem wit="#wit1">辨</lem><rdg resp="#resp1" wit="#wit2">辯</rdg></app>
+
+// ????? lem 裡面要有 note 及 lb 才行. note 是 app 包 app 用的
+
+// 以上是舊版資料, 待研究...
+
+/*
+<note n="0001002" resp="Taisho" type="orig" place="foot text">〔長安〕－【宋】</note>
+<note n="0001002" resp="CBETA" type="mod">長安【大】，〔－〕【宋】</note>
+<app n="0001002">
+	<lem wit="【大】">長安</lem>
+	<rdg resp="Taisho" wit="【宋】"><space quantity="0"/></rdg>
+</app>
+
+標準校註 :
+XML 原始標記  : <app n="0001002">
+HTML 經文轉成 : <span id="note_app_0001002" class="note_app">
+HTML 校註轉成 : <div id="txt_note_app_0001002"> ... </div>
+
+CBETA 自訂校註 :
+XML 原始標記  : <app n="0001b0201">
+HTML 經文轉成 : <span id="note_app_A1" class="note_app">
+HTML 校註轉成 : <div id="txt_note_app_A1"> ... </div>
+
+*/
+
+
 String __fastcall CCBXML::tag_app(_di_IXMLNode Node)
 {
 	String sHtml = "";
-	// 處理標記
-	sHtml = parseChild(Node); // 處理內容
-	// 結束標記
+
+	String sId = GetAttr(Node, u"n");
+
+	if(mpNoteAddNum.count(sId)>0)
+	{
+		// 表示是 <note type="add"> 的 CBETA 自訂 <app>
+		// 取回流水號, 把 Id 改成 Axx
+		String sIdNum = String(Get_Add_IdNum(sId));
+		sId = u"A" + sIdNum;
+	}
+
+	// 這裡要注意順序
+	// 1. 先處理校註區的 <div id="txt_note_app_xxxx">
+	// 2. 進行 parseChild , 這裡面會處理校註區 lem ,rdg 的內容
+	// 3. 再加上校註區的 </div> ,
+
+	HTMLCollation += u"<div id=\"txt_note_app_" + sId + "\">\n";
+	sHtml += u"<span id=\"note_app_" + sId + "\" class=\"note_app\">"
+			 + parseChild(Node) // 處理內容
+			 + u"</span>";
+	HTMLCollation += u"</div>\n";
 
 	return sHtml;
 }
@@ -466,18 +541,57 @@ String __fastcall CCBXML::tag_cell(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
+// 附文: <cb:div type="w"><p xml:id="pT02p0029b2201"><anchor xml:id="nkr_note_orig_0029009" n="0029009"/>
+// 序: <cb:div type="xu"><cb:mulu level="1" type="序">序</cb:mulu><anchor xml:id="nkr_note_orig_0001001" n="0001001"/><head><title>長阿含經</title>序</head>
 String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 {
-	String sHtml = "";
-	// 讀取 href 屬性
-	//String sAttr = Node->Attributes["href"];
-	//if (sAttr != "")
+	String sHtml = u"";
+	String sType = GetAttr(Node, u"type");
 
 	DivCount++;
+
+	if(sType != u"")
+	{
+		DivType[DivCount] = sType.LowerCase();    // 都變成小寫
+	}
+
+	if(DivType[DivCount] == "w")		// 附文
+	{
+		FuWenCount++;
+		sHtml += u"<div class=\"w\">";   // 要用 div , 才不會有 span 包 p 的困境
+
+		if(FuWenCount == 1)
+		{
+			sHtml += u"<div style=\"margin-left: 1em\">";
+			sHtml += u"　";
+		}
+	}
+	else if (DivType[DivCount] == "xu")		// 序文
+	{
+		sHtml += u"<div class=\"xu\">";   // 要用 div , 才不會有 span 包 p 的困境
+	}
+
+	// ----------------------------------
 	sHtml = parseChild(Node); // 處理內容
+	// ----------------------------------
+
+	if(DivType[DivCount] == "w")		// 附文
+	{
+		FuWenCount--;
+		if(FuWenCount == 0)	// 大正藏切行
+		{
+			sHtml += u"</div>";
+		}
+		sHtml += u"</div>";       // 不切行則要用 div , 才不會有 span 包 p 的困境
+
+	}
+	else if(DivType[DivCount] == "xu")		// 序
+	{
+		sHtml += u"</div>";
+	}
+
 	DivCount--;
 
-    // div 很多待處理 ????
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -597,43 +711,50 @@ String __fastcall CCBXML::tag_formula(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
-// <g ref="#CB00166"/>
+// 缺字 <g ref="#CB00166"/>
+// 悉曇字 T20n1034 <g ref="#SD-A440"/>
+// 蘭札字 T21n1419 <g ref="#RJ-C947"/>
 String __fastcall CCBXML::tag_g(_di_IXMLNode Node)
 {
-	String sHtml = "";
-	String sCBCode = GetAttr(Node, "ref");
-	sCBCode = CMyStrUtil::SubString(sCBCode,1);
-	String sCBCodeType = CMyStrUtil::SubString(sCBCode,0,2);
+	String sHtml = u"";
+	String sCBCode = GetAttr(Node, u"ref");
+	sCBCode = sCBCode.Delete0(0,1);
+	String sCBCodeType = sCBCode.SubString0(0,2);
 
-	if(sCBCodeType == "CB")
+	if(sCBCodeType == u"CB")
 	{
-		sHtml = "<span class=\"gaiji\"";
+		sHtml = u"<span class=\"gaiji\" data-id=\"" + sCBCode + u"\"";
 
 		// 組字式
 		String sDes = CB2des[sCBCode];
 		if(!sDes.IsEmpty())
 		{
-			sHtml += " data-des=\"" + sDes + "\"";
+			sHtml += u" data-des=\"" + sDes + u"\"";
 		}
 		// 通用字
 		String sNor = CB2nor[sCBCode];
 		if(!sNor.IsEmpty() && NoNormal == 0)    // 有 NoNormal 就不使用通用字
 		{
-			sHtml += " data-nor=\"" + sNor + "\"";
+			sHtml += u" data-nor=\"" + sNor + u"\"";
 		}
 		// Unicode
 		String sUni = CB2uni[sCBCode];
 		if(!sUni.IsEmpty())
 		{
-			sHtml += " data-uni=\"" + sUni + "\"";
+			sHtml += u" data-uni=\"" + sUni + u"\"";
 		}
 		// Normal Unicode
 		String sNorUni = CB2nor_uni[sCBCode];
 		if(!sNorUni.IsEmpty())
 		{
-			sHtml += " data-noruni=\"" + sNorUni + "\"";
+			sHtml += u" data-noruni=\"" + sNorUni + u"\"";
 		}
-		sHtml += ">";
+		// 圖檔
+
+		String sGaijiFile = SerialPath + u"gaiji-CB/" + sCBCode.SubString0(2,2) + u"/"
+							+ sCBCode + u".gif";
+		sGaijiFile = ExpandFileName(sGaijiFile);
+		sHtml += u" data-imgfile=\"" + sGaijiFile + u"\">";
 
 		// 顯示的文字
 		// 1. 如果 unicode 優先
@@ -674,22 +795,122 @@ String __fastcall CCBXML::tag_g(_di_IXMLNode Node)
 			{
 				// 優先使用組字式
 				if(!sDes.IsEmpty()) sHtml += sDes;
-				//else
-					// 圖檔, 暫時不用 ????
+				else if(TFile::Exists(sGaijiFile))
+					sHtml += u"<img src=\"" + sGaijiFile + u"\"/>";
+				else
+					sHtml += u"<span title=\"此缺字無法呈現\">⍰</span>";
 			}
 			else
 			{
 				// 圖檔優先 , 暫時不用 ????
-				if(!sDes.IsEmpty()) sHtml += sDes;
+				if(TFile::Exists(sGaijiFile))
+					sHtml += u"<img src=\"" + sGaijiFile + u"\"/>";
+				else if(!sDes.IsEmpty()) sHtml += sDes;
+				else
+					sHtml += u"<span title=\"此缺字 " + sCBCode + u" 無法呈現\">⍰</span>";
             }
 
         }
 
 		// 結束標記
 		sHtml += "</span>";
-    }
+	}
+	// 悉曇字
+	else if(sCBCodeType == u"SD" || sCBCodeType == u"RJ")
+	{
+		// 設定還沒寫 ????
+		int iShowSiddamWay = Setting->ShowSiddamWay;
 
-    // 悉曇, 蘭札待處理 ????
+		// 特殊格式, 若格式是 4 自訂, 且文字是 S(R) , 就用特殊格式
+
+		bool bSpecial = false;   // 200702 之後的加強版
+		if(iShowSiddamWay == 6)  bSpecial = true;                                           // 200802 版
+
+		// 悉曇字處理法 0:悉曇字型(siddam.ttf)
+		if(iShowSiddamWay == 0 || bSpecial)
+		{
+			if(SD2char[sCBCode] != u"")
+			{
+				if(sCBCodeType == u"SD")  // 悉曇字型
+					sHtml += u"<font face=\"siddam\">";
+				else if(sCBCodeType == u"RJ")  // 悉曇字型
+					sHtml += u"<font face=\"Ranjana\">";
+				sHtml += SD2char[sCBCode];
+				sHtml += u"</font>";
+			}
+			else
+				iShowSiddamWay = 3;		// 沒有 sdchar 就先換圖檔
+
+		}
+
+		// 悉曇字處理法 1:羅馬轉寫(unicode)
+		if(iShowSiddamWay == 1 || bSpecial)
+		{
+			String sUnicode;
+			String sBig5;
+
+			sUnicode = SD2uni[sCBCode];		// 悉曇
+			sBig5 = SD2big5[sCBCode];
+
+			if(sUnicode != u"")
+			{
+				sUnicode = u"<span class=\"nonhan\">" + sUnicode + u"</span>";
+				if(bSpecial)    // 特殊格式, 給悉曇網用的, 200802 加入
+					sUnicode = u"(" + sUnicode + u")";
+				sHtml += sUnicode;
+				sHtml += u" ";
+			}
+			else if(sBig5 != "")
+			{
+				// 有些悉曇字有 （　）　…　這些文字, 這些在悉曇字與轉寫字同時呈現時, 不用再呈現一次
+				if(!bSpecial) sHtml += sBig5;
+			}
+			else if(!bSpecial)
+				iShowSiddamWay = 3;		// 沒有 big5 就先換圖檔
+		}
+		// 悉曇字處理法 2:羅馬轉寫(純文字) -- 2018 新版不提供了
+
+		// 悉曇字處理法 3:悉曇圖檔
+		if(iShowSiddamWay == 3)
+		{
+			// sCBCode = SD-A440
+
+			String sSDGifOrigFile;
+			String sSDGifFile;
+
+			if(sCBCodeType == u"SD")
+			{
+				sSDGifOrigFile = SerialPath + u"sd-gif/" + sCBCode.SubString0(2,2) + u"/"
+							+ sCBCode + u".gif";
+			}
+			else if(sCBCodeType == u"RJ")
+			{
+				sSDGifOrigFile = SerialPath + u"rj-gif/" + sCBCode.SubString0(2,2) + u"/"
+							+ sCBCode + u".gif";
+			}
+			sSDGifFile = ExpandFileName(sSDGifOrigFile);
+
+			// 如果圖檔不存在, 就用 SD 碼
+			if(TFile::Exists(sSDGifFile))
+			{
+				sHtml += u"<img src=\"";
+				sHtml += sSDGifFile;
+				sHtml += u"\"/>";
+			}
+			else
+				iShowSiddamWay = 5;		// 沒有圖檔就換 SD 碼
+		}
+		// 悉曇字處理法 4:自訂符號 -- 2018 不提供了
+		// 悉曇字處理法 5:CB碼     -- 2018 不提供了
+		if(iShowSiddamWay == 5)
+		{
+			if(sCBCodeType == u"SD")
+				sHtml += u"<span title=\"此悉曇字 " + sCBCode + u" 無法呈現\">⍰</span>";
+			else if(sCBCodeType == u"RJ")
+				sHtml += u"<span title=\"此蘭札字 " + sCBCode + u" 無法呈現\">⍰</span>";
+        }
+	}
+
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -714,19 +935,19 @@ String __fastcall CCBXML::tag_graphic(_di_IXMLNode Node)
 // <head>
 String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 	// 處理標記
 
 	IsFindLg = false;       // 因為 IsFindLg 是判斷 <l> 是不是第一個, 若是就不空格, 但有一種是 <lg><head>...</head><l> , 所以這也不算第一個 <l>
 
-	String sType = GetAttr(Node, "type");
+	String sType = GetAttr(Node, u"type");
 
 	if(sType == u"add")
 	{
 		// 額外的, 不處理 ,
 		// 只出現在 T06, T07 <head type="added">No. 220</head>,
 		// T21 <head type="added">No. 1222</head>
-		return "";
+		return u"";
     }
 
 	if(sType == u"pin")     // 品名
@@ -738,27 +959,28 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 		InOtherHead = true;
 	}
 
-	// head 是否在 list 中待處理 ????
-	/*
-	if(sxmlParentNodeName == "list")
+	// head 是否在 list 中待處理
+	_di_IXMLNode ParentNode = Node->ParentNode;
+	String sParentNodeName = u"";
+	if(ParentNode != NULL)
 	{
-		// list 的規則參考 list 的項目
-		WriteTo("<span class=\"headname\">");
+		sParentNodeName = ParentNode->GetNodeName();
+		if(sParentNodeName == u"list")
+			// list 的規則參考 list 的項目
+			sHtml += u"<span class=\"headname\">";
 	}
 	else
-    */
 	{
-		// 設定 head 待處理 ????
-		/*
-		if(DivType[DivCount] == "pin")          // 品的標題
-			IsPinHead = true;
-		else if(DivType[DivCount] == "w")		// 附文的標題
-			IsFuWenHead = true;
-		else if(DivType[DivCount] == "other")   // 其它的標題
-			IsOtherHead = true;
+		// 設定 head 待處理
+
+		if(DivType[DivCount] == u"pin")          // 品的標題
+			InPinHead = true;
+		else if(DivType[DivCount] == u"w")		// 附文的標題
+			InFuWenHead = true;
+		else if(DivType[DivCount] == u"other")   // 其它的標題
+			InOtherHead = true;
 		else
-			IsHead = true;
-		*/
+			InHead = true;
 
 		// Q1 ==> 空2格
 		// Q2 ==> 空3格
@@ -772,19 +994,17 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 		// 原本不應該有 0 , 但有時 head 不在 div 中, 就會有 0 了
 		if(DivCount == 0 || DivCount == 1 || DivCount == 4 || DivCount == 7)
 			sHtml += u"<span class=\"line_space\">　　</span>"
-					"<p class=\"headname2\">";
+					  "<p class=\"headname2\">";
 		else if(DivCount == 2 || DivCount == 5 || DivCount == 8)
 			sHtml += u"<span class=\"line_space\">　　　</span>"
-					"<p class=\"headname3\">";
+					  "<p class=\"headname3\">";
 		else if(DivCount == 3 || DivCount == 6 || DivCount == 9)
 			sHtml += u"<span class=\"line_space\">　　　　</span>"
-					"<p class=\"headname4\">";
+					  "<p class=\"headname4\">";
 	}
 
 	sHtml += parseChild(Node); // 處理內容
 	// 結束標記
-
-	sHtml += u"</p>";
 
 	if(sType == u"pin")     // 品名
 	{
@@ -793,6 +1013,32 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 	else if(sType == u"other")    // 附文標題
 	{
 		InOtherHead = false;
+	}
+
+	if(sParentNodeName == u"list")
+	{
+		// 詳細說明參考 list 的規則
+		sHtml += u"</span>";
+	}
+	else
+	{
+		if(DivType[DivCount] == u"pin")          // 品的標題
+			InPinHead = false;
+		else if(DivType[DivCount] == u"w")		// 附文的標題
+			InFuWenHead = false;
+		else if(DivType[DivCount] == u"other")   // 其它的標題
+			InOtherHead = false;
+		else
+			InHead = false;
+
+		sHtml += u"</span>";
+		sHtml += u"</p>";
+	}
+
+	if(sParentNodeName == u"list")
+	{
+		// 詳細說明參考 list 的規則
+		sHtml += u"<ul>";
 	}
 
 	return sHtml;
@@ -1025,51 +1271,209 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 // ---------------------------------------------------------------------------
 // <lb>
 // <lb n="0150b09" ed="T"/>
+// 有二種情況要忽略
+// 1. 卍續藏有二種 lb , ed 不是 "X" 的要忽略 : <lb ed="R150" n="0705a03"/>
+// 2. 印順導師也有二種 lb , type="old" 要忽略 : <lb n="a003a06" ed="Y" type="old"/>
+
 String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 {
-	String sHtml = "";
-	// 處理標記
+	String sHtml = u"";
 
-	// 有二種情況要忽略
-	// 1. 卍續藏有二種 lb , ed 不是 "X" 的要忽略 : <lb ed="R150" n="0705a03"/>
-	// 2. 印順導師也有二種 lb , type="old" 要忽略 : <lb n="a003a06" ed="Y" type="old"/>
+	// 取出屬性
+	String sType = GetAttr(Node, u"type");
+	String sEd = GetAttr(Node, u"ed");
+	String sN = GetAttr(Node, "n");
 
-	if(BookId == u"Y")
+	// 印順導師著作有 type="old" 要忽略
+	if(sType == u"old") return u"";
+
+	// 如果 ed 屬性不是本書, 則忽略, 主要是卍續藏是 X, 但有 ed="Rxxx" 的情況
+	if(sEd != BookId) return u"";
+
+	// 因為換行了, 所以隔行對照一定要輸出, 因為有時還在 <t> 當中. 所以 NextLine->InNextLine要先清除, 例如: T18n0864A.xml
+	// <lb n="0200a22"/><p type="dharani">....<tt><t lang="san-sd">&SD-E040;</t><t lang="chi"><yin><zi>南</zi><sg>引</sg></yin></t></tt><tt><t lang="san-sd">&SD-DA42;</t><t lang="chi">唵<note place="inline">若有祈請所求一切事者
+	// <lb n="0200a23"/>
+	// <lb n="0200a24"/>於此應加孔雀王陀羅尼</note></t></tt><tt><t lang="san-sd">&SD-E0EF;</t><t lang="chi"><yin><zi>部嚕唵</zi><sg>三合</sg></yin></t></tt></p>
+	// <lb n="0200a25"/>
+
+	bool bTmp = NextLine->InNextLine;
+	NextLine->InNextLine = false;
+	NextLine->IsOutput = true;			// 表示所有的隔行對照都可以輸出了
+
+	// 若有隔行對照, 則要將先將上行的印出來
+
+	if(NextLine->ThisLine != u"")
 	{
-		String sType = GetAttr(Node, "type");
-		if(sType == u"old") return "";
+		sHtml += u"<br class=\"lb_br\"/>";	// 原書切行
+		sHtml += NextLine->ThisLine;
+		NextLine->ThisLine = "";
 	}
 
-	String sEd = GetAttr(Node, "ed");
-	if(sEd != BookId) return "";
+	LTagNum = 0;		// 還原 <l> 的數目, 要來判斷要不要折行或空格數目
 
-    LTagNum = 0;		// 還原 <l> 的數目, 要來判斷要不要折行或空格數目
+	// 判斷要不要強迫切行
+	// <lb ed="X" n="0070b01" type="honorific"/><lb ed="R150" n="0706a17"/>御製序文。闡揚宗淨合一之旨。
+	// <lb ed="X" n="0070b02" type="honorific"/><lb ed="R150" n="0706a18"/>高宗純皇帝南巡。親詣雲棲。拈香禮佛。
 
-	sHtml = "<br class=\"lb_br\"/>";
-	String sn = GetAttr(Node, "n");
-	PageLine = sn;
-	LineHead = BookVolnSutra + "p" + PageLine + "║";
-	sHtml += "<a\nname=\"p" + PageLine + "\"></a><span class=\"linehead\">" + LineHead + "</span>";
+	bool bForceCutLine = false;		// 強迫切行
+	if(sType == u"honorific")	bForceCutLine = true;
+
+
+	// 判斷此行是不是空白行
+	bool bNoLineData = false;
+	_di_IXMLNode NextSiblNode = Node->NextSibling();
+	String sNextSiblNodeName = u"";
+	if(NextSiblNode != NULL)
+	{
+		#ifdef _Windows
+			TNodeType nodetype = NextSiblNode->NodeType;
+		#else
+			Xml::Internal::Omnixml::TNodeType nodetype = NextSiblNode->NodeType;
+		#endif
+
+		if(nodetype == 3) // 這是純 data
+		{
+			if(NextSiblNode->Text == u"\n")
+			{
+				// 可能空白行, 往下查是不是 lb 標記
+
+				_di_IXMLNode NextSiblNode2 = NextSiblNode->NextSibling();  // 取得下一層
+
+				if(NextSiblNode2 != NULL)
+				{
+					nodetype = NextSiblNode2->NodeType;
+					if(nodetype == 1) // 這是純 element
+					{
+						String sNextSiblNode2Name = NextSiblNode2->GetNodeName();
+						if(sNextSiblNode2Name == u"lb" || sNextSiblNode2Name == u"pb")
+							bNoLineData = true;
+					}
+				}
+			}
+		}
+		else if(nodetype == 1) // 這是純 element
+		{
+			sNextSiblNodeName = NextSiblNode->GetNodeName();
+			if(sNextSiblNodeName == u"lb" || sNextSiblNodeName == u"pb")
+				bNoLineData = true;
+		}
+	}
+
+	// 原書格式會看到的行首空白
+	String sSpace = MarginLeft + LgMarginLeft + LMarginLeft;
+	{
+		if(InByline)				sSpace += u"　　　　";	// 譯者
+		if(FuWenCount && !bNoLineData)	sSpace += u"　";			// 附文
+		if(InSutraNum)				sSpace += u"　　";		// 經號
+
+		if(InPinHead || InFuWenHead || InOtherHead || InHead)		// 品名, 附文標題, 其它標題
+		{
+			if(DivCount == 0 || DivCount == 1 || DivCount == 4 || DivCount == 7)
+				sSpace += u"　　";
+			else if(DivCount == 2 || DivCount == 5 || DivCount == 8)
+				sSpace += u"　　　";
+			else if(DivCount == 3 || DivCount == 6 || DivCount == 9)
+				sSpace += u"　　　　";
+		}
+
+		// 下一個不是 list 或 item 才要空 item 的空格
+		if(ListCount > 0 && sNextSiblNodeName != u"list" && sNextSiblNodeName != u"item")
+		{
+			sSpace += String::StringOfChar(u'　',ListCount);	// Item 的空格
+		}
+	}
+
+	// 產生行首資訊
+
+	PageLine = sN;
+	LineHead = BookVolnSutra + u"p" + PageLine + u"║";
+	if(PreFormatCount || bForceCutLine) // 強迫指定依原書
+		sHtml += u"<br/>";
+	else
+		sHtml += u"<br class=\"lb_br\"/>";
+	sHtml += u"<a \nname=\"p" + PageLine + "\"></a><span class=\"linehead\">" + LineHead + "</span>";
+
+	// 加入品資料, 引用複製會用到
+	// 待處理: 引用複製在品的位置也要處理 ?????
+
+	if(MuluLabel != u"")
+		sHtml += u"<a pin_name=\"" + MuluLabel + "\"></a>";
+
+	// 印出行首空格
+
+	if(PreFormatCount || bForceCutLine) // 強迫指定依原書就不輸 span 標記
+		sHtml += sSpace;
+	else
+		sHtml += u"<span class=\"line_space\">" + sSpace + u"</span>";
+
+	// 若有隔行對照, 則要將將下一行的印出來
+
+	if(NextLine->NextLine != u"")
+	{
+		sHtml += NextLine->NextLine;
+		NextLine->NextLine = u"";
+	}
+
+	NextLine->InNextLine = bTmp;
+
 	// sHtml += parseChild(Node); // 處理內容
-	// 結束標記
-
-	// 隔行對照待處理 ????
-
-	// 行首空格待處理 ????
-
-    // 目錄品名待處理 ????
 
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
-// 解析 XML 標記
+/*
+<note n="0001002" resp="Taisho" type="orig" place="foot text">〔長安〕－【宋】</note>
+<note n="0001002" resp="CBETA" type="mod">長安【大】，〔－〕【宋】</note>
+<app n="0001002">
+	<lem wit="【大】">長安</lem>
+	<rdg resp="Taisho" wit="【宋】"><space quantity="0"/></rdg>
+</app>
+
+XML 原始標記  : <lem wit="【大】">長安</lem>
+HTML 經文轉成 : 長安
+HTML 校註轉成 : <div type="lem" data-wit="【大】">長安</div>
+
+有原始版的 lem 或 rdg 還要轉出一行, 讓 javascript 好處理
+				<div type="orig">XXX</div>
+
+若選擇原書, lem 的 wit 有【大】(或其他藏經的原書版本), 則呈現 lem 的內容.
+			lem 的 wit 沒有【大】(或其他藏經的原書版本), 則不呈現 lem 的內容, 等 rdg .
+若選擇CBETA 版, 則呈現 lem 的內容, 因為若有 CB 版, 一定在 lem 中.
+
+*/
 String __fastcall CCBXML::tag_lem(_di_IXMLNode Node)
 {
-	String sHtml = "";
-	// 處理標記
-	sHtml += parseChild(Node); // 處理內容
-	// 結束標記
+	String sHtml = u"";
 
+	String sWit = GetAttr(Node, "wit");
+
+	bool bShowLemText = true;
+	bool bLemIsOrig = false;   // 判斷 lem 是否是原始校註
+
+	if(sWit.Pos0(BookVerName) >= 0) bLemIsOrig = true;
+
+	// 選擇原書校註, 但 lem 不是原始校註, 就不呈現文字
+	if(Setting->CollationType == ctOrigCollation)
+		if(bLemIsOrig == false) bShowLemText = false;
+
+	String sLemText = parseChild(Node); // 處理內容
+
+	if(bShowLemText) sHtml += sLemText;
+
+	// 記錄到校註區
+
+	// 有些有 type 屬性要處理 : T18n0848 : <rdg resp="Taisho" wit="【丙】" type="variantRemark">乘</rdg>
+    // ???? (lem , rdg 都要處理, 但大概是呈現全部校註文字的表格才會用上吧)
+
+	String sLemTag = u"";
+	if(bLemIsOrig)
+		// <div type="orig">大正原版</div>
+		sLemTag += u"\t<div type=\"orig\">" + sLemText + u"</div>\n";
+
+	sLemTag += u"\t<div type=\"lem\" data-wit=\"" +
+					sWit + "\">" + sLemText + u"</div>\n";
+
+	HTMLCollation += sLemTag;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -1476,50 +1880,103 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 
 */
 
-	String sHtml = "";
-	String sAttrType = GetAttr(Node, "type");
-	String sId = GetAttr(Node, "n");
-	String sIdNum = "";	// 0001001a 取得 1a
+	String sHtml = u"";
+	String sType = GetAttr(Node, u"type");
+	String sPlace = GetAttr(Node, u"place");
+	String sId = GetAttr(Node, u"n");
+	String sIdNum = u"";	// 0001001a 取得 1a
+
+	// 沒有 Type 的情況
+
+	if(sType == u"")
+	{
+		if(sPlace == u"inline" || sPlace == u"interlinear")
+		{
+			sHtml += u"<span class=\"note\">(" + parseChild(Node) + u")</span>";
+			return sHtml;
+		}
+
+		// 有些連 place 也沒有, 例如 :
+		// <note resp="CBETA.Eva">為配合悉漢對照，故將p727a14中文與p727a15悉曇字前後對調</note>
+
+		if(sPlace == u"")	return u"";
+	}
+
+	// 卍續藏特殊校注
+	// X56n0922 <note n="0104k01" resp="Xuzangjing" place="foot text" type="orig_ke">
+	// 【科01】 → xml：<note n="0001k01" resp=" Xuzangjing " place="foot text" type="orig_ke">
+	// 【標01】 → xml：<note n="0001b01" resp=" Xuzangjing " place="foot text" type="orig_biao">
+	// 【解01】 → xml：<note n="0001j01" resp="Xuzangjing" place="foot text" type="orig_jie">
 
 	// 原書校勘
-	if(sAttrType == u"orig")
+	if(sType.SubString0(0,4) == u"orig")
 	{
-		if(sId == "") ShowMessage ("錯誤 : 校勘沒有 n 屬性");
+		if(sId == u"") ShowMessage (u"錯誤 : 校勘沒有 n 屬性");
 		else sIdNum = NoteId2Num(sId);	// 0001001a 取得 1a
+
+		String sKBJ = u"";  // 科, 標, 解專用
+		WideChar wcKBJ = *(sId.FirstChar()+4);
+		if(wcKBJ == u'k') sKBJ = u"科";
+		else if(wcKBJ == u'b') sKBJ = u"標";
+		else if(wcKBJ == u'j') sKBJ = u"解";
 
 		// <a id="note_orig_0001001" class="note_orig" href="" onclick="return false;">
 
 		// note 要暫存起來, 要同時有 note_orig 和 mod
 		// 等到真的遇到 mod , 再把 class 的 note_mod 移除
 
-		String sTmp = "<a id=\"note_orig_" + sId +
-				 "\" class=\"note_orig note_mod\" href=\"\" onclick=\"return false;\">[" +
-				 sIdNum + "]</a>";
+		String sTmp = u"<a id=\"note_orig_" + sId +
+				 u"\" class=\"note_orig note_mod\" href=\"\" onclick=\"return false;\">[" +
+				 sKBJ + sIdNum + u"]</a>";
 
-		sHtml += "<<tmp_note_orig_" + sId + ">>"; // 先做個記錄
+		sHtml += u"<<tmp_note_orig_" + sId + u">>"; // 先做個記錄
 
 		mOrigNote[sId] = sTmp;
 
 		String sNoteText = parseChild(Node);
 		// <div id="txt_note_orig_0001001">校勘內容</div>
-		HTMLCollation += "<div id=\"txt_note_orig_" + sId + "\">" + sNoteText + "</div>\n";
-
+		HTMLCollation += u"<div id=\"txt_note_orig_" + sId + u"\">" + sNoteText + u"</div>\n";
 	}
-	if(sAttrType == u"mod")
+	else if(sType.SubString0(0,3) == u"mod")
 	{
-		if(sId == "") ShowMessage ("錯誤 : 校勘沒有 n 屬性");
+		if(sId == u"") ShowMessage (u"錯誤 : 校勘沒有 n 屬性");
 		else sIdNum = NoteId2Num(sId);	// 0001001a 取得 1a
 
-		sHtml += "<a id=\"note_mod_" + sId +
-				 "\" class=\"note_mod\" href=\"\" onclick=\"return false;\">[" +
-				 sIdNum + "]</a>";
+		String sKBJ = u"";  // 科, 標, 解專用
+		WideChar wcKBJ = *(sId.FirstChar()+4);
+		if(wcKBJ == u'k') sKBJ = u"科";
+		else if(wcKBJ == u'b') sKBJ = u"標";
+		else if(wcKBJ == u'j') sKBJ = u"解";
+
+		sHtml += u"<a id=\"note_mod_" + sId +
+				 u"\" class=\"note_mod\" href=\"\" onclick=\"return false;\">[" +
+				 sKBJ + sIdNum + u"]</a>";
 		String sNoteText = parseChild(Node);
-		HTMLCollation += "<div id=\"txt_note_mod_" + sId + "\">" + sNoteText + "</div>\n";
+		HTMLCollation += u"<div id=\"txt_note_mod_" + sId + u"\">" + sNoteText + u"</div>\n";
 
 		String sIdNormal = sId.SubString0(0,7); // 取出標準的 ID, 因為有些有 abc...
 
 		ThisNoteHasMod(sIdNormal);  // 通知 note orig , 此校勘有 mod 版
+	}
 
+	// 2016 新增加的版本 <note type="editor" ...
+	else if(sType == u"editor" || sType == u"add")
+	{
+		if(sId == u"") ShowMessage (u"錯誤 : 校勘沒有 n 屬性");
+		else sIdNum = String(Get_Add_IdNum(sId));	// 取得自訂校勘的流水號
+
+		// <a id="note_orig_0001001" class="note_orig" href="" onclick="return false;">
+
+		// note 要暫存起來, 要同時有 note_orig 和 mod
+		// 等到真的遇到 mod , 再把 class 的 note_mod 移除
+
+		String sTmp = u"<a id=\"note_add_A" + sIdNum +
+				 u"\" class=\"note_add\" href=\"\" onclick=\"return false;\">[A" +
+				 sIdNum + u"]</a>";
+
+		String sNoteText = parseChild(Node);
+		// <div id="txt_note_orig_0001001">校勘內容</div>
+		HTMLCollation += u"<div id=\"txt_note_add_" + sIdNum + u"\">" + sNoteText + u"</div>\n";
 	}
 
 	// parseChild(Node); // 處理內容
@@ -1528,16 +1985,208 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 }
 
 // ---------------------------------------------------------------------------
-// 解析 XML 標記
+// 注意 : 原本若 XML P4 的 <p> 有 place="inline" , 則 inline 會加至 "rend" 屬性中,
+//        其他 place 內容會變成 cb:type 屬性. 例如:
+//        P4 <p place="inline"> => P5 <p rend="inline">
+//        P4 <p place="head2"> => P5 <p cb:type="head2">
+
+// 段落 : <p>
+// 咒語 : <p cb:type="dharani">唵緊至囉
+// 比照 head 處理 : <p xml:id="pX82p0160b2201" cb:type="head1">臨濟宗</p>
+// 卍續特殊校注有 X14n0288  <p cb:type="各家會釋" rend="margin-left:1em"> , <p cb:type="訂解總論" ... >
+
 String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 {
+	String sHtml = u"";
+	String sRend = GetAttr(Node, u"rend");
+	String sType = GetAttr(Node, u"cb:type");
+    #ifdef _Windows
+		TNodeType nodetype;
+	#else
+		Xml::Internal::Omnixml::TNodeType nodetype;
+	#endif
 
-	String sHtml = "";
-	sHtml = "<p><span class=\"parahead\">[" + PageLine + "] </span>";
+	String sTextIndentSpace = u"";
+	String sOldMarginLeft = MarginLeft; // 先存起舊的
+	int iMarginLeft = 0;
+	int iTextIndent = 0;
+	bool bHasRend = false;	    // 若有 rend 就不使用預設的空格
+	bool bHasInline = false;    // 有沒有 inline
+	bool bAddSpace = false;		// 要不要加空格, 有 inline 不一定加空格, 若前面有空格就不加
+	bool bHasLg = false;	    // 用來判斷前面是不是 lg, 若是就要空二格了
+	int  iSpecialType = 0;      // 0 : 一般情況 , 1 : cb:type ="各家會釋" , 2 : cb:type="訂解總論"
+
+	// 處理 rend
+	// 檢查移位 <p xml:id="pX78p0420a0401" rend="margin-left:2em">
+	//          <p xml:id="pX78p0802a1901" rend="margin-left:1em;text-indent:-1em">
+	//          <p xml:id="xxxxxxxxxxxxxx" rend="margin-left:1em;text-indent:-1em;inline">
+
+	if(sRend != u"")
+	{
+		bHasRend = true;
+
+		CRendAttr * myRend = new CRendAttr(sRend);
+		iMarginLeft = myRend->MarginLeft;
+		iTextIndent = myRend->TextIndent;
+
+		// 處理 inline
+		if(myRend->IsInline)
+		{
+			bHasInline = true;
+			bAddSpace = true;		// 要不要加空格
+
+			// 新的用法, 若 <p rend="inline"> 前無空格, 則依原書切行時都加上空格, 否則一律不加
+
+			_di_IXMLNode PreSiblNode = Node->PreviousSibling();  	// 取得上一層
+			if(PreSiblNode != NULL)
+			{
+				nodetype = PreSiblNode->NodeType;
+				if(nodetype == 3) // 這是純 data
+				{
+					String sData = PreSiblNode->Text;
+
+					if(*(sData.LastChar()) == u'　')
+						bAddSpace = false;
+				}
+				else if(nodetype == 1) // 這是純 element
+				{
+					if(PreSiblNode->NodeName == u"lg") bHasLg = true;
+				}
+			}
+		}
+	}
+
+	// 處理 cb:type
+	// 這二種不理它 : cb:type="xx" , cb:type="interlinear"
+
+	// 先處理卍續藏可能特有的 cb:type ="各家會釋" or cb:type="訂解總論"
+
+	if(sType != u"")
+	{
+		if(sType == u"各家會釋")	// 行中段落加句點
+		{
+			iSpecialType = 1;		// 0 : 一般情況 , 1 : cb:type ="各家會釋" , 2 : cb:type="訂解總論"
+		}
+		if(sType == u"訂解總論")	// 行中段落加句點
+		{
+			iSpecialType = 2;		// 0 : 一般情況 , 1 : cb:type ="各家會釋" , 2 : cb:type="訂解總論"
+		}
+	}
+
+	// ------------------------------------------------------
+	// 順序 : <p><span...>　(空格) [pxxxxaxx]  字
+	// ------------------------------------------------------
+
+	// 處理 <p....>
+	if(iSpecialType > 0)
+	{
+		// iSpecialType > 0 只會出現在校註
+		sHtml += u"<p style=\"text-indent: ";
+		sHtml += String(iTextIndent);
+		sHtml += u"em; margin-left: ";
+		sHtml += String(iMarginLeft);
+		sHtml += u"em; margin-top: 5px; margin-bottom: 0em;\">";
+
+		if(iSpecialType == 1)
+			sHtml += u"<font color=#800000>";
+		else if(iSpecialType == 2)
+			sHtml += u"<font color=blue>";
+	}
+	else
+	{
+		sHtml += u"<p style=\"text-indent: ";
+		sHtml += String(iTextIndent);
+		sHtml += u"em; margin-left: ";
+		sHtml += String(iMarginLeft);
+		sHtml += u"em\">";
+	}
+
+	// 處理 <span ....> --------------------------------------------------
+
+	if(sType == u"dharani")		// 咒
+	{
+		sHtml += u"<span class=\"dharani\">";
+	}
+	else if(sType == u"pre")	// 依原書格式
+	{
+		PreFormatCount++;	   // 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
+	}
+	else if(sType.SubString0(0,4) == u"head")	// 比照 head 處理
+	{
+		//IsOtherHead = true;
+		// Q1 ==> 空2格
+		// Q2 ==> 空3格
+		// Q3 ==> 空4格
+		// Q4 ==> 空2格
+		// Q5 ==> 空3格
+		// Q6 ==> 空4格
+		// Q7 ==> 空2格
+		// Q8 ==> 空3格
+
+		if(sType == u"head1" || sType == u"head4" || sType == u"head7")
+		{
+			iMarginLeft += 2;
+			bAddSpace = false;
+		}
+		else if(sType == u"head2" || sType == u"head5" || sType == u"head8")
+		{
+			iMarginLeft += 3;
+			bAddSpace = false;
+		}
+		else if(sType == u"head3" || sType == u"head6" || sType == u"head9")
+		{
+			iMarginLeft += 4;
+			bAddSpace = false;
+		}
+
+		sHtml += u"<span class=\"headname\">";
+	}
+
+
+	// 卍續藏校注就不用段首了, 在校勘中也不用(藏外第一經第一卷就有例子)
+	if(iSpecialType == 0)
+	{
+		// 處理空格及段首
+		if(sTextIndentSpace == u"" && bAddSpace)
+		{
+			iTextIndent++;
+			if(bHasLg) iTextIndent++;
+		}
+		MarginLeft += String::StringOfChar(u'　', iMarginLeft);
+		String sSpace = String::StringOfChar(u'　', iMarginLeft + iTextIndent);
+
+		sHtml += u"<span class=\"line_space\">";
+		sHtml += sSpace;
+		sHtml += u"</span>";
+
+		// 處理段首
+		if(sType.SubString0(0,4) != "head")	// 當成 head 就不要加行首資訊了
+		{
+			sHtml += u"<span class=\"parahead\">[" + PageLine + "] </span>";
+		}
+	}
+
+	// -----------------------------------
 	sHtml += parseChild(Node); // 處理內容
-	sHtml += "</p>";
+	// -----------------------------------
 
-    // p 很多內容待處理 ????
+	//sHtml += "</p>";
+
+	MarginLeft = sOldMarginLeft;
+
+
+	if(sType == u"dharani")
+	{
+		sHtml += u"</span>";
+	}
+	else if(sType == u"pre")			// 依原書格式
+	{
+		PreFormatCount--;		// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
+	}
+
+	if(iSpecialType > 0) sHtml += u"</font>";
+	sHtml += u"</p>";
+
 	return sHtml;
 }
 
@@ -1551,6 +2200,97 @@ String __fastcall CCBXML::tag_pb(_di_IXMLNode Node)
 	return sHtml;
 }
 
+// ---------------------------------------------------------------------------
+/*
+<note n="0001002" resp="Taisho" type="orig" place="foot text">〔長安〕－【宋】</note>
+<note n="0001002" resp="CBETA" type="mod">長安【大】，〔－〕【宋】</note>
+<app n="0001002">
+	<lem wit="【大】">長安</lem>
+	<rdg resp="Taisho" wit="【宋】"><space quantity="0"/></rdg>
+</app>
+
+XML 原始標記  : <rdg resp="Taisho" wit="【宋】"><space quantity="0"/></rdg>
+HTML 經文轉成 : (空的, 沒有字)
+HTML 校註轉成 : <div type="rdg" data-wit="【宋】">長安</div>
+
+有原始版的 lem 或 rdg 還要轉出一行, 讓 javascript 好處理
+				<div type="orig">XXX</div>
+
+若選擇原書, rdg 的 wit 有【大】(或其他藏經的原書版本), 則呈現 lem 的內容.
+			rdg 的 wit 沒有【大】(或其他藏經的原書版本), 則不呈現 lem 的內容, 等 rdg .
+若選擇CBETA 版, 則不呈現 rdg 的內容, 因為若有 CB 版, 一定在 lem 中.
+
+*/
+String __fastcall CCBXML::tag_rdg(_di_IXMLNode Node)
+{
+String sHtml = u"";
+
+	String sWit = GetAttr(Node, "wit");
+
+	bool bShowRdgText = false;
+	bool bRdgIsOrig = false;   // 判斷 lem 是否是原始校註
+
+	if(sWit.Pos0(BookVerName) >= 0) bRdgIsOrig = true;
+
+	// 選擇原書校註, 且 rdg 是原始校註, 才呈現文字
+	if(Setting->CollationType == ctOrigCollation)
+		if(bRdgIsOrig == true) bShowRdgText = true;
+
+	String sRdgText = parseChild(Node); // 處理內容
+
+	if(bShowRdgText) sHtml += sRdgText;
+
+	// 記錄到校註區
+
+
+	String sRdgTag = u"";
+	if(bRdgIsOrig)
+		// <div type="orig">大正原版</div>
+		sRdgTag += u"\t<div type=\"orig\">" + sRdgText + u"</div>\n";
+
+	sRdgTag += u"\t<div type=\"rdg\" data-wit=\"" +
+					sWit + "\">" + sRdgText + u"</div>\n";
+
+	HTMLCollation += sRdgTag;
+	return sHtml;
+}
+// ---------------------------------------------------------------------------
+// 南傳經文的巴利藏對照頁數
+// <ref target="#PTS.Vin.3.1"></ref>
+// 呈現 [P.1]
+// 實際上則是 <span class="linehead" title="PTS.Vin.3.1">[P.1]</span>
+
+// 不過在各卷最前面, 可能有一個隱形的標記, 記錄著上一卷最後一個 PTS 頁碼, 這個就不要呈現出來
+// 它的格式是 <ref target="#PTS.Vin.3.109" type="PTS_hide"></ref>
+String __fastcall CCBXML::tag_ref(_di_IXMLNode Node)
+{
+	String sHtml = u"";
+	String sType= GetAttr(Node, u"type");
+	String sTarget= GetAttr(Node, u"target");
+
+	bool bHidePTS = false;  // 判斷是不是隱藏版的 PTS 標記
+	if(sType == u"PTS_hide") bHidePTS = true;
+
+	if(sTarget != u"")
+	{
+		if(sTarget.SubString0(0,4) == u"#PTS")
+		{
+			sTarget.Delete(0,1);
+			String sPage = sTarget;
+			int iPos = sPage.LastDelimiter0(u".");	// 找到最後.的位置
+			sPage.Delete0(0,iPos+1);   // 最後一個數字, 也就是頁碼
+
+			// 隱藏的加要寫? 可能是引用複製要用的吧, 我也忘了....
+			String sMsg = u"<span class=\"pts_head\" title=\"" + sTarget + "\">";
+			if(bHidePTS == false)
+				sMsg += u" [P." + sPage + u"] ";
+			sMsg += u"</span>";
+			sHtml += sMsg;
+		}
+	}
+	sHtml += parseChild(Node); // 處理內容
+	return sHtml;
+}
 // ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_row(_di_IXMLNode Node)
 {
@@ -1594,7 +2334,7 @@ String __fastcall CCBXML::tag_space(_di_IXMLNode Node)
 	else
 	{
 		// 隔行對照時, 沒有字的地方也要秀出空格, 以便與悉曇字對應
-		if(true) // if(NextLineOfTT->InNextLineTT) // ???? 隔行對照待處理
+		if(true) // if(NextLine->InNextLine) // ???? 隔行對照待處理
 			sHtml += u"　";
 		else
 			sHtml += u"";
@@ -1699,51 +2439,6 @@ String __fastcall CCBXML::tag_unclear(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
-String __fastcall CCBXML::tag_rdg(_di_IXMLNode Node)
-{
-	String sHtml = "";
-	//sHtml = parseChild(Node); // 處理內容
-
-	return sHtml;
-}
-// ---------------------------------------------------------------------------
-// 南傳經文的巴利藏對照頁數
-// <ref target="#PTS.Vin.3.1"></ref>
-// 呈現 [P.1]
-// 實際上則是 <span class="linehead" title="PTS.Vin.3.1">[P.1]</span>
-
-// 不過在各卷最前面, 可能有一個隱形的標記, 記錄著上一卷最後一個 PTS 頁碼, 這個就不要呈現出來
-// 它的格式是 <ref target="#PTS.Vin.3.109" type="PTS_hide"></ref>
-String __fastcall CCBXML::tag_ref(_di_IXMLNode Node)
-{
-	String sHtml = u"";
-	String sType= GetAttr(Node, u"type");
-	String sTarget= GetAttr(Node, u"target");
-
-	bool bHidePTS = false;  // 判斷是不是隱藏版的 PTS 標記
-	if(sType == u"PTS_hide") bHidePTS = true;
-
-	if(sTarget != u"")
-	{
-		if(sTarget.SubString0(0,4) == u"#PTS")
-		{
-			sTarget.Delete(0,1);
-			String sPage = sTarget;
-			int iPos = sPage.LastDelimiter0(u".");	// 找到最後.的位置
-			sPage.Delete0(0,iPos+1);   // 最後一個數字, 也就是頁碼
-
-			// 隱藏的加要寫? 可能是引用複製要用的吧, 我也忘了....
-			String sMsg = u"<span class=\"pts_head\" title=\"" + sTarget + "\">";
-			if(bHidePTS == false)
-				sMsg += u" [P." + sPage + u"] ";
-			sMsg += u"</span>";
-			sHtml += sMsg;
-		}
-	}
-	sHtml += parseChild(Node); // 處理內容
-	return sHtml;
-}
-// ---------------------------------------------------------------------------
 // 儲存至 HTML
 void __fastcall CCBXML::SaveToHTML(String sFile)
 {
@@ -1758,11 +2453,12 @@ inline String __fastcall CCBXML::GetAttr(_di_IXMLNode Node, String sAttr)
 	if(Node->HasAttribute(sAttr))
 		return Node->Attributes[sAttr];
 	else
-		return "";
+		return u"";
 
 }
 // ---------------------------------------------------------------------------
 // 把校勘ID 變成校勘數字 0001001 -> 1 , 0001001a -> 1a
+// 科標解的為 0001k01 -> 1
 String __fastcall CCBXML::NoteId2Num(String sId)
 {
 	if(sId == "") return "";
@@ -1772,6 +2468,11 @@ String __fastcall CCBXML::NoteId2Num(String sId)
 	int iStdLen;
 	String::iterator it = sId.begin();
 	it += 4; // 跳過頁碼
+
+	// 處理科標解的校勘
+
+	if(*(it) == u'k' || *(it) == u'b' || *(it) == u'j')
+		it++;
 
 	while(*(it) == '0')
 	{
@@ -2018,9 +2719,9 @@ void __fastcall CCBXML::GetInitialFromFileName()
 
 	if(mycoll.Count != 1)   // 失敗
 	{
-		ShowMessage(L"檔名格式不正確, 無法分析");
+		ShowMessage(u"檔名格式不正確, 無法分析");
 		return;
-    }
+	}
 
 	mygrps = mycoll.Item[0].Groups;
 
@@ -2028,15 +2729,42 @@ void __fastcall CCBXML::GetInitialFromFileName()
 	VolId = mygrps.Item[2].Value;      // 內容是 01
 	SutraId = mygrps.Item[3].Value;		// 內容是 "0001" or "0143a"
 	SutraId_ = SutraId;
-	if(SutraId.Length() == 4) SutraId_ += L"_";
+	if(SutraId.Length() == 4) SutraId_ += u"_";
 	JuanNum = String(mygrps.Item[4].Value).ToInt();		// 第幾卷
-	BookVolnSutra = BookId + VolId + "n" + SutraId_;	// 內容是 T01n0001_
+	BookVolnSutra = BookId + VolId + u"n" + SutraId_;	// 內容是 T01n0001_
 
 	// 由 c://xxx/xxx/xml/T/T01/T01n0001_001.xml
 	// 找出這個主要目錄 c://xxx/xxx/
 
 
-	SerialPath = regex->Replace(XMLFile, "[\\\\/][^\\\\/]+?[\\\\/][^\\\\/]+?[\\\\/][^\\\\/]+?[\\\\/][^\\\\/]+?$", "/");
+	SerialPath = regex->Replace(XMLFile, u"[\\\\/][^\\\\/]+?[\\\\/][^\\\\/]+?[\\\\/][^\\\\/]+?[\\\\/][^\\\\/]+?$", "/");
+
+	// 取得版本, 例如 'T' 的版本是 【大】
+	BookVerName = fmMain->Bookcase->CBETA->BookData->GetVerName(BookId);
+	if(BookVerName == u"")   // 失敗
+	{
+		ShowMessage(u"版本名稱找不到");
+		return;
+	}
+}
+// ---------------------------------------------------------------------------
+// 傳入 note 標記的 id , 傳回流水號, 若沒有就自動 + 1 並傳回
+int __fastcall CCBXML::Get_Add_IdNum(String sId)
+{
+	map<String, int>::iterator it;
+	it = mpNoteAddNum.find(sId);
+	if(it != mpNoteAddNum.end())
+	{
+		// 找到了, 傳回流水號
+		return it->second;
+	}
+	else
+	{
+		// 沒找到, 產生一個
+		NoteAddNum++;
+		mpNoteAddNum[sId] = NoteAddNum;
+		return NoteAddNum;
+    }
 }
 // ---------------------------------------------------------------------------
 

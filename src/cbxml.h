@@ -1,5 +1,4 @@
 // ---------------------------------------------------------------------------
-
 #ifdef _Windows
 #include <Xml.Win.msxmldom.hpp>
 #else
@@ -17,15 +16,14 @@
 #include "subutil.h"
 #include "highlight.h"
 #include "rendattr.h"
+#include "nextline.h"
+#include "main.h"
 #include "System.RegularExpressions.hpp"
 #include "../../Monster/src/monster.h"
-
 
 using namespace std;
 // ---------------------------------------------------------------------------
 // 這是一個讀取導覽文件的物件
-
-
 
 class CCBXML
 {
@@ -39,19 +37,18 @@ private: // User declarations
 
 	_di_IXMLDocument Document;
 
-	String __fastcall MakeHTMLHead(); 	// 先產生 html 的 head
-
 	// --------------------------
 
-	int DivCount;   // Div 的層次
+	String DivType[20];		// 最多 20 層
+	int DivCount;   		// Div 的層次
 
 	bool InByline;  		// 用來判斷是否是作譯者
-		int  InFuWen;			// 用來判斷是否是附文, 因為有巢狀, 所以用 int
-		bool InSutraNum;	   	// 用來判斷本行是否是經號
-		bool InPinHead;			// 用來判斷本行是否是品名
-		bool InFuWenHead;		// 用來判斷本行是否是附文標題
-		bool InOtherHead;		// 用來判斷本行是否是其它標題
-		bool InHead;			// 用來判斷本行是否是標題
+	int  FuWenCount;			// 用來判斷是否是附文, 因為有巢狀, 所以用 int
+	bool InSutraNum;	   	// 用來判斷本行是否是經號
+	bool InPinHead;			// 用來判斷本行是否是品名
+	bool InFuWenHead;		// 用來判斷本行是否是附文標題
+	bool InOtherHead;		// 用來判斷本行是否是其它標題
+	bool InHead;			// 用來判斷本行是否是標題
 	int  NoNormal;         // 用來判斷是否可用通用字 , 大於 0 就不用通用字, 這二種就不用通用字 <text rend="no_nor"> 及 <term rend="no_nor">
 
 	// 偈頌相關
@@ -65,7 +62,7 @@ private: // User declarations
 	String LMarginLeft;	    // L的空格
 
 		bool InTTNormal;		// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 , T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
-			int  PreFormatCount;	// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
+	int  PreFormatCount;	// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
 	String MarginLeft;		// 移位
 		String NormalWords; 	// 通用詞處理法, 若是 orig , 就是呈現 <orig> 中的字, 若是 "reg" 就是呈現 <reg> 中的字, 這是在 choice 標記中判斷
 
@@ -82,11 +79,15 @@ private: // User declarations
     bool InMulu;			// 在 <cb:mulu>...</cb:mulu> 的範圍內, 文字則不呈現,
 	bool InMuluPin;			// 在 <cb:mulu>...</cb:mulu> 的範圍內, 而且是 "品" , 則文字不呈現, 但要記錄至 MuluLabel
 
+	int NoteAddNum;     // 自訂校註 <note type="add" 的流水號, 由 1 開始
+	map<String, int> mpNoteAddNum;  // 由 id 找出 流水號, 沒有就設定一個
+
 	// --------------------------
 
-
+	CNextLine * NextLine;		// 用來處理隔行 <tt> 的物件
 
 	// --------------------------
+
 
 	// 處理標記
 	String __fastcall tag_anchor(_di_IXMLNode Node);
@@ -130,11 +131,16 @@ private: // User declarations
 	String __fastcall ParseNode(_di_IXMLNode Node); // 解析 XML Node
 	String __fastcall parseChild(_di_IXMLNode Node); // 解析 XML Child
 
+	String __fastcall MakeHTMLHead(); 	// 先產生 html 的 head
+
 	// 通知 note orig , 此校勘有 mod 版
 	// 就會把 orig note 中 class 的 note_mod 移除
 	void __fastcall ThisNoteHasMod(String sIdNormal);
 	// 原本的 orig 校勘還沒加入, 此時才要加入
 	String __fastcall AddOrigNote(String HTMLText);
+
+	// 傳入 note 標記的 id , 傳回流水號, 若沒有就自動 + 1 並傳回
+	int __fastcall Get_Add_IdNum(String sId);
 
 public: // User declarations
 
@@ -172,7 +178,9 @@ public: // User declarations
 
 	bool ShowHighlight; 	// 是否塗色
 
-    String SerialPath;      // 主要目錄, 要找圖檔位置用的
+	String BookVerName;     // 例如大正藏是 【大】,這是要由其他資料找出來的
+
+	String SerialPath;      // 主要目錄, 要找圖檔位置用的
 
 	void __fastcall GetInitialFromFileName();   // 由經名取得一切相關資訊
 

@@ -7,7 +7,7 @@
 #include <fmx.h>
 #include <System.IniFiles.hpp>
 // ---------------------------------------------------------------------------
-enum ctCollationType {ctNoCollation, ctOrigCollation, ctCBETACollation};
+enum ctCollationType {ctOrigCollation, ctCBETACollation};
 class CSetting
 {
 private: // User declarations
@@ -27,7 +27,7 @@ public: // User declarations
 	bool ShowLineHead;		// 是否行首加上行首資訊
     int  CorrSelect;		// 修訂選擇 0:修訂用字, 1:二者皆要 [底本>修訂], 2:底本用字
     int ShowCorrWarning;    // 是否要秀出修訂選擇的注意事項, 預設是 0
-    bool ShowJKData;		// 顯示校勘資料
+    bool ShowCollation;		// 顯示校勘資料
 	int  CopyMode;			// 1. 有校勘, 經名在前. 2.有校勘, 經名在後. 3. 無校勘, 經名在前. 4.無校勘, 經名在後.
     bool CBCopyWithJuanNum; // 引用複製是否呈現卷數
 
@@ -38,7 +38,7 @@ public: // User declarations
 
 	// 校勘格式
 
-	ctCollationType CollationType;      // 校勘格式 0:無, 1:原書, 2:CBETA
+	ctCollationType CollationType;      // 校勘格式 0:原書, 1:CBETA
 
 	// 經文呈現的顏色, 背景
 

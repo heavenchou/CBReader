@@ -87,8 +87,8 @@
           Size.Height = 585.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          Viewport.Width = 205.000000000000000000
-          Viewport.Height = 581.000000000000000000
+          Viewport.Width = 209.000000000000000000
+          Viewport.Height = 585.000000000000000000
         end
       end
     end
@@ -136,8 +136,8 @@
           Size.Height = 543.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          Viewport.Width = 237.000000000000000000
-          Viewport.Height = 539.000000000000000000
+          Viewport.Width = 241.000000000000000000
+          Viewport.Height = 543.000000000000000000
         end
         object Panel8: TPanel
           Align = Top
@@ -295,7 +295,7 @@
             Position.X = 16.000000000000000000
             Position.Y = 8.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
@@ -355,8 +355,8 @@
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 237.000000000000000000
-          Viewport.Height = 389.000000000000000000
+          Viewport.Width = 241.000000000000000000
+          Viewport.Height = 414.000000000000000000
           object StringColumn1: TStringColumn
             Header = #32147#21517
             Size.Width = 130.000000000000000000
@@ -409,7 +409,7 @@
             Position.X = 16.000000000000000000
             Position.Y = 16.000000000000000000
             Size.Width = 89.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#21367#32080#27083
@@ -420,7 +420,7 @@
             Position.X = 16.000000000000000000
             Position.Y = 48.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
@@ -431,7 +431,7 @@
             Position.X = 16.000000000000000000
             Position.Y = 80.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#34399
@@ -442,7 +442,7 @@
             Position.X = 16.000000000000000000
             Position.Y = 112.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21367#25976
@@ -453,7 +453,7 @@
             Position.X = 128.000000000000000000
             Position.Y = 80.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #38913#25976
@@ -464,7 +464,7 @@
             Position.X = 128.000000000000000000
             Position.Y = 112.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #27396
@@ -475,7 +475,7 @@
             Position.X = 128.000000000000000000
             Position.Y = 144.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34892#25976
@@ -486,7 +486,7 @@
             Position.X = 16.000000000000000000
             Position.Y = 192.000000000000000000
             Size.Width = 89.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #26360#26412#32080#27083
@@ -497,7 +497,7 @@
             Position.X = 16.000000000000000000
             Position.Y = 224.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
@@ -508,7 +508,7 @@
             Position.X = 16.000000000000000000
             Position.Y = 256.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #20874#25976
@@ -519,7 +519,7 @@
             Position.X = 16.000000000000000000
             Position.Y = 288.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #38913#25976
@@ -530,7 +530,7 @@
             Position.X = 128.000000000000000000
             Position.Y = 256.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #27396
@@ -541,7 +541,7 @@
             Position.X = 128.000000000000000000
             Position.Y = 288.000000000000000000
             Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34892#25976
@@ -552,7 +552,7 @@
             Position.X = 16.000000000000000000
             Position.Y = 352.000000000000000000
             Size.Width = 185.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Height = 18.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21069#24448#25351#23450#32147#25991
@@ -806,8 +806,8 @@
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
-          Viewport.Width = 237.000000000000000000
-          Viewport.Height = 446.000000000000000000
+          Viewport.Width = 241.000000000000000000
+          Viewport.Height = 471.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000
@@ -969,7 +969,7 @@
           00000000000000B906400B53697A652E48656967687405000000000000008003
           401453697A652E506C6174666F726D44656661756C7408045465787406045465
           7874165465787453657474696E67732E466F6E742E53697A6505000000000000
-          00800340000000}
+          00E00240000000}
       end>
     Left = 896
     Top = 8
