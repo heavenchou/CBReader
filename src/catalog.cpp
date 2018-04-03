@@ -51,7 +51,7 @@ void __fastcall CCatalog::LoadCatalog(String sFile)
 		return;
 	}
 
-	slCatalog->LoadFromFile(sFile);
+	slCatalog->LoadFromFile(sFile,TEncoding::UTF8);
 
 	for(int i=0; i<slCatalog->Count; i++)
 	{

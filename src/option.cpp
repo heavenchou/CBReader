@@ -32,9 +32,9 @@ void __fastcall TfmOption::LoadFromSetting()
 
 	cbVerticalMode->IsChecked = Setting->VerticalMode;
 
+	cbShowCollation->IsChecked = Setting->ShowCollation;
 	// 校勘格式
-	if(Setting->CollationType == ctNoCollation) rbNoCollation->IsChecked = true;
-	else if(Setting->CollationType == ctOrigCollation) rbOrigCollation->IsChecked = true;
+	if(Setting->CollationType == ctOrigCollation) rbOrigCollation->IsChecked = true;
 	else if(Setting->CollationType == ctCBETACollation) rbCBETACollation->IsChecked = true;
 
 	/*
@@ -225,10 +225,9 @@ void __fastcall TfmOption::SaveToSetting()
 	Setting->NoShowLgPunc = cbNoShowLgPunc->IsChecked;
 
 	Setting->VerticalMode = cbVerticalMode->IsChecked;
-
+	cbShowCollation->IsChecked = Setting->ShowCollation;
 	// 校勘格式
-	if(rbNoCollation->IsChecked) Setting->CollationType = ctNoCollation;
-	else if(rbOrigCollation->IsChecked) Setting->CollationType = ctOrigCollation;
+	if(rbOrigCollation->IsChecked) Setting->CollationType = ctOrigCollation;
 	else if(rbCBETACollation->IsChecked) Setting->CollationType = ctCBETACollation;
 
     /*

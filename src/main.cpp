@@ -39,7 +39,13 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	// 載入書櫃
 
 	Bookcase = new CBookcase();
-	Bookcase->LoadBookcase(MyFullPath + Setting->BookcaseDir);
+	String sBookcasePath = MyFullPath + Setting->BookcaseDir;
+	if(!TDirectory::Exists(sBookcasePath))
+	{
+        // 使用指定目錄 ???? 該改為使用者指定目錄才好
+		sBookcasePath = u"d:\\Dropbox\\CBReader2X\\Bookcase";
+	}
+	Bookcase->LoadBookcase(sBookcasePath);
 
 	// 在書櫃選擇叢書
 	int iBookcaseCount = Bookcase->Count();
@@ -389,7 +395,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 
 	// 產生目錄
 
-	String sMulu = StringReplace(sFile, "XML", "Toc", TReplaceFlags() << rfReplaceAll);
+	String sMulu = StringReplace(sFile, "XML", "toc", TReplaceFlags() << rfReplaceAll);
 	int iLen = sMulu.Length();
 	sMulu = sMulu.SubString0(0,iLen-8); // 扣掉最後的 _001.xml
 
