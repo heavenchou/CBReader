@@ -55,7 +55,7 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	InFuWenHead = false;	// 用來判斷本行是否是附文標題
 	InOtherHead = false;	// 用來判斷本行是否是其它標題
 	InHead = false;			// 用來判斷本行是否是標題
-		InTTNormal = false;		// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 , T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
+	InTTNormal = false;		// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 , T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
 	PreFormatCount = 0;		// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
 	NoNormal = 0;          // 用來判斷是否可用通用字 , 大於 0 就不用通用字, 這二種就不用通用字 <text rend="no_nor"> 及 <term rend="no_nor">
 
@@ -66,9 +66,6 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	InMulu = false;         // 判斷是不是在 <cb:mulu> 之中.
 	InMuluPin = false;      // 判斷是不是在 <cb:mulu> 之中, 且是 "品" 目錄.
 	NoteAddNum = 0;     // 自訂校註 <note type="add" 的流水號, 由 1 開始
-
-
-
 
 	NextLine = new CNextLine;		// 用來處理隔行 <tt> 的物件
 
@@ -173,7 +170,8 @@ String __fastcall CCBXML::MakeHTMLHead()
 				  // 原書
 		sHtml += u"		div {display:inline;}\n"
 				  "		p {display:inline;}\n"
-				  "		br.lg_br {display:none;}\n"
+                  "		br.lb_br {display:inline;}\n"
+				  "		br.para_br {display:none;}\n"
 				  "     table {display: inline;}\n"
 				  "     tr {display: inline;}\n"
 				  "     td {display: inline;}\n"
@@ -190,7 +188,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 		sHtml += u"		div {display:block;}\n"
 				  "		p {display:block;}\n"
 				  "		br.lb_br {display:none;}\n"
-				  "		br.lg_br {display:inline;}\n"
+				  "		br.para_br {display:inline;}\n"
 				  "     table {display: table;}\n"
 				  "     tr {display: table-row;}\n"
 				  "     td {display: table-cell;}\n"
@@ -225,15 +223,21 @@ String __fastcall CCBXML::MakeHTMLHead()
 	if(Setting->ShowCollation == false)
 		sHtml += u"		.note_orig {display:none;}\n"
 				  "		.note_mod {display:none;}\n"
-				  "		.note_star {display:none;}\n";
+				  "		.note_add {display:none;}\n"
+				  "		.note_star {display:none;}\n"
+				  "		.note_star_removed {display:none;}\n";
 	else if(Setting->CollationType == ctOrigCollation)
 		sHtml += u"		.note_mod {display:none;}\n"
 				  "		.note_orig {display:inline;}\n"
-				  "		.note_star {display:inline;}\n";
+				  "		.note_add {display:none;}\n"
+				  "		.note_star {display:inline;}\n"
+				  "		.note_star_removed {display:inline;}\n";
 	else if(Setting->CollationType == ctCBETACollation)
 		sHtml += u"		.note_orig {display:none;}\n"
 				  "		.note_mod {display:inline;}\n"
-				  "		.note_star {display:inline;}\n";
+				  "		.note_add {display:inline;}\n"
+				  "		.note_star {display:inline;}\n"
+				  "		.note_star_removed {display:none;}\n";
 
 	sHtml += u"	</style>\n"
 	"</head>\n"
@@ -330,6 +334,7 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 		else if (sTagName == u"term")		sHtml = tag_term(Node);
 		else if (sTagName == u"text")		sHtml = tag_term(Node); // text 和 term 處理法相同
 		else if (sTagName == u"trailer")	sHtml = tag_trailer(Node);
+		else if (sTagName == u"cb:tt")		sHtml = tag_tt(Node);
 		else if (sTagName == u"unclear")	sHtml = tag_unclear(Node);
 		else                      			sHtml = tag_default(Node);
 	}
@@ -428,26 +433,67 @@ String __fastcall CCBXML::tag_anchor(_di_IXMLNode Node)
 	<rdg resp="Taisho" wit="【宋】"><space quantity="0"/></rdg>
 </app>
 
-標準校註 :
+【標準校註】
 XML 原始標記  : <app n="0001002">
 HTML 經文轉成 : <span id="note_app_0001002" class="note_app">
 HTML 校註轉成 : <div id="txt_note_app_0001002"> ... </div>
 
-CBETA 自訂校註 :
+【CBETA 自訂校註】
 XML 原始標記  : <app n="0001b0201">
 HTML 經文轉成 : <span id="note_app_A1" class="note_app">
 HTML 校註轉成 : <div id="txt_note_app_A1"> ... </div>
 
-*/
+【星號】
+XML 原始標記  :
+<app type="star" corresp="#0001004">
+	<lem wit="【大】">辨</lem>
+	<rdg resp="Taisho" wit="【宋】">辯</rdg>
+</app>
 
+HTML 經文轉成 :
+<a id="note_star_0001004-1" class="note_star" href="" onclick="return false;">[＊]</a>
+<span id="note_app_0001004-1" class="note_app">....</span>
+
+HTML 校註轉成 :
+<div id="txt_note_app_0001004-1">
+	<div type="orig">辨</div>
+	<div type="lem" data-wit="【大】">辨</div>
+	<div type="rdg" data-wit="【宋】">辯</div>
+</div>
+
+【移除的星號】
+
+XML 原始標記  : T01n0001_003.xml
+<note n="0021b2101" resp="CBETA" type="add">琉璃【CB】【麗-CB】，瑠璃【大】，流離【聖】</note>
+<app type="star_removed" corresp="#0021019">
+	<lem resp="CBETA.say" wit="【CB】【麗-CB】">琉璃...</lem>
+	<rdg wit="【大】">瑠璃</rdg>
+	<rdg resp="Taisho" wit="【聖】">流離</rdg>
+</app>
+
+HTML 經文轉成 :
+<a id="note_add_A1" class="note_add" href="" onclick="return false;">[A1]</a>
+<a id="note_star_0021019-1" class="note_star_removed" href="" onclick="return false;">[＊]</a>
+<span id="note_app_0021019-1" class="note_app">琉璃</span>
+
+HTML 校註轉成 :
+<div id="txt_note_add_A1">琉璃【CB】【麗-CB】，瑠璃【大】，流離【聖】</div>
+<div id="txt_note_app_0021019-1">
+	<div type="orig">【大正為趣】</div>
+	<div type="lem" data-wit="【CB】">【CB為越】</span></div>
+	<div type="rdg" data-wit="【大】">趣</div>
+	<div type="rdg" data-wit="【宋】【元】【明】">越</div>
+</div>
+*/
 
 String __fastcall CCBXML::tag_app(_di_IXMLNode Node)
 {
 	String sHtml = "";
 
 	String sId = GetAttr(Node, u"n");
+	String sType = GetAttr(Node, u"type");
 
-	if(mpNoteAddNum.count(sId)>0)
+	if(sId != u"" && mpNoteAddNum.count(sId)>0)
 	{
 		// 表示是 <note type="add"> 的 CBETA 自訂 <app>
 		// 取回流水號, 把 Id 改成 Axx
@@ -455,16 +501,63 @@ String __fastcall CCBXML::tag_app(_di_IXMLNode Node)
 		sId = u"A" + sIdNum;
 	}
 
-	// 這裡要注意順序
-	// 1. 先處理校註區的 <div id="txt_note_app_xxxx">
-	// 2. 進行 parseChild , 這裡面會處理校註區 lem ,rdg 的內容
-	// 3. 再加上校註區的 </div> ,
+	if(sType == u"star")
+	{
+		// 星號
 
-	HTMLCollation += u"<div id=\"txt_note_app_" + sId + "\">\n";
-	sHtml += u"<span id=\"note_app_" + sId + "\" class=\"note_app\">"
-			 + parseChild(Node) // 處理內容
-			 + u"</span>";
-	HTMLCollation += u"</div>\n";
+		String sId = GetAttr(Node, u"corresp");
+		sId.Delete0(0,1);   // remove '#'
+		int iStar = 1;
+		if(mpNoteStarNum.count(sId)>0)
+			iStar =  mpNoteStarNum[sId] + 1;    // 星號加 1
+		else
+			iStar =  1; 	// 第一個星號
+		mpNoteStarNum[sId] = iStar;
+		sId += u"-" + String(iStar);
+
+		HTMLCollation += u"<div id=\"txt_note_app_" + sId + "\">\n";
+		sHtml += u"<a id=\"note_star_" + sId + "\" class=\"note_star\" "
+				  "href=\"\" onclick=\"return false;\">[＊]</a>\n";
+		sHtml += u"<span id=\"note_app_" + sId + "\" class=\"note_app\">"
+				 + parseChild(Node) // 處理內容
+				 + u"</span>";
+		HTMLCollation += u"</div>\n";
+	}
+	else if(sType == u"star_removed")
+	{
+		// 移除的星號
+
+		String sId = GetAttr(Node, u"corresp");
+		sId.Delete0(0,1);   // remove '#'
+		int iStar = 1;
+		if(mpNoteStarNum.count(sId)>0)
+			iStar =  mpNoteStarNum[sId] + 1;    // 星號加 1
+		else
+			iStar =  1; 	// 第一個星號
+		mpNoteStarNum[sId] = iStar;
+		sId += u"-" + String(iStar);
+
+		HTMLCollation += u"<div id=\"txt_note_app_" + sId + "\">\n";
+		sHtml += u"<a id=\"note_star_" + sId + "\" class=\"note_star_removed\" "
+				  "href=\"\" onclick=\"return false;\">[＊]</a>\n";
+		sHtml += u"<span id=\"note_app_" + sId + "\" class=\"note_app\">"
+			  + parseChild(Node) // 處理內容
+			  + u"</span>";
+		HTMLCollation += u"</div>\n";
+	}
+	else
+	{
+    	// 這裡要注意順序
+		// 1. 先處理校註區的 <div id="txt_note_app_xxxx">
+		// 2. 進行 parseChild , 這裡面會處理校註區 lem ,rdg 的內容
+		// 3. 再加上校註區的 </div>
+
+		HTMLCollation += u"<div id=\"txt_note_app_" + sId + "\">\n";
+		sHtml += u"<span id=\"note_app_" + sId + "\" class=\"note_app\">"
+				 + parseChild(Node) // 處理內容
+				 + u"</span>";
+		HTMLCollation += u"</div>\n";
+	}
 
 	return sHtml;
 }
@@ -1250,7 +1343,7 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 				// 目前的新規則, 只要是不依原書, 非標準偈頌, 且有設定 Setting->LgType = 1 , 就不折行. 不過這只限在 GA 及 GB, 因為舊的經文還是折行較好
 				if(!(LgNormal == false && (BookId == u"GA" || BookId == u"GB")))
 				{
-					sHtml += u"<br class=\"lg_br\"/>";	// 偈頌折行 , 待測試 ????
+					sHtml += u"<br class=\"para_br\"/>";	// 偈頌折行 , 待測試 ????
 				}
 				sHtml += LgMarginLeft;
 			}
@@ -1304,7 +1397,7 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 
 	if(NextLine->ThisLine != u"")
 	{
-		sHtml += u"<br class=\"lb_br\"/>";	// 原書切行
+		sHtml += u"<br class=\"para_br\"/>";	// 原書切行
 		sHtml += NextLine->ThisLine;
 		NextLine->ThisLine = "";
 	}
@@ -1388,6 +1481,8 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 	PageLine = sN;
 	LineHead = BookVolnSutra + u"p" + PageLine + u"║";
 	if(PreFormatCount || bForceCutLine) // 強迫指定依原書
+		sHtml += u"<br/>";
+	else if (NextLine->NextLine != u"") // 隔行對照, 所以要 <br>
 		sHtml += u"<br/>";
 	else
 		sHtml += u"<br class=\"lb_br\"/>";
@@ -1739,7 +1834,7 @@ String __fastcall CCBXML::tag_list(_di_IXMLNode Node)
 			// <lb ed="X" n="0575a04"/><div1 type="other"><mulu type="其他" level="1" label="希叟和尚正宗贊目錄"/><head>希叟和尚正宗贊目錄</head>
 			// <lb ed="X" n="0575a05"/>
 			// <lb ed="X" n="0575a06"/><list><head>卷第一</head>
-			if(ListCount == 1) sHtml += u"<br><br>";     // 第一層才要
+			if(ListCount == 1) sHtml += u"<br/><br/>";     // 第一層才要
 		}
 	}
 
@@ -1970,13 +2065,13 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 		// note 要暫存起來, 要同時有 note_orig 和 mod
 		// 等到真的遇到 mod , 再把 class 的 note_mod 移除
 
-		String sTmp = u"<a id=\"note_add_A" + sIdNum +
+		sHtml += u"<a id=\"note_add_A" + sIdNum +
 				 u"\" class=\"note_add\" href=\"\" onclick=\"return false;\">[A" +
 				 sIdNum + u"]</a>";
 
 		String sNoteText = parseChild(Node);
 		// <div id="txt_note_orig_0001001">校勘內容</div>
-		HTMLCollation += u"<div id=\"txt_note_add_" + sIdNum + u"\">" + sNoteText + u"</div>\n";
+		HTMLCollation += u"<div id=\"txt_note_add_A" + sIdNum + u"\">" + sNoteText + u"</div>\n";
 	}
 
 	// parseChild(Node); // 處理內容
@@ -2344,15 +2439,63 @@ String __fastcall CCBXML::tag_space(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
+// 在校勘的巴利文不要印出來 <cb:t lang="pli" resp="Taisho" place="foot">S&amacron;vatth&imacron;.</cb:t>
+// <cb:tt type="tr"><cb:t lang="chi">&lac;</cb:t><cb:t lang="san-sd">&SD-A5A9;</cb:t></cb:tt><cb:tt type="tr"><cb:t lang="chi">&lac;</cb:t><cb:t lang="san-sd">&SD-A5F0;</cb:t></cb:tt><cb:tt type="tr"><cb:t lang="chi">如</cb:t><cb:t lang="san-sd">&SD-CFCF;</cb:t></cb:tt>
+// <cb:tt><cb:t lang="san-sd">&SD-A5A9;</cb:t><cb:t lang="chi">曩</cb:t></cb:tt>
+
+/* 2014 年的類型
+<cb:t cert="?" resp="#respx" xml:lang="pi" place="foot">
+<cb:t cert="?" resp="#respx" xml:lang="sa" place="foot">
+<cb:t resp="#respx" xml:lang="pi" place="foot">
+<cb:t resp="#respx" xml:lang="sa" place="foot">
+<cb:t resp="#respx" xml:lang="x-unknown" place="foot">
+<cb:t resp="#respx" xml:lang="zh" place="foot">
+<cb:t resp="#respx" xml:lang="zh">
+<cb:t xml:lang="sa-Sidd" rend="margin-left:1em">
+<cb:t xml:lang="sa-Sidd">
+<cb:t xml:lang="sa-x-rj">
+<cb:t xml:lang="zh">
+<cb:t xml:lang="zh-x-yy" rend="margin-left:1em">
+*/
 String __fastcall CCBXML::tag_t(_di_IXMLNode Node)
 {
-	String sHtml = "";
-	String sAttrPlace = GetAttr(Node, "place");
-	if(sAttrPlace == u"foot") return "";
+	String sHtml = u"";
+	String sPlace = GetAttr(Node, u"place");
+	String sRend = GetAttr(Node, u"rend");
+	if(sPlace == u"foot") return u"";
 
-	sHtml = parseChild(Node); // 處理內容
+	// 如果是隔行對照, 就要累加 <t> 的計數器
+	if(NextLine->InNextLine)	NextLine->TCount = NextLine->TCount+1;
 
-	return sHtml;
+	if(sRend != u"")
+	{
+		CRendAttr * myRend = new CRendAttr(sRend);
+		int iMarginLeft = myRend->MarginLeft;
+
+		MarginLeft += String::StringOfChar(u'　',iMarginLeft);
+		sHtml += MarginLeft;
+
+	}
+	// "<add_sp>" 是故意的, 在 TmyNextLineOfTT 物件處理
+	else if(NextLine->InNextLine)
+		// 在隔行對照時, 除非 rend = "" , 否則一律加上全型空格
+		sHtml += u"<add_sp>";
+
+	if(InTTNormal)
+	{
+		sHtml += u"<br class=\"para_br\"/>";
+	}
+
+	sHtml += parseChild(Node); // 處理內容
+
+    // 判斷是不是在隔行對照
+	if(NextLine->InNextLine || !NextLine->IsOutput)
+	{
+		NextLine->Add(sHtml);
+		return u"";
+	}
+	else
+		return sHtml;
 }
 // ---------------------------------------------------------------------------
 // 表格的處理
@@ -2402,6 +2545,113 @@ String __fastcall CCBXML::tag_trailer(_di_IXMLNode Node)
 	sHtml = u"<p>";
 	sHtml += parseChild(Node); // 處理內容
     sHtml += u"</p>";
+	return sHtml;
+}
+// ---------------------------------------------------------------------------
+/* 處理 tt
+
+	校勘產生的 tt		# <cb:tt type="app">	: 在 back 區中校勘中 <app> 裡面的 tt
+    					# <cb:tt type="app" from="#begxxxxxx" to="#endxxxxxx"> : 在 back 區獨立出來的
+    					# <cb:tt word-count="xx" type="app" from="#begxxxxxx" to="#endxxxxxx">
+
+	同一行的 tt						# <cb:tt rend="inline">
+	已經自動將漢字和悉曇分開的 tt	# <cb:tt rend="normal">
+
+	這是要隔行對照的 tt 			# <cb:tt>
+	這是要隔行對照的 tt 			# <cb:tt type="tr"> : 只出現在 T20n1168B
+
+
+P5 校勘有點複雜, 尤其是有 <tt> 的
+底下有三種, 一種是純粹 tt 的.
+第二種是 back 區中的 tt 中還有 app , 但 app 中則無 tt , 這是因為在 P4 及 P5a 是 tt 包 app
+第三種是 back 區中的 app 中還有 tt , 但 tt 中則無 app , 這是因為在 P4 及 p5a 是 app 包 tt
+我想不管是哪一種, 原則上應該是只去找 app 中的 xml:id , back 中的 tt 就不管了.
+除非是 app 中還有 tt , 則只要處理 tt 中 t 不是 place=foot 的部份
+
+T01n0001.xml
+
+<anchor xml:id="nkr_note_orig_0011012" n="0011012"/>
+<anchor xml:id="beg0011012" n="0011012"/>禹舍
+<anchor xml:id="end0011012"/>
+
+<note n="0011012" resp="#resp1" type="orig" place="foot text" target="#nkr_note_orig_0011012">禹舍～Vassak?ra.</note>
+<cb:tt type="app" from="#beg0011012" to="#end0011012">
+	<cb:t resp="#resp1" xml:lang="zh">禹舍</cb:t>
+	<cb:t resp="#resp1" xml:lang="pi" place="foot">Vassak?ra.</cb:t>
+</cb:tt>
+
+========================
+
+T01n0001.xml
+
+<anchor xml:id="nkr_note_orig_0039004" n="0039004"/>
+<anchor xml:id="nkr_note_mod_0039004" n="0039004"/>
+<anchor xml:id="beg0039004" n="0039004"/>摩羅醯搜
+<anchor xml:id="end0039004"/>
+
+<note n="0039004" resp="#resp1" type="orig" place="foot text" target="#nkr_note_orig_0039004">摩羅醯搜＝摩醯樓【宋】，摩羅醯樓【元】【明】～M?tul?.</note>
+<note n="0039004" resp="#resp2" type="mod" target="#nkr_note_mod_0039004">摩羅醯搜～M?tul?.，＝摩醯樓【宋】，＝摩羅醯樓【元】【明】</note>
+
+<app from="#beg0039004" to="#end0039004">
+	<lem wit="#wit1">摩羅醯搜</lem>
+	<rdg resp="#resp1" wit="#wit2">摩醯樓</rdg>
+	<rdg resp="#resp1" wit="#wit3 #wit4">摩羅醯樓</rdg></app>
+
+<cb:tt type="app" from="#beg0039004" to="#end0039004">
+	<cb:t resp="#resp1" xml:lang="zh">
+		<app n="0039004">
+			<lem wit="#wit1">摩羅醯搜</lem>
+			<rdg resp="#resp1" wit="#wit2">摩醯樓</rdg>
+			<rdg resp="#resp1" wit="#wit3 #wit4">摩羅醯樓</rdg></app></cb:t>
+	<cb:t resp="#resp1" xml:lang="pi" place="foot">M?tul?.</cb:t>
+</cb:tt>
+
+======================
+
+T01n0026.xml
+
+<anchor xml:id="nkr_note_orig_0680020" n="0680020"/>
+<anchor xml:id="nkr_note_mod_0680020" n="0680020"/>
+<anchor xml:id="beg0680020" n="0680020"/>婆羅婆
+<anchor xml:id="end0680020"/>
+
+<note n="0680020" resp="#resp1" type="orig" place="foot text" target="#nkr_note_orig_0680020">～Bh?radv?ja. 婆＝娑【聖】</note>
+<note n="0680020" resp="#resp2" type="mod" target="#nkr_note_mod_0680020"><choice><corr>婆羅婆</corr><sic><space quantity="0"/></sic></choice>～Bh?radv?ja.，婆＝娑【聖】</note>
+
+<app from="#beg0680020" to="#end0680020">
+	<lem wit="#wit1">
+		<cb:tt type="app">
+			<cb:t resp="#resp2" xml:lang="zh">婆羅婆</cb:t>
+			<cb:t resp="#resp1" xml:lang="pi" place="foot">Bh?radv?ja.</cb:t></cb:tt></lem>
+<rdg resp="#resp1" wit="#wit12">娑羅婆</rdg></app>
+
+<cb:tt type="app" from="#beg0680020" to="#end0680020">
+	<cb:t resp="#resp2" xml:lang="zh">婆羅婆</cb:t>
+	<cb:t resp="#resp1" xml:lang="pi" place="foot">Bh?radv?ja.</cb:t>
+</cb:tt>
+
+*/
+String __fastcall CCBXML::tag_tt(_di_IXMLNode Node)
+{
+	String sHtml = u"";
+	String sRend = GetAttr(Node, u"rend");
+	String sType = GetAttr(Node, u"type");
+	String sPlace = GetAttr(Node, u"place");
+
+	if((sRend == u"" && sType == u"") || (sRend == u"" && sType == u"tr"))
+		NextLine->FindNextLine();	// 這是隔行對照
+
+    // 在 <cb:tt rend="normal"> 中, 這時每一個 <t> 都要換行 ,
+	// T54n2133A : <lb n="1194c17"/><p><cb:tt rend="normal"><cb:t lang="san-sd">
+	if(sRend == u"normal")	InTTNormal = true;
+
+	sHtml = parseChild(Node); // 處理內容
+
+	NextLine->FindNextLineEnd();
+	InTTNormal = false;
+	// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 ,
+	// T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
+
 	return sHtml;
 }
 // ---------------------------------------------------------------------------

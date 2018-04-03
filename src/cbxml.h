@@ -61,10 +61,10 @@ private: // User declarations
 	int LTagNum;		    // <l> 出現的數字, 用來判斷要在普及版寫幾個空格
 	String LMarginLeft;	    // L的空格
 
-		bool InTTNormal;		// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 , T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
+	bool InTTNormal;		// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 , T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
 	int  PreFormatCount;	// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
 	String MarginLeft;		// 移位
-		String NormalWords; 	// 通用詞處理法, 若是 orig , 就是呈現 <orig> 中的字, 若是 "reg" 就是呈現 <reg> 中的字, 這是在 choice 標記中判斷
+	//String NormalWords; 	// 通用詞處理法, 若是 orig , 就是呈現 <orig> 中的字, 若是 "reg" 就是呈現 <reg> 中的字, 這是在 choice 標記中判斷
 
 	int ListCount;				// 計算 list 的數目, 有一些地方需要用到
 	int ItemNum[100];    		// 用來判斷 item 出現的次數, 每一層 list 都有不同的內容
@@ -81,6 +81,7 @@ private: // User declarations
 
 	int NoteAddNum;     // 自訂校註 <note type="add" 的流水號, 由 1 開始
 	map<String, int> mpNoteAddNum;  // 由 id 找出 流水號, 沒有就設定一個
+	map<String, int> mpNoteStarNum; // 記錄每一個 id 有多少個星號了
 
 	// --------------------------
 
@@ -123,6 +124,7 @@ private: // User declarations
 	String __fastcall tag_table(_di_IXMLNode Node);
 	String __fastcall tag_term(_di_IXMLNode Node);
 	String __fastcall tag_trailer(_di_IXMLNode Node);
+	String __fastcall tag_tt(_di_IXMLNode Node);
 	String __fastcall tag_unclear(_di_IXMLNode Node);
 	String __fastcall tag_default(_di_IXMLNode Node);
 

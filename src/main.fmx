@@ -4,6 +4,7 @@
   Caption = 'CBETA CBReader'
   ClientHeight = 713
   ClientWidth = 1040
+  Position = ScreenCenter
   StyleBook = StyleBook1
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -87,8 +88,8 @@
           Size.Height = 585.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          Viewport.Width = 209.000000000000000000
-          Viewport.Height = 585.000000000000000000
+          Viewport.Width = 205.000000000000000000
+          Viewport.Height = 581.000000000000000000
         end
       end
     end
@@ -136,8 +137,8 @@
           Size.Height = 543.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          Viewport.Width = 241.000000000000000000
-          Viewport.Height = 543.000000000000000000
+          Viewport.Width = 237.000000000000000000
+          Viewport.Height = 539.000000000000000000
         end
         object Panel8: TPanel
           Align = Top
@@ -355,8 +356,8 @@
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 241.000000000000000000
-          Viewport.Height = 414.000000000000000000
+          Viewport.Width = 237.000000000000000000
+          Viewport.Height = 389.000000000000000000
           object StringColumn1: TStringColumn
             Header = #32147#21517
             Size.Width = 130.000000000000000000
@@ -806,8 +807,8 @@
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
-          Viewport.Width = 241.000000000000000000
-          Viewport.Height = 471.000000000000000000
+          Viewport.Width = 237.000000000000000000
+          Viewport.Height = 446.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000

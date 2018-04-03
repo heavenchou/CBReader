@@ -35,7 +35,7 @@ void __fastcall CNextLine::Add(String sData)
 {
 	if(TCount == 1)
 	{
-		if(sData == u"rend")
+		if(sData == u"<add_sp>")
 		{
 			if(ThisLine == u"") sData = u"";
 			else sData = u"¡@";
@@ -44,7 +44,7 @@ void __fastcall CNextLine::Add(String sData)
 	}
 	else if(TCount == 2)
 	{
-    	if(sData == u"rend")
+    	if(sData == u"<add_sp>")
 		{
 			if(NextLine == u"") sData = u"";
 			else sData = u"¡@";
