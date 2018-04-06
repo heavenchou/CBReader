@@ -2724,7 +2724,7 @@ String __fastcall CCBXML::NoteId2Num(String sId)
 	if(*(it) == u'k' || *(it) == u'b' || *(it) == u'j')
 		it++;
 
-	while(*(it) == '0')
+	while(*(it) == '0' && it != sId.end()-1)
 	{
 		it++;
     }

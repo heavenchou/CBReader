@@ -84,7 +84,7 @@ __published: // IDE-managed Components
 	TLabel *Label12;
 	TLabel *Label13;
 	TLabel *Label14;
-	TComboBox *ComboBox1;
+	TComboBox *cbGoSutra_BookId;
 	TEdit *edGoSutra_SutraNum;
 	TEdit *edGoSutra_Juan;
 	TEdit *edGoSutra_Page;
@@ -95,7 +95,7 @@ __published: // IDE-managed Components
 	TEdit *edGoBook_Field;
 	TEdit *edGoBook_Line;
 	TEdit *edGoByKeyword;
-	TComboBox *ComboBox2;
+	TComboBox *cbGoBook_BookId;
 	TButton *btGoSutra;
 	TButton *btGoBook;
 	TButton *btGoByKeyword;
@@ -113,7 +113,7 @@ __published: // IDE-managed Components
 	TLabel *經名;
 	TLabel *作譯者;
 	TLabel *Label16;
-	TComboBox *ComboBox3;
+	TComboBox *cbFindSutra_BookId;
 	TLabel *Label17;
 	TLabel *Label18;
 	TStringColumn *StringColumn8;

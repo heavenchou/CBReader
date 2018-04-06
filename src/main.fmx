@@ -14,14 +14,14 @@
   DesignerMasterStyle = 0
   object TabControl1: TTabControl
     Align = Client
-    Size.Width = 791.000000000000000000
+    Size.Width = 751.000000000000000000
     Size.Height = 618.000000000000000000
     Size.PlatformDefault = False
     TabIndex = 0
     TabOrder = 4
     TabPosition = None
     Sizes = (
-      791s
+      751s
       618s)
     object TabItem1: TTabItem
       CustomIcon = <
@@ -38,7 +38,7 @@
       ExplicitSize.cy = 26.000000000000000000
       object WebBrowser: TWebBrowser
         Align = Client
-        Size.Width = 574.000000000000000000
+        Size.Width = 534.000000000000000000
         Size.Height = 618.000000000000000000
         Size.PlatformDefault = False
       end
@@ -97,32 +97,32 @@
   object Panel1: TPanel
     Align = Left
     Position.Y = 49.000000000000000000
-    Size.Width = 241.000000000000000000
+    Size.Width = 281.000000000000000000
     Size.Height = 618.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 3
     object TabControl2: TTabControl
       Align = Client
-      Size.Width = 241.000000000000000000
+      Size.Width = 281.000000000000000000
       Size.Height = 618.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 0
+      TabIndex = 1
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
-        241s
+        281s
         592s
-        241s
+        281s
         592s
-        241s
+        281s
         592s
-        241s
+        281s
         592s)
       object TabItem2: TTabItem
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 44.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -133,16 +133,16 @@
         ExplicitSize.cy = 26.000000000000000000
         object tvNavTree: TTreeView
           Align = Client
-          Size.Width = 241.000000000000000000
+          Size.Width = 281.000000000000000000
           Size.Height = 543.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          Viewport.Width = 237.000000000000000000
+          Viewport.Width = 277.000000000000000000
           Viewport.Height = 539.000000000000000000
         end
         object Panel8: TPanel
           Align = Top
-          Size.Width = 241.000000000000000000
+          Size.Width = 281.000000000000000000
           Size.Height = 49.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
@@ -172,7 +172,7 @@
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 44.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
@@ -183,7 +183,7 @@
         ExplicitSize.cy = 26.000000000000000000
         object Panel3: TPanel
           Align = Top
-          Size.Width = 241.000000000000000000
+          Size.Width = 281.000000000000000000
           Size.Height = 169.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
@@ -206,10 +206,10 @@
             Size.PlatformDefault = False
           end
           object btFindSutra: TButton
-            Position.X = 184.000000000000000000
+            Position.X = 224.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 33.000000000000000000
-            Size.Height = 25.000000000000000000
+            Size.Width = 41.000000000000000000
+            Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 2
             Text = #25214
@@ -302,14 +302,35 @@
             Text = #34255#32147
             TabOrder = 13
           end
-          object ComboBox3: TComboBox
-            Enabled = False
+          object cbFindSutra_BookId: TComboBox
             Items.Strings = (
-              'T '#22823#27491#34255)
+              #20840#37096
+              'T '#22823#27491#26032#33065#22823#34255#32147
+              'X '#21325#26032#32386#22823#26085#26412#32396#34255#32147
+              'A '#36249#22478#37329#34255
+              'K '#39640#40599#22823#34255#32147
+              'S '#23435#34255#36986#29645
+              'F '#25151#23665#30707#32147
+              'C '#20013#33775#22823#34255#32147
+              'D '#22283#23478#22294#26360#39208#21892#26412#20315#20856
+              'U '#27946#27494#21335#34255
+              'P '#27704#27138#21271#34255
+              'J '#22025#33288#22823#34255#32147
+              'L '#20094#38534#22823#34255#32147
+              'G '#20315#25945#22823#34255#32147
+              'M '#21325#27491#34255#32147
+              'N '#28450#35695#21335#20659#22823#34255#32147
+              'ZS '#27491#21490#20315#25945#36039#26009#39006#32232
+              'I '#21271#26397#20315#25945#30707#21051#25299#29255#30334#21697
+              'ZW '#34255#22806#20315#25945#25991#29563
+              'B '#22823#34255#32147#35036#32232
+              'GA '#20013#22283#20315#23546#21490#24535#24409#21002
+              'GB '#20013#22283#20315#23546#24535#21474#21002
+              'Y '#21360#38918#27861#24107#20315#23416#33879#20316#38598)
             ItemIndex = 0
-            Position.X = 64.000000000000000000
+            Position.X = 72.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 113.000000000000000000
+            Size.Width = 144.000000000000000000
             Size.Height = 22.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 17
@@ -341,7 +362,7 @@
           MinSize = 20.000000000000000000
           Position.Y = 169.000000000000000000
           ShowGrip = False
-          Size.Width = 241.000000000000000000
+          Size.Width = 281.000000000000000000
           Size.Height = 9.000000000000000000
           Size.PlatformDefault = False
         end
@@ -349,14 +370,14 @@
           Align = Client
           CanFocus = True
           ClipChildren = True
-          Size.Width = 241.000000000000000000
+          Size.Width = 281.000000000000000000
           Size.Height = 414.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 237.000000000000000000
+          Viewport.Width = 277.000000000000000000
           Viewport.Height = 389.000000000000000000
           object StringColumn1: TStringColumn
             Header = #32147#21517
@@ -401,7 +422,7 @@
         ExplicitSize.cy = 26.000000000000000000
         object Panel4: TPanel
           Align = Client
-          Size.Width = 241.000000000000000000
+          Size.Width = 281.000000000000000000
           Size.Height = 592.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 2
@@ -559,14 +580,34 @@
             Text = #21069#24448#25351#23450#32147#25991
             TabOrder = 0
           end
-          object ComboBox1: TComboBox
-            Enabled = False
+          object cbGoSutra_BookId: TComboBox
             Items.Strings = (
-              'T '#22823#27491#34255)
+              'T '#22823#27491#26032#33065#22823#34255#32147
+              'X '#21325#26032#32386#22823#26085#26412#32396#34255#32147
+              'A '#36249#22478#37329#34255
+              'K '#39640#40599#22823#34255#32147
+              'S '#23435#34255#36986#29645
+              'F '#25151#23665#30707#32147
+              'C '#20013#33775#22823#34255#32147
+              'D '#22283#23478#22294#26360#39208#21892#26412#20315#20856
+              'U '#27946#27494#21335#34255
+              'P '#27704#27138#21271#34255
+              'J '#22025#33288#22823#34255#32147
+              'L '#20094#38534#22823#34255#32147
+              'G '#20315#25945#22823#34255#32147
+              'M '#21325#27491#34255#32147
+              'N '#28450#35695#21335#20659#22823#34255#32147
+              'ZS '#27491#21490#20315#25945#36039#26009#39006#32232
+              'I '#21271#26397#20315#25945#30707#21051#25299#29255#30334#21697
+              'ZW '#34255#22806#20315#25945#25991#29563
+              'B '#22823#34255#32147#35036#32232
+              'GA '#20013#22283#20315#23546#21490#24535#24409#21002
+              'GB '#20013#22283#20315#23546#24535#21474#21002
+              'Y '#21360#38918#27861#24107#20315#23416#33879#20316#38598)
             ItemIndex = 0
             Position.X = 72.000000000000000000
             Position.Y = 48.000000000000000000
-            Size.Width = 153.000000000000000000
+            Size.Width = 152.000000000000000000
             Size.Height = 22.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 16
@@ -681,14 +722,34 @@
             Size.PlatformDefault = False
             StyledSettings = [Family, Style, FontColor]
           end
-          object ComboBox2: TComboBox
-            Enabled = False
+          object cbGoBook_BookId: TComboBox
             Items.Strings = (
-              'T '#22823#27491#34255)
+              'T '#22823#27491#26032#33065#22823#34255#32147
+              'X '#21325#26032#32386#22823#26085#26412#32396#34255#32147
+              'A '#36249#22478#37329#34255
+              'K '#39640#40599#22823#34255#32147
+              'S '#23435#34255#36986#29645
+              'F '#25151#23665#30707#32147
+              'C '#20013#33775#22823#34255#32147
+              'D '#22283#23478#22294#26360#39208#21892#26412#20315#20856
+              'U '#27946#27494#21335#34255
+              'P '#27704#27138#21271#34255
+              'J '#22025#33288#22823#34255#32147
+              'L '#20094#38534#22823#34255#32147
+              'G '#20315#25945#22823#34255#32147
+              'M '#21325#27491#34255#32147
+              'N '#28450#35695#21335#20659#22823#34255#32147
+              'ZS '#27491#21490#20315#25945#36039#26009#39006#32232
+              'I '#21271#26397#20315#25945#30707#21051#25299#29255#30334#21697
+              'ZW '#34255#22806#20315#25945#25991#29563
+              'B '#22823#34255#32147#35036#32232
+              'GA '#20013#22283#20315#23546#21490#24535#24409#21002
+              'GB '#20013#22283#20315#23546#24535#21474#21002
+              'Y '#21360#38918#27861#24107#20315#23416#33879#20316#38598)
             ItemIndex = 0
             Position.X = 72.000000000000000000
             Position.Y = 224.000000000000000000
-            Size.Width = 153.000000000000000000
+            Size.Width = 152.000000000000000000
             Size.Height = 22.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 15
@@ -746,7 +807,7 @@
         ExplicitSize.cy = 26.000000000000000000
         object Panel5: TPanel
           Align = Top
-          Size.Width = 241.000000000000000000
+          Size.Width = 281.000000000000000000
           Size.Height = 121.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
@@ -800,14 +861,14 @@
           Align = Client
           CanFocus = True
           ClipChildren = True
-          Size.Width = 241.000000000000000000
+          Size.Width = 281.000000000000000000
           Size.Height = 471.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
-          Viewport.Width = 237.000000000000000000
+          Viewport.Width = 277.000000000000000000
           Viewport.Height = 446.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
@@ -946,7 +1007,7 @@
     Align = Left
     Cursor = crHSplit
     MinSize = 20.000000000000000000
-    Position.X = 241.000000000000000000
+    Position.X = 281.000000000000000000
     Position.Y = 49.000000000000000000
     ShowGrip = False
     Size.Width = 8.000000000000000000

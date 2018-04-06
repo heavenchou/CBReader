@@ -248,6 +248,13 @@ bool __fastcall TfmMain::IsSelectedBook()
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 {
+	String sBook = cbFindSutra_BookId->Selected->Text;
+	if(cbFindSutra_BookId->ItemIndex == 0) sBook = u"";
+	else
+	{
+		int iPos = sBook.Pos0(u" ");
+		sBook.SetLength(iPos);
+    }
 	String sVolFrom = edFindSutra_VolFrom->Text;
 	String sVolTo = edFindSutra_VolTo->Text;
 	String sSutraFrom = edFindSutra_SutraFrom->Text;
@@ -272,6 +279,11 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 		for(int i=0; i<iCount; i++)
 		{
 			bool bFound = true;
+
+			// 找藏經
+			if(!sBook.IsEmpty())
+				if(Catalog->ID->Strings[i] != sBook)
+					continue;
 
 			// 找冊數
 			if(!sVolFrom.IsEmpty())
@@ -309,11 +321,11 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 			}
 			// 找經名
 			if(!sSutraName.IsEmpty())
-				if(Catalog->SutraName->Strings[i].Pos(sSutraName) <= 0)
+				if(Catalog->SutraName->Strings[i].Pos0(sSutraName) < 0)
 					continue;
 			// 找譯者
 			if(!sByline.IsEmpty())
-				if(Catalog->Byline->Strings[i].Pos(sByline) <= 0)
+				if(Catalog->Byline->Strings[i].Pos0(sByline) < 0)
 					continue;
 
 			// 找到了
@@ -339,7 +351,12 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 // 由經卷頁欄行呈現經文
 void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
 {
-	String sBook = "T";
+
+	String sBook = cbGoSutra_BookId->Items->Strings[cbGoSutra_BookId->ItemIndex];
+
+	int iPos = sBook.Pos0(u" ");
+	sBook.SetLength(iPos);
+
 	String sSutraNum = edGoSutra_SutraNum->Text;
 	String sJuan = edGoSutra_Juan->Text;
 	String sPage = edGoSutra_Page->Text;
@@ -415,7 +432,11 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 // 由冊頁欄行呈現經文
 void __fastcall TfmMain::btGoBookClick(TObject *Sender)
 {
-	String sBook = "T";
+	String sBook = cbGoBook_BookId->Items->Strings[cbGoBook_BookId->ItemIndex];
+
+	int iPos = sBook.Pos0(u" ");
+	sBook.SetLength(iPos);
+
 	String sVol = edGoBook_Vol->Text;
 	String sPage = edGoBook_Page->Text;
 	String sField = edGoBook_Field->Text;
