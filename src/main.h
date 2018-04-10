@@ -39,17 +39,19 @@
 #include <System.Rtti.hpp>
 #include <FMX.MultiView.hpp>
 #include <System.RegularExpressions.hpp>
+#include <FMX.DialogService.hpp>
 #include "option.h"
 #include "../../Monster/src/monster.h"
+#include <FMX.Ani.hpp>
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
 {
 __published: // IDE-managed Components
 	TMainMenu *MainMenu1;
-	TPanel *Panel1;
+	TPanel *pnNav;
 	TTabControl *TabControl1;
-	TPanel *Panel2;
+	TPanel *pnFoot;
 	TTabItem *TabItem1;
 	TWebBrowser *WebBrowser;
 	TToolBar *ToolBar1;
@@ -134,15 +136,9 @@ __published: // IDE-managed Components
 	TButton *btTextSearch;
 	TLabel *lbSearchMsg;
 	TStringColumn *StringColumn17;
-	TSplitter *Splitter3;
-	TPanel *Panel6;
-	TPanel *Panel7;
-	TButton *Button1;
-	TLabel *Label20;
-	TTreeView *tvMuluTree;
 	TCheckBox *cbSearchRange;
 	TCornerButton *btBuildIndex;
-	TStyleBook *StyleBook1;
+	TStyleBook *sbMid;
 	TPanel *Panel8;
 	TButton *btOpenBuleiNav;
 	TButton *btOpenBookNav;
@@ -150,6 +146,24 @@ __published: // IDE-managed Components
 	TCornerButton *btNextJuan;
 	TMenuItem *MenuItem1;
 	TMenuItem *MenuItem2;
+	TMenuItem *MenuItem4;
+	TCornerButton *btNavWidthSwitch;
+	TCornerButton *btMuluWidthSwitch;
+	TFloatAnimation *fanNavWidth;
+	TPanel *Panel1;
+	TPanel *pnMulu;
+	TFloatAnimation *fanMuluWidth;
+	TTreeView *tvMuluTree;
+	TPanel *Panel7;
+	TLabel *Label20;
+	TSplitter *Splitter3;
+	TStringColumn *StringColumn18;
+	TLabel *Label21;
+	TRadioButton *rbFontSmall;
+	TRadioButton *rbFontMid;
+	TRadioButton *rbFontBig;
+	TStyleBook *sbBig;
+	TStyleBook *sbSmall;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -169,6 +183,13 @@ __published: // IDE-managed Components
 	void __fastcall btPrevJuanClick(TObject *Sender);
 	void __fastcall btNextJuanClick(TObject *Sender);
 	void __fastcall MenuItem1Click(TObject *Sender);
+	void __fastcall MenuItem4Click(TObject *Sender);
+	void __fastcall btNavWidthSwitchClick(TObject *Sender);
+	void __fastcall btMuluWidthSwitchClick(TObject *Sender);
+	void __fastcall fanNavWidthFinish(TObject *Sender);
+	void __fastcall fanMuluWidthFinish(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall rbFontSmallChange(TObject *Sender);
 
 
 
@@ -192,9 +213,12 @@ public: // User declarations
 	CNavTree * MuluTree; // 單經導覽文件 (暫時的, 日後會放在 Serial 物件中 ???)
 
 	TStringList * SearchWordList;	// 存放每一個檢索的詞, 日後塗色會用到
-    String SearchSentence;	// 搜尋字串
+	String SearchSentence;	// 搜尋字串
 
-    int SpineID;    // 目前開啟的檔案, 用來處理上一卷和下一卷用的
+	int SpineID;    // 目前開啟的檔案, 用來處理上一卷和下一卷用的
+
+	int NavWidth;   // 目錄區的寬度
+	int MuluWidth;  // 書目區的寬度
 
 	void __fastcall InitialPath(); // 	路徑初值設定
 
@@ -211,6 +235,9 @@ public: // User declarations
 
 	// 載入 XML 並處理成網頁
 	void __fastcall ShowCBXML(String sFile, bool bShowHighlight = false, TmyMonster * SearchEngine = 0);
+
+	// 檢查有沒有更新程式
+	void __fastcall CheckUpdate(String sPara);
 
 	__fastcall TfmMain(TComponent* Owner);
 };

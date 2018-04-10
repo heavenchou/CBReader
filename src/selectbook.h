@@ -21,6 +21,7 @@ __published:	// IDE-managed Components
 	TListBox *lbBookcase;
 	TLabel *Label1;
 	void __fastcall ListBoxItem1Click(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 

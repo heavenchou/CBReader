@@ -21,6 +21,7 @@ TfmMain *fmMain;
 // ---------------------------------------------------------------------------
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
+	Application->Title = "CBReader";
 	InitialPath();  // 設定目錄初值
 
 #ifdef _Windows
@@ -34,42 +35,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	Setting = new CSetting(SettingFile);
 
 	SelectedBook = -1;   // 目前選中的書, -1 表示還沒選
-
-	// 取得 Bookcase 所有資料區
-	// 載入書櫃
-
-	Bookcase = new CBookcase();
-	String sBookcasePath = MyFullPath + Setting->BookcaseDir;
-	if(!TDirectory::Exists(sBookcasePath))
-	{
-        // 使用指定目錄 ???? 該改為使用者指定目錄才好
-		sBookcasePath = u"d:\\Dropbox\\CBReader2X\\Bookcase";
-	}
-	Bookcase->LoadBookcase(sBookcasePath);
-
-	// 在書櫃選擇叢書
-	int iBookcaseCount = Bookcase->Count();
-	if(iBookcaseCount == 0)
-	{
-		ShowMessage(u"書櫃中一本書都沒有");
-    }
-	else if(iBookcaseCount == 1)
-	{
-		// 只有一本書就直接開了
-		// OpenBookcase(0); // ???? 暫時取消, 這一版要直接開啟 CBETA
-	}
-	OpenCBETABook();    // ???? 取消上面, 因為這一版要直接開啟 CBETA
-
-	MuluTree = 0;
-
-    // 這要先處理, 動一下內容, 不然欄位標題就還可以移動
-	sgTextSearch->RowCount = 1;
-	sgFindSutra->RowCount = 1;
-
-	lbSearchMsg->Text = ""; // 清空搜尋訊息
-	btOpenBookcase->Visible = false;
-	btBuildIndex->Visible = false;
-	SpineID = -1;	// 初值表示沒開啟
+    pnMulu->Width = 0;  // 書目先縮到最小
+    MuluWidth = 200;    // 初始書目寬度
 }
 // ---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
@@ -176,7 +143,7 @@ void __fastcall TfmMain::OpenCBETABook()
 			return;
 		}
 	}
-	ShowMessage("找不到 CBETA 資料");
+	TDialogService::ShowMessage("找不到 CBETA 資料");
     return;
 }
 //---------------------------------------------------------------------------
@@ -375,7 +342,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 {
 	if(sFile == "")
 	{
-		ShowMessage("沒有找到正確檔案");
+		TDialogService::ShowMessage("沒有找到正確檔案");
         return;
 	}
 
@@ -578,12 +545,12 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
     {
 		if(sgTextSearch->RowCount == 0)
 	    {
-			ShowMessage(u"找不到任何資料");
+			TDialogService::ShowMessage(u"找不到任何資料");
     	}
     }
     else
 	{
-		ShowMessage(u"查詢字串語法有問題，請再檢查看看。");
+		TDialogService::ShowMessage(u"查詢字串語法有問題，請再檢查看看。");
 	}
 }
 //---------------------------------------------------------------------------
@@ -680,6 +647,25 @@ void __fastcall TfmMain::LoadMuluTree(String sFile)
 	if(MuluTree) delete MuluTree;
 	MuluTree = new CNavTree(sFile);
 	MuluTree->SaveToTreeView(tvMuluTree, NavTreeItemClick);
+
+	// 展開第一層
+
+	for(int i=0; i<tvMuluTree->ChildrenCount; i++)
+	{
+		try
+		{
+			tvMuluTree->Items[i]->Expand();
+		}
+		catch(...)
+		{
+            // 忽略...
+        }
+	}
+
+	// 檢查書目區是不是縮到最小
+
+	if(pnMulu->Width == 0)
+		btMuluWidthSwitchClick(this);
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btOpenBuleiNavClick(TObject *Sender)
@@ -715,7 +701,184 @@ void __fastcall TfmMain::btNextJuanClick(TObject *Sender)
 
 void __fastcall TfmMain::MenuItem1Click(TObject *Sender)
 {
-    ShowMessage("CBETA CBReader 2X");
+	TDialogService::ShowMessage(u"CBETA CBReader 2X 搶鮮版");
 }
 //---------------------------------------------------------------------------
+
+// 檢查有沒有更新程式
+void __fastcall TfmMain::CheckUpdate(String sPara)
+{
+#ifdef _Windows
+
+	//HWND handle = fmMain->Handle;
+
+	HINSTANCE  hResult;
+	int iResult;
+	String sFileName = MyFullPath + u"update.exe";
+
+	hResult = ShellExecute(0,L"open",sFileName.c_str(),sPara.c_str(),MyFullPath.c_str(), SW_SHOW);
+
+	iResult = (int) hResult;
+	switch(iResult)
+	{
+		case 0                    : TDialogService::ShowMessage(u"系統記憶體或資源不足, 無法順利開啟!"); break;
+		case ERROR_FILE_NOT_FOUND : TDialogService::ShowMessage(u"找不到更新檢查檔案" + sFileName); break;
+		case SE_ERR_NOASSOC       : TDialogService::ShowMessage(u"此類檔案無登記, 無法順利開啟!"); break;
+		//case SE_ERR_OOM           : TDialogService::ShowMessage("記憶體不足, 無法順利開啟!"); break;
+		default:
+		{
+			if(iResult <= 32)  // 其它情況的錯誤
+			{
+				TDialogService::ShowMessage("SE_Err:" + AnsiString(iResult) + " 無法開啟此檔!");
+			}
+		}
+	}
+#else
+	TDialogService::ShowMessage("抱歉！目前只有 Windows 版才有更新功能。");
+#endif
+}
+//---------------------------------------------------------------------------
+// 檢查更新
+void __fastcall TfmMain::MenuItem4Click(TObject *Sender)
+{
+	CheckUpdate(u"show");
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btNavWidthSwitchClick(TObject *Sender)
+{
+	if(pnNav->Width == 0)
+	{
+		// 開啟主功能區
+		fanNavWidth->StartValue = 0;
+		fanNavWidth->StopValue = NavWidth;
+		fanNavWidth->Interpolation = TInterpolationType::Quintic;
+		fanNavWidth->Duration = 0.5;
+		fanNavWidth->Start();
+	}
+	else
+	{
+		NavWidth = pnNav->Width;
+		fanNavWidth->StartValue = NavWidth;
+		fanNavWidth->StopValue = 0;
+		fanNavWidth->Interpolation = TInterpolationType::Bounce;
+        fanNavWidth->Duration = 1;
+		fanNavWidth->Start();
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::btMuluWidthSwitchClick(TObject *Sender)
+{
+	if(pnMulu->Width == 0)
+	{
+		fanMuluWidth->StartValue = 0;
+		fanMuluWidth->StopValue = MuluWidth;
+		fanMuluWidth->Interpolation = TInterpolationType::Quintic;
+		fanMuluWidth->Start();
+	}
+	else
+	{
+		MuluWidth = pnMulu->Width;
+		fanMuluWidth->StartValue = MuluWidth;
+		fanMuluWidth->StopValue = 0;
+		fanMuluWidth->Interpolation = TInterpolationType::Quintic;
+		fanMuluWidth->Start();
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::fanNavWidthFinish(TObject *Sender)
+{
+	if(pnNav->Width == 0)
+		btNavWidthSwitch->Text = u"主功能>>";
+	else
+		btNavWidthSwitch->Text = u"<<主功能";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::fanMuluWidthFinish(TObject *Sender)
+{
+	if(pnMulu->Width == 0)
+		btMuluWidthSwitch->Text = u"書目>>";
+	else
+		btMuluWidthSwitch->Text = u"<<書目";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::FormShow(TObject *Sender)
+{
+	// 取得 Bookcase 所有資料區
+	// 載入書櫃
+
+	Bookcase = new CBookcase();
+
+	String sBookcasePath = MyFullPath + Setting->BookcaseDir;
+	if(!TDirectory::Exists(sBookcasePath))
+	{
+        // 使用指定目錄 ???? 該改為使用者指定目錄才好
+		sBookcasePath = u"d:\\Dropbox\\CBReader2X\\Bookcase";
+	}
+	Bookcase->LoadBookcase(sBookcasePath);
+
+	// 在書櫃選擇叢書
+	int iBookcaseCount = Bookcase->Count();
+	if(iBookcaseCount == 0)
+	{
+		TDialogService::ShowMessage(u"書櫃中一本書都沒有");
+	}
+	else if(iBookcaseCount == 1)
+	{
+		// 只有一本書就直接開了
+		// OpenBookcase(0); // ???? 暫時取消, 這一版要直接開啟 CBETA
+	}
+
+	OpenCBETABook();    // ???? 取消上面, 因為這一版要直接開啟 CBETA
+
+	MuluTree = 0;
+
+    // 這要先處理, 動一下內容, 不然欄位標題就還可以移動
+	sgTextSearch->RowCount = 1;
+	sgFindSutra->RowCount = 1;
+
+	lbSearchMsg->Text = ""; // 清空搜尋訊息
+	btOpenBookcase->Visible = false;
+	btBuildIndex->Visible = false;
+	SpineID = -1;	// 初值表示沒開啟
+
+	//CheckUpdate(u"");   // 檢查更新
+
+   	WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
+	WebBrowser->Navigate();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::rbFontSmallChange(TObject *Sender)
+{
+	if(rbFontBig->IsChecked)
+	{
+		StyleBook = sbBig;
+		fmOption->StyleBook = sbBig;
+		fmSearchRange->StyleBook = sbBig;
+		sgTextSearch->TextSettings->Font->Size = 16;
+		sgFindSutra->TextSettings->Font->Size = 16;
+	}
+	else if(rbFontMid->IsChecked)
+	{
+		StyleBook = sbMid;
+		fmOption->StyleBook = sbMid;
+		fmSearchRange->StyleBook = sbMid;
+		sgTextSearch->TextSettings->Font->Size = 14;
+		sgFindSutra->TextSettings->Font->Size = 14;
+	}
+	else if(rbFontSmall->IsChecked)
+	{
+		StyleBook = sbSmall;
+		fmOption->StyleBook = sbSmall;
+		fmSearchRange->StyleBook = sbSmall;
+		sgTextSearch->TextSettings->Font->Size = 12;
+		sgFindSutra->TextSettings->Font->Size = 12;
+	}
+}
+//---------------------------------------------------------------------------
+
 

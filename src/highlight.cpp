@@ -374,9 +374,9 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 			pFindWord++;
 		}
 		else if(iPos>iAfterThisPos &&
-				((CMyStrUtil::StrnCmp(pPoint,pFindWord,iThisWordLen)==0 && iThisWordLen == iFindWordLen) ||
-				(iDesLen == iFindWordLen && CMyStrUtil::StrnCmp(pDesPoint,pFindWord,iDesLen)==0)||
-				(iUniLen == iFindWordLen && CMyStrUtil::StrnCmp(pUniPoint,pFindWord,iUniLen)==0 )))
+				((CMyStrUtil::StrnCmp(pPoint,pFindWord,iThisWordLen) && iThisWordLen == iFindWordLen) ||
+				(iDesLen == iFindWordLen && CMyStrUtil::StrnCmp(pDesPoint,pFindWord,iDesLen))||
+				(iUniLen == iFindWordLen && CMyStrUtil::StrnCmp(pUniPoint,pFindWord,iUniLen) )))
 
 		{
 			// 找到了 (包括缺字中的組字式或unicode)

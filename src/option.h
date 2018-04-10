@@ -18,15 +18,10 @@
 class TfmOption : public TForm
 {
 __published:	// IDE-managed Components
-	TTreeView *TreeView1;
 	TTabControl *TabControl1;
 	TTabItem *TabItem1;
 	TTabItem *TabItem2;
 	TTabItem *TabItem3;
-	TSplitter *Splitter1;
-	TTreeViewItem *TreeViewItem1;
-	TTreeViewItem *TreeViewItem2;
-	TTreeViewItem *TreeViewItem3;
 	TPanel *Panel1;
 	TGroupBox *gbSutraFormat;
 	TCheckBox *cbShowLineFormat;
@@ -51,7 +46,6 @@ __published:	// IDE-managed Components
 	TCheckBox *cbShowCollation;
 	TRadioButton *rbCBETACollation;
 	TRadioButton *rbOrigCollation;
-	TStyleBook *StyleBook1;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btOKClick(TObject *Sender);
 	void __fastcall btCancelClick(TObject *Sender);

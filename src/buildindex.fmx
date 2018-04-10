@@ -11,7 +11,7 @@ object fmBuildIndex: TfmBuildIndex
   DesignerMasterStyle = 0
   object edBuildListDir: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 4
+    TabOrder = 0
     Position.X = 128.000000000000000000
     Position.Y = 24.000000000000000000
     Size.Width = 489.000000000000000000
@@ -20,7 +20,7 @@ object fmBuildIndex: TfmBuildIndex
   end
   object edBuildList: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 3
+    TabOrder = 1
     Position.X = 128.000000000000000000
     Position.Y = 72.000000000000000000
     Size.Width = 489.000000000000000000
@@ -38,7 +38,7 @@ object fmBuildIndex: TfmBuildIndex
   end
   object edMainIndex: TEdit
     Touch.InteractiveGestures = [LongTap, DoubleTap]
-    TabOrder = 1
+    TabOrder = 3
     Position.X = 128.000000000000000000
     Position.Y = 168.000000000000000000
     Size.Width = 489.000000000000000000
@@ -64,7 +64,7 @@ object fmBuildIndex: TfmBuildIndex
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = #36039#26009#30446#37636
-    TabOrder = 12
+    TabOrder = 13
   end
   object Label2: TLabel
     Position.X = 40.000000000000000000
@@ -73,7 +73,7 @@ object fmBuildIndex: TfmBuildIndex
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = #27284#26696#21015#34920
-    TabOrder = 11
+    TabOrder = 12
   end
   object Label3: TLabel
     Position.X = 16.000000000000000000
@@ -82,7 +82,7 @@ object fmBuildIndex: TfmBuildIndex
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = 'Word Index'
-    TabOrder = 10
+    TabOrder = 11
   end
   object Label4: TLabel
     Position.X = 16.000000000000000000
@@ -91,7 +91,7 @@ object fmBuildIndex: TfmBuildIndex
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = 'Main Index'
-    TabOrder = 9
+    TabOrder = 10
   end
   object Memo1: TMemo
     Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
@@ -101,7 +101,7 @@ object fmBuildIndex: TfmBuildIndex
     Size.Width = 489.000000000000000000
     Size.Height = 177.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 15
+    TabOrder = 6
     Viewport.Width = 485.000000000000000000
     Viewport.Height = 173.000000000000000000
   end
@@ -148,7 +148,7 @@ object fmBuildIndex: TfmBuildIndex
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = #34389#29702#21508#27284
-    TabOrder = 8
+    TabOrder = 9
   end
   object Label6: TLabel
     Position.X = 40.000000000000000000
@@ -157,7 +157,7 @@ object fmBuildIndex: TfmBuildIndex
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = #21512#25104#32034#24341
-    TabOrder = 7
+    TabOrder = 8
   end
   object Label7: TLabel
     Position.X = 40.000000000000000000
@@ -166,7 +166,7 @@ object fmBuildIndex: TfmBuildIndex
     Size.Height = 33.000000000000000000
     Size.PlatformDefault = False
     Text = #32034#24341#35338#24687
-    TabOrder = 6
+    TabOrder = 7
   end
   object cbNoMsg: TCheckBox
     Position.X = 24.000000000000000000
@@ -174,7 +174,7 @@ object fmBuildIndex: TfmBuildIndex
     Size.Width = 89.000000000000000000
     Size.Height = 25.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 20
+    TabOrder = 4
     Text = #19981#35201#31168#35338#24687
   end
 end

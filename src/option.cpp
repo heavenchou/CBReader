@@ -12,7 +12,11 @@ TfmOption *fmOption;
 __fastcall TfmOption::TfmOption(TComponent* Owner)
 	: TForm(Owner)
 {
-    Setting = fmMain->Setting;
+	Setting = fmMain->Setting;
+
+    // 新標選項先隱藏
+	cbShowPunc->Visible = false;
+	cbNoShowLgPunc->Visible = false;
 }
 //---------------------------------------------------------------------------
 // 由設定載入
@@ -225,7 +229,7 @@ void __fastcall TfmOption::SaveToSetting()
 	Setting->NoShowLgPunc = cbNoShowLgPunc->IsChecked;
 
 	Setting->VerticalMode = cbVerticalMode->IsChecked;
-	cbShowCollation->IsChecked = Setting->ShowCollation;
+	Setting->ShowCollation = cbShowCollation->IsChecked;
 	// 校勘格式
 	if(rbOrigCollation->IsChecked) Setting->CollationType = ctOrigCollation;
 	else if(rbCBETACollation->IsChecked) Setting->CollationType = ctCBETACollation;

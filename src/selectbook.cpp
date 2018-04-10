@@ -14,8 +14,6 @@ __fastcall TfmSelectBook::TfmSelectBook(TComponent* Owner)
 {
 	SelectedBook = -1;   // 目前選中的書代碼, -1 表示還沒有選
 
-	// 初始書櫃
-	Initial(fmMain->Bookcase);
 }
 //---------------------------------------------------------------------------
 // 初始書櫃
@@ -49,4 +47,12 @@ void __fastcall TfmSelectBook::ListBoxItem1Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
+void __fastcall TfmSelectBook::FormShow(TObject *Sender)
+{
+
+	// 初始書櫃
+	Initial(fmMain->Bookcase);
+}
+//---------------------------------------------------------------------------
 

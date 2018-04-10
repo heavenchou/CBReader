@@ -165,6 +165,9 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		.corr {color:#FF0000; font-weight: normal; }\n"
 	"		.note {color:#9F5000; font-weight: normal; font-size:14pt;}\n";
 
+	if(Setting->VerticalMode)
+		sHtml += u"		body {writing-mode: tb-rl;}\n";
+
     // 行首格式
 	if(Setting->ShowLineFormat)
 				  // 原書
@@ -1340,7 +1343,8 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 			else
 			{
 				// 在 2016 之前, 標準或非標準的偈頌, 不依原書時, 第一個 <l> 都會折行.
-				// 目前的新規則, 只要是不依原書, 非標準偈頌, 且有設定 Setting->LgType = 1 , 就不折行. 不過這只限在 GA 及 GB, 因為舊的經文還是折行較好
+				// 目前的新規則, 只要是不依原書, 非標準偈頌, 且有設定 Setting->LgType = 1 ,
+				// 就不折行. 不過這只限在 GA 及 GB, 因為舊的經文還是折行較好
 				if(!(LgNormal == false && (BookId == u"GA" || BookId == u"GB")))
 				{
 					sHtml += u"<br class=\"para_br\"/>";	// 偈頌折行 , 待測試 ????
@@ -1453,7 +1457,7 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 	}
 
 	// 原書格式會看到的行首空白
-	String sSpace = MarginLeft + LgMarginLeft + LMarginLeft;
+	String sSpace = MarginLeft;	// + LgMarginLeft + LMarginLeft; 這些留在 <l> 才空格
 	{
 		if(InByline)				sSpace += u"　　　　";	// 譯者
 		if(FuWenCount && !bNoLineData)	sSpace += u"　";			// 附文
@@ -2049,9 +2053,9 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 		String sNoteText = parseChild(Node);
 		HTMLCollation += u"<div id=\"txt_note_mod_" + sId + u"\">" + sNoteText + u"</div>\n";
 
-		String sIdNormal = sId.SubString0(0,7); // 取出標準的 ID, 因為有些有 abc...
+		//String sIdNormal = sId.SubString0(0,7); // 取出標準的 ID, 因為有些有 abc...
 
-		ThisNoteHasMod(sIdNormal);  // 通知 note orig , 此校勘有 mod 版
+		ThisNoteHasMod(sId);  // 通知 note orig , 此校勘有 mod 版
 	}
 
 	// 2016 新增加的版本 <note type="editor" ...
@@ -2900,13 +2904,26 @@ void __fastcall CCBXML::ReadGaiji(_di_IXMLNode NodeGaijis)
 // ---------------------------------------------------------------------------
 // 通知 note orig , 此校勘有 mod 版
 // 就會把 orig note 中 class 的 note_mod 移除
-void __fastcall CCBXML::ThisNoteHasMod(String sIdNormal)
+void __fastcall CCBXML::ThisNoteHasMod(String sId)
 {
-	if(mOrigNote.find(sIdNormal) != mOrigNote.end())
+	// 在 T27n1545 有 id = 0003002A 的校勘
+	// 所以要同時處理 0003002A 與 0003002
+	// 因為有時 mod 會有 a, b 還是要還原回 7 個字
+	// 若有 xxxxxxxA , 就處理. 否則就處理 xxxxxxx 7 個字的版本.
+	if(mOrigNote.find(sId) != mOrigNote.end())
 	{
-		mOrigNote[sIdNormal] = StringReplace(mOrigNote[sIdNormal],
+		mOrigNote[sId] = StringReplace(mOrigNote[sId],
 		u"class=\"note_orig note_mod\"", u"class=\"note_orig\"", TReplaceFlags());
 	}
+	else if(sId.Length() > 7)
+	{
+		String sIdNormal = sId.SubString0(0,7);
+		if(mOrigNote.find(sIdNormal) != mOrigNote.end())
+		{
+			mOrigNote[sIdNormal] = StringReplace(mOrigNote[sIdNormal],
+			u"class=\"note_orig note_mod\"", u"class=\"note_orig\"", TReplaceFlags());
+		}
+    }
 }
 // ---------------------------------------------------------------------------
 // 原本的 orig 校勘還沒加入, 此時才要加入
@@ -2931,8 +2948,18 @@ String __fastcall CCBXML::AddOrigNote(String HTMLText)
 			if(sNote == u"<<tmp_note_orig_")
 			{
 				// 找到校勘記號
-				String sId = String(pPoint+16,7);
-				pPoint+=25;
+				String sId;
+
+				int iShift = 23;
+
+				while(*(pPoint+iShift) != u'>')
+				{
+					iShift++;
+                }
+
+				sId = String(pPoint+16, iShift-16);
+				pPoint = pPoint + iShift + 2;
+
 				String sNote = mOrigNote[sId];  // 取出真正的校勘
 
 				System::WideChar * pNote = sNote.FirstChar();
