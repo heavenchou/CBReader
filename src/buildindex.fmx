@@ -1,0 +1,180 @@
+object fmBuildIndex: TfmBuildIndex
+  Left = 0
+  Top = 0
+  Caption = #24314#31435#32034#24341#27284
+  ClientHeight = 497
+  ClientWidth = 640
+  StyleBook = StyleBook1
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object edBuildListDir: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 0
+    Position.X = 128.000000000000000000
+    Position.Y = 24.000000000000000000
+    Size.Width = 489.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object edBuildList: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 1
+    Position.X = 128.000000000000000000
+    Position.Y = 72.000000000000000000
+    Size.Width = 489.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object edWordIndex: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 2
+    Position.X = 128.000000000000000000
+    Position.Y = 120.000000000000000000
+    Size.Width = 489.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object edMainIndex: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 3
+    Position.X = 128.000000000000000000
+    Position.Y = 168.000000000000000000
+    Size.Width = 489.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object btBuild: TButton
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 24.000000000000000000
+    Position.Y = 400.000000000000000000
+    Size.Width = 89.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 5
+    Text = #24314#31435#32034#24341
+    TextSettings.Font.Size = 16.000000000000000000
+    OnClick = btBuildClick
+  end
+  object Label1: TLabel
+    Position.X = 40.000000000000000000
+    Position.Y = 24.000000000000000000
+    Size.Width = 89.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    Text = #36039#26009#30446#37636
+    TabOrder = 13
+  end
+  object Label2: TLabel
+    Position.X = 40.000000000000000000
+    Position.Y = 72.000000000000000000
+    Size.Width = 89.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    Text = #27284#26696#21015#34920
+    TabOrder = 12
+  end
+  object Label3: TLabel
+    Position.X = 16.000000000000000000
+    Position.Y = 120.000000000000000000
+    Size.Width = 113.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Word Index'
+    TabOrder = 11
+  end
+  object Label4: TLabel
+    Position.X = 16.000000000000000000
+    Position.Y = 168.000000000000000000
+    Size.Width = 105.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Main Index'
+    TabOrder = 10
+  end
+  object Memo1: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Position.X = 128.000000000000000000
+    Position.Y = 296.000000000000000000
+    Size.Width = 489.000000000000000000
+    Size.Height = 177.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 6
+    Viewport.Width = 485.000000000000000000
+    Viewport.Height = 173.000000000000000000
+  end
+  object StyleBook1: TStyleBook
+    Styles = <
+      item
+      end
+      item
+        Platform = 'Windows 10 Desktop'
+        ResourcesBin = {
+          464D585F5354594C4520322E3501060A4C6162656C7374796C65032901005450
+          463007544C61796F757400095374796C654E616D65060A4C6162656C7374796C
+          6505416C69676E070643656E7465720A53697A652E5769647468050000000000
+          0000FA05400B53697A652E4865696768740500000000000000E803401453697A
+          652E506C6174666F726D44656661756C7408085461624F726465720200000554
+          5465787400095374796C654E616D6506047465787405416C69676E0706436C69
+          656E74064C6F636B6564090748697454657374080A53697A652E576964746805
+          00000000000000FA05400B53697A652E4865696768740500000000000000E803
+          401453697A652E506C6174666F726D44656661756C7408045465787406045465
+          7874165465787453657474696E67732E466F6E742E53697A6505000000000000
+          00800340000000}
+      end>
+  end
+  object ProgressBar1: TProgressBar
+    Orientation = Horizontal
+    Position.X = 128.000000000000000000
+    Position.Y = 224.000000000000000000
+    Size.Width = 489.000000000000000000
+    Size.Height = 20.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object ProgressBar2: TProgressBar
+    Orientation = Horizontal
+    Position.X = 128.000000000000000000
+    Position.Y = 256.000000000000000000
+    Size.Width = 489.000000000000000000
+    Size.Height = 20.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Label5: TLabel
+    Position.X = 40.000000000000000000
+    Position.Y = 216.000000000000000000
+    Size.Width = 89.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    Text = #34389#29702#21508#27284
+    TabOrder = 9
+  end
+  object Label6: TLabel
+    Position.X = 40.000000000000000000
+    Position.Y = 248.000000000000000000
+    Size.Width = 89.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    Text = #21512#25104#32034#24341
+    TabOrder = 8
+  end
+  object Label7: TLabel
+    Position.X = 40.000000000000000000
+    Position.Y = 296.000000000000000000
+    Size.Width = 89.000000000000000000
+    Size.Height = 33.000000000000000000
+    Size.PlatformDefault = False
+    Text = #32034#24341#35338#24687
+    TabOrder = 7
+  end
+  object cbNoMsg: TCheckBox
+    Position.X = 24.000000000000000000
+    Position.Y = 344.000000000000000000
+    Size.Width = 89.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 4
+    Text = #19981#35201#31168#35338#24687
+  end
+end

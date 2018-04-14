@@ -1,0 +1,558 @@
+object fmSearchRange: TfmSearchRange
+  Left = 0
+  Top = 0
+  BorderStyle = Single
+  Caption = #35373#23450#27298#32034#31684#22285
+  ClientHeight = 648
+  ClientWidth = 726
+  StyleBook = fmMain.sbBig
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object Panel1: TPanel
+    Align = Left
+    Size.Width = 169.000000000000000000
+    Size.Height = 648.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object lbSearchRangeList: TListBox
+      Align = Client
+      Margins.Left = 10.000000000000000000
+      Margins.Top = 10.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Margins.Bottom = 10.000000000000000000
+      Size.Width = 149.000000000000000000
+      Size.Height = 628.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      DisableFocusEffect = True
+      ItemIndex = 0
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      Viewport.Width = 145.000000000000000000
+      Viewport.Height = 624.000000000000000000
+      object ListBoxItem1: TListBoxItem
+        TextSettings.Font.Size = 16.000000000000000000
+        StyledSettings = [Family, Style, FontColor, Other]
+        IsSelected = True
+        Size.Width = 145.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = #20381#37096#39006#36984#25799
+        OnClick = ListBoxItem1Click
+      end
+      object ListBoxItem2: TListBoxItem
+        TextSettings.Font.Size = 16.000000000000000000
+        StyledSettings = [Family, Style, FontColor, Other]
+        Position.Y = 40.000000000000000000
+        Size.Width = 145.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = #20381#34255#32147#36984#25799
+        OnClick = ListBoxItem2Click
+      end
+    end
+  end
+  object Splitter1: TSplitter
+    Align = Left
+    Cursor = crHSplit
+    MinSize = 20.000000000000000000
+    Position.X = 169.000000000000000000
+    ShowGrip = False
+    Size.Width = 8.000000000000000000
+    Size.Height = 648.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Panel3: TPanel
+    Align = Right
+    Position.X = 592.000000000000000000
+    Size.Width = 134.000000000000000000
+    Size.Height = 648.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object btOK: TButton
+      ModalResult = 1
+      Position.X = 16.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 97.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = #30906#23450
+      TextSettings.Font.Size = 16.000000000000000000
+      OnClick = btOKClick
+    end
+    object btCancle: TButton
+      ModalResult = 2
+      Position.X = 16.000000000000000000
+      Position.Y = 80.000000000000000000
+      Size.Width = 97.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = #21462#28040
+      TextSettings.Font.Size = 16.000000000000000000
+    end
+    object btCheckAll: TButton
+      Position.X = 16.000000000000000000
+      Position.Y = 160.000000000000000000
+      Size.Width = 97.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Text = #20840#37096#36984#21462
+      TextSettings.Font.Size = 16.000000000000000000
+      OnClick = btCheckAllClick
+    end
+    object btUnCheckAll: TButton
+      Position.X = 16.000000000000000000
+      Position.Y = 216.000000000000000000
+      Size.Width = 97.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      Text = #20840#37096#19981#36984#21462
+      TextSettings.Font.Size = 16.000000000000000000
+      OnClick = btUnCheckAllClick
+    end
+  end
+  object tcSelect: TTabControl
+    Align = Client
+    Size.Width = 415.000000000000000000
+    Size.Height = 648.000000000000000000
+    Size.PlatformDefault = False
+    StyleLookup = 'tabcontrolstyle'
+    TabIndex = 1
+    TabOrder = 1
+    TabPosition = None
+    Sizes = (
+      415s
+      648s
+      415s
+      648s)
+    object TabItem1: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem1'
+      ExplicitSize.cx = 8.000000000000000000
+      ExplicitSize.cy = 8.000000000000000000
+      object tvBulei: TTreeView
+        Align = Client
+        Margins.Left = 10.000000000000000000
+        Margins.Top = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Margins.Bottom = 10.000000000000000000
+        Size.Width = 395.000000000000000000
+        Size.Height = 628.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'treeviewstyle'
+        TabOrder = 0
+        ShowCheckboxes = True
+        Viewport.Width = 391.000000000000000000
+        Viewport.Height = 624.000000000000000000
+        object triBulei0: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 0
+          Text = #38463#21547#37096#39006
+        end
+        object triBulei1: TTreeViewItem
+          Tag = 1
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 1
+          Text = #26412#32227#37096#39006
+        end
+        object triBulei2: TTreeViewItem
+          Tag = 2
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 2
+          Text = #33324#33509#37096#39006
+        end
+        object TreeViewItem20: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 3
+          Text = #27861#33775#37096#39006
+        end
+        object TreeViewItem21: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 4
+          Text = #33775#22196#37096#39006
+        end
+        object TreeViewItem22: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 5
+          Text = #23542#31309#37096#39006
+        end
+        object TreeViewItem23: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 6
+          Text = #28037#27075#37096#39006
+        end
+        object TreeViewItem24: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 7
+          Text = #22823#38598#37096#39006
+        end
+        object TreeViewItem25: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 8
+          Text = #32147#38598#37096#39006
+        end
+        object TreeViewItem26: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 9
+          Text = #23494#25945#37096#39006
+        end
+        object TreeViewItem27: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 10
+          Text = #24459#37096#39006
+        end
+        object TreeViewItem28: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 11
+          Text = #27608#26311#37096#39006
+        end
+        object TreeViewItem29: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 12
+          Text = #20013#35264#37096#39006
+        end
+        object TreeViewItem30: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 13
+          Text = #29788#20285#37096#39006
+        end
+        object TreeViewItem31: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 14
+          Text = #35542#38598#37096#39006
+        end
+        object TreeViewItem32: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 15
+          Text = #28136#22303#23447#37096#39006
+        end
+        object TreeViewItem33: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 16
+          Text = #31146#23447#37096#39006
+        end
+        object TreeViewItem34: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 17
+          Text = #21490#20659#37096#39006
+        end
+        object TreeViewItem35: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 18
+          Text = #20107#24409#37096#39006
+        end
+        object TreeViewItem36: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 19
+          Text = #25958#29004#23531#26412#37096#39006
+        end
+        object TreeViewItem37: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 20
+          Text = #22283#22294#21892#26412#37096#39006
+        end
+        object TreeViewItem38: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 21
+          Text = #28450#35695#21335#20659#22823#34255#32147#37096#39006
+        end
+        object TreeViewItem40: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 22
+          Text = #26032#32232#37096#39006
+        end
+      end
+    end
+    object TabItem2: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem2'
+      ExplicitSize.cx = 8.000000000000000000
+      ExplicitSize.cy = 8.000000000000000000
+      object tvBook: TTreeView
+        Align = Client
+        Margins.Left = 10.000000000000000000
+        Margins.Top = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Margins.Bottom = 10.000000000000000000
+        Size.Width = 395.000000000000000000
+        Size.Height = 628.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        ShowCheckboxes = True
+        Viewport.Width = 391.000000000000000000
+        Viewport.Height = 624.000000000000000000
+        object tviT: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 0
+          Text = 'T '#22823#27491#26032#33065#22823#34255#32147
+        end
+        object tviX: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 1
+          Text = 'X '#21325#26032#32386#22823#26085#26412#32396#34255#32147
+        end
+        object tviY: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 2
+          Text = 'A '#36249#22478#37329#34255
+        end
+        object TreeViewItem1: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 3
+          Text = 'B '#22823#34255#32147#35036#32232
+        end
+        object TreeViewItem2: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 4
+          Text = 'C '#20013#33775#22823#34255#32147#65288#20013#33775#26360#23616#29256#65289
+        end
+        object TreeViewItem3: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 5
+          Text = 'D '#22283#23478#22294#26360#39208#21892#26412#20315#20856
+        end
+        object TreeViewItem4: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 6
+          Text = 'F '#25151#23665#30707#32147
+        end
+        object TreeViewItem5: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 7
+          Text = 'G '#20315#25945#22823#34255#32147
+        end
+        object TreeViewItem6: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 8
+          Text = 'GA '#20013#22283#20315#23546#21490#24535#24409#21002
+        end
+        object TreeViewItem7: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 9
+          Text = 'GB '#20013#22283#20315#23546#24535#21474#21002
+        end
+        object TreeViewItem8: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 10
+          Text = 'I '#21271#26397#20315#25945#30707#21051#25299#29255#30334#21697
+        end
+        object TreeViewItem9: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 11
+          Text = 'J '#22025#33288#22823#34255#32147#65288#26032#25991#35920#29256#65289
+        end
+        object TreeViewItem10: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 12
+          Text = 'K '#39640#40599#22823#34255#32147#65288#26032#25991#35920#29256#65289
+        end
+        object TreeViewItem11: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 13
+          Text = 'L '#20094#38534#22823#34255#32147#65288#26032#25991#35920#29256#65289
+        end
+        object TreeViewItem12: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 14
+          Text = 'M '#21325#27491#34255#32147#65288#26032#25991#35920#29256#65289
+        end
+        object TreeViewItem13: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 15
+          Text = 'N '#28450#35695#21335#20659#22823#34255#32147#65288#20803#20136#23546#29256#65289
+        end
+        object TreeViewItem14: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 16
+          Text = 'P '#27704#27138#21271#34255
+        end
+        object TreeViewItem15: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 17
+          Text = 'S '#23435#34255#36986#29645#65288#26032#25991#35920#29256#65289
+        end
+        object TreeViewItem16: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 18
+          Text = 'U '#27946#27494#21335#34255
+        end
+        object TreeViewItem17: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 19
+          Text = 'Y '#21360#38918#27861#24107#20315#23416#33879#20316#38598
+        end
+        object TreeViewItem18: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 20
+          Text = 'ZS '#27491#21490#20315#25945#36039#26009#39006#32232
+        end
+        object TreeViewItem19: TTreeViewItem
+          TextSettings.Font.Size = 16.000000000000000000
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 21
+          Text = 'ZW '#34255#22806#20315#25945#25991#29563
+        end
+      end
+    end
+  end
+end

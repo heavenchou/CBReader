@@ -1,3 +1,13 @@
 /src/OSX32
 /src/Win32
 /src/__history
+/src/__astcache
+/unittest/OSX32
+/unittest/Win32
+__history
+__astcache
+/guiunittest/Win32
+/guiunittest/OSX32
+/src/Win64
+/guiunittest/Win64
+/.tmp.drivedownload

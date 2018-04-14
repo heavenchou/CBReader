@@ -1,0 +1,37 @@
+object fmSelectBook: TfmSelectBook
+  Left = 0
+  Top = 0
+  Caption = #36984#25799#26360#27331
+  ClientHeight = 552
+  ClientWidth = 522
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object lbBookcase: TListBox
+    Position.X = 88.000000000000000000
+    Position.Y = 88.000000000000000000
+    Size.Width = 353.000000000000000000
+    Size.Height = 409.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    DisableFocusEffect = True
+    DefaultItemStyles.ItemStyle = ''
+    DefaultItemStyles.GroupHeaderStyle = ''
+    DefaultItemStyles.GroupFooterStyle = ''
+    Viewport.Width = 349.000000000000000000
+    Viewport.Height = 405.000000000000000000
+  end
+  object Label1: TLabel
+    StyledSettings = [Family, Style, FontColor]
+    Position.X = 168.000000000000000000
+    Position.Y = 8.000000000000000000
+    Size.Width = 193.000000000000000000
+    Size.Height = 65.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.Size = 60.000000000000000000
+    Text = #26360#12288#27331
+    TabOrder = 1
+  end
+end

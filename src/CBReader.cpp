@@ -1,4 +1,4 @@
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 #include <fmx.h>
 #ifdef _WIN32
@@ -6,7 +6,11 @@
 #endif
 #pragma hdrstop
 #include <System.StartUpCopy.hpp>
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+USEFORM("buildindex.cpp", fmBuildIndex);
+USEFORM("option.cpp", fmOption);
+USEFORM("searchrange.cpp", fmSearchRange);
+USEFORM("selectbook.cpp", fmSelectBook);
 USEFORM("main.cpp", fmMain);
 //---------------------------------------------------------------------------
 extern "C" int FMXmain()
@@ -15,6 +19,10 @@ extern "C" int FMXmain()
 	{
 		Application->Initialize();
 		Application->CreateForm(__classid(TfmMain), &fmMain);
+		Application->CreateForm(__classid(TfmSelectBook), &fmSelectBook);
+		Application->CreateForm(__classid(TfmOption), &fmOption);
+		Application->CreateForm(__classid(TfmSearchRange), &fmSearchRange);
+		Application->CreateForm(__classid(TfmBuildIndex), &fmBuildIndex);
 		Application->Run();
 	}
 	catch (Exception &exception)
@@ -34,4 +42,4 @@ extern "C" int FMXmain()
 	}
 	return 0;
 }
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
