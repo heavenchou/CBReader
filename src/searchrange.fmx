@@ -9,6 +9,7 @@ object fmSearchRange: TfmSearchRange
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnShow = FormShow
   DesignerMasterStyle = 0
   object Panel1: TPanel
     Align = Left
@@ -120,7 +121,7 @@ object fmSearchRange: TfmSearchRange
       OnClick = btUnCheckAllClick
     end
   end
-  object TabControl1: TTabControl
+  object tcSelect: TTabControl
     Align = Client
     Size.Width = 415.000000000000000000
     Size.Height = 648.000000000000000000
@@ -159,8 +160,8 @@ object fmSearchRange: TfmSearchRange
         StyleLookup = 'treeviewstyle'
         TabOrder = 0
         ShowCheckboxes = True
-        Viewport.Width = 395.000000000000000000
-        Viewport.Height = 628.000000000000000000
+        Viewport.Width = 391.000000000000000000
+        Viewport.Height = 624.000000000000000000
         object triBulei0: TTreeViewItem
           TextSettings.Font.Size = 16.000000000000000000
           IsChecked = False
@@ -339,20 +340,12 @@ object fmSearchRange: TfmSearchRange
           TabOrder = 21
           Text = #28450#35695#21335#20659#22823#34255#32147#37096#39006
         end
-        object TreeViewItem39: TTreeViewItem
-          TextSettings.Font.Size = 16.000000000000000000
-          IsChecked = False
-          IsExpanded = False
-          IsSelected = False
-          TabOrder = 22
-          Text = #21360#38918#27861#24107#20315#23416#33879#20316#38598#37096#39006
-        end
         object TreeViewItem40: TTreeViewItem
           TextSettings.Font.Size = 16.000000000000000000
           IsChecked = False
           IsExpanded = False
           IsSelected = False
-          TabOrder = 23
+          TabOrder = 22
           Text = #26032#32232#37096#39006
         end
       end

@@ -86,11 +86,25 @@ unsigned long __fastcall CMyStrUtil::StrToULong(String s, int iBase)
 // 去除頭尾指定字元
 String __fastcall CMyStrUtil::Trim(String sStr, wchar_t wChar)
 {
+	sStr = TrimLeft(sStr, wChar);
+	sStr = TrimRight(sStr, wChar);
+	return sStr;
+}
+//---------------------------------------------------------------------------
+// 去除左邊指定字元
+String __fastcall CMyStrUtil::TrimLeft(String sStr, wchar_t wChar)
+{
 	while((sStr.Length() > 0) && (*(sStr.begin()) == wChar))
 	{
 		sStr.Delete0(0,1);
 	}
 
+	return sStr;
+}
+//---------------------------------------------------------------------------
+// 去除右邊指定字元
+String __fastcall CMyStrUtil::TrimRight(String sStr, wchar_t wChar)
+{
 	while((sStr.Length() > 0) && (*(sStr.LastChar()) == wChar))
 	{
 		sStr.Delete0(sStr.Length()-1,1);

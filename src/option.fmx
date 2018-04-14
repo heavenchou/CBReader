@@ -93,8 +93,8 @@ object fmOption: TfmOption
           Text = #21152#19978#12300#38913#12289#27396#12289#34892#12301#36039#35338
         end
         object cbShowPunc: TCheckBox
-          Position.X = 256.000000000000000000
-          Position.Y = 320.000000000000000000
+          Position.X = 248.000000000000000000
+          Position.Y = 352.000000000000000000
           Size.Width = 153.000000000000000000
           Size.Height = 19.000000000000000000
           Size.PlatformDefault = False
@@ -103,8 +103,8 @@ object fmOption: TfmOption
           OnChange = cbShowPuncChange
         end
         object cbNoShowLgPunc: TCheckBox
-          Position.X = 256.000000000000000000
-          Position.Y = 352.000000000000000000
+          Position.X = 248.000000000000000000
+          Position.Y = 384.000000000000000000
           Size.Width = 113.000000000000000000
           Size.Height = 19.000000000000000000
           Size.PlatformDefault = False
@@ -122,15 +122,15 @@ object fmOption: TfmOption
         Position.X = 24.000000000000000000
         Position.Y = 206.000000000000000000
         Size.Width = 193.000000000000000000
-        Size.Height = 195.000000000000000000
+        Size.Height = 203.000000000000000000
         Size.PlatformDefault = False
         Text = #26657#35387#26684#24335
         TabOrder = 2
         object GroupBox4: TGroupBox
           Position.X = 16.000000000000000000
-          Position.Y = 80.000000000000000000
+          Position.Y = 72.000000000000000000
           Size.Width = 153.000000000000000000
-          Size.Height = 89.000000000000000000
+          Size.Height = 97.000000000000000000
           Size.PlatformDefault = False
           Text = #26657#35387#36984#25799
           TabOrder = 1
@@ -138,14 +138,14 @@ object fmOption: TfmOption
             GroupName = '3'
             IsChecked = True
             Position.X = 16.000000000000000000
-            Position.Y = 57.000000000000000000
+            Position.Y = 65.000000000000000000
             TabOrder = 1
             Text = 'CBETA'#29256#26657#35387
           end
           object rbOrigCollation: TRadioButton
             GroupName = '3'
             Position.X = 17.000000000000000000
-            Position.Y = 25.000000000000000000
+            Position.Y = 33.000000000000000000
             TabOrder = 0
             Text = #21407#26360#26657#35387
           end
@@ -161,7 +161,7 @@ object fmOption: TfmOption
         Position.X = 256.000000000000000000
         Position.Y = 22.000000000000000000
         Size.Width = 225.000000000000000000
-        Size.Height = 315.000000000000000000
+        Size.Height = 339.000000000000000000
         Size.PlatformDefault = False
         Text = #32570#23383#26684#24335
         TabOrder = 1
@@ -169,6 +169,9 @@ object fmOption: TfmOption
           IsChecked = True
           Position.X = 16.000000000000000000
           Position.Y = 32.000000000000000000
+          Size.Width = 169.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
           TabOrder = 0
           Text = #20351#29992' Unicode Ext'
         end
@@ -176,6 +179,9 @@ object fmOption: TfmOption
           IsChecked = True
           Position.X = 16.000000000000000000
           Position.Y = 64.000000000000000000
+          Size.Width = 145.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
           TabOrder = 1
           Text = #20351#29992#36890#29992#23383
         end
@@ -183,7 +189,7 @@ object fmOption: TfmOption
           Position.X = 16.000000000000000000
           Position.Y = 96.000000000000000000
           Size.Width = 185.000000000000000000
-          Size.Height = 89.000000000000000000
+          Size.Height = 97.000000000000000000
           Size.PlatformDefault = False
           Text = #20309#32773#20778#20808
           TabOrder = 2
@@ -191,23 +197,26 @@ object fmOption: TfmOption
             GroupName = '1'
             IsChecked = True
             Position.X = 16.000000000000000000
-            Position.Y = 24.000000000000000000
+            Position.Y = 32.000000000000000000
+            Size.Width = 145.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
             TabOrder = 0
             Text = 'Unicode Ext'
           end
           object rbGaijiNormalFirst: TRadioButton
             GroupName = '1'
             Position.X = 16.000000000000000000
-            Position.Y = 56.000000000000000000
+            Position.Y = 64.000000000000000000
             TabOrder = 1
             Text = #36890#29992#23383
           end
         end
         object GroupBox3: TGroupBox
           Position.X = 16.000000000000000000
-          Position.Y = 200.000000000000000000
+          Position.Y = 208.000000000000000000
           Size.Width = 185.000000000000000000
-          Size.Height = 89.000000000000000000
+          Size.Height = 105.000000000000000000
           Size.PlatformDefault = False
           Text = #28961'Unicode'#21450#36890#29992#23383#26178
           TabOrder = 3
@@ -215,14 +224,14 @@ object fmOption: TfmOption
             GroupName = '2'
             IsChecked = True
             Position.X = 16.000000000000000000
-            Position.Y = 24.000000000000000000
+            Position.Y = 32.000000000000000000
             TabOrder = 0
             Text = #32068#23383#24335
           end
           object rbGaijiImageFirst: TRadioButton
             GroupName = '2'
             Position.X = 16.000000000000000000
-            Position.Y = 56.000000000000000000
+            Position.Y = 64.000000000000000000
             TabOrder = 1
             Text = #22294#27284
           end

@@ -49,6 +49,12 @@ public:
 	// 將傳入字串去除頭尾指定字元
 	static String __fastcall Trim(String sStr, wchar_t wChar);
 
+	// 將傳入字串去除左邊指定字元
+	static String __fastcall TrimLeft(String sStr, wchar_t wChar);
+
+	// 將傳入字串去除右邊指定字元
+	static String __fastcall TrimRight(String sStr, wchar_t wChar);
+
 	// 比對指定長度的字串
 	static bool __fastcall StrnCmp(System::WideChar * p1, System::WideChar * p2, int len);
 

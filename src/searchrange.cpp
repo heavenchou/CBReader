@@ -17,12 +17,12 @@ __fastcall TfmSearchRange::TfmSearchRange(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TfmSearchRange::ListBoxItem1Click(TObject *Sender)
 {
-	TabControl1->TabIndex = 0;
+	tcSelect->TabIndex = 0;
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmSearchRange::ListBoxItem2Click(TObject *Sender)
 {
-    TabControl1->TabIndex = 1;
+    tcSelect->TabIndex = 1;
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmSearchRange::btOKClick(TObject *Sender)
@@ -55,6 +55,11 @@ void __fastcall TfmSearchRange::BuleiSelect()
 			// 先找出該部類的經
 			for(int j=0; j<Catalog->Bulei->Count; j++)
 			{
+				if(j==4620)
+				{
+					int a=10;
+                    int b=a+1;
+                }
 				if(Catalog->Bulei->Strings[j] == sBuleiName)
 				{
 					// 此經要檢索
@@ -125,4 +130,11 @@ void __fastcall TfmSearchRange::TreeViewCheckAll(TTreeView * tvTreeView, bool bC
 }
 //---------------------------------------------------------------------------
 
+
+void __fastcall TfmSearchRange::FormShow(TObject *Sender)
+{
+	tcSelect->TabIndex = 0;
+    lbSearchRangeList->ItemIndex = 0;
+}
+//---------------------------------------------------------------------------
 

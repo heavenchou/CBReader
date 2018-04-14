@@ -18,7 +18,7 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
     // 經文格式
 
 	ShowLineFormat = false;         // 是否依大正藏切行
-	ShowLineHead = true;			// 是否行首加上行首資訊
+	ShowLineHead = false;			// 是否行首加上行首資訊
 	//CorrSelect = 0;				// 勘誤選擇 0:修訂用字, 1:二者皆要 [底本>修訂], 2:底本用字
 	//ShowCorrWarning = 0;          // 是否要秀出修訂選擇的注意事項, 預設是 0
 	ShowCollation = true;			// 顯示校勘資料

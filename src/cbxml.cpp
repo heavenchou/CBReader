@@ -306,9 +306,10 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 		else if (sTagName == u"app")		sHtml = tag_app(Node);
 		else if (sTagName == u"byline")		sHtml = tag_byline(Node);
 		else if (sTagName == u"cell")		sHtml = tag_cell(Node);
-		else if (sTagName == u"div")		sHtml = tag_div(Node);
+		else if (sTagName == u"cb:div")		sHtml = tag_div(Node);
 		else if (sTagName == u"cb:docNumber")	sHtml = tag_docNumber(Node);
 		else if (sTagName == u"entry")		sHtml = tag_entry(Node);
+		else if (sTagName == u"figDesc")	sHtml = tag_figdesc(Node);
 		else if (sTagName == u"foreign")	sHtml = tag_foreign(Node);
 		else if (sTagName == u"form")		sHtml = tag_form(Node);
 		else if (sTagName == u"formula")	sHtml = tag_formula(Node);
@@ -651,18 +652,21 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 		DivType[DivCount] = sType.LowerCase();    // 都變成小寫
 	}
 
-	if(DivType[DivCount] == "w")		// 附文
+	if(DivType[DivCount] == u"w")		// 附文
 	{
 		FuWenCount++;
 		sHtml += u"<div class=\"w\">";   // 要用 div , 才不會有 span 包 p 的困境
 
 		if(FuWenCount == 1)
 		{
-			sHtml += u"<div style=\"margin-left: 1em\">";
-			sHtml += u"　";
+			if(Setting->ShowLineFormat)
+				sHtml += u"<div data-margin-left=\"1em\">";
+			else
+				sHtml += u"<div style=\"margin-left: 1em\">";
+			sHtml += u"<span class=\"line_space\">　</span>";
 		}
 	}
-	else if (DivType[DivCount] == "xu")		// 序文
+	else if (DivType[DivCount] == u"xu")		// 序文
 	{
 		sHtml += u"<div class=\"xu\">";   // 要用 div , 才不會有 span 包 p 的困境
 	}
@@ -671,7 +675,7 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 	sHtml = parseChild(Node); // 處理內容
 	// ----------------------------------
 
-	if(DivType[DivCount] == "w")		// 附文
+	if(DivType[DivCount] == u"w")		// 附文
 	{
 		FuWenCount--;
 		if(FuWenCount == 0)	// 大正藏切行
@@ -742,11 +746,22 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 		sTextIndentSpace = u"　　　";
 	}
 
-	sHtml += u"<div class=\"entry\" style=\"text-indent: ";
-	sHtml += String(iTextIndent);
-	sHtml += u"em; margin-left: ";
-	sHtml += String(iMarginLeft);
-	sHtml += u"em\">";
+	if(Setting->ShowLineFormat)
+	{
+		sHtml += u"<div class=\"entry\" style=\"text-indent: ";
+		sHtml += String(iTextIndent);
+		sHtml += u"em\" data-margin-left=\"";
+		sHtml += String(iMarginLeft);
+		sHtml += u"em\">";
+	}
+	else
+	{
+		sHtml += u"<div class=\"entry\" style=\"text-indent: ";
+		sHtml += String(iTextIndent);
+		sHtml += u"em; margin-left: ";
+		sHtml += String(iMarginLeft);
+		sHtml += u"em\">";
+	}
 
 	sHtml += u"<span class=\"line_space\">";
 	sHtml += sTextIndentSpace;
@@ -760,6 +775,11 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 	MarginLeft = sOldMarginLeft;
 
 	return sHtml;
+}
+// ---------------------------------------------------------------------------
+String __fastcall CCBXML::tag_figdesc(_di_IXMLNode Node)
+{
+	return u"";
 }
 // ---------------------------------------------------------------------------
 // no.26 <foreign n="0442001" lang="pli" resp="Taisho" cb:place="foot">gabbhaseyy&amacron; punabhav&amacron;bhimbbatti.</foreign>
@@ -1061,7 +1081,10 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 	if(ParentNode != NULL)
 	{
 		sParentNodeName = ParentNode->GetNodeName();
-		if(sParentNodeName == u"list")
+	}
+
+	if(sParentNodeName == u"list")
+	{
 			// list 的規則參考 list 的項目
 			sHtml += u"<span class=\"headname\">";
 	}
@@ -1088,13 +1111,13 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 		// Q8 ==> 空3格
 
 		// 原本不應該有 0 , 但有時 head 不在 div 中, 就會有 0 了
-		if(DivCount == 0 || DivCount == 1 || DivCount == 4 || DivCount == 7)
+		if(DivCount == 0 || DivCount % 3 == 1)
 			sHtml += u"<span class=\"line_space\">　　</span>"
 					  "<p class=\"headname2\">";
-		else if(DivCount == 2 || DivCount == 5 || DivCount == 8)
+		else if(DivCount % 3 == 2)
 			sHtml += u"<span class=\"line_space\">　　　</span>"
 					  "<p class=\"headname3\">";
-		else if(DivCount == 3 || DivCount == 6 || DivCount == 9)
+		else if(DivCount % 3 == 0)
 			sHtml += u"<span class=\"line_space\">　　　　</span>"
 					  "<p class=\"headname4\">";
 	}
@@ -1418,7 +1441,7 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 
 	// 判斷此行是不是空白行
 	bool bNoLineData = false;
-	_di_IXMLNode NextSiblNode = Node->NextSibling();
+	_di_IXMLNode NextSiblNode = GetNextSiblNode(Node);
 	String sNextSiblNodeName = u"";
 	if(NextSiblNode != NULL)
 	{
@@ -1434,7 +1457,7 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 			{
 				// 可能空白行, 往下查是不是 lb 標記
 
-				_di_IXMLNode NextSiblNode2 = NextSiblNode->NextSibling();  // 取得下一層
+				_di_IXMLNode NextSiblNode2 = GetNextSiblNode(NextSiblNode);  // 取得下一層
 
 				if(NextSiblNode2 != NULL)
 				{
@@ -1465,11 +1488,11 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 
 		if(InPinHead || InFuWenHead || InOtherHead || InHead)		// 品名, 附文標題, 其它標題
 		{
-			if(DivCount == 0 || DivCount == 1 || DivCount == 4 || DivCount == 7)
+			if(DivCount == 0 || DivCount % 3 == 1)
 				sSpace += u"　　";
-			else if(DivCount == 2 || DivCount == 5 || DivCount == 8)
+			else if(DivCount % 3 == 2 )
 				sSpace += u"　　　";
-			else if(DivCount == 3 || DivCount == 6 || DivCount == 9)
+			else if(DivCount % 3 == 0)
 				sSpace += u"　　　　";
 		}
 
@@ -1737,20 +1760,40 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	{
 		if(iMarginLeft !=0 || iTextIndent != 0)
 		{
-			sHtml += u"<p style=\"";
-			if(iMarginLeft != 0)
+			if(Setting->ShowLineFormat)
 			{
-				sHtml += u"margin-left:";
-				sHtml += String(iMarginLeft);
-				sHtml += u"em;";
+				sHtml += u"<p style=\"";
+				if(iTextIndent != 0)
+				{
+					sHtml += u"text-indent:";
+					sHtml += String(iTextIndent);
+					sHtml += u"em\"";
+				}
+				if(iMarginLeft != 0)
+				{
+					sHtml += u" data-margin-left=\"";
+					sHtml += String(iMarginLeft);
+					sHtml += u"em\"";
+				}
+				sHtml += u">";
 			}
-			if(iTextIndent != 0)
+			else
 			{
-				sHtml += u"text-indent:";
-				sHtml += String(iTextIndent);
-				sHtml += u"em;";
+				sHtml += u"<p style=\"";
+				if(iMarginLeft != 0)
+				{
+					sHtml += u"margin-left:";
+					sHtml += String(iMarginLeft);
+					sHtml += u"em;";
+				}
+				if(iTextIndent != 0)
+				{
+					sHtml += u"text-indent:";
+					sHtml += String(iTextIndent);
+					sHtml += u"em;";
+				}
+				sHtml += u"\">";
 			}
-			sHtml += u"\">";
 		}
 		else
 		{
@@ -1827,6 +1870,8 @@ String __fastcall CCBXML::tag_list(_di_IXMLNode Node)
 	ListCount++;
 	ItemNum[ListCount] = 0; // 歸零
 
+	bool bHasHead = false;
+
 	// 看看下一個是不是 <head>
 	if(Node->HasChildNodes)
 	{
@@ -1838,16 +1883,25 @@ String __fastcall CCBXML::tag_list(_di_IXMLNode Node)
 			// <lb ed="X" n="0575a04"/><div1 type="other"><mulu type="其他" level="1" label="希叟和尚正宗贊目錄"/><head>希叟和尚正宗贊目錄</head>
 			// <lb ed="X" n="0575a05"/>
 			// <lb ed="X" n="0575a06"/><list><head>卷第一</head>
-			if(ListCount == 1) sHtml += u"<br/><br/>";     // 第一層才要
+			if(ListCount == 1)
+			{
+            	// 好像不需要了
+				//sHtml += u"<br class=\"para_br\"/><br class=\"para_br\"/>";     // 第一層才要
+			}
+			bHasHead = true;
 		}
 	}
 
 	// 如果是 <list rendition="simple"> 要轉成 <ul style="list-style:none;">
 	String sRendition = GetAttr(Node, "rendition");
-	if(sRendition == u"simple")
-		sHtml += u"<ul style=\"list-style:none;\">";
-	else
-		sHtml += u"<ul>";
+
+	if(!bHasHead)
+	{
+		if(sRendition == u"simple")
+			sHtml += u"<ul style=\"list-style:none;\">";
+		else
+			sHtml += u"<ul>";
+    }
 
 	sHtml += parseChild(Node); // 處理內容
 
@@ -2193,11 +2247,23 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 	}
 	else
 	{
-		sHtml += u"<p style=\"text-indent: ";
-		sHtml += String(iTextIndent);
-		sHtml += u"em; margin-left: ";
-		sHtml += String(iMarginLeft);
-		sHtml += u"em\">";
+
+		if(Setting->ShowLineFormat)
+		{
+			sHtml += u"<p style=\"text-indent: ";
+			sHtml += String(iTextIndent);
+			sHtml += u"em\" data-margin-left=\"";
+			sHtml += String(iMarginLeft);
+			sHtml += u"em\">";
+		}
+		else
+		{
+			sHtml += u"<p style=\"text-indent: ";
+			sHtml += String(iTextIndent);
+			sHtml += u"em; margin-left: ";
+			sHtml += String(iMarginLeft);
+			sHtml += u"em\">";
+		}
 	}
 
 	// 處理 <span ....> --------------------------------------------------
@@ -2374,7 +2440,7 @@ String __fastcall CCBXML::tag_ref(_di_IXMLNode Node)
 	{
 		if(sTarget.SubString0(0,4) == u"#PTS")
 		{
-			sTarget.Delete(0,1);
+			sTarget.Delete0(0,1);
 			String sPage = sTarget;
 			int iPos = sPage.LastDelimiter0(u".");	// 找到最後.的位置
 			sPage.Delete0(0,iPos+1);   // 最後一個數字, 也就是頁碼
@@ -3044,4 +3110,43 @@ int __fastcall CCBXML::Get_Add_IdNum(String sId)
     }
 }
 // ---------------------------------------------------------------------------
+// 取得下一個 note , 但因為有一些是 <lb type=old> , <pb type=old> <lb id=Rxx> 要忽略
+_di_IXMLNode __fastcall CCBXML::GetNextSiblNode(_di_IXMLNode Node)
+{
+	_di_IXMLNode NextSiblNode = Node->NextSibling();
+	String sNextSiblNodeName = u"";
+	if(NextSiblNode == NULL) return NextSiblNode;
 
+	#ifdef _Windows
+		TNodeType nodetype = NextSiblNode->NodeType;
+	#else
+		Xml::Internal::Omnixml::TNodeType nodetype = NextSiblNode->NodeType;
+	#endif
+
+	// 不是純 element , 傳回
+	if(nodetype != 1) return NextSiblNode;
+
+	// 這是純 element
+
+	sNextSiblNodeName = NextSiblNode->GetNodeName();
+	if(sNextSiblNodeName != u"lb" && sNextSiblNodeName != u"pb") return NextSiblNode;
+
+
+	// 取出屬性
+	String sType = GetAttr(NextSiblNode, u"type");
+	String sEd = GetAttr(NextSiblNode, u"ed");
+	String sN = GetAttr(NextSiblNode, "n");
+
+	// 印順導師著作有 type="old" 要忽略
+	if(sType == u"old")
+	{
+		NextSiblNode = GetNextSiblNode(NextSiblNode);
+	}
+	// 如果 ed 屬性不是本書, 則忽略, 主要是卍續藏是 X, 但有 ed="Rxxx" 的情況
+	else if(sEd != BookId)
+	{
+		NextSiblNode = GetNextSiblNode(NextSiblNode);
+	}
+
+	return NextSiblNode;
+}

@@ -39,17 +39,17 @@ private: // User declarations
 
 	// --------------------------
 
-	String DivType[20];		// 最多 20 層
+	String DivType[30];		// 最多 20 層
 	int DivCount;   		// Div 的層次
 
 	bool InByline;  		// 用來判斷是否是作譯者
-	int  FuWenCount;			// 用來判斷是否是附文, 因為有巢狀, 所以用 int
+	int  FuWenCount;		// 用來判斷是否是附文, 因為有巢狀, 所以用 int
 	bool InSutraNum;	   	// 用來判斷本行是否是經號
 	bool InPinHead;			// 用來判斷本行是否是品名
 	bool InFuWenHead;		// 用來判斷本行是否是附文標題
 	bool InOtherHead;		// 用來判斷本行是否是其它標題
 	bool InHead;			// 用來判斷本行是否是標題
-	int  NoNormal;         // 用來判斷是否可用通用字 , 大於 0 就不用通用字, 這二種就不用通用字 <text rend="no_nor"> 及 <term rend="no_nor">
+	int  NoNormal;			// 用來判斷是否可用通用字 , 大於 0 就不用通用字, 這二種就不用通用字 <text rend="no_nor"> 及 <term rend="no_nor">
 
 	// 偈頌相關
 	bool IsFindLg;			// 一遇到 <lg> 就 true, 第一個 <l> 就會處理並設為 false;
@@ -66,8 +66,8 @@ private: // User declarations
 	String MarginLeft;		// 移位
 	//String NormalWords; 	// 通用詞處理法, 若是 orig , 就是呈現 <orig> 中的字, 若是 "reg" 就是呈現 <reg> 中的字, 這是在 choice 標記中判斷
 
-	int ListCount;				// 計算 list 的數目, 有一些地方需要用到
-	int ItemNum[100];    		// 用來判斷 item 出現的次數, 每一層 list 都有不同的內容
+	int ListCount;			// 計算 list 的數目, 有一些地方需要用到
+	int ItemNum[100];		// 用來判斷 item 出現的次數, 每一層 list 都有不同的內容
 
 	int CellNum;            // 計算第幾個 Cell, 用來判斷要在普及版寫幾個空格
 	int OtherColspan;       // 因本 cell 佔 n 格以上, 所以和後面的 cell 要空 (n-1)*3 的空格, 此即記錄 n-1 的數字
@@ -75,12 +75,12 @@ private: // User declarations
 	// 要判斷品的範圍, 若出現品的 mulu, 則記錄 level, 等到 level 數字再次大於或等於時, 此品才結束
 	//<mulu level="3" label="3 轉輪聖王品" type="品"/>
 	int MuluLevel;          // 目錄的層次
-	String MuluLabel;    // 目錄的名稱
+	String MuluLabel;		// 目錄的名稱
     bool InMulu;			// 在 <cb:mulu>...</cb:mulu> 的範圍內, 文字則不呈現,
 	bool InMuluPin;			// 在 <cb:mulu>...</cb:mulu> 的範圍內, 而且是 "品" , 則文字不呈現, 但要記錄至 MuluLabel
 
-	int NoteAddNum;     // 自訂校註 <note type="add" 的流水號, 由 1 開始
-	map<String, int> mpNoteAddNum;  // 由 id 找出 流水號, 沒有就設定一個
+	int NoteAddNum;			// 自訂校註 <note type="add" 的流水號, 由 1 開始
+	map<String, int> mpNoteAddNum;	// 由 id 找出 流水號, 沒有就設定一個
 	map<String, int> mpNoteStarNum; // 記錄每一個 id 有多少個星號了
 
 	// --------------------------
@@ -98,6 +98,7 @@ private: // User declarations
 	String __fastcall tag_div(_di_IXMLNode Node);
 	String __fastcall tag_docNumber(_di_IXMLNode Node);
 	String __fastcall tag_entry(_di_IXMLNode Node);
+	String __fastcall tag_figdesc(_di_IXMLNode Node);
 	String __fastcall tag_foreign(_di_IXMLNode Node);
 	String __fastcall tag_form(_di_IXMLNode Node);
 	String __fastcall tag_formula(_di_IXMLNode Node);
@@ -191,6 +192,9 @@ public: // User declarations
 	inline String __fastcall GetAttr(_di_IXMLNode Node, String sAttr); // 取得屬性
 	String __fastcall NoteId2Num(String sId); // 把校勘ID 變成校勘數字 0001001 -> 1
 	void __fastcall ReadGaiji(_di_IXMLNode xmlNodeGaijis); // 讀取缺字
+
+	// 取得下一個 note , 但因為有一些是 <lb type=old> , <pb type=old> <lb id=Rxx> 要忽略
+	_di_IXMLNode __fastcall GetNextSiblNode(_di_IXMLNode Node);
 
 	// 傳入參數為 XML 檔, 呈現的設定
 	__fastcall CCBXML(String sFile, String sLink, CSetting * csSetting, String sJSFile, bool bShowHighlight = false, TmyMonster * seSearchEngine = 0);

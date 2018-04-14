@@ -29,7 +29,7 @@ __published:	// IDE-managed Components
 	TPanel *Panel3;
 	TButton *btOK;
 	TButton *btCancle;
-	TTabControl *TabControl1;
+	TTabControl *tcSelect;
 	TTabItem *TabItem1;
 	TTreeView *tvBulei;
 	TTreeViewItem *triBulei0;
@@ -54,7 +54,6 @@ __published:	// IDE-managed Components
 	TTreeViewItem *TreeViewItem36;
 	TTreeViewItem *TreeViewItem37;
 	TTreeViewItem *TreeViewItem38;
-	TTreeViewItem *TreeViewItem39;
 	TTreeViewItem *TreeViewItem40;
 	TTabItem *TabItem2;
 	TTreeView *tvBook;
@@ -87,6 +86,7 @@ __published:	// IDE-managed Components
 	void __fastcall btOKClick(TObject *Sender);
 	void __fastcall btCheckAllClick(TObject *Sender);
 	void __fastcall btUnCheckAllClick(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
 private:	// User declarations
 
 	void __fastcall TreeViewCheckAll(TTreeView * tvTreeView, bool bChecked); // ¬Y Treeview ¥þ¿ï

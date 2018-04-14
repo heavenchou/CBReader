@@ -58,7 +58,7 @@ __published: // IDE-managed Components
 	TCornerButton *btOpenBookcase;
 	TMenuItem *MenuItem3;
 	TSplitter *Splitter1;
-	TTabControl *TabControl2;
+	TTabControl *tcMainFunc;
 	TTabItem *TabItem2;
 	TTreeView *tvNavTree;
 	TTabItem *TabItem3;
@@ -200,6 +200,7 @@ private: // User declarations
 
 public: // User declarations
 
+    String ProgramTitle;    // 程式名稱
 
     int SelectedBook;   // 目前選中的書, -1 表示還沒選
 	String SettingFile;

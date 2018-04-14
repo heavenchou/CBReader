@@ -22,6 +22,7 @@ TfmMain *fmMain;
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
 	Application->Title = "CBReader";
+	ProgramTitle = u"CBETA 電子佛典 2018";
 	InitialPath();  // 設定目錄初值
 
 #ifdef _Windows
@@ -361,11 +362,8 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	String sJSFile = Bookcase->CBETA->Dir + Bookcase->CBETA->JSFile;
 	CCBXML * CBXML = new CCBXML(sXMLFile, sLink, Setting, sJSFile, bShowHighlight, seSearchEngine);
 
-	// 找出 spine id
-	if(!Bookcase->CBETA->Spine->Files->Find(sFile, SpineID))
-	{
-		SpineID = -1;	// 表示沒找到
-	}
+	// 找出 spine id , -1 表示沒找到
+	SpineID = Bookcase->CBETA->Spine->Files->IndexOf(sFile);
 
 	String sOutFile = sFile + ".htm";
 	sOutFile = StringReplace(sOutFile, "/", "_", TReplaceFlags() << rfReplaceAll);
@@ -393,6 +391,24 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 		{
 			LoadMuluTree(sMulu);
 		}
+	}
+
+	// 更改 form 的 title
+
+	if(SpineID >= 0)
+	{
+		String sBook = Bookcase->CBETA->Spine->BookID->Strings[SpineID];
+		String sVol = Bookcase->CBETA->Spine->Vol->Strings[SpineID];
+		String sSutra = Bookcase->CBETA->Spine->Sutra->Strings[SpineID];
+		String sJuan = Bookcase->CBETA->Spine->Juan->Strings[SpineID];
+		int iIndex = Bookcase->CBETA->Catalog->FindIndexBySutraNum(sBook, sSutra);
+		String sName = Bookcase->CBETA->Catalog->SutraName->Strings[iIndex];
+
+		sJuan = CMyStrUtil::TrimLeft(sJuan, u'0');
+		sSutra = CMyStrUtil::TrimLeft(sSutra, u'0');
+		String sCaption = ProgramTitle + u"《" + sName + u"》"
+				+ sVol + u", No. " + sSutra + u", 卷" + sJuan;
+		Caption = sCaption;
 	}
 }
 //---------------------------------------------------------------------------
@@ -515,6 +531,11 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 
 			// 這裡可能找到 T220 第 600 卷, 卻傳回 T05 而不是 T07
 			// 有待改進處理 ????
+			if(i > 720)
+			{
+				int j;
+				j++;
+            }
 			int iCatalogIndex = Catalog->FindIndexBySutraNum(sBook,sSutraNum);	// 取得 TripitakaMenu 的編號
 
 			// 找到了
@@ -681,21 +702,41 @@ void __fastcall TfmMain::btOpenBookNavClick(TObject *Sender)
 // 上一卷
 void __fastcall TfmMain::btPrevJuanClick(TObject *Sender)
 {
+	if(SpineID == -1) return;
 	if(SpineID > 0)
 	{
-		String sFile = Bookcase->CBETA->Spine->CBGetFileNameBySpineIndex(SpineID-1);
-		ShowCBXML(sFile);
+			// 檢查是不是同一經
+		String sThisSutra = Bookcase->CBETA->Spine->Sutra->Strings[SpineID];
+		String sNextSutra = Bookcase->CBETA->Spine->Sutra->Strings[SpineID-1];
+		if(sThisSutra == sNextSutra)
+		{
+			String sFile = Bookcase->CBETA->Spine->CBGetFileNameBySpineIndex(SpineID-1);
+			ShowCBXML(sFile);
+			return;
+		}
 	}
+
+	TDialogService::ShowMessage(u"本卷已是最初卷");
 }
 //---------------------------------------------------------------------------
 // 下一卷
 void __fastcall TfmMain::btNextJuanClick(TObject *Sender)
 {
+	if(SpineID == -1) return;
 	if(SpineID + 1 < Bookcase->CBETA->Spine->Files->Count)
 	{
-		String sFile = Bookcase->CBETA->Spine->CBGetFileNameBySpineIndex(SpineID+1);
-		ShowCBXML(sFile);
+		// 檢查是不是同一經
+		String sThisSutra = Bookcase->CBETA->Spine->Sutra->Strings[SpineID];
+		String sNextSutra = Bookcase->CBETA->Spine->Sutra->Strings[SpineID+1];
+		if(sThisSutra == sNextSutra)
+		{
+			String sFile = Bookcase->CBETA->Spine->CBGetFileNameBySpineIndex(SpineID+1);
+			ShowCBXML(sFile);
+			return;
+		}
 	}
+
+	TDialogService::ShowMessage(u"本卷已是最後一卷");
 }
 //---------------------------------------------------------------------------
 
@@ -807,6 +848,8 @@ void __fastcall TfmMain::fanMuluWidthFinish(TObject *Sender)
 
 void __fastcall TfmMain::FormShow(TObject *Sender)
 {
+	tcMainFunc->TabIndex = 0;
+
 	// 取得 Bookcase 所有資料區
 	// 載入書櫃
 
@@ -845,9 +888,9 @@ void __fastcall TfmMain::FormShow(TObject *Sender)
 	btBuildIndex->Visible = false;
 	SpineID = -1;	// 初值表示沒開啟
 
-	//CheckUpdate(u"");   // 檢查更新
+	CheckUpdate(u"");   // 檢查更新
 
-   	WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
+	WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
 	WebBrowser->Navigate();
 }
 //---------------------------------------------------------------------------
