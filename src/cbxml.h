@@ -196,6 +196,11 @@ public: // User declarations
 	// 取得下一個 note , 但因為有一些是 <lb type=old> , <pb type=old> <lb id=Rxx> 要忽略
 	_di_IXMLNode __fastcall GetNextSiblNode(_di_IXMLNode Node);
 
+	// 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
+	String __fastcall mv_data_between_tr(String sHtml);
+	// 取代正規式 : 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
+	String __fastcall TableTrReplace (const TMatch &Match);
+
 	// 傳入參數為 XML 檔, 呈現的設定
 	__fastcall CCBXML(String sFile, String sLink, CSetting * csSetting, String sJSFile, bool bShowHighlight = false, TmyMonster * seSearchEngine = 0);
 	__fastcall ~CCBXML();

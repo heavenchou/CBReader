@@ -163,7 +163,8 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		.pts_head {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
 	"		.lg {color:#008040; font-weight: normal; font-size:16pt;}\n"
 	"		.corr {color:#FF0000; font-weight: normal; }\n"
-	"		.note {color:#9F5000; font-weight: normal; font-size:14pt;}\n";
+	"		.note {color:#9F5000; font-weight: normal; font-size:14pt;}\n"
+	"		table {border-collapse: collapse;}\n";
 
 	if(Setting->VerticalMode)
 		sHtml += u"		body {writing-mode: tb-rl;}\n";
@@ -175,9 +176,10 @@ String __fastcall CCBXML::MakeHTMLHead()
 				  "		p {display:inline;}\n"
                   "		br.lb_br {display:inline;}\n"
 				  "		br.para_br {display:none;}\n"
-				  "     table {display: inline;}\n"
+				  "     table {display: inline; line-height:2px; border-style: none}\n"
+				  "     tbody {display: inline;}\n"
 				  "     tr {display: inline;}\n"
-				  "     td {display: inline;}\n"
+				  "     td {display: inline; padding: 0px;}\n"
 				  "     p.juannum {display:inline; margin-left:0em;}\n"    // 經號
 				  "     p.headname2 {display:inline; margin-left:0em;}\n"    // head 標題
 				  "     p.headname3 {display:inline; margin-left:0em;}\n"    // head 標題
@@ -192,9 +194,10 @@ String __fastcall CCBXML::MakeHTMLHead()
 				  "		p {display:block;}\n"
 				  "		br.lb_br {display:none;}\n"
 				  "		br.para_br {display:inline;}\n"
-				  "     table {display: table;}\n"
+				  "     table {display: table; line-height:20px; border-style: solid}\n"
+				  "     tbody {display: table-row-group;}\n"
 				  "     tr {display: table-row;}\n"
-				  "     td {display: table-cell;}\n"
+				  "     td {display: table-cell; padding: 10px;}\n"
 				  "     p.juannum {display:block; margin-left:2em;}\n"  // 經號
 				  "     p.headname2 {display:block; margin-left:2em;}\n"    // head 標題
 				  "     p.headname3 {display:block; margin-left:3em;}\n"    // head 標題
@@ -254,7 +257,7 @@ String __fastcall CCBXML::ParseXML()
 {
 	_di_IXMLNode Node;
 	Document->Active = true;
-	String sHtml = "";
+	String sHtml = u"";
 
 	// 讀取缺字
 	_di_IXMLNode NodeGaijis = Document->DocumentElement->ChildNodes->Nodes["teiHeader"]->ChildNodes->Nodes["encodingDesc"]->ChildNodes->Nodes["charDecl"];
@@ -275,7 +278,7 @@ String __fastcall CCBXML::ParseXML()
 // 解析 XML Node
 String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 
 #ifdef _Windows
 	TNodeType nodetype = Node->NodeType;
@@ -359,7 +362,7 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 // 解析 XML Child
 String __fastcall CCBXML::parseChild(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 
 	for (int i = 0; i < Node->ChildNodes->Count; i++)
 	{
@@ -492,7 +495,7 @@ HTML 校註轉成 :
 
 String __fastcall CCBXML::tag_app(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 
 	String sId = GetAttr(Node, u"n");
 	String sType = GetAttr(Node, u"type");
@@ -569,7 +572,7 @@ String __fastcall CCBXML::tag_app(_di_IXMLNode Node)
  // <byline cb:type="Translator">
 String __fastcall CCBXML::tag_byline(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 	if(ListCount == 0) InByline = true;
 
 	sHtml = parseChild(Node); // 處理內容
@@ -588,25 +591,24 @@ String __fastcall CCBXML::tag_byline(_di_IXMLNode Node)
 // ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_cell(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 	String sCols = GetAttr(Node, u"cols");
 	String sRows = GetAttr(Node, u"rows");
 
 	CellNum++;        // cell 格式數量累加
-	String sColspan = "";
-	String sRowspan = "";
+	String sColspan = u"";
+	String sRowspan = u"";
 
 	int iColspan = 0;
-	if(sCols != "")
+	if(sCols != u"")
 	{
-		sColspan = sCols;
-		iColspan = sColspan.ToIntDef(1)-1;
-		sColspan = " colspan = \"" + sColspan + "\"";
+		iColspan = sCols.ToIntDef(1)-1;
+		sColspan = u" colspan = \"" + sCols + u"\"";
 	}
 
-	if(sRows != "")
+	if(sRows != u"")
 	{
-		sRowspan = " rowspan = \"" + sRows + "\"";
+		sRowspan = u" rowspan = \"" + sRows + u"\"";
 	}
 
 	sHtml += u"<td";
@@ -633,7 +635,7 @@ String __fastcall CCBXML::tag_cell(_di_IXMLNode Node)
 	sHtml += u"</span>";
 
 	sHtml += parseChild(Node); // 處理內容
-	sHtml += u"&nbsp;</td>";
+	sHtml += u"</td>";
 
 	return sHtml;
 }
@@ -660,10 +662,10 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 		if(FuWenCount == 1)
 		{
 			if(Setting->ShowLineFormat)
-				sHtml += u"<div data-margin-left=\"1em\">";
+				sHtml += u"<div data-margin-left='1em'>";
 			else
-				sHtml += u"<div style=\"margin-left: 1em\">";
-			sHtml += u"<span class=\"line_space\">　</span>";
+				sHtml += u"<div data-margin-left='1em' style='margin-left: 1em'>";
+			sHtml += u"<span class='line_space'>　</span>";
 		}
 	}
 	else if (DivType[DivCount] == u"xu")		// 序文
@@ -672,7 +674,7 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 	}
 
 	// ----------------------------------
-	sHtml = parseChild(Node); // 處理內容
+	sHtml += parseChild(Node); // 處理內容
 	// ----------------------------------
 
 	if(DivType[DivCount] == u"w")		// 附文
@@ -697,7 +699,7 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 // ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_docNumber(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 
 	sHtml += u"<span class=\"line_space\">　　</span>";
 	sHtml += u"<p class=\"juannum\">";
@@ -760,6 +762,8 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 		sHtml += String(iTextIndent);
 		sHtml += u"em; margin-left: ";
 		sHtml += String(iMarginLeft);
+		sHtml += u"em\" data-margin-left=\"";
+		sHtml += String(iMarginLeft);
 		sHtml += u"em\">";
 	}
 
@@ -812,7 +816,7 @@ String __fastcall CCBXML::tag_form(_di_IXMLNode Node)
 // formula 或 hi , 誰有  rend="vertical-align:super" 就使用 <sup>...</sup>
 String __fastcall CCBXML::tag_formula(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 	String sRend = GetAttr(Node, "rend");
 
 	if(sRend == u"vertical-align:super")
@@ -1033,7 +1037,7 @@ String __fastcall CCBXML::tag_g(_di_IXMLNode Node)
 // 圖檔 <figure><graphic url="../figures/T/T18p0146_01.gif"></graphic></figure>
 String __fastcall CCBXML::tag_graphic(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 	String sURL = GetAttr(Node, "url");
 	if(sURL != "")
 	{
@@ -1165,7 +1169,7 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 // ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_item(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 
     ItemNum[ListCount]++;
 
@@ -1275,7 +1279,7 @@ String __fastcall CCBXML::tag_item(_di_IXMLNode Node)
 
 String __fastcall CCBXML::tag_juan(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 
 	sHtml = u"<span class=\"juanname\">";
 	String sPlace = GetAttr(Node, "place");
@@ -1305,7 +1309,7 @@ String __fastcall CCBXML::tag_juan(_di_IXMLNode Node)
 
 String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 
 	LTagNum++;					// 若是第一個, 只空一格
 
@@ -1628,7 +1632,7 @@ String __fastcall CCBXML::tag_lem(_di_IXMLNode Node)
 
 String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 
 	IsFindLg = true;			// 一遇到 <lg> 就 true, 第一個 <l> 就會處理並設為 false;
 	LgCount++;                  // 判斷是不是在 <lg> 之中, 主要是用來處理偈頌中的標點要不要呈現.
@@ -1792,7 +1796,14 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 					sHtml += String(iTextIndent);
 					sHtml += u"em;";
 				}
-				sHtml += u"\">";
+				sHtml += u"\"";
+				if(iMarginLeft != 0)
+				{
+					sHtml += u" data-margin-left=\"";
+					sHtml += String(iMarginLeft);
+					sHtml += u"em\"";
+				}
+				sHtml += u">";
 			}
 		}
 		else
@@ -1865,7 +1876,7 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 */
 String __fastcall CCBXML::tag_list(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 
 	ListCount++;
 	ItemNum[ListCount] = 0; // 歸零
@@ -2250,19 +2261,21 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 
 		if(Setting->ShowLineFormat)
 		{
-			sHtml += u"<p style=\"text-indent: ";
+			sHtml += u"<p style='text-indent: ";
 			sHtml += String(iTextIndent);
-			sHtml += u"em\" data-margin-left=\"";
+			sHtml += u"em' data-margin-left='";
 			sHtml += String(iMarginLeft);
-			sHtml += u"em\">";
+			sHtml += u"em'>";
 		}
 		else
 		{
-			sHtml += u"<p style=\"text-indent: ";
+			sHtml += u"<p style='text-indent: ";
 			sHtml += String(iTextIndent);
 			sHtml += u"em; margin-left: ";
 			sHtml += String(iMarginLeft);
-			sHtml += u"em\">";
+			sHtml += u"em' data-margin-left='";
+			sHtml += String(iMarginLeft);
+			sHtml += u"em'>";
 		}
 	}
 
@@ -2359,7 +2372,7 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 // 解析 XML 標記
 String __fastcall CCBXML::tag_pb(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 	sHtml = parseChild(Node); // 處理內容
 
 	return sHtml;
@@ -2459,7 +2472,7 @@ String __fastcall CCBXML::tag_ref(_di_IXMLNode Node)
 // ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_row(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 	//String sXXX = GetAttr(Node, "xxx");
     CellNum = 0;        // cell 格式數量歸 0
 	OtherColspan = 0;   // 因本 cell 佔 n 格以上, 所以和後面的 cell 要空 (n-1)*3 的空格, 此即記錄 n-1 的數字
@@ -2577,9 +2590,9 @@ String __fastcall CCBXML::tag_t(_di_IXMLNode Node)
 // <cell rows="n"> 依原書不管 rows , 不依原書則變成 <td rowspan="n">
 String __fastcall CCBXML::tag_table(_di_IXMLNode Node)
 {
-	String sHtml = "";
-	String sRend = GetAttr(Node, "rend");
-	String sBorder = "1";      // 預設表格線為 1
+	String sHtml = u"";
+	String sRend = GetAttr(Node, u"rend");
+	String sBorder = u"1";      // 預設表格線為 1
 
 	CRendAttr * myRend = new CRendAttr(sRend);
 	if(myRend->Border != "") sBorder = myRend->Border;
@@ -2591,6 +2604,9 @@ String __fastcall CCBXML::tag_table(_di_IXMLNode Node)
 	sHtml += parseChild(Node); // 處理內容
 
 	sHtml += u"</table>";
+
+	sHtml = mv_data_between_tr(sHtml);  // 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
+
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -2598,7 +2614,7 @@ String __fastcall CCBXML::tag_table(_di_IXMLNode Node)
 // 這二種就不用通用字 <text rend="no_nor"> 及 <term rend="no_nor">
 String __fastcall CCBXML::tag_term(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 	String sRend = GetAttr(Node, u"rend");
 
 	if(sRend == u"no_nor")  NoNormal++;
@@ -2611,7 +2627,7 @@ String __fastcall CCBXML::tag_term(_di_IXMLNode Node)
 // 後面的名字, 當段落用 <trailer><title>般若波羅蜜多心經</title></trailer>
 String __fastcall CCBXML::tag_trailer(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 	sHtml = u"<p>";
 	sHtml += parseChild(Node); // 處理內容
     sHtml += u"</p>";
@@ -3149,4 +3165,24 @@ _di_IXMLNode __fastcall CCBXML::GetNextSiblNode(_di_IXMLNode Node)
 	}
 
 	return NextSiblNode;
+}
+// ---------------------------------------------------------------------------
+// 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
+String __fastcall CCBXML::mv_data_between_tr(String sHtml)
+{
+    TRegEx *regex = new TRegEx();
+	String sPattern = u"(<\\/tr>)(.*?)(<tr>((<td>)|(<td [^>]*>)))";
+	String Out = regex->Replace(sHtml, sPattern, &TableTrReplace, TRegExOptions() << roSingleLine);
+	return Out;
+}
+// ---------------------------------------------------------------------------
+// 取代正規式 : 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
+String __fastcall CCBXML::TableTrReplace (const TMatch &Match)
+{
+	TMatch reMatch = Match; // 這行一定要, 不然會錯
+	String a = reMatch.Groups.Item[1].Value;
+	String b = reMatch.Groups.Item[2].Value;
+	String c = reMatch.Groups.Item[3].Value;
+	// 把二個括號交換
+	return a+c+b;
 }
