@@ -56,6 +56,9 @@ public: // User declarations
 	// 由冊頁欄行找 Spine 的 Index
 	int __fastcall CBGetSpineIndexByVolPageFieldLine(String sBook, String sVol = "", String sPage = "", String sField = "", String sLine = "");
 
+	// 傳入檔名, 找出書,冊,經,卷
+	void __fastcall GetBookVolSutraJuan(String sFile, String &sBook, String &sVol, String &sSutra, String &sJuan);
+
 	__fastcall CJuanLine();
 	__fastcall ~CJuanLine();
 };

@@ -5,7 +5,7 @@
         <FrameworkType>FMX</FrameworkType>
         <MainSource>CBReader.cpp</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>7</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -166,8 +166,8 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <Debugger_Launcher>/usr/X11/bin/xterm -e &quot;%debuggee%&quot;</Debugger_Launcher>
-        <LinkPackageImports>rtl.bpi;fmx.bpi;xmlrtl.bpi</LinkPackageImports>
         <ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
+        <LinkPackageImports>rtl.bpi;fmx.bpi;xmlrtl.bpi</LinkPackageImports>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -205,6 +205,9 @@
         <Debugger_Launcher>/usr/X11/bin/xterm -e &quot;%debuggee%&quot;</Debugger_Launcher>
         <DynamicRTL>false</DynamicRTL>
         <LinkPackageImports>rtl.bpi;fmx.bpi;xmlrtl.bpi</LinkPackageImports>
+        <VerInfo_MajorVer>0</VerInfo_MajorVer>
+        <VerInfo_MinorVer>1</VerInfo_MinorVer>
+        <VerInfo_Keys>CFBundleName=$(MSBuildProjectName);CFBundleDisplayName=$(MSBuildProjectName);CFBundleIdentifier=$(MSBuildProjectName);CFBundleVersion=0.1.0;CFBundlePackageType=APPL;CFBundleSignature=????;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=$(MSBuildProjectName);NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.utilities;NSLocationAlwaysUsageDescription=The reason for accessing the location information of the user;NSLocationWhenInUseUsageDescription=The reason for accessing the location information of the user;NSContactsUsageDescription=The reason for accessing the contacts;CFBundleShortVersionString=1.0.0</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -232,6 +235,12 @@
         <LinkPackageStatics>rtl.lib;fmx.lib;xmlrtl.lib</LinkPackageStatics>
     </PropertyGroup>
     <ItemGroup>
+        <CppCompile Include="about.cpp">
+            <Form>fmAbout</Form>
+            <FormType>fmx</FormType>
+            <DependentOn>about.h</DependentOn>
+            <BuildOrder>37</BuildOrder>
+        </CppCompile>
         <CppCompile Include="bookcase.cpp">
             <DependentOn>bookcase.h</DependentOn>
             <BuildOrder>4</BuildOrder>
@@ -268,6 +277,12 @@
         <CppCompile Include="juanline.cpp">
             <DependentOn>juanline.h</DependentOn>
             <BuildOrder>14</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="logo.cpp">
+            <Form>fmLogo</Form>
+            <FormType>fmx</FormType>
+            <DependentOn>logo.h</DependentOn>
+            <BuildOrder>36</BuildOrder>
         </CppCompile>
         <CppCompile Include="main.cpp">
             <Form>fmMain</Form>
@@ -384,10 +399,12 @@
             <DependentOn>..\..\Monster\src\xmltag.h</DependentOn>
             <BuildOrder>32</BuildOrder>
         </CppCompile>
+        <FormResources Include="selectbook.fmx"/>
+        <FormResources Include="about.fmx"/>
         <FormResources Include="buildindex.fmx"/>
         <FormResources Include="option.fmx"/>
         <FormResources Include="searchrange.fmx"/>
-        <FormResources Include="selectbook.fmx"/>
+        <FormResources Include="logo.fmx"/>
         <FormResources Include="main.fmx"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
@@ -439,20 +456,15 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplfmx250.dylib" Configuration="Release" Class="DependencyPackage">
+                <DeployFile LocalName="$(BDS)\bin\cbuilder_PROJECTICNS.icns" Configuration="Debug" Class="ProjectOSXResource">
                     <Platform Name="OSX32">
+                        <RemoteName>CBReader.icns</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName=".\OSX32\Release\CBReader.info.plist" Configuration="Release" Class="ProjectOSXInfoPList">
                     <Platform Name="OSX32">
                         <RemoteName>Info.plist</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="$(BDS)\bin\cbuilder_PROJECTICNS.icns" Configuration="Debug" Class="ProjectOSXResource">
-                    <Platform Name="OSX32">
-                        <RemoteName>CBReader.icns</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -483,16 +495,16 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\OSX32\Debug\CBReader" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="OSX32">
-                        <RemoteName>CBReader</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="c:\program files (x86)\embarcadero\studio\19.0\bin\Artwork\Windows\UWP\cppreg_UwpDefault_150.png" Configuration="Release" Class="UWP_CppLogo150">
                     <Platform Name="OSX32">
                         <RemoteDir>Assets\</RemoteDir>
                         <RemoteName>Logo150x150.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName=".\OSX32\Debug\CBReader" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="OSX32">
+                        <RemoteName>CBReader</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -573,8 +585,10 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplxmlrtl250.dylib" Configuration="Release" Class="DependencyPackage">
+                <DeployFile LocalName=".\OSX32\Debug\CBReader.tds" Configuration="Debug" Class="DebugSymbols">
                     <Platform Name="OSX32">
+                        <RemoteDir>Contents\MacOS\</RemoteDir>
+                        <RemoteName>CBReader.tds</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -594,13 +608,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\OSX32\Debug\CBReader.tds" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS\</RemoteDir>
-                        <RemoteName>CBReader.tds</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
@@ -608,11 +615,6 @@
                 </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32240.dll" Class="DependencyModule">
                     <Platform Name="Win32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplrtl250.dylib" Configuration="Release" Class="DependencyPackage">
-                    <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

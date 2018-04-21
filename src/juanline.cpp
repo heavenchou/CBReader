@@ -40,7 +40,9 @@ void __fastcall CJuanLine::LoadFromSpine(CSpine * Spine)
 
 		Spine->Files->Strings[i] = da[0];
 
-        TMatchCollection mycoll;
+		// 正規式看來太慢了, 底下自己寫
+		/*
+		TMatchCollection mycoll;
 		TGroupCollection mygrps;
 		mycoll = TRegEx::Matches(Spine->Files->Strings[i], "[\\/]([A-Z]+)(\\d+)n(.{4,5}?)_?(...)\\.xml");
 
@@ -49,6 +51,16 @@ void __fastcall CJuanLine::LoadFromSpine(CSpine * Spine)
 		String sVol = sBookID + sVolNum;
 		String sSutra = mycoll.Item[0].Groups.Item[3].Value;
 		String sJuan = mycoll.Item[0].Groups.Item[4].Value;
+		*/
+
+		String sBookID;
+		String sVolNum;
+		String sSutra;
+		String sJuan;
+		GetBookVolSutraJuan(Spine->Files->Strings[i], sBookID,
+							sVolNum, sSutra, sJuan);
+		String sVol = sBookID + sVolNum;
+
 
 		// 記錄每一經的冊, 經, 卷
 		Spine->BookID->Add(sBookID);
@@ -192,6 +204,54 @@ String __fastcall CJuanLine::GetNewPageLine(String sPageLine)
 	return sPageLine;
 }
 // ---------------------------------------------------------------------------
+// 傳入檔名, 找出書,冊,經,卷
+void __fastcall CJuanLine::GetBookVolSutraJuan(String sFile, String &sBook, String &sVol, String &sSutra, String &sJuan)
+{
+	System::WideChar * iIndex;
+	int i1;
 
+    iIndex = sFile.FirstChar();
+	i1 = sFile.LastDelimiter0(u"\\/");
 
+	// 找書
+	iIndex = iIndex + i1 + 1;   // sBook 的起始位置
+
+	for(int i=1; i<10; i++)
+	{
+		if(*(iIndex+i) >= u'0' && *(iIndex+i) <= '9')
+		{
+			sBook = String(iIndex,i);
+			iIndex += i;
+			break;
+		}
+	}
+
+	// 找冊
+	for(int i=2; i<10; i++)
+	{
+		if(*(iIndex+i) == u'n')
+		{
+			sVol = String(iIndex,i);
+			iIndex = iIndex + i + 1;
+			break;
+		}
+	}
+
+	// 找經號
+	if(*(iIndex+4) == u'_')
+	{
+		sSutra = String(iIndex,4);
+		iIndex+=4;
+	}
+	else
+	{
+		sSutra = String(iIndex,5);
+		iIndex+=5;
+	}
+	// 找冊數
+	if(*(iIndex) == u'_') iIndex++;
+
+	sJuan = String(iIndex,3);
+}
+// ---------------------------------------------------------------------------
 

@@ -43,6 +43,7 @@
 #include "option.h"
 #include "../../Monster/src/monster.h"
 #include <FMX.Ani.hpp>
+#include <FMX.Memo.hpp>
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
@@ -111,9 +112,9 @@ __published: // IDE-managed Components
 	TEdit *edFindSutra_SutraFrom;
 	TEdit *edFindSutra_SutraTo;
 	TLabel *Label15;
-	TLabel *經號;
-	TLabel *經名;
-	TLabel *作譯者;
+	TLabel *Label35;
+	TLabel *Label33;
+	TLabel *Label34;
 	TLabel *Label16;
 	TComboBox *cbFindSutra_BookId;
 	TLabel *Label17;
@@ -240,6 +241,8 @@ public: // User declarations
 	// 檢查有沒有更新程式
 	void __fastcall CheckUpdate(String sPara);
 
+	// 初始資料
+	void __fastcall InitialData();
 	__fastcall TfmMain(TComponent* Owner);
 };
 

@@ -2079,7 +2079,7 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 		else sIdNum = NoteId2Num(sId);	// 0001001a 取得 1a
 
 		String sKBJ = u"";  // 科, 標, 解專用
-		WideChar wcKBJ = *(sId.FirstChar()+4);
+		System::WideChar wcKBJ = *(sId.FirstChar()+4);
 		if(wcKBJ == u'k') sKBJ = u"科";
 		else if(wcKBJ == u'b') sKBJ = u"標";
 		else if(wcKBJ == u'j') sKBJ = u"解";
@@ -2107,7 +2107,7 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 		else sIdNum = NoteId2Num(sId);	// 0001001a 取得 1a
 
 		String sKBJ = u"";  // 科, 標, 解專用
-		WideChar wcKBJ = *(sId.FirstChar()+4);
+		System::WideChar wcKBJ = *(sId.FirstChar()+4);
 		if(wcKBJ == u'k') sKBJ = u"科";
 		else if(wcKBJ == u'b') sKBJ = u"標";
 		else if(wcKBJ == u'j') sKBJ = u"解";

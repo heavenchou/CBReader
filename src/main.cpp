@@ -7,6 +7,8 @@
 #include "selectbook.h"
 #include "searchrange.h"
 #include "buildindex.h"
+#include "logo.h"
+#include "about.h"
 
 #ifdef _Windows
 #include <System.Win.Registry.hpp>
@@ -56,9 +58,6 @@ void __fastcall TfmMain::InitialPath()
 #ifdef _Windows
 	MyFullPath = GetCurrentDir();
 #else
-	// MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
-	// MyFullPath = GetCurrentDir();
-	// MyFullPath = StringReplace(MyFullPath, "/CBReader.app/Contents/MacOS", "", TReplaceFlags() << rfReplaceAll);
 
 	MyFullPath = System::Ioutils::TPath::GetHomePath();
 	MyFullPath += "/Desktop";
@@ -67,6 +66,7 @@ void __fastcall TfmMain::InitialPath()
 	MyFullPath += "/";
 
 	// Temp 目錄
+
 	MyTempPath = System::Ioutils::TPath::GetTempPath();
 	MyTempPath = MyTempPath + "CBReader/";
 
@@ -364,16 +364,26 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 
 	// 找出 spine id , -1 表示沒找到
 	SpineID = Bookcase->CBETA->Spine->Files->IndexOf(sFile);
-
-	String sOutFile = sFile + ".htm";
+#ifdef _Windows
+	String sOutFile = sFile + u".htm";
+#else
+	String sOutFile = u"a.htm";
+#endif
 	sOutFile = StringReplace(sOutFile, "/", "_", TReplaceFlags() << rfReplaceAll);
 	sOutFile = StringReplace(sOutFile, "\\", "_", TReplaceFlags() << rfReplaceAll);
 	sOutFile = MyTempPath + sOutFile;
 
 	CBXML->SaveToHTML(sOutFile);
 
-	WebBrowser->URL = "file://" + sOutFile;
-	WebBrowser->Navigate();
+	try
+	{
+		//WebBrowser->URL = (u"file://" + sOutFile);
+		WebBrowser->Navigate(u"file://" + sOutFile);
+	}
+	catch(...)
+	{
+        //WebBrowser->Navigate(u"file://" + sOutFile);
+    }
 
 	// 產生目錄
 
@@ -742,7 +752,7 @@ void __fastcall TfmMain::btNextJuanClick(TObject *Sender)
 
 void __fastcall TfmMain::MenuItem1Click(TObject *Sender)
 {
-	TDialogService::ShowMessage(u"CBETA CBReader 2X 搶鮮版");
+	fmAbout->ShowModal();
 }
 //---------------------------------------------------------------------------
 
@@ -845,8 +855,21 @@ void __fastcall TfmMain::fanMuluWidthFinish(TObject *Sender)
 		btMuluWidthSwitch->Text = u"<<書目";
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TfmMain::FormShow(TObject *Sender)
+{
+	Cursor = crHourGlass;
+
+	Application->ProcessMessages();
+	fmLogo->Show();
+	Application->ProcessMessages();
+	InitialData();
+
+	fmLogo->Close();
+	Cursor = crDefault;
+}
+//---------------------------------------------------------------------------
+// 初始資料
+void __fastcall TfmMain::InitialData()
 {
 	tcMainFunc->TabIndex = 0;
 
@@ -858,9 +881,10 @@ void __fastcall TfmMain::FormShow(TObject *Sender)
 	String sBookcasePath = MyFullPath + Setting->BookcaseDir;
 	if(!TDirectory::Exists(sBookcasePath))
 	{
-        // 使用指定目錄 ???? 該改為使用者指定目錄才好
-		sBookcasePath = u"d:\\Dropbox\\CBReader2X\\Bookcase";
+		// 使用指定目錄 ???? 該改為使用者指定目錄才好
+		SelectDirectory(u"選擇 Bookcase 目錄所在位置",MyFullPath,sBookcasePath);
 	}
+
 	Bookcase->LoadBookcase(sBookcasePath);
 
 	// 在書櫃選擇叢書
@@ -869,13 +893,13 @@ void __fastcall TfmMain::FormShow(TObject *Sender)
 	{
 		TDialogService::ShowMessage(u"書櫃中一本書都沒有");
 	}
-	else if(iBookcaseCount == 1)
+	// else if(iBookcaseCount == 1)
+	else
 	{
 		// 只有一本書就直接開了
 		// OpenBookcase(0); // ???? 暫時取消, 這一版要直接開啟 CBETA
+		OpenCBETABook();    // ???? 取消上面, 因為這一版要直接開啟 CBETA
 	}
-
-	OpenCBETABook();    // ???? 取消上面, 因為這一版要直接開啟 CBETA
 
 	MuluTree = 0;
 
@@ -887,11 +911,14 @@ void __fastcall TfmMain::FormShow(TObject *Sender)
 	btOpenBookcase->Visible = false;
 	btBuildIndex->Visible = false;
 	SpineID = -1;	// 初值表示沒開啟
-
+#ifdef _Windows
 	CheckUpdate(u"");   // 檢查更新
-
-	WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
-	WebBrowser->Navigate();
+#endif
+	if(iBookcaseCount != 0)
+	{
+		WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
+		WebBrowser->Navigate();
+	}
 }
 //---------------------------------------------------------------------------
 
@@ -923,5 +950,6 @@ void __fastcall TfmMain::rbFontSmallChange(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+
 
 
