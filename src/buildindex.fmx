@@ -2,7 +2,7 @@ object fmBuildIndex: TfmBuildIndex
   Left = 0
   Top = 0
   Caption = #24314#31435#32034#24341#27284
-  ClientHeight = 497
+  ClientHeight = 509
   ClientWidth = 640
   StyleBook = StyleBook1
   FormFactor.Width = 320
@@ -48,9 +48,9 @@ object fmBuildIndex: TfmBuildIndex
   object btBuild: TButton
     StyledSettings = [Family, Style, FontColor]
     Position.X = 24.000000000000000000
-    Position.Y = 400.000000000000000000
+    Position.Y = 424.000000000000000000
     Size.Width = 89.000000000000000000
-    Size.Height = 73.000000000000000000
+    Size.Height = 49.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 5
     Text = #24314#31435#32034#24341
@@ -102,8 +102,8 @@ object fmBuildIndex: TfmBuildIndex
     Size.Height = 177.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 6
-    Viewport.Width = 485.000000000000000000
-    Viewport.Height = 173.000000000000000000
+    Viewport.Width = 489.000000000000000000
+    Viewport.Height = 177.000000000000000000
   end
   object StyleBook1: TStyleBook
     Styles = <
@@ -169,12 +169,42 @@ object fmBuildIndex: TfmBuildIndex
     TabOrder = 7
   end
   object cbNoMsg: TCheckBox
-    Position.X = 24.000000000000000000
-    Position.Y = 344.000000000000000000
+    Position.X = 128.000000000000000000
+    Position.Y = 480.000000000000000000
     Size.Width = 89.000000000000000000
     Size.Height = 25.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 4
     Text = #19981#35201#31168#35338#24687
+  end
+  object GroupBox1: TGroupBox
+    Position.X = 16.000000000000000000
+    Position.Y = 344.000000000000000000
+    Size.Width = 97.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    Text = #32034#24341#32317#39006
+    TabOrder = 15
+    object rbIndexTypeOrig: TRadioButton
+      GroupName = 'IndexType'
+      Position.X = 8.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 81.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Text = #21407#26360
+    end
+    object rbIndexTypeCBETA: TRadioButton
+      GroupName = 'IndexType'
+      IsChecked = True
+      Position.X = 8.000000000000000000
+      Position.Y = 48.000000000000000000
+      Size.Width = 73.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Text = 'CBETA'
+    end
   end
 end

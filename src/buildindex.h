@@ -36,6 +36,9 @@ __published:	// IDE-managed Components
 	TLabel *Label6;
 	TLabel *Label7;
 	TCheckBox *cbNoMsg;
+	TGroupBox *GroupBox1;
+	TRadioButton *rbIndexTypeOrig;
+	TRadioButton *rbIndexTypeCBETA;
 	void __fastcall btBuildClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations

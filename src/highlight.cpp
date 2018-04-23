@@ -259,7 +259,9 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 				pPoint++;
 
 				if (CMyStrUtil::StrHas(pPoint, u"P."))  // 南傳有 [P.nn] 的 PTS 頁碼
-                    pPoint += 2;
+					pPoint += 2;
+				else if (*pPoint == u'A')  				// CBETA 自訂校註是 [Axx]
+					pPoint++;
 
 				if(*pPoint >= u'0' && *pPoint <= u'9')
 				{

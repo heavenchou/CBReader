@@ -7,7 +7,7 @@
 #include <vector>
 #include "System.RegularExpressions.hpp"
 #include "System.IOUtils.hpp"
-
+#include <map>
 // ---------------------------------------------------------------------------
 using namespace std;
 
@@ -35,6 +35,10 @@ public: // User declarations
 	String __fastcall GetVerName(String sBook);
 	// 傳入 T, 傳回其在 TStringList 的 Index , 沒有則傳回 -1
 	int __fastcall GetBookIndex(String sBook);
+
+	// 由 bookdata 做出 map , 傳入 "T" , 傳回 "【大】"
+	// 這是要傳給全文檢索用的
+	void __fastcall BookToVerNameMap(map<String, String> & mpBookToVerName);
 
 	__fastcall CBookData();
 	__fastcall ~CBookData();

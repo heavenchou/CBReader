@@ -25,7 +25,8 @@ __fastcall CSeries::CSeries(String sDir)
 	JuanLine = 0;   	// 各卷與頁欄行的關係物件, CBETA 專用
 	BookData = 0;   	// 每本書的資訊, 例如 T , 大正藏, 2
 
-	SearchEngine = 0;   // 全文檢索引擎
+	SearchEngine_orig = 0;   // 全文檢索引擎
+	SearchEngine_CB = 0;   // 全文檢索引擎
 
 	//--------------
 
@@ -83,10 +84,15 @@ __fastcall CSeries::~CSeries()
 	if(Spine) delete Spine;
 	if(JuanLine) delete JuanLine;
 	if(BookData) delete BookData;
-	if(SearchEngine)
+	if(SearchEngine_orig)
 	{
-		delete SearchEngine;
-		SearchEngine = 0;
+		delete SearchEngine_orig;
+		SearchEngine_orig = 0;
+	}
+	if(SearchEngine_CB)
+	{
+		delete SearchEngine_CB;
+		SearchEngine_CB = 0;
 	}
 }
 // ---------------------------------------------------------------------------
@@ -266,13 +272,25 @@ void __fastcall CSeries::LoadSearchEngine()
 {
 	if(TDirectory::Exists(Dir + "index"))
 	{
+		// CBETA 版的索引
 		String sWordIndexFile = Dir + "index/wordindex.ndx";
 		String sMainIndexFile = Dir + "index/main.ndx";
 		if(TFile::Exists(Dir + SpineFile) &&
 			TFile::Exists(sWordIndexFile) &&
 			TFile::Exists(sMainIndexFile))
 		{
-			SearchEngine = new TmyMonster(Dir + SpineFile, sWordIndexFile, sMainIndexFile);
+			SearchEngine_CB = new TmyMonster(Dir + SpineFile, sWordIndexFile, sMainIndexFile);
+		}
+
+		// 原書的索引
+
+		sWordIndexFile = Dir + "index/wordindex_o.ndx";
+		sMainIndexFile = Dir + "index/main_o.ndx";
+		if(TFile::Exists(Dir + SpineFile) &&
+			TFile::Exists(sWordIndexFile) &&
+			TFile::Exists(sMainIndexFile))
+		{
+			SearchEngine_orig = new TmyMonster(Dir + SpineFile, sWordIndexFile, sMainIndexFile);
 		}
 	}
 }
@@ -280,12 +298,18 @@ void __fastcall CSeries::LoadSearchEngine()
 // 釋放全文檢索引擎
 void __fastcall CSeries::FreeSearchEngine()
 {
-	if(SearchEngine)
+	if(SearchEngine_orig)
 	{
-		delete SearchEngine;
-		SearchEngine = 0;
+		delete SearchEngine_orig;
+		SearchEngine_orig = 0;
+	}
+	if(SearchEngine_CB)
+	{
+		delete SearchEngine_CB;
+		SearchEngine_CB = 0;
 	}
 }
 // ---------------------------------------------------------------------------
+
 
 

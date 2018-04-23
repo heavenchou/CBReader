@@ -25,12 +25,17 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
 	Application->Title = "CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
+
+	btOpenBookcase->Visible = false;
+	//btBuildIndex->Visible = false;
+
 	InitialPath();  // 設定目錄初值
 
 #ifdef _Windows
 	SetPermissions(11001); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
 #endif
 
+	SearchEngine = 0;   // 全文檢索引擎
 	SearchSentence = "";    // 搜尋字串
 	SearchWordList = new TStringList;	    // 存放每一個檢索的詞, 日後塗色會用到
 
@@ -492,7 +497,9 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 	bool bHasRange = false;     // 有範圍就要設定
 	if(cbSearchRange->IsChecked) bHasRange = true;
 
-	TmyMonster * SearchEngine = Bookcase->CBETA->SearchEngine;
+	// 選擇全文檢索引擎, 若某一方為 0 , 則選另一方 (全 0 就不管了)
+	SetSearchEngine();
+
 	CCatalog * Catalog = Bookcase->CBETA->Catalog;
 	CSpine * Spine = Bookcase->CBETA->Spine;
 	bool bFindOK = SearchEngine->Find(SearchSentence,bHasRange);      // 在找囉.........................................
@@ -516,9 +523,9 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 
         // 先檢查有沒有超過限制
 
-        for (int i=0; i<BuildFileList->FileCount; i++)
+		for (int i=0; i<SearchEngine->BuildFileList->FileCount; i++)
     	{
-	    	if(SearchEngine->FileFound->Ints[i])
+			if(SearchEngine->FileFound->Ints[i])
 		    {
 			    iTotalSearchFileNum++;
             }
@@ -531,13 +538,13 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 	int iGridIndex = 0;
 	sgTextSearch->RowCount = 10;
 
-	for (int i=0; i<BuildFileList->FileCount; i++)
+	for (int i=0; i<SearchEngine->BuildFileList->FileCount; i++)
 	{
 		// 找到了
         if(SearchEngine->FileFound->Ints[i])
 		{
-			String sSutraNum  = BuildFileList->SutraNum[i];		// 取得經號
-			String sBook = BuildFileList->Book[i];
+			String sSutraNum  = SearchEngine->BuildFileList->SutraNum[i];		// 取得經號
+			String sBook = SearchEngine->BuildFileList->Book[i];
 
 			// 這裡可能找到 T220 第 600 卷, 卻傳回 T05 而不是 T07
 			// 有待改進處理 ????
@@ -556,7 +563,7 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 			sgTextSearch->Cells[3][iGridIndex]=Spine->VolNum->Strings[i];
 			sgTextSearch->Cells[4][iGridIndex]=Catalog->Part->Strings[iCatalogIndex];
 			sgTextSearch->Cells[5][iGridIndex]=Catalog->SutraNum->Strings[iCatalogIndex];
-			sgTextSearch->Cells[6][iGridIndex]=BuildFileList->JuanNum[i];
+			sgTextSearch->Cells[6][iGridIndex]=SearchEngine->BuildFileList->JuanNum[i];
 			sgTextSearch->Cells[7][iGridIndex]=Catalog->Byline->Strings[iCatalogIndex];
 			sgTextSearch->Cells[8][iGridIndex]=i;
 			iGridIndex++;
@@ -592,7 +599,7 @@ void __fastcall TfmMain::sgTextSearchCellDblClick(TColumn * const Column, const 
 
 	String sFile = Bookcase->CBETA->Spine->Files->Strings[iIndex];
     // 要塗色
-	ShowCBXML(sFile, true, Bookcase->CBETA->SearchEngine);
+	ShowCBXML(sFile, true, SearchEngine);
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::cbSearchRangeChange(TObject *Sender)
@@ -658,6 +665,9 @@ void __fastcall TfmMain::btBuildIndexClick(TObject *Sender)
 	// 重新建立全文檢索引擎
 
 	Bookcase->CBETA->LoadSearchEngine();
+
+	SetSearchEngine();
+
 }
 //---------------------------------------------------------------------------
 // 將檔案載入導覽樹
@@ -908,8 +918,6 @@ void __fastcall TfmMain::InitialData()
 	sgFindSutra->RowCount = 1;
 
 	lbSearchMsg->Text = ""; // 清空搜尋訊息
-	btOpenBookcase->Visible = false;
-	btBuildIndex->Visible = false;
 	SpineID = -1;	// 初值表示沒開啟
 #ifdef _Windows
 	CheckUpdate(u"");   // 檢查更新
@@ -950,6 +958,19 @@ void __fastcall TfmMain::rbFontSmallChange(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+// 選擇全文檢索引擎
+void __fastcall TfmMain::SetSearchEngine()
+{
+	// 選擇全文檢索引擎, 若某一方為 0 , 則選另一方 (全 0 就不管了)
+	if(Bookcase->CBETA->SearchEngine_CB == 0)
+		SearchEngine = Bookcase->CBETA->SearchEngine_orig;  // 原書索引
+	else if(Bookcase->CBETA->SearchEngine_orig == 0)
+		SearchEngine = Bookcase->CBETA->SearchEngine_CB;  // CBETA 索引
 
-
+	else if(Setting->CollationType == ctCBETACollation)
+		SearchEngine = Bookcase->CBETA->SearchEngine_CB;    // CBETA 索引
+	else
+		SearchEngine = Bookcase->CBETA->SearchEngine_orig;  // 原書索引
+}
+//---------------------------------------------------------------------------
 
