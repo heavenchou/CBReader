@@ -26,10 +26,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	Application->Title = "CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
 
-	btOpenBookcase->Visible = false;
-	//btBuildIndex->Visible = false;
-
-	InitialPath();  // 設定目錄初值
+	// 設定目錄初值
+	InitialPath();
 
 #ifdef _Windows
 	SetPermissions(11001); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
@@ -42,6 +40,10 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	// 取得設定檔並讀取所有設定
 	Setting = new CSetting(SettingFile);
 
+	// 初始畫面的設定
+	btOpenBookcase->Visible = false;
+	btBuildIndex->Visible = false;
+	tcMainFunc->TabIndex = 0;
 	SelectedBook = -1;   // 目前選中的書, -1 表示還沒選
     pnMulu->Width = 0;  // 書目先縮到最小
     MuluWidth = 200;    // 初始書目寬度
@@ -54,41 +56,6 @@ void __fastcall TfmMain::FormDestroy(TObject *Sender)
 	if(Bookcase) delete Bookcase;
 	if(NavTree) delete NavTree;
 	if(MuluTree) delete MuluTree;
-}
-// ---------------------------------------------------------------------------
-// 	路徑初值設定
-void __fastcall TfmMain::InitialPath()
-{
-	// 程式主目錄
-#ifdef _Windows
-	MyFullPath = GetCurrentDir();
-#else
-
-	MyFullPath = System::Ioutils::TPath::GetHomePath();
-	MyFullPath += "/Desktop";
-
-#endif
-	MyFullPath += "/";
-
-	// Temp 目錄
-
-	MyTempPath = System::Ioutils::TPath::GetTempPath();
-	MyTempPath = MyTempPath + "CBReader/";
-
-	if(!TDirectory::Exists(MyTempPath))
-		TDirectory::CreateDirectory(MyTempPath);
-
-	// 使用者個人目錄
-	MyHomePath = System::Ioutils::TPath::GetHomePath();
-	MyHomePath += "/CBETA/";
-	if(!TDirectory::Exists(MyHomePath))
-		TDirectory::CreateDirectory(MyHomePath);
-	MyHomePath += "CBReader2X/";
-	if(!TDirectory::Exists(MyHomePath))
-		TDirectory::CreateDirectory(MyHomePath);
-
-	// 設定檔
-	SettingFile = MyHomePath + u"cbreader.ini";
 }
 // ---------------------------------------------------------------------------
 // 將 IE 設定為 IE 11
@@ -120,6 +87,141 @@ void __fastcall TfmMain::SetPermissions(int iIE)
 		Reg->Free();
 	}
 #endif
+}
+// ---------------------------------------------------------------------------
+// 	路徑初值設定
+void __fastcall TfmMain::InitialPath()
+{
+	// 程式主目錄
+#ifdef _Windows
+	MyFullPath = GetCurrentDir();
+#else
+	MyFullPath = System::Ioutils::TPath::GetHomePath();
+#endif
+	MyFullPath += u"/";
+
+	// Temp 目錄
+
+	MyTempPath = System::Ioutils::TPath::GetTempPath();
+	MyTempPath = MyTempPath + u"CBReader/";
+
+	if(!TDirectory::Exists(MyTempPath))
+		TDirectory::CreateDirectory(MyTempPath);
+
+	// 使用者個人目錄
+
+	MyHomePath = System::Ioutils::TPath::GetHomePath();
+
+	// 設定檔目錄
+
+#ifdef _Windows
+	MySettingPath = MyHomePath + u"/CBETA/";
+#else
+	MySettingPath = MyHomePath + u"/.CBETA/";
+#endif
+	if(!TDirectory::Exists(MySettingPath))
+		TDirectory::CreateDirectory(MySettingPath);
+	MySettingPath += u"CBReader2X/";
+	if(!TDirectory::Exists(MySettingPath))
+		TDirectory::CreateDirectory(MySettingPath);
+
+	// 設定檔
+
+	SettingFile = MySettingPath + u"cbreader.ini";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::FormShow(TObject *Sender)
+{
+	Cursor = crHourGlass;
+
+	Application->ProcessMessages();
+	fmLogo->Show();
+	Application->ProcessMessages();
+	InitialData();
+
+	fmLogo->Close();
+	Cursor = crDefault;
+}
+//---------------------------------------------------------------------------
+// 初始資料
+void __fastcall TfmMain::InitialData()
+{
+	// 取得 Bookcase 所有資料區
+	// 載入書櫃
+
+	Bookcase = new CBookcase();
+
+	String sBookcasePath = u"";
+
+	// Bookcase 目錄處理原則
+	// 1. 如果有 Setting->BookcaseFullDir , 則此為第一優先
+	// 2. Windows 在主程式所在目錄底下去找 Bookcase 子目錄
+	// 3. Mac 有二個優先順序
+	//    3.1 /User/xxx/Library/CBETA/Bookcase
+	//    3.2 /Library/CBETA/Bookcase
+	// 4. 以上若都沒有, 則由使用者尋找, 找到後存在 Setting->BookcaseFullDir
+
+	if(Setting->BookcaseFullPath != u"")
+	{
+		sBookcasePath = Setting->BookcaseFullPath;
+    }
+	else
+	{
+#ifdef _Windows
+		sBookcasePath = MyFullPath + Setting->BookcasePath;
+#else
+		// Mac 第一優先
+		sBookcasePath = MyHomePath + u"/Library/CBETA/" + Setting->BookcasePath;
+		if(!TDirectory::Exists(sBookcasePath))
+		{
+			// Mac 第二優先
+			sBookcasePath = u"/Library/CBETA/" + Setting->BookcasePath;
+		}
+#endif
+	}
+
+	if(!TDirectory::Exists(sBookcasePath))
+	{
+		TDialogService::ShowMessage(u"沒有找到您的 Bookcase 書櫃目錄，請手動選擇目錄所在位置。");
+		// 使用指定目錄 ???? 該改為使用者指定目錄才好
+		SelectDirectory(u"選擇 Bookcase 目錄所在位置",MyFullPath,sBookcasePath);
+
+		Setting->BookcaseFullPath = sBookcasePath;
+		Setting->SaveToFile();
+	}
+
+	Bookcase->LoadBookcase(sBookcasePath);
+
+	// 在書櫃選擇叢書
+	int iBookcaseCount = Bookcase->Count();
+	if(iBookcaseCount == 0)
+	{
+		TDialogService::ShowMessage(u"書櫃中一本書都沒有");
+	}
+	// else if(iBookcaseCount == 1)
+	else
+	{
+		// 只有一本書就直接開了
+		// OpenBookcase(0); // ???? 暫時取消, 這一版要直接開啟 CBETA
+		OpenCBETABook();    // ???? 取消上面, 因為這一版要直接開啟 CBETA
+	}
+
+	MuluTree = 0;
+
+    // 這要先處理, 動一下內容, 不然欄位標題就還可以移動
+	sgTextSearch->RowCount = 1;
+	sgFindSutra->RowCount = 1;
+
+	lbSearchMsg->Text = ""; // 清空搜尋訊息
+	SpineID = -1;	// 初值表示沒開啟
+#ifdef _Windows
+	CheckUpdate(u"");   // 檢查更新
+#endif
+	if(iBookcaseCount != 0)
+	{
+		WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
+		WebBrowser->Navigate();
+	}
 }
 //---------------------------------------------------------------------------
 // 開啟指定的書櫃
@@ -210,8 +312,6 @@ void __fastcall TfmMain::btOpenBookcaseClick(TObject *Sender)
 	OpenBookcase(fmSelectBook->SelectedBook);
 }
 //---------------------------------------------------------------------------
-
-
 // 是否有選擇套書了?
 bool __fastcall TfmMain::IsSelectedBook()
 {
@@ -865,71 +965,6 @@ void __fastcall TfmMain::fanMuluWidthFinish(TObject *Sender)
 		btMuluWidthSwitch->Text = u"<<書目";
 }
 //---------------------------------------------------------------------------
-void __fastcall TfmMain::FormShow(TObject *Sender)
-{
-	Cursor = crHourGlass;
-
-	Application->ProcessMessages();
-	fmLogo->Show();
-	Application->ProcessMessages();
-	InitialData();
-
-	fmLogo->Close();
-	Cursor = crDefault;
-}
-//---------------------------------------------------------------------------
-// 初始資料
-void __fastcall TfmMain::InitialData()
-{
-	tcMainFunc->TabIndex = 0;
-
-	// 取得 Bookcase 所有資料區
-	// 載入書櫃
-
-	Bookcase = new CBookcase();
-
-	String sBookcasePath = MyFullPath + Setting->BookcaseDir;
-	if(!TDirectory::Exists(sBookcasePath))
-	{
-		// 使用指定目錄 ???? 該改為使用者指定目錄才好
-		SelectDirectory(u"選擇 Bookcase 目錄所在位置",MyFullPath,sBookcasePath);
-	}
-
-	Bookcase->LoadBookcase(sBookcasePath);
-
-	// 在書櫃選擇叢書
-	int iBookcaseCount = Bookcase->Count();
-	if(iBookcaseCount == 0)
-	{
-		TDialogService::ShowMessage(u"書櫃中一本書都沒有");
-	}
-	// else if(iBookcaseCount == 1)
-	else
-	{
-		// 只有一本書就直接開了
-		// OpenBookcase(0); // ???? 暫時取消, 這一版要直接開啟 CBETA
-		OpenCBETABook();    // ???? 取消上面, 因為這一版要直接開啟 CBETA
-	}
-
-	MuluTree = 0;
-
-    // 這要先處理, 動一下內容, 不然欄位標題就還可以移動
-	sgTextSearch->RowCount = 1;
-	sgFindSutra->RowCount = 1;
-
-	lbSearchMsg->Text = ""; // 清空搜尋訊息
-	SpineID = -1;	// 初值表示沒開啟
-#ifdef _Windows
-	CheckUpdate(u"");   // 檢查更新
-#endif
-	if(iBookcaseCount != 0)
-	{
-		WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
-		WebBrowser->Navigate();
-	}
-}
-//---------------------------------------------------------------------------
-
 void __fastcall TfmMain::rbFontSmallChange(TObject *Sender)
 {
 	if(rbFontBig->IsChecked)

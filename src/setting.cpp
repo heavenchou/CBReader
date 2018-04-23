@@ -13,7 +13,8 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 
 	// 設定預設值
 
-	BookcaseDir = "bookcase"; 		// 書櫃的目錄
+	BookcasePath = u"Bookcase"; 		// 書櫃的目錄
+	BookcaseFullPath = u""; 		// 書櫃的完整目錄
 
     // 經文格式
 
@@ -204,7 +205,8 @@ void __fastcall CSetting::LoadFromFile(String sFile)
 
 	Section = "SystemInfo";
 
-	BookcaseDir = IniFile->ReadString(Section, "BookcaseDir", BookcaseDir);
+	BookcasePath = IniFile->ReadString(Section, "BookcasePath", BookcasePath);
+	BookcaseFullPath = IniFile->ReadString(Section, "BookcaseFullPath", BookcaseFullPath);
 
 	delete IniFile;
 }
@@ -229,7 +231,7 @@ void __fastcall CSetting::SaveToFile(String sFile)
 	Section = "Version";
     try
     {
-		IniFile->WriteString(Section, "Version", "0.1");
+		IniFile->WriteString(Section, u"Version", u"2X");
     }
     catch(...)
     {
@@ -261,7 +263,8 @@ void __fastcall CSetting::SaveToFile(String sFile)
 
 	Section = "SystemInfo";
 
-	IniFile->WriteString(Section, "BookcaseDir", BookcaseDir);
+	IniFile->WriteString(Section, "BookcasePath", BookcasePath);
+	IniFile->WriteString(Section, "BookcaseFullPath", BookcaseFullPath);
 
 	delete IniFile;
 }

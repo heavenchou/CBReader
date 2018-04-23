@@ -204,10 +204,12 @@ public: // User declarations
     String ProgramTitle;    // 程式名稱
 
     int SelectedBook;   // 目前選中的書, -1 表示還沒選
-	String SettingFile;
+
 	String MyFullPath;
 	String MyTempPath;  // 存放暫時檔的目錄
-    String MyHomePath;  // 私人目錄, 要放設定檔
+	String MyHomePath;  // 個人目錄
+	String MySettingPath;  // 私人目錄, 要放設定檔
+	String SettingFile;    // 設定檔
 
 	CSetting * Setting; // 設定檔
 	CBookcase * Bookcase; // 書櫃
