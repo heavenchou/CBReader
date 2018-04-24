@@ -137,15 +137,6 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include=".\Win32\Debug\CBReader.tds" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>CBReader\</RemoteDir>
-            <RemoteName>CBReader.tds</RemoteName>
-            <DeployClass>DebugSymbols</DeployClass>
-            <Operation>0</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="$(BDS)\bin\cc32240.dll" Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'">
             <RemoteDir>CBReader\</RemoteDir>
             <RemoteName>cc32240.dll</RemoteName>
@@ -166,6 +157,15 @@
         </DeployFile>
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='OSX32'">
+        <DeployFile Include="cbeta.icns" Condition="'$(Config)'=='Release'">
+            <RemoteDir>CBReader.app\Contents\Resources\</RemoteDir>
+            <RemoteName>CBReader.icns</RemoteName>
+            <DeployClass>ProjectOSXResource</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="$(BDS)\bin\cbuilder_PROJECTICNS.icns" Condition="'$(Config)'=='Release'">
             <RemoteDir>CBReader.app\Contents\Resources\</RemoteDir>
             <RemoteName>CBReader.icns</RemoteName>
@@ -202,6 +202,16 @@
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\Redist\OSX32\bplfmx250.dylib" Condition="'$(Config)'=='Release'">
+            <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
+            <RemoteName>bplfmx250.dylib</RemoteName>
+            <DeployClass>DependencyPackage</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
         </DeployFile>
         <DeployFile Include=".\OSX32\Debug\CBReader.entitlements" Condition="'$(Config)'=='Debug'">
             <RemoteDir>CBReader.app\..\</RemoteDir>
@@ -296,14 +306,15 @@
             <Overwrite>True</Overwrite>
             <Required>True</Required>
         </DeployFile>
-        <DeployFile Include=".\OSX32\Debug\CBReader.tds" Condition="'$(Config)'=='Debug'">
+        <DeployFile Include="$(BDS)\Redist\OSX32\bplxmlrtl250.dylib" Condition="'$(Config)'=='Release'">
             <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
-            <RemoteName>CBReader.tds</RemoteName>
-            <DeployClass>DebugSymbols</DeployClass>
+            <RemoteName>bplxmlrtl250.dylib</RemoteName>
+            <DeployClass>DependencyPackage</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
+            <Required>True</Required>
         </DeployFile>
         <DeployFile Include="$(BDS)\Redist\osx32\libcgsqlite3.dylib">
             <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
@@ -322,6 +333,16 @@
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\Redist\OSX32\bplrtl250.dylib" Condition="'$(Config)'=='Release'">
+            <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
+            <RemoteName>bplrtl250.dylib</RemoteName>
+            <DeployClass>DependencyPackage</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+            <Required>True</Required>
         </DeployFile>
         <DeployFile Include=".\OSX32\Release\CBReader" Condition="'$(Config)'=='Release'">
             <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
