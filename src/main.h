@@ -44,6 +44,8 @@
 #include "../../Monster/src/monster.h"
 #include <FMX.Ani.hpp>
 #include <FMX.Memo.hpp>
+#include <FMX.ImgList.hpp>
+#include <System.ImageList.hpp>
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
@@ -165,6 +167,7 @@ __published: // IDE-managed Components
 	TRadioButton *rbFontBig;
 	TStyleBook *sbBig;
 	TStyleBook *sbSmall;
+	TImageList *ImageList1;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);

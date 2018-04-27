@@ -126,10 +126,14 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"<html>\n"
 	"<head>\n"
 	"	<meta charset=\"utf-8\">\n"
-	"	<title>CBETA 線上閱讀</title>\n"
-	"   <script src=\"";
+	"	<title>";
+
+	sHtml += BookId + SutraId + u" " + SutraName;
+
+	sHtml += u"</title>\n";
+	sHtml += u"   <script src=\"";
 	sHtml += sJqueryFile;
-	sHtml += "\"></script>\n"
+	sHtml += u"\"></script>\n"
 	"   <script src=\"";
 	sHtml += JSFile;
 	sHtml += u"\"></script>\n"
@@ -222,8 +226,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 		sHtml += u"		.linehead {display:none;}\n"
 				  "		.parahead {display:none;}\n"
 				  "		.pts_head {display:none;}\n";
-    }
-
+	}
 
 	// 校勘呈現
 	if(Setting->ShowCollation == false)
@@ -245,10 +248,20 @@ String __fastcall CCBXML::MakeHTMLHead()
 				  "		.note_star {display:inline;}\n"
 				  "		.note_star_removed {display:none;}\n";
 
-	sHtml += u"	</style>\n"
-	"</head>\n"
-	"<body>\n";
+	sHtml += u"	</style>\n</head>\n";
+	sHtml += u"<body data-sutraname='" + SutraName
+		+ u"' data-juan='" + JuanNum
+		+ u"' data-totaljuan='" + TotalJuan + u"'";
 
+	// data-notetype 用來判斷目前是呈現何種校註
+	if(Setting->ShowCollation == false)
+		sHtml += u" data-notetype='none'";
+	else if(Setting->CollationType == ctOrigCollation)
+		sHtml += u" data-notetype='orig'";
+	else if(Setting->CollationType == ctCBETACollation)
+		sHtml += u" data-notetype='cbeta'";
+
+	sHtml += u">\n";
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -3091,6 +3104,10 @@ void __fastcall CCBXML::GetInitialFromFileName()
 	if(SutraId.Length() == 4) SutraId_ += u"_";
 	JuanNum = String(mygrps.Item[4].Value).ToInt();		// 第幾卷
 	BookVolnSutra = BookId + VolId + u"n" + SutraId_;	// 內容是 T01n0001_
+
+	int iIndex = fmMain->Bookcase->CBETA->Catalog->FindIndexBySutraNum(BookId,SutraId);
+	SutraName = fmMain->Bookcase->CBETA->Catalog->SutraName->Strings[iIndex];
+	TotalJuan = fmMain->Bookcase->CBETA->Catalog->JuanNum->Strings[iIndex].ToIntDef(0);
 
 	// 由 c://xxx/xxx/xml/T/T01/T01n0001_001.xml
 	// 找出這個主要目錄 c://xxx/xxx/

@@ -172,6 +172,7 @@ public: // User declarations
 	String SutraId_;	// 內容是 "0001_" or "0143a"
 	String SutraName;	// 經名
 	int    JuanNum;		// 第幾卷
+    int    TotalJuan;   // 共幾卷, 用來判斷是不是只有一卷
 
 	String GotoPageLine;	// 本網頁要跳到的地點 (因為不一定是卷首)
 

@@ -116,7 +116,7 @@ object fmMain: TfmMain
       Size.Width = 281.000000000000000000
       Size.Height = 607.000000000000000000
       Size.PlatformDefault = False
-      TabIndex = 3
+      TabIndex = 0
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -132,7 +132,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 54.000000000000000000
         Size.Height = 31.000000000000000000
         Size.PlatformDefault = False
@@ -147,6 +147,7 @@ object fmMain: TfmMain
           Size.Height = 527.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
+          Images = ImageList1
           Viewport.Width = 277.000000000000000000
           Viewport.Height = 523.000000000000000000
         end
@@ -795,7 +796,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 86.000000000000000000
         Size.Height = 31.000000000000000000
         Size.PlatformDefault = False
@@ -6332,5 +6333,132 @@ object fmMain: TfmMain
       end>
     Left = 712
     Top = 8
+  end
+  object ImageList1: TImageList
+    Source = <
+      item
+        MultiResBitmap = <
+          item
+            Width = 16
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+              61000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              00A649444154384FA5910B0E84200C44AB175B8FC6D1EAC9D87EB10561CD3AC9
+              A4A1F40DA6C20F55F3549BD55E06392B63B7B37DB303A3EE43BCB100A3C6909D
+              5C11918B34D6929961901A9543A43E730E6917FF86A48BE72112C0CE01EC7588
+              82A514AEB244DA6AFE3BC7F101C4D34E2E9ED980408A117690BD7059BFE47A91
+              CFACD8272751238628E890579D1B6197C11AE0104BEFE660540BB0654DC1BCBD
+              AC08ACE6DE08E00B6B3FDD99B1FEFD260000000049454E44AE426082}
+            FileName = 'D:\Data\c\_CppBuilder\CBReader\image\closebook.ico'
+          end>
+        Name = 'Item 0'
+      end
+      item
+        MultiResBitmap = <
+          item
+            Width = 16
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+              61000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              00B749444154384FCD916B1204110C84D99A7B7133DC8C93D974222A63D596D9
+              5FFB557945BA054EC939F7317DC40B1DC431C69F4C3C351275D7A96FADB95A2B
+              8C109F58E3750FC060B224F35AB17BCA35C689BD4A4A8963020ECE98A8C9ACE4
+              5601408CAEA2AB314A0500F9A21B8FF81DCE233EAECE1C18A8508DEEFC51057E
+              7F0021C2520AFFD00ABE91A49EB23A9BF0FB1A2004108710786EB1E7B2090C3C
+              39D197717027946AA5B306804DCED81B805307B0D33FC1B937C0EB7D58235320
+              D90000000049454E44AE426082}
+            FileName = 'D:\Data\c\_CppBuilder\CBReader\image\openbook.ico'
+          end>
+        Name = 'Item 1'
+      end
+      item
+        MultiResBitmap = <
+          item
+            Width = 16
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+              61000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              009049444154384F63648082868686FF50264E005403570F0328069C8C3909E5
+              6182F227E50C070E1CC03084094A1305EAEBEB315C4AB4010E0E0E0C8C8C8C20
+              03405CB8212C501A056C57D906654180E71D2F20F604B3415E01190603585D00
+              D180C0F8005603402E40C7B800512EC0E78A5117E03080148092179013083E00
+              5507D68B9C3108E646348092A9C8040C0C0015375417CF0A4A8E000000004945
+              4E44AE426082}
+            FileName = 'D:\Data\c\_CppBuilder\CBReader\image\page_green.ico'
+          end>
+        Name = 'Item 2'
+      end
+      item
+        MultiResBitmap = <
+          item
+            Width = 16
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+              61000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              00A749444154384F9592010EC0200803652FF367FA347FE6EC00750A66BB84E8
+              0CB425190521E75CE5EAD27A7AFF06047C422DA554CBE4927302266AA427CFA5
+              94FCA4E7042D03ABCCF56026A0663C178006AAADC20F822180460C8C1AE84A83
+              4F093405C45716017422011D52BC5904B893A83A09768C15E0E825D8958C15E0
+              E825E84A1D7385D51D893C8C15B4791E62E1F71BD35FF027C618E5EB8CF43DB3
+              96CD57F638FF09E106E6FB8AD4092C6EEE0000000049454E44AE426082}
+            FileName = 'D:\Data\c\_CppBuilder\CBReader\image\page.ico'
+          end>
+        Name = 'Item 3'
+      end
+      item
+        MultiResBitmap = <
+          item
+            Width = 16
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+              61000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              009D49444154384FA5908B0DC4200C43A18B5D4763B4DC64340E31D0DE417F96
+              22C0C9338870A2EC755B0E66C297431CB4ED619D87387884AE856411D1C6193C
+              0E5123BF0AA9CDA721BA69CD1B21ACF602AEF39002A694ECBC68C562465D3114
+              E3BA7E82C81776EF631EA09E8CFD91BBECF225ED469CA1DED7DAC98D7A858184
+              B8C2F7FA2B6D20C0422A0495DE18ECC5217ED610B49F19A80766736F14C20615
+              A4CBA46C5B62980000000049454E44AE426082}
+            FileName = 'D:\Data\c\_CppBuilder\CBReader\image\newbook.ico'
+          end>
+        Name = 'Item 4'
+      end>
+    Destination = <
+      item
+        Layers = <
+          item
+            Name = 'Item 0'
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'Item 1'
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'Item 4'
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'Item 2'
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'Item 3'
+          end>
+      end>
+    Left = 979
+    Top = 233
   end
 end

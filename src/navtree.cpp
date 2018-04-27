@@ -79,6 +79,15 @@ TTreeViewItem *  __fastcall CNavTree::TreeViewAddItem(TTreeViewItem * tvItem, SN
 	newItem->TagString = nItem->URL;    // URL
 	newItem->Tag = nItem->Type;     // Type
 	newItem->OnDblClick = fnLinkFunc;    // Double Click 要連結的
+	if(nItem->Type == nit_Title)
+		newItem->ImageIndex = 0;    // 目錄
+	else if(nItem->Type == nit_NavLink)
+		newItem->ImageIndex = 2;    // 另一個目錄
+	else if(nItem->Type == nit_CBLink)
+		newItem->ImageIndex = 3;    // CBETA 經文
+	else if(nItem->Type == nit_NormalLink)
+		newItem->ImageIndex = 4;    // 一般經文
+
 	tvItem->AddObject(newItem);
 	return newItem ;
 }
