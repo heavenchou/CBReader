@@ -149,8 +149,13 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 	//slCalloutTitle = new TTntStringList();      // 外部連結的標題
 	//slCalloutProgram = new TTntStringList();    // 外部連結的程式
 
+
+	// 其他
+
+	LastUpdateChk = u"";       // 最後一次更新檢查, 格式為 20180517
+
     // 不改的資訊 (或是很難改, 要會 ini)
-    XMLJuanPosPath = "JuanPos\\";	// 每一卷經文移位的資料檔
+	XMLJuanPosPath = "JuanPos\\";	// 每一卷經文移位的資料檔
 	JuanLinePath = "JuanLine\\";	// 每一卷經文第一行行首的資訊
 
     LoadFromFile(SettingFile);  // 載入設定檔
@@ -207,6 +212,13 @@ void __fastcall CSetting::LoadFromFile(String sFile)
 
 	BookcasePath = IniFile->ReadString(Section, "BookcasePath", BookcasePath);
 	BookcaseFullPath = IniFile->ReadString(Section, "BookcaseFullPath", BookcaseFullPath);
+
+	// 其他
+
+	Section = "Misc";
+
+	LastUpdateChk = IniFile->ReadString(Section, "LastUpdateChk", LastUpdateChk);
+
 
 	delete IniFile;
 }
@@ -265,6 +277,12 @@ void __fastcall CSetting::SaveToFile(String sFile)
 
 	IniFile->WriteString(Section, "BookcasePath", BookcasePath);
 	IniFile->WriteString(Section, "BookcaseFullPath", BookcaseFullPath);
+
+	// 其他
+
+	Section = "Misc";
+
+	IniFile->WriteString(Section, "LastUpdateChk", LastUpdateChk);
 
 	delete IniFile;
 }

@@ -166,9 +166,13 @@ public: // User declarations
 	//TTntStringList * slCalloutTitle;       // 外部連結的標題
 	//TTntStringList * slCalloutProgram;     // 外部連結的程式
 
+	// 其他
+
+	String LastUpdateChk;       // 最後一次更新檢查, 格式為 20180517
+
 	// 還沒處理 (或不處理?)
 
-    String XMLJuanPosPath;		// 每一卷經文移位的資料檔
+	String XMLJuanPosPath;		// 每一卷經文移位的資料檔
 	String JuanLinePath;		// 每一卷經文第一行行首的資訊
 
 	void __fastcall LoadFromFile();

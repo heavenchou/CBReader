@@ -199,6 +199,7 @@ __published: // IDE-managed Components
 
 private: // User declarations
 
+	String __fastcall GetTodayString();   // 取得今日日期, 格式 19991231
 	void __fastcall SetPermissions(int iIE); // 設定 TWebBrowser 的 IE 版本
 	void __fastcall NavTreeItemClick(TObject *Sender); // NavTree Item 點二下的作用
 

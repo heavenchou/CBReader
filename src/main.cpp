@@ -215,7 +215,9 @@ void __fastcall TfmMain::InitialData()
 	lbSearchMsg->Text = ""; // 清空搜尋訊息
 	SpineID = -1;	// 初值表示沒開啟
 #ifdef _Windows
-	CheckUpdate(u"");   // 檢查更新
+	String sToday = GetTodayString();
+	if(sToday != Setting->LastUpdateChk)
+		CheckUpdate(u"");   // 檢查更新
 #endif
 	if(iBookcaseCount != 0)
 	{
@@ -869,6 +871,7 @@ void __fastcall TfmMain::MenuItem1Click(TObject *Sender)
 // 檢查有沒有更新程式
 void __fastcall TfmMain::CheckUpdate(String sPara)
 {
+
 #ifdef _Windows
 
 	//HWND handle = fmMain->Handle;
@@ -894,6 +897,10 @@ void __fastcall TfmMain::CheckUpdate(String sPara)
 			}
 		}
 	}
+
+	String sToday = GetTodayString();
+	Setting->LastUpdateChk = sToday;
+    Setting->SaveToFile();
 #else
 	TDialogService::ShowMessage("抱歉！目前只有 Windows 版才有更新功能。");
 #endif
@@ -1008,4 +1015,14 @@ void __fastcall TfmMain::SetSearchEngine()
 		SearchEngine = Bookcase->CBETA->SearchEngine_orig;  // 原書索引
 }
 //---------------------------------------------------------------------------
+// 取得今日日期, 格式 19991231
+String __fastcall TfmMain::GetTodayString()
+{
+	TDateTime * Today = new TDateTime(Now());
+	String str = Today->FormatString("yyyymmdd");
+	delete Today;
+	return str;
+}
+//---------------------------------------------------------------------------
+
 
