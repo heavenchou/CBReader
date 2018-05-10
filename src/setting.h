@@ -16,12 +16,14 @@ public: // User declarations
 
 	String SettingFile;     // 設定檔的位置
 
+	// String MyFullPath;      // 主程式所在目錄
+
 	//CCBXMLOption * CBXMLOption; // CBETA 經文的格式
 
 	// 預設 Windows 會在主程式的子目錄 Bookcase
 	// 預設 Mac 會在 /Library/CBETA/Bookcase
 	// 若找不到, 會詢問使用者, 然後存在 BookcaseFullDir
-    // BookcaseFullDir 是第一搜尋目標
+
 	String BookcasePath; 	// 書櫃的目錄
 	String BookcaseFullPath; 		// 書櫃的完整目錄
 

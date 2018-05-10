@@ -9,6 +9,7 @@
 #include "buildindex.h"
 #include "logo.h"
 #include "about.h"
+#include "update.h"
 
 #ifdef _Windows
 #include <System.Win.Registry.hpp>
@@ -23,8 +24,9 @@ TfmMain *fmMain;
 // ---------------------------------------------------------------------------
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
-	Application->Title = "CBReader";
+	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
+	Version = u"0.2.0.0";
 
 	// 設定目錄初值
 	InitialPath();
@@ -94,16 +96,16 @@ void __fastcall TfmMain::InitialPath()
 {
 	// 程式主目錄
 #ifdef _Windows
-	MyFullPath = GetCurrentDir();
+	MyFullPath = ExtractFilePath(ParamStr(0));
 #else
 	MyFullPath = System::Ioutils::TPath::GetHomePath();
 #endif
-	MyFullPath += u"/";
+	MyFullPath = IncludeTrailingPathDelimiter(MyFullPath);
 
 	// Temp 目錄
 
 	MyTempPath = System::Ioutils::TPath::GetTempPath();
-	MyTempPath = MyTempPath + u"CBReader/";
+	MyTempPath = IncludeTrailingPathDelimiter(MyTempPath + u"CBReader");
 
 	if(!TDirectory::Exists(MyTempPath))
 		TDirectory::CreateDirectory(MyTempPath);
@@ -111,13 +113,14 @@ void __fastcall TfmMain::InitialPath()
 	// 使用者個人目錄
 
 	MyHomePath = System::Ioutils::TPath::GetHomePath();
+	MyHomePath = IncludeTrailingPathDelimiter(MyHomePath);
 
 	// 設定檔目錄
 
 #ifdef _Windows
-	MySettingPath = MyHomePath + u"/CBETA/";
+	MySettingPath = MyHomePath + u"CBETA/";
 #else
-	MySettingPath = MyHomePath + u"/.CBETA/";
+	MySettingPath = MyHomePath + u".CBETA/";
 #endif
 	if(!TDirectory::Exists(MySettingPath))
 		TDirectory::CreateDirectory(MySettingPath);
@@ -125,6 +128,7 @@ void __fastcall TfmMain::InitialPath()
 	if(!TDirectory::Exists(MySettingPath))
 		TDirectory::CreateDirectory(MySettingPath);
 
+	MySettingPath = IncludeTrailingPathDelimiter(MySettingPath);
 	// 設定檔
 
 	SettingFile = MySettingPath + u"cbreader.ini";
@@ -141,11 +145,61 @@ void __fastcall TfmMain::FormShow(TObject *Sender)
 
 	fmLogo->Close();
 	Cursor = crDefault;
+
+	// 檢查更新
+	String sToday = GetTodayString();
+	if(sToday != Setting->LastUpdateChk)
+		CheckUpdate();   // 檢查更新
 }
 //---------------------------------------------------------------------------
 // 初始資料
 void __fastcall TfmMain::InitialData()
 {
+	/* 不用了, Windows 已經確定能得到使用者目錄了
+	#ifdef _Windows
+
+	// 檢查 MyFullPath 有沒有錯誤
+	if(!TFile::Exists(String(MyFullPath + u"CBReader.exe")))
+	{
+		// 沒看到 CBReader.exe , 可能有問題
+
+		bool bFound = false;
+		String sMyFullPath = u"";
+
+		// 檢查設定中有沒有 MyFullPath , 檢查正不正確
+		if(Setting->MyFullPath != u"")
+		{
+			sMyFullPath = Setting->MyFullPath;
+			if(TFile::Exists(String(sMyFullPath + u"CBReader.exe")))
+			{
+				bFound = true;
+			}
+		}
+
+		while(!bFound)
+		{
+			// 都找不到目前目錄, 要詢問使用者了
+			TDialogService::ShowMessage(u"沒有找到您的 CBReader.exe 所在目錄，請手動選擇本程式所在目錄位置。");
+			SelectDirectory(u"選擇 CBReader.exe 所在目錄位置",MyFullPath,sMyFullPath);
+
+            if(TFile::Exists(String(sMyFullPath + u"CBReader.exe")))
+			{
+				bFound = true;
+			}
+        }
+
+		// 至此應該都找到了
+		MyFullPath = sMyFullPath;
+		if(Setting->MyFullPath != MyFullPath)
+		{
+			// 將 MyFullPath 寫入
+			Setting->MyFullPath = MyFullPath;
+			Setting->SaveToFile();
+		}
+	}
+	#endif
+	*/
+
 	// 取得 Bookcase 所有資料區
 	// 載入書櫃
 
@@ -154,37 +208,41 @@ void __fastcall TfmMain::InitialData()
 	String sBookcasePath = u"";
 
 	// Bookcase 目錄處理原則
-	// 1. 如果有 Setting->BookcaseFullDir , 則此為第一優先
-	// 2. Windows 在主程式所在目錄底下去找 Bookcase 子目錄
-	// 3. Mac 有二個優先順序
+	// 1. Windows 在主程式所在目錄底下去找 Bookcase 子目錄
+	// 2. Mac 有二個優先順序
 	//    3.1 /User/xxx/Library/CBETA/Bookcase
 	//    3.2 /Library/CBETA/Bookcase
+	// 3. 上面若沒有, 則找 Setting->BookcaseFullDir
 	// 4. 以上若都沒有, 則由使用者尋找, 找到後存在 Setting->BookcaseFullDir
 
-	if(Setting->BookcaseFullPath != u"")
-	{
-		sBookcasePath = Setting->BookcaseFullPath;
-    }
-	else
-	{
+
 #ifdef _Windows
-		sBookcasePath = MyFullPath + Setting->BookcasePath;
+	sBookcasePath = MyFullPath + Setting->BookcasePath;
 #else
-		// Mac 第一優先
-		sBookcasePath = MyHomePath + u"/Library/CBETA/" + Setting->BookcasePath;
-		if(!TDirectory::Exists(sBookcasePath))
-		{
-			// Mac 第二優先
-			sBookcasePath = u"/Library/CBETA/" + Setting->BookcasePath;
-		}
+	// Mac 第一優先
+	sBookcasePath = MyHomePath + u"Library/CBETA/" + Setting->BookcasePath;
+	if(!TDirectory::Exists(sBookcasePath))
+	{
+		// Mac 第二優先
+		sBookcasePath = u"/Library/CBETA/" + Setting->BookcasePath;
+	}
 #endif
+
+	// 都沒有就查設定
+	if(!TDirectory::Exists(sBookcasePath))
+	{
+		if(Setting->BookcaseFullPath != u"")
+		{
+			sBookcasePath = Setting->BookcaseFullPath;
+		}
 	}
 
+	// 都沒有就詢問使用者
 	if(!TDirectory::Exists(sBookcasePath))
 	{
 		TDialogService::ShowMessage(u"沒有找到您的 Bookcase 書櫃目錄，請手動選擇目錄所在位置。");
-		// 使用指定目錄 ???? 該改為使用者指定目錄才好
-		SelectDirectory(u"選擇 Bookcase 目錄所在位置",MyFullPath,sBookcasePath);
+		// 使用指定目錄
+		SelectDirectory(u"選擇 Bookcase 目錄所在位置", MyFullPath, sBookcasePath);
 
 		Setting->BookcaseFullPath = sBookcasePath;
 		Setting->SaveToFile();
@@ -214,11 +272,7 @@ void __fastcall TfmMain::InitialData()
 
 	lbSearchMsg->Text = ""; // 清空搜尋訊息
 	SpineID = -1;	// 初值表示沒開啟
-#ifdef _Windows
-	String sToday = GetTodayString();
-	if(sToday != Setting->LastUpdateChk)
-		CheckUpdate(u"");   // 檢查更新
-#endif
+
 	if(iBookcaseCount != 0)
 	{
 		WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
@@ -869,9 +923,17 @@ void __fastcall TfmMain::MenuItem1Click(TObject *Sender)
 //---------------------------------------------------------------------------
 
 // 檢查有沒有更新程式
-void __fastcall TfmMain::CheckUpdate(String sPara)
+void __fastcall TfmMain::CheckUpdate(bool bShowNoUpdate)
 {
+	// 取得資料版本
+	String sDataVer = "";
+	fmUpdate->CheckUpdate(Version, sDataVer, bShowNoUpdate);
 
+	String sToday = GetTodayString();
+	Setting->LastUpdateChk = sToday;
+	Setting->SaveToFile();
+
+/* 舊的, 讀取 update.exe, 不用了
 #ifdef _Windows
 
 	//HWND handle = fmMain->Handle;
@@ -900,16 +962,17 @@ void __fastcall TfmMain::CheckUpdate(String sPara)
 
 	String sToday = GetTodayString();
 	Setting->LastUpdateChk = sToday;
-    Setting->SaveToFile();
+	Setting->SaveToFile();
 #else
 	TDialogService::ShowMessage("抱歉！目前只有 Windows 版才有更新功能。");
 #endif
+*/
 }
 //---------------------------------------------------------------------------
 // 檢查更新
 void __fastcall TfmMain::MenuItem4Click(TObject *Sender)
 {
-	CheckUpdate(u"show");
+	CheckUpdate(true);  // true 表示沒有更新要秀訊息
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btNavWidthSwitchClick(TObject *Sender)

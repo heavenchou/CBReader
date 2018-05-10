@@ -13,7 +13,8 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 
 	// 設定預設值
 
-	BookcasePath = u"Bookcase"; 		// 書櫃的目錄
+	//MyFullPath = u"";				// 主程式所在目錄
+	BookcasePath = u"Bookcase";		// 書櫃的目錄
 	BookcaseFullPath = u""; 		// 書櫃的完整目錄
 
     // 經文格式
@@ -210,6 +211,7 @@ void __fastcall CSetting::LoadFromFile(String sFile)
 
 	Section = "SystemInfo";
 
+	//MyFullPath = IniFile->ReadString(Section, "MyFullPath", MyFullPath);
 	BookcasePath = IniFile->ReadString(Section, "BookcasePath", BookcasePath);
 	BookcaseFullPath = IniFile->ReadString(Section, "BookcaseFullPath", BookcaseFullPath);
 
@@ -275,6 +277,7 @@ void __fastcall CSetting::SaveToFile(String sFile)
 
 	Section = "SystemInfo";
 
+	//IniFile->WriteString(Section, "MyFullPath", MyFullPath);
 	IniFile->WriteString(Section, "BookcasePath", BookcasePath);
 	IniFile->WriteString(Section, "BookcaseFullPath", BookcaseFullPath);
 

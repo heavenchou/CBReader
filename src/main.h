@@ -20,6 +20,7 @@
 #include "series.h"
 #include "navtree.h"
 #include "cbxml.h"
+#include "chkupdate.h"
 #include <FMX.ActnList.hpp>
 #include <FMX.StdActns.hpp>
 #include <System.Actions.hpp>
@@ -195,8 +196,6 @@ __published: // IDE-managed Components
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall rbFontSmallChange(TObject *Sender);
 
-
-
 private: // User declarations
 
 	String __fastcall GetTodayString();   // 取得今日日期, 格式 19991231
@@ -205,6 +204,7 @@ private: // User declarations
 
 public: // User declarations
 
+    String Version;     	// 版本
     String ProgramTitle;    // 程式名稱
 
     int SelectedBook;   // 目前選中的書, -1 表示還沒選
@@ -247,7 +247,7 @@ public: // User declarations
 	void __fastcall ShowCBXML(String sFile, bool bShowHighlight = false, TmyMonster * SearchEngine = 0);
 
 	// 檢查有沒有更新程式
-	void __fastcall CheckUpdate(String sPara);
+	void __fastcall CheckUpdate(bool bShowNoUpdate=false);
 
     // 選擇全文檢索引擎
 	void __fastcall SetSearchEngine();

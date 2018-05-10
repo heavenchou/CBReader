@@ -7,13 +7,14 @@
 #pragma hdrstop
 #include <System.StartUpCopy.hpp>
 // ---------------------------------------------------------------------------
+USEFORM("update.cpp", fmUpdate);
+USEFORM("selectbook.cpp", fmSelectBook);
+USEFORM("about.cpp", fmAbout);
 USEFORM("buildindex.cpp", fmBuildIndex);
 USEFORM("option.cpp", fmOption);
 USEFORM("searchrange.cpp", fmSearchRange);
-USEFORM("selectbook.cpp", fmSelectBook);
-USEFORM("main.cpp", fmMain);
 USEFORM("logo.cpp", fmLogo);
-USEFORM("about.cpp", fmAbout);
+USEFORM("main.cpp", fmMain);
 //---------------------------------------------------------------------------
 extern "C" int FMXmain()
 {
@@ -27,6 +28,7 @@ extern "C" int FMXmain()
 		Application->CreateForm(__classid(TfmBuildIndex), &fmBuildIndex);
 		Application->CreateForm(__classid(TfmLogo), &fmLogo);
 		Application->CreateForm(__classid(TfmAbout), &fmAbout);
+		Application->CreateForm(__classid(TfmUpdate), &fmUpdate);
 		Application->Run();
 	}
 	catch (Exception &exception)
