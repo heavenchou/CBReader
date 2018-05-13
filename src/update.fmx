@@ -3,7 +3,8 @@ object fmUpdate: TfmUpdate
   Top = 0
   Caption = #26356#26032
   ClientHeight = 297
-  ClientWidth = 570
+  ClientWidth = 558
+  Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -12,6 +13,7 @@ object fmUpdate: TfmUpdate
   object Memo: TMemo
     Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
     DataDetectorTypes = []
+    ReadOnly = True
     Position.X = 40.000000000000000000
     Position.Y = 40.000000000000000000
     Size.Width = 401.000000000000000000

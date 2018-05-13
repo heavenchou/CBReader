@@ -15,10 +15,13 @@ __fastcall CSeries::CSeries(String sDir)
 	Title = "";       // 標題
 	Creator = "";     // 作者
 	NavFile = "";     // 導覽文件
+	Nav2File = "";     // 導覽文件
+	Nav3File = "";     // 導覽文件
 	CatalogFile = "";     // 目錄文件
 	SpineFile = "";   	// 遍歷文件
 	BookDataFile = "";   // Bookdata 文件
 	JSFile = "";          // CBReader 專用的 js 檔
+	Version = "";       // 資料版本
 
 	Catalog = 0;	  	// 目錄
 	Spine = 0;    		// 遍歷文件
@@ -30,7 +33,7 @@ __fastcall CSeries::CSeries(String sDir)
 
 	//--------------
 
-	Dir = sDir + "/";         // 本書的目錄
+	Dir = IncludeTrailingPathDelimiter(sDir);	// 本書的目錄
 
 	// 判斷目錄中有沒有 metadata : index.xml
 
@@ -147,6 +150,12 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 		Nav2File = Node->GetAttribute("src");
 	}
 
+	Node = Document->DocumentElement->ChildNodes->Nodes["nav3"];
+	if(Node->HasAttribute("src"))
+	{
+		Nav3File = Node->GetAttribute("src");
+	}
+
 	// 讀 toc
 
 	Node = Document->DocumentElement->ChildNodes->Nodes["catalog"];
@@ -175,6 +184,19 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	if(Node->HasAttribute("src"))
 	{
 		JSFile = Node->GetAttribute("src");
+	}
+
+	// 讀 Version
+	Node = Document->DocumentElement->ChildNodes->Nodes["version"];
+	if(Node->HasAttribute("src"))
+	{
+		String sVerFile = Dir + Node->GetAttribute("src");
+		if(TFile::Exists(sVerFile))
+		{
+			TStringDynArray sda = TFile::ReadAllLines(sVerFile, TEncoding::UTF8);
+			if(sda.Length > 0)
+				Version = sda[0];
+        }
 	}
 }
 // ---------------------------------------------------------------------------

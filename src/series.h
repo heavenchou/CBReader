@@ -36,10 +36,12 @@ public: // User declarations
 
 	String NavFile;     // 導覽文件
 	String Nav2File;     // 導覽文件 (CBETA 特有的, 未來再考慮如何處理多目錄)
+	String Nav3File;     // 導覽文件 (CBETA 特有的, 未來再考慮如何處理多目錄)
 	String CatalogFile;	// 目錄文件
 	String SpineFile;   // 遍歷文件
 	String BookDataFile;   // BookData 文件
-    String JSFile;          // CBReader 專用的 js 檔
+	String JSFile;          // CBReader 專用的 js 檔
+    String Version;     // 版本
 
 	CCatalog * Catalog; // 目錄
 	CSpine * Spine;		// 遍歷文件

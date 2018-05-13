@@ -15,6 +15,7 @@
 #include <System.Net.HttpClientComponent.hpp>
 #include <System.Net.URLClient.hpp>
 #include <FMX.DialogService.hpp>
+#include <FMX.DialogService.Sync.hpp>
 #include <System.IOUtils.hpp>
 #include <System.Zip.hpp>
 #include <FMX.Edit.hpp>
@@ -85,8 +86,6 @@ public:		// User declarations
 
 	// 檢查需不需要更新, 傳入 cbreader 版本, 資料版本, 以及要不要回應目前是最新的 (手動更新才需要)
 	void __fastcall CheckUpdate(String sCBRVer, String sDataVer, bool bShowNoUpdate=false);
-	// 使用者選擇要不要更新
-	void __fastcall UserSelect(TObject * Sender, TModalResult AKey);
 	// 由 http 網址取得最後的檔名
 	String __fastcall GetHttpFileName(String sURL);
 	// 下載檔案

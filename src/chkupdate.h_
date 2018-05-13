@@ -1,0 +1,44 @@
+//---------------------------------------------------------------------------
+#ifndef ChkUpdateH
+#define ChkUpdateH
+//---------------------------------------------------------------------------
+#include <fmx.h>
+#include <System.Net.HTTPClientComponent.hpp>
+#include <FMX.DialogService.hpp>
+//---------------------------------------------------------------------------
+
+class CChkUpdate
+{
+private:	// User declarations
+public:		// User declarations
+
+    String ServiceURL;  // 要檢查更新的網頁目錄
+
+	// 三個版本
+	//String CBRVer;  // CBReader 的版本
+	//String DataVer;	// 經文資料的版本
+	//String UpdateVer;   // 更新程式的版本
+
+	// 判斷要不要秀訊息
+	// 如果傳入參數 show , 表示要秀訊息
+	// 自動檢查更新時, 若沒更新就自行離開
+	// 手動檢查更新, 沒更新就需要秀訊息 "目前是最新版".
+	bool IsShowMessage;
+    bool IsShowDebug;
+
+	TStringList * slReceive;	// 接收網頁訊息
+
+	// 檢查需不需要更新
+	void __fastcall CheckUpdate(String sCBRVer, String sDataVer);
+	// 使用者選擇要不要更新
+	void __fastcall UserSelect(TObject * Sender, TModalResult AKey);
+
+	void __fastcall nhrCBRRequestCompleted(TObject * const Sender, IHTTPResponse * const AResponse);
+	void __fastcall nhrCBRRequestError(TObject * const Sender, const UnicodeString AError);
+
+
+	__fastcall CChkUpdate();		// 建構函式
+	__fastcall ~CChkUpdate();	// 解構函式
+};
+//---------------------------------------------------------------------------
+#endif

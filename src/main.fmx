@@ -72,8 +72,8 @@ object fmMain: TfmMain
             Size.Height = 575.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            Viewport.Width = 233.000000000000000000
-            Viewport.Height = 575.000000000000000000
+            Viewport.Width = 229.000000000000000000
+            Viewport.Height = 571.000000000000000000
           end
           object Panel7: TPanel
             Align = Top
@@ -86,7 +86,7 @@ object fmMain: TfmMain
               Size.Width = 65.000000000000000000
               Size.Height = 33.000000000000000000
               Size.PlatformDefault = False
-              Text = #26412#26360#30446#37636
+              Text = #26412#26360#30446#27425
               TabOrder = 0
             end
           end
@@ -135,12 +135,12 @@ object fmMain: TfmMain
           item
           end>
         IsSelected = True
-        Size.Width = 69.000000000000000000
+        Size.Width = 54.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
         TabOrder = 0
-        Text = #30446#37636
+        Text = #26360#30446
         ExplicitSize.cx = 44.000000000000000000
         ExplicitSize.cy = 26.000000000000000000
         object tvNavTree: TTreeView
@@ -150,8 +150,8 @@ object fmMain: TfmMain
           Size.PlatformDefault = False
           TabOrder = 0
           Images = ImageList1
-          Viewport.Width = 281.000000000000000000
-          Viewport.Height = 510.000000000000000000
+          Viewport.Width = 277.000000000000000000
+          Viewport.Height = 506.000000000000000000
         end
         object Panel8: TPanel
           Align = Top
@@ -160,24 +160,34 @@ object fmMain: TfmMain
           Size.PlatformDefault = False
           TabOrder = 1
           object btOpenBuleiNav: TButton
-            Position.X = 8.000000000000000000
+            Position.X = 160.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 89.000000000000000000
+            Size.Width = 57.000000000000000000
             Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            Text = #37096#39006#30446#37636
+            Text = #37096#39006
             OnClick = btOpenBuleiNavClick
           end
           object btOpenBookNav: TButton
-            Position.X = 112.000000000000000000
+            Position.X = 88.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 89.000000000000000000
+            Size.Width = 57.000000000000000000
+            Size.Height = 33.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 2
+            Text = #36914#38542
+            OnClick = btOpenBookNavClick
+          end
+          object btOpenSimpleNav: TButton
+            Position.X = 16.000000000000000000
+            Position.Y = 8.000000000000000000
+            Size.Width = 57.000000000000000000
             Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 1
-            Text = #21407#26360#30446#37636
-            OnClick = btOpenBookNavClick
+            Text = #31777#26131
+            OnClick = btOpenSimpleNavClick
           end
         end
       end
@@ -186,12 +196,12 @@ object fmMain: TfmMain
           item
           end>
         IsSelected = False
-        Size.Width = 69.000000000000000000
+        Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
         TabOrder = 0
-        Text = #32147#30446
+        Text = #32147#30446#26597#35426
         ExplicitSize.cx = 44.000000000000000000
         ExplicitSize.cy = 26.000000000000000000
         object Panel3: TPanel
@@ -392,8 +402,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 281.000000000000000000
-          Viewport.Height = 381.000000000000000000
+          Viewport.Width = 277.000000000000000000
+          Viewport.Height = 356.000000000000000000
           object StringColumn1: TStringColumn
             Header = #32147#21517
             Size.Width = 130.000000000000000000
@@ -427,7 +437,7 @@ object fmMain: TfmMain
           item
           end>
         IsSelected = False
-        Size.Width = 69.000000000000000000
+        Size.Width = 38.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
@@ -799,7 +809,7 @@ object fmMain: TfmMain
           item
           end>
         IsSelected = False
-        Size.Width = 72.000000000000000000
+        Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
@@ -872,8 +882,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
-          Viewport.Width = 281.000000000000000000
-          Viewport.Height = 430.000000000000000000
+          Viewport.Width = 277.000000000000000000
+          Viewport.Height = 405.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000
@@ -1018,7 +1028,7 @@ object fmMain: TfmMain
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 6
-      Text = #26360#30446'>>'
+      Text = #30446#27425'>>'
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
       OnClick = btMuluWidthSwitchClick
@@ -1027,17 +1037,17 @@ object fmMain: TfmMain
       ClipChildren = True
       Position.X = 456.000000000000000000
       Position.Y = 8.000000000000000000
-      Size.Width = 87.000000000000000000
+      Size.Width = 113.000000000000000000
       Size.Height = 41.000000000000000000
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
-      Text = #31243#24335#23383#39636
+      Text = #20027#21151#33021#21312#23383#39636
       TabOrder = 7
     end
     object rbFontSmall: TRadioButton
       StyledSettings = [Family, Style, FontColor]
       GroupName = 'gnFontSize'
-      Position.X = 552.000000000000000000
+      Position.X = 576.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
@@ -1049,7 +1059,7 @@ object fmMain: TfmMain
     object rbFontMid: TRadioButton
       StyledSettings = [Family, Style, FontColor]
       GroupName = 'gnFontSize'
-      Position.X = 592.000000000000000000
+      Position.X = 616.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
@@ -1063,7 +1073,7 @@ object fmMain: TfmMain
       StyledSettings = [Family, Style, FontColor]
       GroupName = 'gnFontSize'
       IsChecked = True
-      Position.X = 632.000000000000000000
+      Position.X = 656.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
@@ -3679,8 +3689,8 @@ object fmMain: TfmMain
             6C6F720708636C61426C61636B0B4E6F726D616C436F6C6F720708636C61426C
             61636B0C50726573736564436F6C6F720708636C61426C61636B000000}
         end>
-      Left = 792
-      Top = 8
+      Left = 1000
+      Top = 56
     end
   end
   object MainMenu1: TMainMenu
@@ -6326,15 +6336,15 @@ object fmMain: TfmMain
           636B0B4E6F726D616C436F6C6F720708636C61426C61636B0C50726573736564
           436F6C6F720708636C61426C61636B000000}
       end>
-    Left = 752
-    Top = 8
+    Left = 960
+    Top = 56
   end
   object sbSmall: TStyleBook
     Styles = <
       item
       end>
-    Left = 712
-    Top = 8
+    Left = 920
+    Top = 56
   end
   object ImageList1: TImageList
     Source = <

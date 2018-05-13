@@ -155,17 +155,18 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-    </ItemGroup>
-    <ItemGroup Condition="'$(Platform)'=='OSX32'">
-        <DeployFile Include="cbeta.icns" Condition="'$(Config)'=='Release'">
-            <RemoteDir>CBReader.app\Contents\Resources\</RemoteDir>
-            <RemoteName>CBReader.icns</RemoteName>
-            <DeployClass>ProjectOSXResource</DeployClass>
-            <Operation>1</Operation>
+        <DeployFile Include=".\Win32\Release\CBReader.exe" Condition="'$(Config)'=='Release'">
+            <RemoteDir>CBReader\</RemoteDir>
+            <RemoteName>CBReader.exe</RemoteName>
+            <DeployClass>ProjectOutput</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
+            <Required>True</Required>
         </DeployFile>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Platform)'=='OSX32'">
         <DeployFile Include="$(BDS)\bin\cbuilder_PROJECTICNS.icns" Condition="'$(Config)'=='Release'">
             <RemoteDir>CBReader.app\Contents\Resources\</RemoteDir>
             <RemoteName>CBReader.icns</RemoteName>
@@ -185,24 +186,6 @@
             <Overwrite>True</Overwrite>
             <Required>True</Required>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\cbuilder_PROJECTICNS.icns" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>CBReader.app\Contents\Resources\</RemoteDir>
-            <RemoteName>CBReader.icns</RemoteName>
-            <DeployClass>ProjectOSXResource</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
-        <DeployFile Include=".\OSX32\Release\CBReader.info.plist" Condition="'$(Config)'=='Release'">
-            <RemoteDir>CBReader.app\Contents\</RemoteDir>
-            <RemoteName>Info.plist</RemoteName>
-            <DeployClass>ProjectOSXInfoPList</DeployClass>
-            <Operation>1</Operation>
-            <LocalCommand/>
-            <RemoteCommand/>
-            <Overwrite>True</Overwrite>
-        </DeployFile>
         <DeployFile Include="$(BDS)\Redist\OSX32\bplfmx250.dylib" Condition="'$(Config)'=='Release'">
             <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
             <RemoteName>bplfmx250.dylib</RemoteName>
@@ -213,11 +196,20 @@
             <Overwrite>True</Overwrite>
             <Required>True</Required>
         </DeployFile>
-        <DeployFile Include="c:\program files (x86)\embarcadero\studio\19.0\bin\Artwork\Windows\UWP\cppreg_UwpDefault_44.png" Condition="'$(Config)'=='Release'">
-            <RemoteDir>CBReader.app\Assets\</RemoteDir>
-            <RemoteName>Logo44x44.png</RemoteName>
-            <DeployClass>UWP_CppLogo44</DeployClass>
-            <Operation>0</Operation>
+        <DeployFile Include=".\OSX32\Release\CBReader.info.plist" Condition="'$(Config)'=='Release'">
+            <RemoteDir>CBReader.app\Contents\</RemoteDir>
+            <RemoteName>Info.plist</RemoteName>
+            <DeployClass>ProjectOSXInfoPList</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="$(BDS)\bin\cbuilder_PROJECTICNS.icns" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>CBReader.app\Contents\Resources\</RemoteDir>
+            <RemoteName>CBReader.icns</RemoteName>
+            <DeployClass>ProjectOSXResource</DeployClass>
+            <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -227,6 +219,15 @@
             <RemoteName>CBReader.entitlements</RemoteName>
             <DeployClass>ProjectOSXEntitlements</DeployClass>
             <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="c:\program files (x86)\embarcadero\studio\19.0\bin\Artwork\Windows\UWP\cppreg_UwpDefault_44.png" Condition="'$(Config)'=='Release'">
+            <RemoteDir>CBReader.app\Assets\</RemoteDir>
+            <RemoteName>Logo44x44.png</RemoteName>
+            <DeployClass>UWP_CppLogo44</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -249,6 +250,15 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
             <Required>True</Required>
+        </DeployFile>
+        <DeployFile Include="cbeta.icns" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>CBReader.app\Contents\Resources\</RemoteDir>
+            <RemoteName>CBReader.icns</RemoteName>
+            <DeployClass>ProjectOSXResource</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
         </DeployFile>
         <DeployFile Include="$(BDS)\Redist\OSX32\bplfmx250.dylib" Condition="'$(Config)'=='Debug'">
             <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
@@ -320,6 +330,15 @@
             <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
             <RemoteName>libcgsqlite3.dylib</RemoteName>
             <DeployClass>DependencyModule</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include=".\OSX32\Debug\CBReader.tds" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>CBReader.app\Contents\MacOS\</RemoteDir>
+            <RemoteName>CBReader.tds</RemoteName>
+            <DeployClass>DebugSymbols</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>

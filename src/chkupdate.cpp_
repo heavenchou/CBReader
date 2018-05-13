@@ -1,0 +1,67 @@
+//---------------------------------------------------------------------------
+#pragma hdrstop
+
+#include "chkupdate.h"
+#include "update.h"
+//---------------------------------------------------------------------------
+__fastcall CChkUpdate::CChkUpdate()		// 建構函式
+{
+	// 初值
+	//CBRVer = u"";  // CBReader 的版本
+	//DataVer = u"";	// 經文資料的版本
+	//UpdateVer = u"";   // 更新程式的版本
+
+	IsShowMessage = false;
+	IsShowDebug = false;
+	ServiceURL = u"http://www.cbeta.org/cbreader/update.php?";
+	slReceive = new TStringList;	// 接收網頁訊息
+}
+//---------------------------------------------------------------------------
+__fastcall CChkUpdate::~CChkUpdate(void)	// 解構函式
+{
+	if(slReceive) delete slReceive;
+}
+//---------------------------------------------------------------------------
+void __fastcall CChkUpdate::CheckUpdate(String sCBRVer, String sDataVer)
+{
+	String sURL = ServiceURL + u"cbr=0.1.0.0&a=" + sCBRVer + u"&data=" + sDataVer;
+	if(IsShowDebug) TDialogService::ShowMessage(sURL);
+	fmUpdate->nhrCBR->URL = sURL;
+	fmUpdate->nhrCBR->Execute();
+}
+//---------------------------------------------------------------------------
+void __fastcall CChkUpdate::nhrCBRRequestCompleted(TObject * const Sender, IHTTPResponse * const AResponse)
+{
+	// 讀入更新資料
+	slReceive->LoadFromStream(AResponse->GetContentStream(),TEncoding::UTF8);
+	// 判斷是不是更新資料檔
+	String sStr1 = slReceive->Strings[0];
+	//if(IsShowDebug) TDialogService::ShowMessage(sStr1);
+	if(sStr1.SubString0(0,2) == u"ok")
+	{
+		// 表示沒有更新資料
+		if(IsShowMessage)
+		{
+			//TDialogService::ShowMessage(u"您的 CBReader 是最新的!");
+		}
+	}
+	else if(sStr1.SubString0(0,8) == u"message=" || sStr1.SubString0(0,7) == u"mesage=")
+		TDialogService::MessageDialog(u"有更新資料，要進行更新嗎？",
+			TMsgDlgType::mtConfirmation,
+  			TMsgDlgButtons() << TMsgDlgBtn::mbYes << TMsgDlgBtn::mbNo, TMsgDlgBtn::mbYes ,0,UserSelect);
+
+}
+//---------------------------------------------------------------------------
+void __fastcall CChkUpdate::UserSelect(TObject * Sender, TModalResult AKey)
+{
+	if (AKey == System::Uitypes::mrYes)
+		fmUpdate->ShowModal();
+}
+//---------------------------------------------------------------------------
+void __fastcall CChkUpdate::nhrCBRRequestError(TObject * const Sender, const UnicodeString AError)
+{
+	TDialogService::ShowMessage(AError);
+//	Close();
+}
+//---------------------------------------------------------------------------
+

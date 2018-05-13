@@ -20,7 +20,6 @@
 #include "series.h"
 #include "navtree.h"
 #include "cbxml.h"
-#include "chkupdate.h"
 #include <FMX.ActnList.hpp>
 #include <FMX.StdActns.hpp>
 #include <System.Actions.hpp>
@@ -169,6 +168,7 @@ __published: // IDE-managed Components
 	TStyleBook *sbBig;
 	TStyleBook *sbSmall;
 	TImageList *ImageList1;
+	TButton *btOpenSimpleNav;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -195,6 +195,7 @@ __published: // IDE-managed Components
 	void __fastcall fanMuluWidthFinish(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall rbFontSmallChange(TObject *Sender);
+	void __fastcall btOpenSimpleNavClick(TObject *Sender);
 
 private: // User declarations
 

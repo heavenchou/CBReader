@@ -83,7 +83,7 @@
         <AUP_READ_EXTERNAL_STORAGE>true</AUP_READ_EXTERNAL_STORAGE>
         <Icon_MainIcon>$(BDS)\bin\cbuilder_PROJECTICON.ico</Icon_MainIcon>
         <AUP_CALL_PHONE>true</AUP_CALL_PHONE>
-        <AllPackageLibs>rtl.lib;fmx.lib;xmlrtl.lib;vclimg.lib;vcl.lib;vclactnband.lib;vclx.lib</AllPackageLibs>
+        <AllPackageLibs>rtl.lib;fmx.lib;xmlrtl.lib</AllPackageLibs>
         <AUP_READ_CALENDAR>true</AUP_READ_CALENDAR>
         <AUP_CAMERA>true</AUP_CAMERA>
         <AUP_WRITE_CALENDAR>true</AUP_WRITE_CALENDAR>
@@ -170,7 +170,6 @@
         <LinkPackageImports>rtl.bpi;fmx.bpi;xmlrtl.bpi</LinkPackageImports>
         <Icon_MainIcon>cbeta.ico</Icon_MainIcon>
         <Icns_MainIcns>cbeta.icns</Icns_MainIcns>
-        <LinkPackageStatics>vclimg.lib;vcl.lib;vclactnband.lib;vclx.lib</LinkPackageStatics>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -182,7 +181,7 @@
         <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
         <DynamicRTL>false</DynamicRTL>
         <UsePackages>false</UsePackages>
-        <LinkPackageStatics>rtl.lib;fmx.lib;xmlrtl.lib;vclimg.lib;vcl.lib;vclactnband.lib;vclx.lib</LinkPackageStatics>
+        <LinkPackageStatics>rtl.lib;fmx.lib;xmlrtl.lib</LinkPackageStatics>
         <VerInfo_MinorVer>1</VerInfo_MinorVer>
         <VerInfo_Debug>true</VerInfo_Debug>
         <BCC_InstructionSet>5</BCC_InstructionSet>
@@ -219,7 +218,7 @@
         <AppEnableHighDPI>true</AppEnableHighDPI>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1028</VerInfo_Locale>
-        <LinkPackageStatics>rtl.lib;fmx.lib;xmlrtl.lib;vclimg.lib;vcl.lib;vclactnband.lib;vclx.lib</LinkPackageStatics>
+        <LinkPackageStatics>rtl.lib;fmx.lib;xmlrtl.lib</LinkPackageStatics>
         <UsePackages>false</UsePackages>
         <DynamicRTL>false</DynamicRTL>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
@@ -468,9 +467,8 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\bin\cbuilder_PROJECTICNS.icns" Configuration="Debug" Class="ProjectOSXResource">
+                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplfmx250.dylib" Configuration="Release" Class="DependencyPackage">
                     <Platform Name="OSX32">
-                        <RemoteName>CBReader.icns</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -480,13 +478,14 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\Redist\OSX32\bplfmx250.dylib" Configuration="Release" Class="DependencyPackage">
+                <DeployFile LocalName="$(BDS)\bin\cbuilder_PROJECTICNS.icns" Configuration="Debug" Class="ProjectOSXResource">
                     <Platform Name="OSX32">
+                        <RemoteName>CBReader.icns</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
-                    <Platform Name="OSX32">
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -502,8 +501,8 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
+                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
+                    <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -522,6 +521,12 @@
                 <DeployFile LocalName=".\OSX32\Debug\CBReader" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="OSX32">
                         <RemoteName>CBReader</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="cbeta.icns" Configuration="Debug" Class="ProjectOSXResource">
+                    <Platform Name="OSX32">
+                        <RemoteName>CBReader.icns</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -609,6 +614,13 @@
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx32\libcgsqlite3.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName=".\OSX32\Debug\CBReader.tds" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="OSX32">
+                        <RemoteDir>Contents\MacOS\</RemoteDir>
+                        <RemoteName>CBReader.tds</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

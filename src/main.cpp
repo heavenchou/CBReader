@@ -33,6 +33,10 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 
 #ifdef _Windows
 	SetPermissions(11001); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
+	// 刪去舊版
+	String sOld = ParamStr(0) + u".tmp";
+	if(TFile::Exists(sOld))
+        TFile::Delete(sOld);
 #endif
 
 	SearchEngine = 0;   // 全文檢索引擎
@@ -865,7 +869,8 @@ void __fastcall TfmMain::LoadMuluTree(String sFile)
 		btMuluWidthSwitchClick(this);
 }
 //---------------------------------------------------------------------------
-void __fastcall TfmMain::btOpenBuleiNavClick(TObject *Sender)
+
+void __fastcall TfmMain::btOpenSimpleNavClick(TObject *Sender)
 {
 	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->NavFile);
 }
@@ -873,6 +878,11 @@ void __fastcall TfmMain::btOpenBuleiNavClick(TObject *Sender)
 void __fastcall TfmMain::btOpenBookNavClick(TObject *Sender)
 {
 	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->Nav2File);
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btOpenBuleiNavClick(TObject *Sender)
+{
+	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->Nav3File);
 }
 //---------------------------------------------------------------------------
 // 上一卷
@@ -926,7 +936,8 @@ void __fastcall TfmMain::MenuItem1Click(TObject *Sender)
 void __fastcall TfmMain::CheckUpdate(bool bShowNoUpdate)
 {
 	// 取得資料版本
-	String sDataVer = "";
+	String sDataVer = Bookcase->CBETA->Version;
+
 	fmUpdate->CheckUpdate(Version, sDataVer, bShowNoUpdate);
 
 	String sToday = GetTodayString();
@@ -1030,9 +1041,9 @@ void __fastcall TfmMain::fanNavWidthFinish(TObject *Sender)
 void __fastcall TfmMain::fanMuluWidthFinish(TObject *Sender)
 {
 	if(pnMulu->Width == 0)
-		btMuluWidthSwitch->Text = u"書目>>";
+		btMuluWidthSwitch->Text = u"目次>>";
 	else
-		btMuluWidthSwitch->Text = u"<<書目";
+		btMuluWidthSwitch->Text = u"<<目次";
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::rbFontSmallChange(TObject *Sender)
@@ -1087,5 +1098,4 @@ String __fastcall TfmMain::GetTodayString()
 	return str;
 }
 //---------------------------------------------------------------------------
-
 

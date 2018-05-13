@@ -14,9 +14,10 @@ __fastcall TfmUpdate::TfmUpdate(TComponent* Owner)
 	: TForm(Owner)
 {
 	IsShowMessage = false;
-	IsShowDebug = true;
+	IsShowDebug = false;
 	ServiceURL = u"http://www.cbeta.org/cbreader/update.php?";
-	ServiceURL = u"http://localhost/cbreader/update.php?";
+	//ServiceURL = u"http://localhost/cbreader/update.php?";
+	//ServiceURL = u"http://192.168.0.3/cbreader/update.php?";
 	slReceive = new TStringList;	// 接收網頁訊息
 }
 //---------------------------------------------------------------------------
@@ -53,20 +54,16 @@ void __fastcall TfmUpdate::nhrCBRRequestCompleted(TObject * const Sender, IHTTPR
 	}
 	else if(sStr1.SubString0(0,8) == u"message=")
 	{
-		TDialogService::MessageDialog(u"發現更新檔案，您要進行更新嗎？更新後請立刻重新開啟本程式，以確保程式與資料能正確搭配。",
+		int iResult = TDialogServiceSync::MessageDialog(u"發現更新檔案，您要進行更新嗎？更新後請立刻重新開啟本程式，以確保程式與資料能正確搭配。",
 			TMsgDlgType::mtConfirmation,
-			TMsgDlgButtons() << TMsgDlgBtn::mbYes << TMsgDlgBtn::mbNo, TMsgDlgBtn::mbYes ,0,UserSelect);
+			TMsgDlgButtons() << TMsgDlgBtn::mbYes << TMsgDlgBtn::mbNo, TMsgDlgBtn::mbYes ,0);
+
+		if (iResult == System::Uitypes::mrYes)
+			ShowModal();
+		else
+			if(IsShowDebug)
+				TDialogService::ShowMessage(u"不更新就算了");
 	}
-}
-//---------------------------------------------------------------------------
-// 選擇要不要更新
-void __fastcall TfmUpdate::UserSelect(TObject * Sender, TModalResult AKey)
-{
-	if (AKey == System::Uitypes::mrYes)
-		ShowModal();
-	else
-		if(IsShowDebug)
-			TDialogService::ShowMessage(u"不更新就算了");
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmUpdate::FormShow(TObject *Sender)
