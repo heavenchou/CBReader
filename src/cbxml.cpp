@@ -73,6 +73,7 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 
 	Document = interface_cast<Xmlintf::IXMLDocument>(new TXMLDocument(NULL));
 	Document->FileName = XMLFile;
+	//Document->ParseOptions = Document->ParseOptions + (TParseOptions() << poPreserveWhiteSpace);
 
 	HTMLText += MakeHTMLHead(); // 先產生 html 的 head
 
@@ -190,6 +191,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 				  "     p.headname4 {display:inline; margin-left:0em;}\n"    // head 標題
 				  "     p.byline {display:inline; margin-left:0em;}\n"    // byline
 				  "     span.line_space {display:inline;}\n"  // 行首空格
+				  "     span.para_space {display:none;}\n"  // 行首空格
 				  "     ul {display:inline;padding-left:0;}\n"     	// <ul>
 				  "     li {display:inline;}\n";     // <li>
 	else
@@ -208,6 +210,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 				  "     p.headname4 {display:block; margin-left:4em;}\n"    // head 標題
 				  "     p.byline {display:block; margin-left:4em;}\n"    // byline
 				  "     span.line_space {display:none;}\n"     // 行首空格
+				  "     span.para_space {display:inline;}\n"     // 行首空格
 				  "     ul {display:block;padding-left:40;}\n"     	// <ul>
 				  "     li {display:list-item;}\n";     // <li>
 
@@ -535,10 +538,10 @@ String __fastcall CCBXML::tag_app(_di_IXMLNode Node)
 		mpNoteStarNum[sId] = iStar;
 		sId += u"-" + String(iStar);
 
-		HTMLCollation += u"<div id=\"txt_note_app_" + sId + "\">\n";
-		sHtml += u"<a id=\"note_star_" + sId + "\" class=\"note_star\" "
-				  "href=\"\" onclick=\"return false;\">[＊]</a>\n";
-		sHtml += u"<span id=\"note_app_" + sId + "\" class=\"note_app\">"
+		HTMLCollation += u"<div id=\"txt_note_app_" + sId + u"\">\n";
+		sHtml += u"<a id=\"note_star_" + sId + u"\" class=\"note_star\" "
+		       + u"href=\"\" onclick=\"return false;\">[＊]</a>\n";
+		sHtml += u"<span id=\"note_app_" + sId + u"\" class=\"note_app\">"
 				 + parseChild(Node) // 處理內容
 				 + u"</span>";
 		HTMLCollation += u"</div>\n";
@@ -558,9 +561,9 @@ String __fastcall CCBXML::tag_app(_di_IXMLNode Node)
 		sId += u"-" + String(iStar);
 
 		HTMLCollation += u"<div id=\"txt_note_app_" + sId + "\">\n";
-		sHtml += u"<a id=\"note_star_" + sId + "\" class=\"note_star_removed\" "
-				  "href=\"\" onclick=\"return false;\">[＊]</a>\n";
-		sHtml += u"<span id=\"note_app_" + sId + "\" class=\"note_app\">"
+		sHtml += u"<a id=\"note_star_" + sId + u"\" class=\"note_star_removed\" "
+			   + u"href=\"\" onclick=\"return false;\">[＊]</a>\n";
+		sHtml += u"<span id=\"note_app_" + sId + u"\" class=\"note_app\">"
 			  + parseChild(Node) // 處理內容
 			  + u"</span>";
 		HTMLCollation += u"</div>\n";
@@ -750,6 +753,7 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 		CRendAttr * myRend = new CRendAttr(sRend);
 		iMarginLeft = myRend->MarginLeft;
 		iTextIndent = myRend->TextIndent;
+		delete myRend;
 
 		MarginLeft += String::StringOfChar(u'　',iMarginLeft);// 這是第二行之後要空的
 		sTextIndentSpace += String::StringOfChar(u'　',iMarginLeft+iTextIndent);
@@ -1344,8 +1348,10 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 		CRendAttr * myRend = new CRendAttr(sRend);
 		iMarginLeft = myRend->MarginLeft;
 		iTextIndent = myRend->TextIndent;
-		if(iMarginLeft)
-			LgMarginLeft += String::StringOfChar(u'　',myRend->MarginLeft);  // lg 整段要空的格
+		delete myRend;
+		// l 標記應該不處理 LgMarginLeft 比較好吧
+		//if(iMarginLeft)
+		//	LgMarginLeft += String::StringOfChar(u'　',myRend->MarginLeft);  // lg 整段要空的格
 	}
 	else
 	{
@@ -1354,7 +1360,12 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 
 		if(LgNormal)
 		{
-			if(LTagNum != 1)
+			if(LTagNum == 1)
+			{
+				iMarginLeft = 0;
+				LMarginLeft = u"";
+			}
+			else
 			{
 				iMarginLeft = 2;
 				LMarginLeft = u"　　";
@@ -1376,7 +1387,10 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 			//圓寂宮城門　　能摧戶扇者
 			//　諸佛法受用　　救世我頂禮
 			//　自手流清水　　能除餓鬼渴
-			if(IsFindLg)		// lg 之後的第一個 <l>
+			
+			// lg 之後的第一個 <l> , 不處理空格, 都由 lg 處理了
+			// 之後每行第一個 <l> 都要先印出整段偈頌要空的空格
+			if(IsFindLg)		
 			{
 				IsFindLg = false;
 			}
@@ -1387,14 +1401,16 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 				// 就不折行. 不過這只限在 GA 及 GB, 因為舊的經文還是折行較好
 				if(!(LgNormal == false && (BookId == u"GA" || BookId == u"GB")))
 				{
-					sHtml += u"<br class=\"para_br\"/>";	// 偈頌折行 , 待測試 ????
+					sHtml += u"<br class=\"para_br\"/>";	// 偈頌折行
+					sHtml += LgMarginLeft;	// 整段偈頌要空的空格
+					//sHtml += "<span class=\"para_space\">" + LgMarginLeft + "</span>";
 				}
-				sHtml += LgMarginLeft;
 			}
 		}
 	}
-
-	sLTextIndent += String::StringOfChar(u'　',iMarginLeft + iTextIndent); // lg 整段要空的格
+	
+	sLTextIndent += String::StringOfChar(u'　',iMarginLeft + iTextIndent); 
+	// l 本身要空的格
 	sHtml += sLTextIndent;
 
 	// -----------------------------------
@@ -1497,7 +1513,11 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 	}
 
 	// 原書格式會看到的行首空白
-	String sSpace = MarginLeft;	// + LgMarginLeft + LMarginLeft; 這些留在 <l> 才空格
+	String sSpace;
+	if(LgNormal)
+		sSpace = MarginLeft;	// + LgMarginLeft + LMarginLeft; 這些留在 <l> 才空格
+	else
+		sSpace = MarginLeft + LgMarginLeft + LMarginLeft;
 	{
 		if(InByline)				sSpace += u"　　　　";	// 譯者
 		if(FuWenCount && !bNoLineData)	sSpace += u"　";			// 附文
@@ -1637,11 +1657,38 @@ String __fastcall CCBXML::tag_lem(_di_IXMLNode Node)
 //   不呈現標點時, 在 typle=normal 的情況下, 忽略 lg 與 l 的 rend 屬性, 因為 rend 會因為新標的引號而調整. 故不呈現時就不要處理.
 //   呈現標點時, 也可以選擇偈頌不呈現標點, 這時只忽略標點, 但不忽略上下引號, 這樣比較好看.
 
-// 2016 的新作法:
-// 原本整段的空格是用空格. 例如 : <lg rend="margin-left:1"> , 2014 之前的版本是每一行前面都加上一個空格. 不過折行就不會空格了.
-// 2016 就改成用段落 <p class="lg" style="margin-left:1em;"> , 因此每一行前面就不用加空格.
-// 不過因此 copy 再貼在純文字, 就會少了行首的空格.
-// 至於引用複製, 就要在原本行首的空格加上 <spane data-space="1"> 表示空一格, 到時再用引用複製來還原一個空格.
+/* 空格處理法
+
+整個偈頌都要空的假設為Ｌ
+
+目前的設計是 lb 之後不要空，等標準偈頌遇到第一個 <l> 才空，如下所示
+
+<lb><l>ＬｘｘｘｘＬＬｘｘｘｘ
+
+為什麼不在 <lb> 之後就空呢? 因為在段落模式，<lb> 沒有換行，而 <l> 才有換行效果，
+所以空格要在 <l> 之後，才不會先空格再換行，就白空了。
+
+至於非標準偈頌 , 又分成二種：
+
+1. 原書格式 : lb 之後就要空出整段的 , 多行的偈頌才會整齊
+
+<lb>ＬＬＬxxxxxxxx
+<lb>ＬＬＬxxxxxxxx
+<lb>ＬＬＬxxxxxxxx
+
+2. 段落格式
+
+整段的空格用 <p style="margin:3em"> 來控制
+
+行首的Ｌ在段落模式會隱藏，<p> 在原書模式也會消失作用。
+
+/* 2018註 : 底下這一段怪怪的, 不看好了
+	// 2016 的新作法:
+	// 原本整段的空格是用空格. 例如 : <lg rend="margin-left:1"> , 2014 之前的版本是每一行前面都加上一個空格. 不過折行就不會空格了.
+	// 2016 就改成用段落 <p class="lg" style="margin-left:1em;"> , 因此每一行前面就不用加空格.
+	// 不過因此 copy 再貼在純文字, 就會少了行首的空格.
+	// 至於引用複製, 就要在原本行首的空格加上 <spane data-space="1"> 表示空一格, 到時再用引用複製來還原一個空格.
+*/
 
 String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 {
@@ -1651,16 +1698,16 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	LgCount++;                  // 判斷是不是在 <lg> 之中, 主要是用來處理偈頌中的標點要不要呈現.
 	LgNormal = true;			// 預設值, 因為有些舊的 xml 沒有 <lg type=normal>
 	LgInline = false;      		// lg 的 place 是不是 inline?
-	LgMarginLeft = "";			// lg 整段要空的格
+	LgMarginLeft = u"";			// lg 整段要空的格
 	LTagNum = 0;		        // 還原 <l> 的數目, 要來判斷要不要折行或空格數目
 
 	bool bHasRend = false;		// 先假設沒有 rend 屬性
-	String sLgTextIndent = "";	// lg 開頭要空的格
+	String sLgTextIndent = u"";	// lg 開頭要空的格
 	bool bIsNote = false;       // 若 type 是 note1 or note2 , 則偈誦前後要加小括號
 
 	// 先處理 type 屬性
 
-	String sType = GetAttr(Node, "type");
+	String sType = GetAttr(Node, u"type");
 
 	if(sType == u"normal") LgNormal = true;		// lg 的 type 是 normal
 	if(sType == u"abnormal") LgNormal = false;    // 因為舊版有 type=inline
@@ -1670,99 +1717,53 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 		bIsNote = true;
 	}
 
+	// 處理 place="inline"
+	// V2.0 之後, 由 type=inline 改成 place=inline
+
+	String sPlace = GetAttr(Node, "place");
+	if(sPlace == "inline")			// 行中段落加句點
+	{
+		LgInline = true;
+		LgNormal = false;
+	}
+
 	// 再處理 rend 屬性
 
-	String sRend = GetAttr(Node, "rend");
+	String sRend = GetAttr(Node, u"rend");
 
 	int iMarginLeft = 0;
 	int iTextIndent = 0;
 	// 檢查移位 <lg rend="margin-left:1">
 	// 舊版的會有 <lg type="inline">或<lg rend="inline''> , 要改成 type=abnormal
-	if(sRend != ""
+	if(sRend != u""
 		&& !(!Setting->ShowPunc && LgNormal)    //若不秀標點且是標準格式, 就不依 rend
 		&& !(Setting->NoShowLgPunc && LgNormal))     //若在偈頌中且偈頌不秀新標
 	{
 		bHasRend = true;
-		// 尾端補上 ;
-		if(*sRend.LastChar() != u';') sRend += u";";
 
-
-		int iPos;
-		String sMarginLeft = "";
-		String sTextIndent = "";
-
-		// 逐一取出 rend 裡面的內容, 可能是 "margin-left:2em;text-indent:1em;inline;"
-		while(sRend != "")
+		CRendAttr * myRend = new CRendAttr(sRend);
+		iMarginLeft = myRend->MarginLeft;
+		iTextIndent = myRend->TextIndent;
+		if(myRend->IsInline)
 		{
-			String sTmp = "";
-
-			if((iPos = sRend.Pos0(";")) >= 0)
-			{
-				sTmp = sRend.SubString0(0,iPos);
-				sRend.Delete0(0,iPos+1);
-			}
-
-			if(sTmp.SubString0(0,12) == u"margin-left:")
-			{
-				sMarginLeft = sTmp;
-			}
-			else if(sTmp.SubString0(0,12) == u"text-indent:")
-			{
-				sTextIndent = sTmp;
-			}
-			else if(sTmp == u"inline;")  // 舊版, 新版好像也有
-			{
-				LgNormal = false;
-				LgInline = true;
-			}
-			// 其他情況就不管了
+			LgNormal = false;
+			LgInline = true;
 		}
-
-		// 如果有 MarginLeft:
-		if(sMarginLeft != u"")
-		{
-			// 支援 rend="margin-left:1em" 格式
-			if((iPos = sMarginLeft.Pos0(u"em")) >= 0)
-			{
-				sMarginLeft = sMarginLeft.SubString0(12,iPos-12); // 取出數字
-			}
-			iMarginLeft = sMarginLeft.ToIntDef(0);
-			// lg 整段要空的格
-			LgMarginLeft = String::StringOfChar(u'　',iMarginLeft);
-		}
-
-		// 如果有 sTextIndent:
-		if(sTextIndent != "")
-		{
-			// 支援 rend="text-indent:1em" 格式
-			if((iPos = sTextIndent.Pos0(u"em")) > 0)
-			{
-				sTextIndent = sTextIndent.SubString0(12,iPos-12); // 取出數字
-			}
-			iTextIndent = sTextIndent.ToIntDef(0);
-		}
+        // lg 整段要空的格
+		LgMarginLeft = String::StringOfChar(u'　',iMarginLeft);
+		delete myRend;
 	}
 	else
 	{
 		if(LgNormal)
 		{
 			iMarginLeft = 1;
-			LgMarginLeft = "　";	// 非 normal 的可能是 inline, 不一定要空格
+			LgMarginLeft = u"　";	// 非 normal 的可能是 inline, 不一定要空格
 		}
 	}
 
-	// lg 整段要空的格
+	// 開頭要空的格
 	sLgTextIndent = String::StringOfChar(u'　',iMarginLeft + iTextIndent);
-
-	// 處理 place="inline"
-	// V2.0 之後, 由 type=inline 改成 place=inline
-
-	String sPlace = GetAttr(Node, "place");
-
-	if(sPlace == "inline")			// 行中段落加句點
-	{
-		LgInline = true;
-	}
 
 	if(LgInline && LgMarginLeft == "" && !bHasRend)	// 即在行中, 又沒有空白, 前一個字也不是空白時, 就加上空白
 	{
@@ -1771,18 +1772,23 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 		sHtml += u"<span class=\"line_space\">　</span>";
 	}
 
-	// 如果是不依原書, 且不是 normal 偈頌, 且指定用段落的方式 (LgTYpe = 1), 則處理成 <p style="margin-left::2em;text-indent:xxem;"><lg class="lg"> 這種格式
-	//if(Setting->LgType == 1 && LgNormal == false)
-	if(LgNormal == false)
+	if(LgNormal)
 	{
+		// 標準偈頌, 完全利用空格來處理, 不由 <p> 來控制縮排, copy 才會好看
+		sHtml += u"<p>";
+		sHtml += sLgTextIndent;
+	}
+	else
+	{
+		// 如果是不依原書, 且不是 normal 偈頌, 且指定用段落的方式 (LgTYpe = 1), 則處理成 <p style="margin-left::2em;text-indent:xxem;"><lg class="lg"> 這種格式
 		if(iMarginLeft !=0 || iTextIndent != 0)
 		{
 			if(Setting->ShowLineFormat)
 			{
-				sHtml += u"<p style=\"";
+				sHtml += u"<p";
 				if(iTextIndent != 0)
 				{
-					sHtml += u"text-indent:";
+					sHtml += u" style=\"text-indent:";
 					sHtml += String(iTextIndent);
 					sHtml += u"em\"";
 				}
@@ -1793,6 +1799,11 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 					sHtml += u"em\"";
 				}
 				sHtml += u">";
+
+				sHtml += u"<span class=\"line_space\">";
+				sHtml += sLgTextIndent;
+				sHtml += u"</span>";
+
 			}
 			else
 			{
@@ -1817,18 +1828,16 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 					sHtml += u"em\"";
 				}
 				sHtml += u">";
+
+				sHtml += u"<span class=\"line_space\">";
+				sHtml += sLgTextIndent;
+				sHtml += u"</span>";
 			}
 		}
 		else
 		{
 			sHtml += u"<p>";
 		}
-	}
-	else
-	{
-		// 傳統舊方式, 用空格來處理, <p>　　<span class="lg">
-		sHtml += u"<p>";
-		sHtml += sLgTextIndent;
 	}
 
 	sHtml += u"<span class=\"lg\">";	// 偈頌折行
@@ -2231,6 +2240,7 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 				}
 			}
 		}
+		delete myRend;
 	}
 
 	// 處理 cb:type
@@ -2570,7 +2580,7 @@ String __fastcall CCBXML::tag_t(_di_IXMLNode Node)
 
 		MarginLeft += String::StringOfChar(u'　',iMarginLeft);
 		sHtml += MarginLeft;
-
+		delete myRend;
 	}
 	// "<add_sp>" 是故意的, 在 TmyNextLineOfTT 物件處理
 	else if(NextLine->InNextLine)
@@ -2609,6 +2619,7 @@ String __fastcall CCBXML::tag_table(_di_IXMLNode Node)
 
 	CRendAttr * myRend = new CRendAttr(sRend);
 	if(myRend->Border != "") sBorder = myRend->Border;
+	delete myRend;
 
 	sHtml += u"<table border=\"";
 	sHtml += sBorder;

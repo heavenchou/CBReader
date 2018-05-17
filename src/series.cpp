@@ -187,16 +187,11 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	}
 
 	// Ū Version
+
 	Node = Document->DocumentElement->ChildNodes->Nodes["version"];
-	if(Node->HasAttribute("src"))
+	if(Node->ChildNodes->Count > 0)
 	{
-		String sVerFile = Dir + Node->GetAttribute("src");
-		if(TFile::Exists(sVerFile))
-		{
-			TStringDynArray sda = TFile::ReadAllLines(sVerFile, TEncoding::UTF8);
-			if(sda.Length > 0)
-				Version = sda[0];
-        }
+		Version = Node->ChildNodes->Get(0)->Text;
 	}
 }
 // ---------------------------------------------------------------------------
