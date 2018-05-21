@@ -13,7 +13,9 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 
 	// 設定預設值
 
-	BookcaseDir = "bookcase"; 		// 書櫃的目錄
+	//MyFullPath = u"";				// 主程式所在目錄
+	BookcasePath = u"Bookcase";		// 書櫃的目錄
+	BookcaseFullPath = u""; 		// 書櫃的完整目錄
 
     // 經文格式
 
@@ -103,7 +105,7 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 	GaijiImageFirst = false;   // 優先使用缺字圖檔
 
 	ShowSiddamWay = 6;		// 悉曇字處理法 0:悉曇字型(siddam.ttf) 1:羅馬轉寫(unicode) 2:羅馬轉寫(純文字) 3:悉曇圖檔 4:自訂符號 5:CB碼 6:悉曇羅馬對照
-	UserSiddamSign = "◇";	// 使用者自訂悉曇字符號
+	UserSiddamSign = u"◇";	// 使用者自訂悉曇字符號
     ShowPaliWay = 0;		// 梵巴字處理法 0:Unicode 1:純文字 2:Ent 碼
     ShowUnicode30 = true;  // 呈現 Unicode 3.0 , 在 P5 XML , 這個可以預設為
 
@@ -148,8 +150,13 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 	//slCalloutTitle = new TTntStringList();      // 外部連結的標題
 	//slCalloutProgram = new TTntStringList();    // 外部連結的程式
 
+
+	// 其他
+
+	LastUpdateChk = u"";       // 最後一次更新檢查, 格式為 20180517
+
     // 不改的資訊 (或是很難改, 要會 ini)
-    XMLJuanPosPath = "JuanPos\\";	// 每一卷經文移位的資料檔
+	XMLJuanPosPath = "JuanPos\\";	// 每一卷經文移位的資料檔
 	JuanLinePath = "JuanLine\\";	// 每一卷經文第一行行首的資訊
 
     LoadFromFile(SettingFile);  // 載入設定檔
@@ -204,7 +211,16 @@ void __fastcall CSetting::LoadFromFile(String sFile)
 
 	Section = "SystemInfo";
 
-	BookcaseDir = IniFile->ReadString(Section, "BookcaseDir", BookcaseDir);
+	//MyFullPath = IniFile->ReadString(Section, "MyFullPath", MyFullPath);
+	BookcasePath = IniFile->ReadString(Section, "BookcasePath", BookcasePath);
+	BookcaseFullPath = IniFile->ReadString(Section, "BookcaseFullPath", BookcaseFullPath);
+
+	// 其他
+
+	Section = "Misc";
+
+	LastUpdateChk = IniFile->ReadString(Section, "LastUpdateChk", LastUpdateChk);
+
 
 	delete IniFile;
 }
@@ -229,7 +245,7 @@ void __fastcall CSetting::SaveToFile(String sFile)
 	Section = "Version";
     try
     {
-		IniFile->WriteString(Section, "Version", "0.1");
+		IniFile->WriteString(Section, u"Version", u"2X");
     }
     catch(...)
     {
@@ -261,7 +277,15 @@ void __fastcall CSetting::SaveToFile(String sFile)
 
 	Section = "SystemInfo";
 
-	IniFile->WriteString(Section, "BookcaseDir", BookcaseDir);
+	//IniFile->WriteString(Section, "MyFullPath", MyFullPath);
+	IniFile->WriteString(Section, "BookcasePath", BookcasePath);
+	IniFile->WriteString(Section, "BookcaseFullPath", BookcaseFullPath);
+
+	// 其他
+
+	Section = "Misc";
+
+	IniFile->WriteString(Section, "LastUpdateChk", LastUpdateChk);
 
 	delete IniFile;
 }

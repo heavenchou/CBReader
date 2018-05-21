@@ -67,7 +67,7 @@ void __fastcall CNavXML::ParseXML()
 	Node = Document->DocumentElement->ChildNodes->Nodes["body"];
 
 	if (Node->ChildNodes->Count == 0)
-		ShowMessage("錯誤：導覽文件找不到 body 標記。");
+		TDialogService::ShowMessage(u"錯誤：導覽文件找不到 body 標記。");
 	else
 	{
 		ParseNode(Node);

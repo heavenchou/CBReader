@@ -7,6 +7,9 @@
 #include "selectbook.h"
 #include "searchrange.h"
 #include "buildindex.h"
+#include "logo.h"
+#include "about.h"
+#include "update.h"
 
 #ifdef _Windows
 #include <System.Win.Registry.hpp>
@@ -21,20 +24,46 @@ TfmMain *fmMain;
 // ---------------------------------------------------------------------------
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
-	Application->Title = "CBReader";
+	// 更新版本注意事項, 要改底下, 還有 project 的版本與日期
+    // 還有 fmAbout 的資料
+	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	InitialPath();  // 設定目錄初值
+	Version = u"0.2.0.0";
+	IsDebug = false;           // debug 變數
+
+#ifdef _Windows
+	MainMenu->Free();
+#else
+    MenuBar->Free();
+#endif
+
+	// 設定目錄初值
+	InitialPath();
 
 #ifdef _Windows
 	SetPermissions(11001); // 將 IE 設定到 IE 11 (如果沒 IE 11 的如何?)
+	// 刪去舊版
+	String sOld = ParamStr(0) + u".tmp";
+	if(TFile::Exists(sOld))
+        TFile::Delete(sOld);
 #endif
 
+	SearchEngine = 0;   // 全文檢索引擎
 	SearchSentence = "";    // 搜尋字串
 	SearchWordList = new TStringList;	    // 存放每一個檢索的詞, 日後塗色會用到
 
 	// 取得設定檔並讀取所有設定
 	Setting = new CSetting(SettingFile);
 
+	// 初始畫面的設定
+	btOpenBookcase->Visible = false;
+	btBuildIndex->Visible = false;
+	btOpenSimpleNav->Visible = false;
+	#ifdef _Windows
+	wmiDebug->Visible = false;
+	#endif
+
+	tcMainFunc->TabIndex = 0;
 	SelectedBook = -1;   // 目前選中的書, -1 表示還沒選
     pnMulu->Width = 0;  // 書目先縮到最小
     MuluWidth = 200;    // 初始書目寬度
@@ -47,43 +76,6 @@ void __fastcall TfmMain::FormDestroy(TObject *Sender)
 	if(Bookcase) delete Bookcase;
 	if(NavTree) delete NavTree;
 	if(MuluTree) delete MuluTree;
-}
-// ---------------------------------------------------------------------------
-// 	路徑初值設定
-void __fastcall TfmMain::InitialPath()
-{
-	// 程式主目錄
-#ifdef _Windows
-	MyFullPath = GetCurrentDir();
-#else
-	// MyFullPath = "/Users/heavenchou/PAServer/scratch-dir/Heaven-macos1012";
-	// MyFullPath = GetCurrentDir();
-	// MyFullPath = StringReplace(MyFullPath, "/CBReader.app/Contents/MacOS", "", TReplaceFlags() << rfReplaceAll);
-
-	MyFullPath = System::Ioutils::TPath::GetHomePath();
-	MyFullPath += "/Desktop";
-
-#endif
-	MyFullPath += "/";
-
-	// Temp 目錄
-	MyTempPath = System::Ioutils::TPath::GetTempPath();
-	MyTempPath = MyTempPath + "CBReader/";
-
-	if(!TDirectory::Exists(MyTempPath))
-		TDirectory::CreateDirectory(MyTempPath);
-
-	// 使用者個人目錄
-	MyHomePath = System::Ioutils::TPath::GetHomePath();
-	MyHomePath += "/CBETA/";
-	if(!TDirectory::Exists(MyHomePath))
-		TDirectory::CreateDirectory(MyHomePath);
-	MyHomePath += "CBReader2X/";
-	if(!TDirectory::Exists(MyHomePath))
-		TDirectory::CreateDirectory(MyHomePath);
-
-	// 設定檔
-	SettingFile = MyHomePath + u"cbreader.ini";
 }
 // ---------------------------------------------------------------------------
 // 將 IE 設定為 IE 11
@@ -116,6 +108,195 @@ void __fastcall TfmMain::SetPermissions(int iIE)
 	}
 #endif
 }
+// ---------------------------------------------------------------------------
+// 	路徑初值設定
+void __fastcall TfmMain::InitialPath()
+{
+	// 程式主目錄
+#ifdef _Windows
+	MyFullPath = ExtractFilePath(ParamStr(0));
+#else
+	MyFullPath = System::Ioutils::TPath::GetHomePath();
+#endif
+	MyFullPath = IncludeTrailingPathDelimiter(MyFullPath);
+
+	// Temp 目錄
+
+	MyTempPath = System::Ioutils::TPath::GetTempPath();
+	MyTempPath = IncludeTrailingPathDelimiter(MyTempPath + u"CBReader");
+
+	if(!TDirectory::Exists(MyTempPath))
+		TDirectory::CreateDirectory(MyTempPath);
+
+	// 使用者個人目錄
+
+	MyHomePath = System::Ioutils::TPath::GetHomePath();
+	MyHomePath = IncludeTrailingPathDelimiter(MyHomePath);
+
+	// 設定檔目錄
+
+#ifdef _Windows
+	MySettingPath = MyHomePath + u"CBETA/";
+#else
+	MySettingPath = MyHomePath + u".CBETA/";
+#endif
+	if(!TDirectory::Exists(MySettingPath))
+		TDirectory::CreateDirectory(MySettingPath);
+	MySettingPath += u"CBReader2X/";
+	if(!TDirectory::Exists(MySettingPath))
+		TDirectory::CreateDirectory(MySettingPath);
+
+	MySettingPath = IncludeTrailingPathDelimiter(MySettingPath);
+	// 設定檔
+
+	SettingFile = MySettingPath + u"cbreader.ini";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::FormShow(TObject *Sender)
+{
+	Cursor = crHourGlass;
+
+	Application->ProcessMessages();
+	fmLogo->Show();
+	Application->ProcessMessages();
+	InitialData();
+
+	fmLogo->Close();
+	Cursor = crArrow;
+
+	// 檢查更新
+	String sToday = GetTodayString();
+	if(sToday != Setting->LastUpdateChk)
+		CheckUpdate();   // 檢查更新
+}
+//---------------------------------------------------------------------------
+// 初始資料
+void __fastcall TfmMain::InitialData()
+{
+	/* 不用了, Windows 已經確定能得到使用者目錄了
+	#ifdef _Windows
+
+	// 檢查 MyFullPath 有沒有錯誤
+	if(!TFile::Exists(String(MyFullPath + u"CBReader.exe")))
+	{
+		// 沒看到 CBReader.exe , 可能有問題
+
+		bool bFound = false;
+		String sMyFullPath = u"";
+
+		// 檢查設定中有沒有 MyFullPath , 檢查正不正確
+		if(Setting->MyFullPath != u"")
+		{
+			sMyFullPath = Setting->MyFullPath;
+			if(TFile::Exists(String(sMyFullPath + u"CBReader.exe")))
+			{
+				bFound = true;
+			}
+		}
+
+		while(!bFound)
+		{
+			// 都找不到目前目錄, 要詢問使用者了
+			TDialogService::ShowMessage(u"沒有找到您的 CBReader.exe 所在目錄，請手動選擇本程式所在目錄位置。");
+			SelectDirectory(u"選擇 CBReader.exe 所在目錄位置",MyFullPath,sMyFullPath);
+
+            if(TFile::Exists(String(sMyFullPath + u"CBReader.exe")))
+			{
+				bFound = true;
+			}
+        }
+
+		// 至此應該都找到了
+		MyFullPath = sMyFullPath;
+		if(Setting->MyFullPath != MyFullPath)
+		{
+			// 將 MyFullPath 寫入
+			Setting->MyFullPath = MyFullPath;
+			Setting->SaveToFile();
+		}
+	}
+	#endif
+	*/
+
+	// 取得 Bookcase 所有資料區
+	// 載入書櫃
+
+	Bookcase = new CBookcase();
+
+	String sBookcasePath = u"";
+
+	// Bookcase 目錄處理原則
+	// 1. Windows 在主程式所在目錄底下去找 Bookcase 子目錄
+	// 2. Mac 有二個優先順序
+	//    3.1 /User/xxx/Library/CBETA/Bookcase
+	//    3.2 /Library/CBETA/Bookcase
+	// 3. 上面若沒有, 則找 Setting->BookcaseFullDir
+	// 4. 以上若都沒有, 則由使用者尋找, 找到後存在 Setting->BookcaseFullDir
+
+
+#ifdef _Windows
+	sBookcasePath = MyFullPath + Setting->BookcasePath;
+#else
+	// Mac 第一優先
+	sBookcasePath = MyHomePath + u"Library/CBETA/" + Setting->BookcasePath;
+	if(!TDirectory::Exists(sBookcasePath))
+	{
+		// Mac 第二優先
+		sBookcasePath = u"/Library/CBETA/" + Setting->BookcasePath;
+	}
+#endif
+
+	// 都沒有就查設定
+	if(!TDirectory::Exists(sBookcasePath))
+	{
+		if(Setting->BookcaseFullPath != u"")
+		{
+			sBookcasePath = Setting->BookcaseFullPath;
+		}
+	}
+
+	// 都沒有就詢問使用者
+	if(!TDirectory::Exists(sBookcasePath))
+	{
+		TDialogService::ShowMessage(u"沒有找到您的 Bookcase 書櫃目錄，請手動選擇目錄所在位置。");
+		// 使用指定目錄
+		SelectDirectory(u"選擇 Bookcase 目錄所在位置", MyFullPath, sBookcasePath);
+
+		Setting->BookcaseFullPath = sBookcasePath;
+		Setting->SaveToFile();
+	}
+
+	Bookcase->LoadBookcase(sBookcasePath);
+
+	// 在書櫃選擇叢書
+	int iBookcaseCount = Bookcase->Count();
+	if(iBookcaseCount == 0)
+	{
+		TDialogService::ShowMessage(u"書櫃中一本書都沒有");
+	}
+	// else if(iBookcaseCount == 1)
+	else
+	{
+		// 只有一本書就直接開了
+		// OpenBookcase(0); // ???? 暫時取消, 這一版要直接開啟 CBETA
+		OpenCBETABook();    // ???? 取消上面, 因為這一版要直接開啟 CBETA
+	}
+
+	MuluTree = 0;
+
+    // 這要先處理, 動一下內容, 不然欄位標題就還可以移動
+	sgTextSearch->RowCount = 1;
+	sgFindSutra->RowCount = 1;
+
+	lbSearchMsg->Text = ""; // 清空搜尋訊息
+	SpineID = -1;	// 初值表示沒開啟
+
+	if(iBookcaseCount != 0)
+	{
+		WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
+		WebBrowser->Navigate();
+	}
+}
 //---------------------------------------------------------------------------
 // 開啟指定的書櫃
 void __fastcall TfmMain::OpenBookcase(int iID)
@@ -144,7 +325,7 @@ void __fastcall TfmMain::OpenCBETABook()
 			return;
 		}
 	}
-	TDialogService::ShowMessage("找不到 CBETA 資料");
+	TDialogService::ShowMessage(u"找不到 CBETA 資料");
     return;
 }
 //---------------------------------------------------------------------------
@@ -205,8 +386,6 @@ void __fastcall TfmMain::btOpenBookcaseClick(TObject *Sender)
 	OpenBookcase(fmSelectBook->SelectedBook);
 }
 //---------------------------------------------------------------------------
-
-
 // 是否有選擇套書了?
 bool __fastcall TfmMain::IsSelectedBook()
 {
@@ -216,6 +395,16 @@ bool __fastcall TfmMain::IsSelectedBook()
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 {
+	if(edFindSutra_SutraName->Text == u"Heaven")
+	{
+		IsDebug = true;
+		edFindSutra_SutraName->Text = u"";
+		#ifdef _Windows
+		btBuildIndex->Visible = true;
+		wmiDebug->Visible = true;
+    	#endif
+		return;
+    }
 	String sBook = cbFindSutra_BookId->Selected->Text;
 	if(cbFindSutra_BookId->ItemIndex == 0) sBook = u"";
 	else
@@ -343,7 +532,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 {
 	if(sFile == "")
 	{
-		TDialogService::ShowMessage("沒有找到正確檔案");
+		TDialogService::ShowMessage(u"沒有找到正確檔案");
         return;
 	}
 
@@ -364,16 +553,26 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 
 	// 找出 spine id , -1 表示沒找到
 	SpineID = Bookcase->CBETA->Spine->Files->IndexOf(sFile);
-
-	String sOutFile = sFile + ".htm";
+#ifdef _Windows
+	String sOutFile = sFile + u".htm";
+#else
+	String sOutFile = u"a.htm";
+#endif
 	sOutFile = StringReplace(sOutFile, "/", "_", TReplaceFlags() << rfReplaceAll);
 	sOutFile = StringReplace(sOutFile, "\\", "_", TReplaceFlags() << rfReplaceAll);
 	sOutFile = MyTempPath + sOutFile;
 
 	CBXML->SaveToHTML(sOutFile);
 
-	WebBrowser->URL = "file://" + sOutFile;
-	WebBrowser->Navigate();
+	try
+	{
+		//WebBrowser->URL = (u"file://" + sOutFile);
+		WebBrowser->Navigate(u"file://" + sOutFile);
+	}
+	catch(...)
+	{
+        //WebBrowser->Navigate(u"file://" + sOutFile);
+    }
 
 	// 產生目錄
 
@@ -403,6 +602,16 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 		String sJuan = Bookcase->CBETA->Spine->Juan->Strings[SpineID];
 		int iIndex = Bookcase->CBETA->Catalog->FindIndexBySutraNum(sBook, sSutra);
 		String sName = Bookcase->CBETA->Catalog->SutraName->Strings[iIndex];
+
+		// 經名移除 (第X卷-第x卷)
+		if(sName.Pos0(u"(第") >= 0)
+		{
+			int iPos = sName.Pos0(u"(第");
+			if(sName.Pos0(u"卷)") >= 0)
+			{
+                sName = sName.SubString0(0,iPos);
+            }
+		}
 
 		sJuan = CMyStrUtil::TrimLeft(sJuan, u'0');
 		sSutra = CMyStrUtil::TrimLeft(sSutra, u'0');
@@ -482,7 +691,9 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 	bool bHasRange = false;     // 有範圍就要設定
 	if(cbSearchRange->IsChecked) bHasRange = true;
 
-	TmyMonster * SearchEngine = Bookcase->CBETA->SearchEngine;
+	// 選擇全文檢索引擎, 若某一方為 0 , 則選另一方 (全 0 就不管了)
+	SetSearchEngine();
+
 	CCatalog * Catalog = Bookcase->CBETA->Catalog;
 	CSpine * Spine = Bookcase->CBETA->Spine;
 	bool bFindOK = SearchEngine->Find(SearchSentence,bHasRange);      // 在找囉.........................................
@@ -506,9 +717,9 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 
         // 先檢查有沒有超過限制
 
-        for (int i=0; i<BuildFileList->FileCount; i++)
+		for (int i=0; i<SearchEngine->BuildFileList->FileCount; i++)
     	{
-	    	if(SearchEngine->FileFound->Ints[i])
+			if(SearchEngine->FileFound->Ints[i])
 		    {
 			    iTotalSearchFileNum++;
             }
@@ -521,13 +732,13 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 	int iGridIndex = 0;
 	sgTextSearch->RowCount = 10;
 
-	for (int i=0; i<BuildFileList->FileCount; i++)
+	for (int i=0; i<SearchEngine->BuildFileList->FileCount; i++)
 	{
 		// 找到了
         if(SearchEngine->FileFound->Ints[i])
 		{
-			String sSutraNum  = BuildFileList->SutraNum[i];		// 取得經號
-			String sBook = BuildFileList->Book[i];
+			String sSutraNum  = SearchEngine->BuildFileList->SutraNum[i];		// 取得經號
+			String sBook = SearchEngine->BuildFileList->Book[i];
 
 			// 這裡可能找到 T220 第 600 卷, 卻傳回 T05 而不是 T07
 			// 有待改進處理 ????
@@ -546,7 +757,7 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 			sgTextSearch->Cells[3][iGridIndex]=Spine->VolNum->Strings[i];
 			sgTextSearch->Cells[4][iGridIndex]=Catalog->Part->Strings[iCatalogIndex];
 			sgTextSearch->Cells[5][iGridIndex]=Catalog->SutraNum->Strings[iCatalogIndex];
-			sgTextSearch->Cells[6][iGridIndex]=BuildFileList->JuanNum[i];
+			sgTextSearch->Cells[6][iGridIndex]=SearchEngine->BuildFileList->JuanNum[i];
 			sgTextSearch->Cells[7][iGridIndex]=Catalog->Byline->Strings[iCatalogIndex];
 			sgTextSearch->Cells[8][iGridIndex]=i;
 			iGridIndex++;
@@ -582,7 +793,7 @@ void __fastcall TfmMain::sgTextSearchCellDblClick(TColumn * const Column, const 
 
 	String sFile = Bookcase->CBETA->Spine->Files->Strings[iIndex];
     // 要塗色
-	ShowCBXML(sFile, true, Bookcase->CBETA->SearchEngine);
+	ShowCBXML(sFile, true, SearchEngine);
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::cbSearchRangeChange(TObject *Sender)
@@ -648,6 +859,9 @@ void __fastcall TfmMain::btBuildIndexClick(TObject *Sender)
 	// 重新建立全文檢索引擎
 
 	Bookcase->CBETA->LoadSearchEngine();
+
+	SetSearchEngine();
+
 }
 //---------------------------------------------------------------------------
 // 將檔案載入導覽樹
@@ -689,14 +903,26 @@ void __fastcall TfmMain::LoadMuluTree(String sFile)
 		btMuluWidthSwitchClick(this);
 }
 //---------------------------------------------------------------------------
-void __fastcall TfmMain::btOpenBuleiNavClick(TObject *Sender)
+
+void __fastcall TfmMain::btOpenSimpleNavClick(TObject *Sender)
 {
+	btOpenSimpleNav->Cursor = crHourGlass;
 	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->NavFile);
+	btOpenSimpleNav->Cursor = crDefault;
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btOpenBookNavClick(TObject *Sender)
 {
+	btOpenBookNav->Cursor = crHourGlass;
 	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->Nav2File);
+	btOpenBookNav->Cursor = crDefault;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btOpenBuleiNavClick(TObject *Sender)
+{
+	btOpenBuleiNav->Cursor = crHourGlass;
+	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->NavFile);
+	btOpenBuleiNav->Cursor = crDefault;
 }
 //---------------------------------------------------------------------------
 // 上一卷
@@ -740,15 +966,25 @@ void __fastcall TfmMain::btNextJuanClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfmMain::MenuItem1Click(TObject *Sender)
+void __fastcall TfmMain::mmiAboutClick(TObject *Sender)
 {
-	TDialogService::ShowMessage(u"CBETA CBReader 2X 搶鮮版");
+	fmAbout->ShowModal();
 }
 //---------------------------------------------------------------------------
 
 // 檢查有沒有更新程式
-void __fastcall TfmMain::CheckUpdate(String sPara)
+void __fastcall TfmMain::CheckUpdate(bool bShowNoUpdate)
 {
+	// 取得資料版本
+	String sDataVer = Bookcase->CBETA->Version;
+
+	fmUpdate->CheckUpdate(Version, sDataVer, bShowNoUpdate);
+
+	String sToday = GetTodayString();
+	Setting->LastUpdateChk = sToday;
+	Setting->SaveToFile();
+
+/* 舊的, 讀取 update.exe, 不用了
 #ifdef _Windows
 
 	//HWND handle = fmMain->Handle;
@@ -770,19 +1006,24 @@ void __fastcall TfmMain::CheckUpdate(String sPara)
 		{
 			if(iResult <= 32)  // 其它情況的錯誤
 			{
-				TDialogService::ShowMessage("SE_Err:" + AnsiString(iResult) + " 無法開啟此檔!");
+				TDialogService::ShowMessage("SE_Err:" + AnsiString(iResult) + u" 無法開啟此檔!");
 			}
 		}
 	}
+
+	String sToday = GetTodayString();
+	Setting->LastUpdateChk = sToday;
+	Setting->SaveToFile();
 #else
-	TDialogService::ShowMessage("抱歉！目前只有 Windows 版才有更新功能。");
+	TDialogService::ShowMessage(u"抱歉！目前只有 Windows 版才有更新功能。");
 #endif
+*/
 }
 //---------------------------------------------------------------------------
 // 檢查更新
-void __fastcall TfmMain::MenuItem4Click(TObject *Sender)
+void __fastcall TfmMain::mmiUpdateClick(TObject *Sender)
 {
-	CheckUpdate(u"show");
+	CheckUpdate(true);  // true 表示沒有更新要秀訊息
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btNavWidthSwitchClick(TObject *Sender)
@@ -840,61 +1081,11 @@ void __fastcall TfmMain::fanNavWidthFinish(TObject *Sender)
 void __fastcall TfmMain::fanMuluWidthFinish(TObject *Sender)
 {
 	if(pnMulu->Width == 0)
-		btMuluWidthSwitch->Text = u"書目>>";
+		btMuluWidthSwitch->Text = u"目次>>";
 	else
-		btMuluWidthSwitch->Text = u"<<書目";
+		btMuluWidthSwitch->Text = u"<<目次";
 }
 //---------------------------------------------------------------------------
-
-void __fastcall TfmMain::FormShow(TObject *Sender)
-{
-	tcMainFunc->TabIndex = 0;
-
-	// 取得 Bookcase 所有資料區
-	// 載入書櫃
-
-	Bookcase = new CBookcase();
-
-	String sBookcasePath = MyFullPath + Setting->BookcaseDir;
-	if(!TDirectory::Exists(sBookcasePath))
-	{
-        // 使用指定目錄 ???? 該改為使用者指定目錄才好
-		sBookcasePath = u"d:\\Dropbox\\CBReader2X\\Bookcase";
-	}
-	Bookcase->LoadBookcase(sBookcasePath);
-
-	// 在書櫃選擇叢書
-	int iBookcaseCount = Bookcase->Count();
-	if(iBookcaseCount == 0)
-	{
-		TDialogService::ShowMessage(u"書櫃中一本書都沒有");
-	}
-	else if(iBookcaseCount == 1)
-	{
-		// 只有一本書就直接開了
-		// OpenBookcase(0); // ???? 暫時取消, 這一版要直接開啟 CBETA
-	}
-
-	OpenCBETABook();    // ???? 取消上面, 因為這一版要直接開啟 CBETA
-
-	MuluTree = 0;
-
-    // 這要先處理, 動一下內容, 不然欄位標題就還可以移動
-	sgTextSearch->RowCount = 1;
-	sgFindSutra->RowCount = 1;
-
-	lbSearchMsg->Text = ""; // 清空搜尋訊息
-	btOpenBookcase->Visible = false;
-	btBuildIndex->Visible = false;
-	SpineID = -1;	// 初值表示沒開啟
-
-	CheckUpdate(u"");   // 檢查更新
-
-	WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
-	WebBrowser->Navigate();
-}
-//---------------------------------------------------------------------------
-
 void __fastcall TfmMain::rbFontSmallChange(TObject *Sender)
 {
 	if(rbFontBig->IsChecked)
@@ -923,5 +1114,36 @@ void __fastcall TfmMain::rbFontSmallChange(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+// 選擇全文檢索引擎
+void __fastcall TfmMain::SetSearchEngine()
+{
+	// 選擇全文檢索引擎, 若某一方為 0 , 則選另一方 (全 0 就不管了)
+	if(Bookcase->CBETA->SearchEngine_CB == 0)
+		SearchEngine = Bookcase->CBETA->SearchEngine_orig;  // 原書索引
+	else if(Bookcase->CBETA->SearchEngine_orig == 0)
+		SearchEngine = Bookcase->CBETA->SearchEngine_CB;  // CBETA 索引
 
+	else if(Setting->CollationType == ctCBETACollation)
+		SearchEngine = Bookcase->CBETA->SearchEngine_CB;    // CBETA 索引
+	else
+		SearchEngine = Bookcase->CBETA->SearchEngine_orig;  // 原書索引
+}
+//---------------------------------------------------------------------------
+// 取得今日日期, 格式 19991231
+String __fastcall TfmMain::GetTodayString()
+{
+	TDateTime * Today = new TDateTime(Now());
+	String str = Today->FormatString("yyyymmdd");
+	delete Today;
+	return str;
+}
+//---------------------------------------------------------------------------
+
+// 更換更新的 URL , 換成測試用的
+void __fastcall TfmMain::wmiUpdateURLClick(TObject *Sender)
+{
+	wmiUpdateURL->IsChecked = !wmiUpdateURL->IsChecked;
+	fmUpdate->UseLocalhostURL = wmiUpdateURL->IsChecked;
+}
+//---------------------------------------------------------------------------
 

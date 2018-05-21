@@ -1,0 +1,92 @@
+object fmUpdate: TfmUpdate
+  Left = 0
+  Top = 0
+  Caption = #26356#26032
+  ClientHeight = 297
+  ClientWidth = 558
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnShow = FormShow
+  DesignerMasterStyle = 0
+  object Memo: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    ReadOnly = True
+    Position.X = 40.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 401.000000000000000000
+    Size.Height = 153.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Viewport.Width = 401.000000000000000000
+    Viewport.Height = 153.000000000000000000
+  end
+  object btUpdate: TButton
+    Position.X = 464.000000000000000000
+    Position.Y = 40.000000000000000000
+    Size.Width = 65.000000000000000000
+    Size.Height = 49.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Text = #26356#26032
+    OnClick = btUpdateClick
+  end
+  object ProgressBar: TProgressBar
+    Orientation = Horizontal
+    Position.X = 40.000000000000000000
+    Position.Y = 216.000000000000000000
+    Size.Width = 401.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object edBookcasePath: TEdit
+    Touch.InteractiveGestures = [LongTap, DoubleTap]
+    TabOrder = 5
+    Position.X = 120.000000000000000000
+    Position.Y = 248.000000000000000000
+    Size.Width = 321.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+  end
+  object Label2: TLabel
+    Position.X = 40.000000000000000000
+    Position.Y = 248.000000000000000000
+    Size.Width = 73.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    Text = #26360#27331#30446#37636
+    TabOrder = 6
+  end
+  object NetHTTPClient: TNetHTTPClient
+    Asynchronous = False
+    ConnectionTimeout = 60000
+    ResponseTimeout = 60000
+    AllowCookies = True
+    HandleRedirects = True
+    UserAgent = 'Embarcadero URI Client/1.0'
+    Left = 496
+    Top = 88
+  end
+  object nhrCBR: TNetHTTPRequest
+    Asynchronous = False
+    ConnectionTimeout = 60000
+    ResponseTimeout = 60000
+    Client = NetHTTPClient
+    OnRequestCompleted = nhrCBRRequestCompleted
+    OnRequestError = nhrCBRRequestError
+    Left = 496
+    Top = 224
+  end
+  object nhrDownload: TNetHTTPRequest
+    Asynchronous = False
+    ConnectionTimeout = 60000
+    ResponseTimeout = 60000
+    Client = NetHTTPClient
+    OnRequestCompleted = nhrDownloadRequestCompleted
+    OnReceiveData = nhrDownloadReceiveData
+    Left = 496
+    Top = 136
+  end
+end

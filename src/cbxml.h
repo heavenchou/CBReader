@@ -12,13 +12,14 @@
 #include <System.IOUtils.hpp>
 #include <System.SysUtils.hpp>
 #include <map>
+#include <FMX.DialogService.hpp>
+#include <System.RegularExpressions.hpp>
 #include "setting.h"
 #include "subutil.h"
 #include "highlight.h"
 #include "rendattr.h"
 #include "nextline.h"
 #include "main.h"
-#include "System.RegularExpressions.hpp"
 #include "../../Monster/src/monster.h"
 
 using namespace std;
@@ -172,6 +173,7 @@ public: // User declarations
 	String SutraId_;	// 內容是 "0001_" or "0143a"
 	String SutraName;	// 經名
 	int    JuanNum;		// 第幾卷
+    int    TotalJuan;   // 共幾卷, 用來判斷是不是只有一卷
 
 	String GotoPageLine;	// 本網頁要跳到的地點 (因為不一定是卷首)
 
@@ -195,6 +197,11 @@ public: // User declarations
 
 	// 取得下一個 note , 但因為有一些是 <lb type=old> , <pb type=old> <lb id=Rxx> 要忽略
 	_di_IXMLNode __fastcall GetNextSiblNode(_di_IXMLNode Node);
+
+	// 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
+	String __fastcall mv_data_between_tr(String sHtml);
+	// 取代正規式 : 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
+	String __fastcall TableTrReplace (const TMatch &Match);
 
 	// 傳入參數為 XML 檔, 呈現的設定
 	__fastcall CCBXML(String sFile, String sLink, CSetting * csSetting, String sJSFile, bool bShowHighlight = false, TmyMonster * seSearchEngine = 0);

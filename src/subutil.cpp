@@ -63,7 +63,11 @@ String __fastcall CMyStrUtil::LongToUnicode(unsigned long UTF32)
 {
 	if (UTF32 < 0x10000)
 	{
+		#ifdef _Windows
 		String s = (wchar_t) UTF32;
+		#else
+		String s = (char16_t) UTF32;
+		#endif
 		return s;
     }
 	unsigned long t = UTF32 - 0x10000;
@@ -71,8 +75,13 @@ String __fastcall CMyStrUtil::LongToUnicode(unsigned long UTF32)
 	unsigned int l = (((t<<22)>>22) + 0xDC00);
     unsigned int ret = ((h<<16) | ( l & 0x0000FFFF));
 
+	#ifdef _Windows
 	String sh = (wchar_t) h;
 	String sl = (wchar_t) l;
+	#else
+	String sh = (char16_t) h;
+	String sl = (char16_t) l;
+	#endif
 	return sh + sl;
 }
 //---------------------------------------------------------------------------

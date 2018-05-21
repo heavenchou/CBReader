@@ -4,6 +4,7 @@ object fmOption: TfmOption
   Caption = #35373#23450
   ClientHeight = 526
   ClientWidth = 562
+  Position = ScreenCenter
   StyleBook = fmMain.sbBig
   FormFactor.Width = 320
   FormFactor.Height = 480

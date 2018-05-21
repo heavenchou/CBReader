@@ -42,7 +42,7 @@ void __fastcall TfmSearchRange::btOKClick(TObject *Sender)
 // 處理部類
 void __fastcall TfmSearchRange::BuleiSelect()
 {
-	BuildFileList->NoneSearch();
+	fmMain->SearchEngine->BuildFileList->NoneSearch();
 	// 逐一搜尋樹狀
 	for(int i=0; i<tvBulei->Count; i++)
 	{
@@ -63,7 +63,7 @@ void __fastcall TfmSearchRange::BuleiSelect()
 				if(Catalog->Bulei->Strings[j] == sBuleiName)
 				{
 					// 此經要檢索
-                    BuildFileList->SearchThisSutra(Catalog->ID->Strings[j],Catalog->SutraNum->Strings[j]);
+					fmMain->SearchEngine->BuildFileList->SearchThisSutra(Catalog->ID->Strings[j],Catalog->SutraNum->Strings[j]);
                 }
 			}
 		}
@@ -73,7 +73,7 @@ void __fastcall TfmSearchRange::BuleiSelect()
 // 處理原書
 void __fastcall TfmSearchRange::BookSelect()
 {
-    BuildFileList->NoneSearch();
+	fmMain->SearchEngine->BuildFileList->NoneSearch();
 	// 逐一搜尋樹狀
 	for(int i=0; i<tvBook->Count; i++)
 	{
@@ -84,7 +84,7 @@ void __fastcall TfmSearchRange::BookSelect()
 			// 取出前面的代碼
 			int iPos = sName.Pos0(" ");
 			String sBookId = sName.SubString0(0,iPos);
-			BuildFileList->SearchThisBoook(sBookId);
+			fmMain->SearchEngine->BuildFileList->SearchThisBoook(sBookId);
 		}
 
 	}

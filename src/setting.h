@@ -16,10 +16,16 @@ public: // User declarations
 
 	String SettingFile;     // 設定檔的位置
 
+	// String MyFullPath;      // 主程式所在目錄
+
 	//CCBXMLOption * CBXMLOption; // CBETA 經文的格式
 
-	String BookcaseDir; // 書櫃的目錄
+	// 預設 Windows 會在主程式的子目錄 Bookcase
+	// 預設 Mac 會在 /Library/CBETA/Bookcase
+	// 若找不到, 會詢問使用者, 然後存在 BookcaseFullDir
 
+	String BookcasePath; 	// 書櫃的目錄
+	String BookcaseFullPath; 		// 書櫃的完整目錄
 
     // 經文格式
 
@@ -162,9 +168,13 @@ public: // User declarations
 	//TTntStringList * slCalloutTitle;       // 外部連結的標題
 	//TTntStringList * slCalloutProgram;     // 外部連結的程式
 
+	// 其他
+
+	String LastUpdateChk;       // 最後一次更新檢查, 格式為 20180517
+
 	// 還沒處理 (或不處理?)
 
-    String XMLJuanPosPath;		// 每一卷經文移位的資料檔
+	String XMLJuanPosPath;		// 每一卷經文移位的資料檔
 	String JuanLinePath;		// 每一卷經文第一行行首的資訊
 
 	void __fastcall LoadFromFile();

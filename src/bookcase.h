@@ -3,9 +3,10 @@
 #ifndef BookcaseH
 #define BookcaseH
 
-#include "series.h"
 #include <fmx.h>
 #include <System.IOUtils.hpp>
+#include <FMX.DialogService.hpp>
+#include "series.h"
 
 // ---------------------------------------------------------------------------
 

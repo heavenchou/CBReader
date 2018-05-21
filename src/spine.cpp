@@ -33,7 +33,7 @@ void __fastcall CSpine::LoadSpineFile(String sFile)
 {
 	if(!TFile::Exists(sFile))
 	{
-		ShowMessage(u"遍歷文件不存在 : " + sFile);
+		TDialogService::ShowMessage(u"遍歷文件不存在 : " + sFile);
 		return;
 	}
 

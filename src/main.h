@@ -43,12 +43,16 @@
 #include "option.h"
 #include "../../Monster/src/monster.h"
 #include <FMX.Ani.hpp>
+#include <FMX.Memo.hpp>
+#include <FMX.ImgList.hpp>
+#include <System.ImageList.hpp>
+#include <FMX.Effects.hpp>
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
 {
 __published: // IDE-managed Components
-	TMainMenu *MainMenu1;
+	TMainMenu *MainMenu;
 	TPanel *pnNav;
 	TTabControl *TabControl1;
 	TPanel *pnFoot;
@@ -111,9 +115,9 @@ __published: // IDE-managed Components
 	TEdit *edFindSutra_SutraFrom;
 	TEdit *edFindSutra_SutraTo;
 	TLabel *Label15;
-	TLabel *經號;
-	TLabel *經名;
-	TLabel *作譯者;
+	TLabel *Label35;
+	TLabel *Label33;
+	TLabel *Label34;
 	TLabel *Label16;
 	TComboBox *cbFindSutra_BookId;
 	TLabel *Label17;
@@ -144,9 +148,8 @@ __published: // IDE-managed Components
 	TButton *btOpenBookNav;
 	TCornerButton *btPrevJuan;
 	TCornerButton *btNextJuan;
-	TMenuItem *MenuItem1;
-	TMenuItem *MenuItem2;
-	TMenuItem *MenuItem4;
+	TMenuItem *mmiAbout;
+	TMenuItem *mmiUpdate;
 	TCornerButton *btNavWidthSwitch;
 	TCornerButton *btMuluWidthSwitch;
 	TFloatAnimation *fanNavWidth;
@@ -164,6 +167,15 @@ __published: // IDE-managed Components
 	TRadioButton *rbFontBig;
 	TStyleBook *sbBig;
 	TStyleBook *sbSmall;
+	TImageList *ImageList1;
+	TButton *btOpenSimpleNav;
+	TMenuBar *MenuBar;
+	TMenuItem *wmiOPtion;
+	TMenuItem *wmiUpdate;
+	TMenuItem *wmiAbout;
+	TMenuItem *MenuItem5;
+	TMenuItem *wmiDebug;
+	TMenuItem *wmiUpdateURL;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -182,36 +194,43 @@ __published: // IDE-managed Components
 	void __fastcall btOpenBookNavClick(TObject *Sender);
 	void __fastcall btPrevJuanClick(TObject *Sender);
 	void __fastcall btNextJuanClick(TObject *Sender);
-	void __fastcall MenuItem1Click(TObject *Sender);
-	void __fastcall MenuItem4Click(TObject *Sender);
+	void __fastcall mmiAboutClick(TObject *Sender);
+	void __fastcall mmiUpdateClick(TObject *Sender);
 	void __fastcall btNavWidthSwitchClick(TObject *Sender);
 	void __fastcall btMuluWidthSwitchClick(TObject *Sender);
 	void __fastcall fanNavWidthFinish(TObject *Sender);
 	void __fastcall fanMuluWidthFinish(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall rbFontSmallChange(TObject *Sender);
-
-
+	void __fastcall btOpenSimpleNavClick(TObject *Sender);
+	void __fastcall wmiUpdateURLClick(TObject *Sender);
 
 private: // User declarations
 
+	String __fastcall GetTodayString();   // 取得今日日期, 格式 19991231
 	void __fastcall SetPermissions(int iIE); // 設定 TWebBrowser 的 IE 版本
 	void __fastcall NavTreeItemClick(TObject *Sender); // NavTree Item 點二下的作用
 
 public: // User declarations
 
-    String ProgramTitle;    // 程式名稱
+    String Version;     	// 版本
+	String ProgramTitle;    // 程式名稱
+    bool IsDebug;           // debug 變數
 
     int SelectedBook;   // 目前選中的書, -1 表示還沒選
-	String SettingFile;
+
 	String MyFullPath;
 	String MyTempPath;  // 存放暫時檔的目錄
-    String MyHomePath;  // 私人目錄, 要放設定檔
+	String MyHomePath;  // 個人目錄
+	String MySettingPath;  // 私人目錄, 要放設定檔
+	String SettingFile;    // 設定檔
 
 	CSetting * Setting; // 設定檔
 	CBookcase * Bookcase; // 書櫃
 	CNavTree * NavTree; // 導覽文件 (暫時的, 日後會放在 Serial 物件中 ???)
 	CNavTree * MuluTree; // 單經導覽文件 (暫時的, 日後會放在 Serial 物件中 ???)
+
+    TmyMonster * SearchEngine;   // 全文檢索引擎
 
 	TStringList * SearchWordList;	// 存放每一個檢索的詞, 日後塗色會用到
 	String SearchSentence;	// 搜尋字串
@@ -238,8 +257,13 @@ public: // User declarations
 	void __fastcall ShowCBXML(String sFile, bool bShowHighlight = false, TmyMonster * SearchEngine = 0);
 
 	// 檢查有沒有更新程式
-	void __fastcall CheckUpdate(String sPara);
+	void __fastcall CheckUpdate(bool bShowNoUpdate=false);
 
+    // 選擇全文檢索引擎
+	void __fastcall SetSearchEngine();
+
+	// 初始資料
+	void __fastcall InitialData();
 	__fastcall TfmMain(TComponent* Owner);
 };
 

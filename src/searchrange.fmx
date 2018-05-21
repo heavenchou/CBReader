@@ -160,8 +160,8 @@ object fmSearchRange: TfmSearchRange
         StyleLookup = 'treeviewstyle'
         TabOrder = 0
         ShowCheckboxes = True
-        Viewport.Width = 391.000000000000000000
-        Viewport.Height = 624.000000000000000000
+        Viewport.Width = 395.000000000000000000
+        Viewport.Height = 628.000000000000000000
         object triBulei0: TTreeViewItem
           TextSettings.Font.Size = 16.000000000000000000
           IsChecked = False

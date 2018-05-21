@@ -40,7 +40,7 @@ void __fastcall CBookData::LoadBookDataFile(String sFile)
 
 	if(!TFile::Exists(sFile))
 	{
-		ShowMessage(u"BookData 文件不存在 : " + sFile);
+		TDialogService::ShowMessage(u"BookData 文件不存在 : " + sFile);
 		return;
 	}
 
@@ -118,5 +118,15 @@ String __fastcall CBookData::GetVerName(String sBook)
 		return VerName->Strings[i];
 	else
 		return u""; // 找不到傳回空字串
+}
+// ---------------------------------------------------------------------------
+// 由 bookdata 做出 map , 傳入 "T" , 傳回 "【大】"
+// 這是要傳給全文檢索用的
+void __fastcall CBookData::BookToVerNameMap(map<String, String> & mpBookToVerName)
+{
+	for(int i=0; i<ID->Count; i++)
+	{
+		mpBookToVerName[ID->Strings[i]] = VerName->Strings[i];
+    }
 }
 // ---------------------------------------------------------------------------

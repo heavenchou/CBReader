@@ -36,17 +36,20 @@ public: // User declarations
 
 	String NavFile;     // 導覽文件
 	String Nav2File;     // 導覽文件 (CBETA 特有的, 未來再考慮如何處理多目錄)
+	String Nav3File;     // 導覽文件 (CBETA 特有的, 未來再考慮如何處理多目錄)
 	String CatalogFile;	// 目錄文件
 	String SpineFile;   // 遍歷文件
 	String BookDataFile;   // BookData 文件
-    String JSFile;          // CBReader 專用的 js 檔
+	String JSFile;          // CBReader 專用的 js 檔
+    String Version;     // 版本
 
 	CCatalog * Catalog; // 目錄
 	CSpine * Spine;		// 遍歷文件
 	CJuanLine * JuanLine;	// 各卷與頁欄行的關係物件, CBETA 專用
 	CBookData * BookData;   // 每本書的資訊, 例如 T , 大正藏, 2
 
-	TmyMonster * SearchEngine;   // 全文檢索引擎
+	TmyMonster * SearchEngine_orig;   // 原書全文檢索引擎
+	TmyMonster * SearchEngine_CB;   // CB 版全文檢索引擎
 
 
 	void __fastcall LoadMetaData(String sMeta);	// 載入後設文件
