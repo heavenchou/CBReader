@@ -284,7 +284,7 @@ String __fastcall CCBXML::ParseXML()
 	Node = Document->DocumentElement->ChildNodes->Nodes["text"];
 
 	if (Node->ChildNodes->Count == 0)
-		ShowMessage(u"錯誤：找不到 text 標記。");
+		TDialogService::ShowMessage(u"錯誤：找不到 text 標記。");
 	else
 		sHtml = ParseNode(Node);
 
@@ -1399,12 +1399,17 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 				// 在 2016 之前, 標準或非標準的偈頌, 不依原書時, 第一個 <l> 都會折行.
 				// 目前的新規則, 只要是不依原書, 非標準偈頌, 且有設定 Setting->LgType = 1 ,
 				// 就不折行. 不過這只限在 GA 及 GB, 因為舊的經文還是折行較好
+
+				// 也就是 【GA 或 GA 的非標準偈頌不折行】, 否則就折行
 				if(!(LgNormal == false && (BookId == u"GA" || BookId == u"GB")))
 				{
 					sHtml += u"<br class=\"para_br\"/>";	// 偈頌折行
-					sHtml += LgMarginLeft;	// 整段偈頌要空的空格
 					//sHtml += "<span class=\"para_space\">" + LgMarginLeft + "</span>";
 				}
+
+				// 標準偈頌時, 整段的空格由 <l> 處理, 因為 <l> 會折行, 要折行後才能空
+				// 非標準偈頌, 則由 <lb> 去空
+				if(LgNormal) sHtml += LgMarginLeft;	// 整段偈頌要空的空格
 			}
 		}
 	}
@@ -1556,7 +1561,8 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 	// 待處理: 引用複製在品的位置也要處理 ?????
 
 	if(MuluLabel != u"")
-		sHtml += u"<a pin_name=\"" + MuluLabel + "\"></a>";
+		// T21n1251_p0233a27 有品名有缺字造成的問題, 待處理 ????
+		//sHtml += u"<a pin_name=\"" + MuluLabel + "\"></a>";
 
 	// 印出行首空格
 
@@ -1999,7 +2005,8 @@ String __fastcall CCBXML::tag_mulu(_di_IXMLNode Node)
 		String sMulu = parseChild(Node); // 處理內容
 
 		MuluLabel = sMulu;
-		sHtml += sMulu;
+		// 目錄有缺字, 所以先不呈現 T21n1251_p0233a27 ????
+		//sHtml += sMulu;
 
 		InMulu = false;
 		InMuluPin = false;	// 先設成 false, 以免底下的內容被記錄至 MuluLabel 中 (舊版才會啦)
@@ -2097,7 +2104,7 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 	// 原書校勘
 	if(sType.SubString0(0,4) == u"orig")
 	{
-		if(sId == u"") ShowMessage (u"錯誤 : 校勘沒有 n 屬性");
+		if(sId == u"") TDialogService::ShowMessage (u"錯誤 : 校勘沒有 n 屬性");
 		else sIdNum = NoteId2Num(sId);	// 0001001a 取得 1a
 
 		String sKBJ = u"";  // 科, 標, 解專用
@@ -2125,7 +2132,7 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 	}
 	else if(sType.SubString0(0,3) == u"mod")
 	{
-		if(sId == u"") ShowMessage (u"錯誤 : 校勘沒有 n 屬性");
+		if(sId == u"") TDialogService::ShowMessage (u"錯誤 : 校勘沒有 n 屬性");
 		else sIdNum = NoteId2Num(sId);	// 0001001a 取得 1a
 
 		String sKBJ = u"";  // 科, 標, 解專用
@@ -2148,7 +2155,7 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 	// 2016 新增加的版本 <note type="editor" ...
 	else if(sType == u"editor" || sType == u"add")
 	{
-		if(sId == u"") ShowMessage (u"錯誤 : 校勘沒有 n 屬性");
+		if(sId == u"") TDialogService::ShowMessage (u"錯誤 : 校勘沒有 n 屬性");
 		else sIdNum = String(Get_Add_IdNum(sId));	// 取得自訂校勘的流水號
 
 		// <a id="note_orig_0001001" class="note_orig" href="" onclick="return false;">
@@ -3102,7 +3109,7 @@ void __fastcall CCBXML::GetInitialFromFileName()
 
 	if(mycoll.Count != 1)   // 失敗
 	{
-		ShowMessage(u"檔名格式不正確, 無法分析");
+		TDialogService::ShowMessage(u"檔名格式不正確, 無法分析");
 		return;
 	}
 
@@ -3130,7 +3137,7 @@ void __fastcall CCBXML::GetInitialFromFileName()
 	BookVerName = fmMain->Bookcase->CBETA->BookData->GetVerName(BookId);
 	if(BookVerName == u"")   // 失敗
 	{
-		ShowMessage(u"版本名稱找不到");
+		TDialogService::ShowMessage(u"版本名稱找不到");
 		return;
 	}
 }

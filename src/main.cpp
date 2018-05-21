@@ -24,9 +24,18 @@ TfmMain *fmMain;
 // ---------------------------------------------------------------------------
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
+	// 更新版本注意事項, 要改底下, 還有 project 的版本與日期
+    // 還有 fmAbout 的資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
 	Version = u"0.2.0.0";
+	IsDebug = false;           // debug 變數
+
+#ifdef _Windows
+	MainMenu->Free();
+#else
+    MenuBar->Free();
+#endif
 
 	// 設定目錄初值
 	InitialPath();
@@ -49,6 +58,11 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	// 初始畫面的設定
 	btOpenBookcase->Visible = false;
 	btBuildIndex->Visible = false;
+	btOpenSimpleNav->Visible = false;
+	#ifdef _Windows
+	wmiDebug->Visible = false;
+	#endif
+
 	tcMainFunc->TabIndex = 0;
 	SelectedBook = -1;   // 目前選中的書, -1 表示還沒選
     pnMulu->Width = 0;  // 書目先縮到最小
@@ -148,7 +162,7 @@ void __fastcall TfmMain::FormShow(TObject *Sender)
 	InitialData();
 
 	fmLogo->Close();
-	Cursor = crDefault;
+	Cursor = crArrow;
 
 	// 檢查更新
 	String sToday = GetTodayString();
@@ -311,7 +325,7 @@ void __fastcall TfmMain::OpenCBETABook()
 			return;
 		}
 	}
-	TDialogService::ShowMessage("找不到 CBETA 資料");
+	TDialogService::ShowMessage(u"找不到 CBETA 資料");
     return;
 }
 //---------------------------------------------------------------------------
@@ -381,6 +395,16 @@ bool __fastcall TfmMain::IsSelectedBook()
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 {
+	if(edFindSutra_SutraName->Text == u"Heaven")
+	{
+		IsDebug = true;
+		edFindSutra_SutraName->Text = u"";
+		#ifdef _Windows
+		btBuildIndex->Visible = true;
+		wmiDebug->Visible = true;
+    	#endif
+		return;
+    }
 	String sBook = cbFindSutra_BookId->Selected->Text;
 	if(cbFindSutra_BookId->ItemIndex == 0) sBook = u"";
 	else
@@ -508,7 +532,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 {
 	if(sFile == "")
 	{
-		TDialogService::ShowMessage("沒有找到正確檔案");
+		TDialogService::ShowMessage(u"沒有找到正確檔案");
         return;
 	}
 
@@ -578,6 +602,16 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 		String sJuan = Bookcase->CBETA->Spine->Juan->Strings[SpineID];
 		int iIndex = Bookcase->CBETA->Catalog->FindIndexBySutraNum(sBook, sSutra);
 		String sName = Bookcase->CBETA->Catalog->SutraName->Strings[iIndex];
+
+		// 經名移除 (第X卷-第x卷)
+		if(sName.Pos0(u"(第") >= 0)
+		{
+			int iPos = sName.Pos0(u"(第");
+			if(sName.Pos0(u"卷)") >= 0)
+			{
+                sName = sName.SubString0(0,iPos);
+            }
+		}
 
 		sJuan = CMyStrUtil::TrimLeft(sJuan, u'0');
 		sSutra = CMyStrUtil::TrimLeft(sSutra, u'0');
@@ -872,17 +906,23 @@ void __fastcall TfmMain::LoadMuluTree(String sFile)
 
 void __fastcall TfmMain::btOpenSimpleNavClick(TObject *Sender)
 {
+	btOpenSimpleNav->Cursor = crHourGlass;
 	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->NavFile);
+	btOpenSimpleNav->Cursor = crDefault;
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btOpenBookNavClick(TObject *Sender)
 {
+	btOpenBookNav->Cursor = crHourGlass;
 	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->Nav2File);
+	btOpenBookNav->Cursor = crDefault;
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btOpenBuleiNavClick(TObject *Sender)
 {
-	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->Nav3File);
+	btOpenBuleiNav->Cursor = crHourGlass;
+	LoadNavTree(Bookcase->CBETA->Dir + Bookcase->CBETA->NavFile);
+	btOpenBuleiNav->Cursor = crDefault;
 }
 //---------------------------------------------------------------------------
 // 上一卷
@@ -926,7 +966,7 @@ void __fastcall TfmMain::btNextJuanClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfmMain::MenuItem1Click(TObject *Sender)
+void __fastcall TfmMain::mmiAboutClick(TObject *Sender)
 {
 	fmAbout->ShowModal();
 }
@@ -966,7 +1006,7 @@ void __fastcall TfmMain::CheckUpdate(bool bShowNoUpdate)
 		{
 			if(iResult <= 32)  // 其它情況的錯誤
 			{
-				TDialogService::ShowMessage("SE_Err:" + AnsiString(iResult) + " 無法開啟此檔!");
+				TDialogService::ShowMessage("SE_Err:" + AnsiString(iResult) + u" 無法開啟此檔!");
 			}
 		}
 	}
@@ -975,13 +1015,13 @@ void __fastcall TfmMain::CheckUpdate(bool bShowNoUpdate)
 	Setting->LastUpdateChk = sToday;
 	Setting->SaveToFile();
 #else
-	TDialogService::ShowMessage("抱歉！目前只有 Windows 版才有更新功能。");
+	TDialogService::ShowMessage(u"抱歉！目前只有 Windows 版才有更新功能。");
 #endif
 */
 }
 //---------------------------------------------------------------------------
 // 檢查更新
-void __fastcall TfmMain::MenuItem4Click(TObject *Sender)
+void __fastcall TfmMain::mmiUpdateClick(TObject *Sender)
 {
 	CheckUpdate(true);  // true 表示沒有更新要秀訊息
 }
@@ -1096,6 +1136,14 @@ String __fastcall TfmMain::GetTodayString()
 	String str = Today->FormatString("yyyymmdd");
 	delete Today;
 	return str;
+}
+//---------------------------------------------------------------------------
+
+// 更換更新的 URL , 換成測試用的
+void __fastcall TfmMain::wmiUpdateURLClick(TObject *Sender)
+{
+	wmiUpdateURL->IsChecked = !wmiUpdateURL->IsChecked;
+	fmUpdate->UseLocalhostURL = wmiUpdateURL->IsChecked;
 }
 //---------------------------------------------------------------------------
 

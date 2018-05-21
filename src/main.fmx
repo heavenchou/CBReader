@@ -18,7 +18,7 @@ object fmMain: TfmMain
   object TabControl1: TTabControl
     Align = Client
     Size.Width = 854.000000000000000000
-    Size.Height = 608.000000000000000000
+    Size.Height = 584.000000000000000000
     Size.PlatformDefault = False
     TabHeight = 49.000000000000000000
     TabIndex = 0
@@ -26,7 +26,7 @@ object fmMain: TfmMain
     TabPosition = None
     Sizes = (
       854s
-      608s)
+      584s)
     object TabItem1: TTabItem
       CustomIcon = <
         item
@@ -43,19 +43,19 @@ object fmMain: TfmMain
       object Panel1: TPanel
         Align = Client
         Size.Width = 854.000000000000000000
-        Size.Height = 608.000000000000000000
+        Size.Height = 584.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
         object WebBrowser: TWebBrowser
           Align = Client
           Size.Width = 612.000000000000000000
-          Size.Height = 608.000000000000000000
+          Size.Height = 584.000000000000000000
           Size.PlatformDefault = False
         end
         object pnMulu: TPanel
           Align = Left
           Size.Width = 233.000000000000000000
-          Size.Height = 608.000000000000000000
+          Size.Height = 584.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
           object fanMuluWidth: TFloatAnimation
@@ -69,11 +69,11 @@ object fmMain: TfmMain
           object tvMuluTree: TTreeView
             Align = Client
             Size.Width = 233.000000000000000000
-            Size.Height = 575.000000000000000000
+            Size.Height = 551.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
             Viewport.Width = 229.000000000000000000
-            Viewport.Height = 571.000000000000000000
+            Viewport.Height = 547.000000000000000000
           end
           object Panel7: TPanel
             Align = Top
@@ -98,7 +98,7 @@ object fmMain: TfmMain
           Position.X = 233.000000000000000000
           ShowGrip = False
           Size.Width = 9.000000000000000000
-          Size.Height = 608.000000000000000000
+          Size.Height = 584.000000000000000000
           Size.PlatformDefault = False
           OnDblClick = btMuluWidthSwitchClick
         end
@@ -107,34 +107,34 @@ object fmMain: TfmMain
   end
   object pnNav: TPanel
     Align = Left
-    Position.Y = 48.000000000000000000
+    Position.Y = 72.000000000000000000
     Size.Width = 281.000000000000000000
-    Size.Height = 608.000000000000000000
+    Size.Height = 584.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 3
     object tcMainFunc: TTabControl
       Align = Client
       Size.Width = 281.000000000000000000
-      Size.Height = 608.000000000000000000
+      Size.Height = 584.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 0
+      TabIndex = 1
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
         281s
-        559s
+        535s
         281s
-        559s
+        535s
         281s
-        559s
+        535s
         281s
-        559s)
+        535s)
       object TabItem2: TTabItem
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 54.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -146,12 +146,12 @@ object fmMain: TfmMain
         object tvNavTree: TTreeView
           Align = Client
           Size.Width = 281.000000000000000000
-          Size.Height = 510.000000000000000000
+          Size.Height = 486.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
           Images = ImageList1
           Viewport.Width = 277.000000000000000000
-          Viewport.Height = 506.000000000000000000
+          Viewport.Height = 482.000000000000000000
         end
         object Panel8: TPanel
           Align = Top
@@ -160,27 +160,27 @@ object fmMain: TfmMain
           Size.PlatformDefault = False
           TabOrder = 1
           object btOpenBuleiNav: TButton
-            Position.X = 160.000000000000000000
+            Position.X = 8.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 57.000000000000000000
+            Size.Width = 81.000000000000000000
             Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            Text = #37096#39006
+            Text = #37096#39006#30446#37636
             OnClick = btOpenBuleiNavClick
           end
           object btOpenBookNav: TButton
-            Position.X = 88.000000000000000000
+            Position.X = 96.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 57.000000000000000000
+            Size.Width = 81.000000000000000000
             Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 2
-            Text = #36914#38542
+            Text = #21407#26360#30446#37636
             OnClick = btOpenBookNavClick
           end
           object btOpenSimpleNav: TButton
-            Position.X = 16.000000000000000000
+            Position.X = 224.000000000000000000
             Position.Y = 8.000000000000000000
             Size.Width = 57.000000000000000000
             Size.Height = 33.000000000000000000
@@ -195,7 +195,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -394,7 +394,7 @@ object fmMain: TfmMain
           CanFocus = True
           ClipChildren = True
           Size.Width = 281.000000000000000000
-          Size.Height = 381.000000000000000000
+          Size.Height = 357.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
           StyledSettings = [Family, Style, FontColor]
@@ -403,7 +403,7 @@ object fmMain: TfmMain
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
           Viewport.Width = 277.000000000000000000
-          Viewport.Height = 356.000000000000000000
+          Viewport.Height = 332.000000000000000000
           object StringColumn1: TStringColumn
             Header = #32147#21517
             Size.Width = 130.000000000000000000
@@ -448,7 +448,7 @@ object fmMain: TfmMain
         object Panel4: TPanel
           Align = Client
           Size.Width = 281.000000000000000000
-          Size.Height = 559.000000000000000000
+          Size.Height = 535.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 2
           object Label1: TLabel
@@ -874,7 +874,7 @@ object fmMain: TfmMain
           CanFocus = True
           ClipChildren = True
           Size.Width = 281.000000000000000000
-          Size.Height = 430.000000000000000000
+          Size.Height = 406.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
           StyledSettings = [Family, Style, FontColor]
@@ -883,7 +883,7 @@ object fmMain: TfmMain
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
           Viewport.Width = 277.000000000000000000
-          Viewport.Height = 405.000000000000000000
+          Viewport.Height = 381.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000
@@ -938,6 +938,7 @@ object fmMain: TfmMain
     TabOrder = 5
   end
   object ToolBar1: TToolBar
+    Position.Y = 24.000000000000000000
     Size.Width = 1143.000000000000000000
     Size.Height = 48.000000000000000000
     Size.PlatformDefault = False
@@ -969,10 +970,10 @@ object fmMain: TfmMain
       OnClick = btOptionClick
     end
     object btBuildIndex: TCornerButton
-      Position.X = 880.000000000000000000
+      Position.X = 848.000000000000000000
       Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
-      Size.Width = 113.000000000000000000
+      Size.Width = 145.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 3
@@ -3693,7 +3694,7 @@ object fmMain: TfmMain
       Top = 56
     end
   end
-  object MainMenu1: TMainMenu
+  object MainMenu: TMainMenu
     Left = 1056
     Top = 8
     object MenuItem3: TMenuItem
@@ -3704,18 +3705,19 @@ object fmMain: TfmMain
       Text = #35373#23450
       OnClick = btOptionClick
     end
-    object MenuItem4: TMenuItem
-      Text = #26356#26032#27298#26597
-      OnClick = MenuItem4Click
-    end
-    object MenuItem1: TMenuItem
-      Text = #38364#26044
-      OnClick = MenuItem1Click
-    end
-    object MenuItem2: TMenuItem
-      Text = #29986#29983#32034#24341#27284
-      Visible = False
-      OnClick = btBuildIndexClick
+    object MenuItem5: TMenuItem
+      Locked = True
+      Text = #22519#34892
+      object mmiUpdate: TMenuItem
+        Locked = True
+        Text = #26356#26032#27298#26597
+        OnClick = mmiUpdateClick
+      end
+      object mmiAbout: TMenuItem
+        Locked = True
+        Text = #38364#26044
+        OnClick = mmiAboutClick
+      end
     end
   end
   object Splitter1: TSplitter
@@ -3723,10 +3725,10 @@ object fmMain: TfmMain
     Cursor = crHSplit
     MinSize = 20.000000000000000000
     Position.X = 281.000000000000000000
-    Position.Y = 48.000000000000000000
+    Position.Y = 72.000000000000000000
     ShowGrip = False
     Size.Width = 8.000000000000000000
-    Size.Height = 608.000000000000000000
+    Size.Height = 584.000000000000000000
     Size.PlatformDefault = False
     OnDblClick = btNavWidthSwitchClick
   end
@@ -6345,6 +6347,32 @@ object fmMain: TfmMain
       end>
     Left = 920
     Top = 56
+  end
+  object MenuBar: TMenuBar
+    Size.Width = 1143.000000000000000000
+    Size.Height = 24.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 12
+    object wmiOPtion: TMenuItem
+      Text = #35373#23450
+      OnClick = btOptionClick
+    end
+    object wmiUpdate: TMenuItem
+      Text = #26356#26032#27298#26597
+      OnClick = mmiUpdateClick
+    end
+    object wmiAbout: TMenuItem
+      Text = #38364#26044
+      OnClick = mmiAboutClick
+    end
+    object wmiDebug: TMenuItem
+      Text = 'Debug Mode'
+      object wmiUpdateURL: TMenuItem
+        Locked = True
+        Text = #26356#26032#30340#32178#22336#25563#25104' localhost'
+        OnClick = wmiUpdateURLClick
+      end
+    end
   end
   object ImageList1: TImageList
     Source = <

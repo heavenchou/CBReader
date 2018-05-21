@@ -40,7 +40,7 @@ void __fastcall CBookData::LoadBookDataFile(String sFile)
 
 	if(!TFile::Exists(sFile))
 	{
-		ShowMessage(u"BookData 文件不存在 : " + sFile);
+		TDialogService::ShowMessage(u"BookData 文件不存在 : " + sFile);
 		return;
 	}
 

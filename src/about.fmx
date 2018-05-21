@@ -1522,7 +1522,7 @@ object fmAbout: TfmAbout
       Size.Width = 273.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
-      Text = 'CBReader 2X V0.2   '#12288#12288' 2018/04/29'
+      Text = 'CBReader 2X V0.2   '#12288#12288' 2018/05/20'
       TabOrder = 6
     end
     object Label2: TLabel
@@ -1531,7 +1531,7 @@ object fmAbout: TfmAbout
       Size.Width = 273.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
-      Text = 'CBETA Reader '#24565#24681#38321#34255#31995#32113
+      Text = 'CBETA Reader '#38321#34255#31995#32113
       TabOrder = 5
     end
     object Label3: TLabel

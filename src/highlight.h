@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <utility>  // for std::pair
+#include <FMX.DialogService.hpp>
 #include "../../Monster/src/Monster.h"
 #include "../../Monster/src/PostfixStack.h"
 #include "../../Monster/src/Int2List.h"

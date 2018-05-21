@@ -10,6 +10,7 @@
 #define NavXMLH
 #include <fmx.h>
 #include <Xml.XMLDoc.hpp>
+#include <FMX.DialogService.hpp>
 #include "navitem.h"
 // ---------------------------------------------------------------------------
 // 這是一個讀取導覽文件的物件

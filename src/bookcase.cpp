@@ -38,7 +38,7 @@ void __fastcall CBookcase::LoadBookcase(String sDir)
 	// 檢查書櫃目錄是否存在
 	if(!TDirectory::Exists(sDir))
 	{
-		ShowMessage(u"書櫃目錄不存在 : " + sDir);
+		TDialogService::ShowMessage(u"書櫃目錄不存在 : " + sDir);
 		return;
 	}
 	BookcaseDir = sDir; 	// 書櫃的目錄

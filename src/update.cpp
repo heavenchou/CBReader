@@ -14,10 +14,11 @@ __fastcall TfmUpdate::TfmUpdate(TComponent* Owner)
 	: TForm(Owner)
 {
 	IsShowMessage = false;
-	IsShowDebug = false;
-	ServiceURL = u"http://www.cbeta.org/cbreader/update.php?";
-	//ServiceURL = u"http://localhost/cbreader/update.php?";
-	//ServiceURL = u"http://192.168.0.3/cbreader/update.php?";
+	UseLocalhostURL = false;  // 使用 localhost 的測試網址
+	ServerURL = u"http://www.cbeta.org/cbreader/update.php?";
+	LocalhostURL = u"http://localhost/cbreader/update.php?";// 內部測試的網址
+
+	//LocalhostURL = u"http://192.168.0.3/cbreader/update.php?";
 	slReceive = new TStringList;	// 接收網頁訊息
 }
 //---------------------------------------------------------------------------
@@ -25,13 +26,27 @@ __fastcall TfmUpdate::TfmUpdate(TComponent* Owner)
 void __fastcall TfmUpdate::CheckUpdate(String sCBRVer, String sDataVer, bool bShowNoUpdate)
 {
 	IsShowMessage = bShowNoUpdate;
-	String sURL = ServiceURL + u"cbr=" + sCBRVer + u"&data=" + sDataVer;
+
+	// 傳過去的版本格式 ?cbr=0.1.0.0&data=0.1.0.0
+	// 作業系統 &os=win
+    // debug 模式 &type=debug
+
+	String sURL = ServerURL;
+	if(UseLocalhostURL) sURL = LocalhostURL;
+
+	sURL = sURL + u"cbr=" + sCBRVer + u"&data=" + sDataVer;
 #ifdef _Windows
 	sURL += u"&os=win";
 #else
 	sURL += u"&os=mac";
 #endif
-	if(IsShowDebug) TDialogService::ShowMessage(sURL);
+
+	if(fmMain->IsDebug)
+	{
+		sURL += u"&type=debug";
+		TDialogService::ShowMessage(sURL);
+	}
+
 	nhrCBR->URL = sURL;
 	nhrCBR->Execute();
 }
@@ -43,7 +58,7 @@ void __fastcall TfmUpdate::nhrCBRRequestCompleted(TObject * const Sender, IHTTPR
 	slReceive->LoadFromStream(AResponse->GetContentStream(),TEncoding::UTF8);
 	// 判斷是不是更新資料檔
 	String sStr1 = slReceive->Strings[0];
-	if(IsShowDebug) TDialogService::ShowMessage(sStr1);
+	if(fmMain->IsDebug) TDialogService::ShowMessage(sStr1);
 	if(sStr1.SubString0(0,2) == u"ok")
 	{
 		// 表示沒有更新資料
@@ -61,7 +76,7 @@ void __fastcall TfmUpdate::nhrCBRRequestCompleted(TObject * const Sender, IHTTPR
 		if (iResult == System::Uitypes::mrYes)
 			ShowModal();
 		else
-			if(IsShowDebug)
+			if(fmMain->IsDebug)
 				TDialogService::ShowMessage(u"不更新就算了");
 	}
 }
@@ -105,7 +120,7 @@ void __fastcall TfmUpdate::btUpdateClick(TObject *Sender)
 			{
 				sSource.Delete0(0,7);
 				sDest.Delete0(0,5);
-				if(IsShowDebug)
+				if(fmMain->IsDebug)
 				{
 					TDialogService::ShowMessage(sSource);
 					TDialogService::ShowMessage(sDest);
@@ -205,7 +220,9 @@ void __fastcall TfmUpdate::nhrDownloadRequestCompleted(TObject * const Sender,
 // 接收有錯誤，秀出錯誤訊息
 void __fastcall TfmUpdate::nhrCBRRequestError(TObject * const Sender, const UnicodeString AError)
 {
-	TDialogService::ShowMessage(AError);
+    // 手動更新的才要秀錯誤訊息
+	if(IsShowMessage)
+		TDialogService::ShowMessage(AError);
 }
 //---------------------------------------------------------------------------
 // 由 http 網址取得最後的檔名

@@ -12,13 +12,14 @@
 #include <System.IOUtils.hpp>
 #include <System.SysUtils.hpp>
 #include <map>
+#include <FMX.DialogService.hpp>
+#include <System.RegularExpressions.hpp>
 #include "setting.h"
 #include "subutil.h"
 #include "highlight.h"
 #include "rendattr.h"
 #include "nextline.h"
 #include "main.h"
-#include "System.RegularExpressions.hpp"
 #include "../../Monster/src/monster.h"
 
 using namespace std;

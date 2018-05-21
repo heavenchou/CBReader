@@ -20,8 +20,8 @@ object fmUpdate: TfmUpdate
     Size.Height = 153.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    Viewport.Width = 397.000000000000000000
-    Viewport.Height = 149.000000000000000000
+    Viewport.Width = 401.000000000000000000
+    Viewport.Height = 153.000000000000000000
   end
   object btUpdate: TButton
     Position.X = 464.000000000000000000

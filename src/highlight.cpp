@@ -172,7 +172,7 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 
 	if(!*pPoint)
 	{
-        ShowMessage(u"沒找到指定標記，程式要再檢查處理");
+        TDialogService::ShowMessage(u"沒找到指定標記，程式要再檢查處理");
     }
 
     // =====================================================
@@ -209,7 +209,7 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
                 {
                     if(!bShowError)
                     {
-						ShowMessage(u"LineHead Error : Please call Heaven!");
+						TDialogService::ShowMessage(u"LineHead Error : Please call Heaven!");
                         bShowError = true;
                     }
                     pPoint += 49;

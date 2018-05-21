@@ -46,12 +46,13 @@
 #include <FMX.Memo.hpp>
 #include <FMX.ImgList.hpp>
 #include <System.ImageList.hpp>
+#include <FMX.Effects.hpp>
 // ---------------------------------------------------------------------------
 
 class TfmMain : public TForm
 {
 __published: // IDE-managed Components
-	TMainMenu *MainMenu1;
+	TMainMenu *MainMenu;
 	TPanel *pnNav;
 	TTabControl *TabControl1;
 	TPanel *pnFoot;
@@ -147,9 +148,8 @@ __published: // IDE-managed Components
 	TButton *btOpenBookNav;
 	TCornerButton *btPrevJuan;
 	TCornerButton *btNextJuan;
-	TMenuItem *MenuItem1;
-	TMenuItem *MenuItem2;
-	TMenuItem *MenuItem4;
+	TMenuItem *mmiAbout;
+	TMenuItem *mmiUpdate;
 	TCornerButton *btNavWidthSwitch;
 	TCornerButton *btMuluWidthSwitch;
 	TFloatAnimation *fanNavWidth;
@@ -169,6 +169,13 @@ __published: // IDE-managed Components
 	TStyleBook *sbSmall;
 	TImageList *ImageList1;
 	TButton *btOpenSimpleNav;
+	TMenuBar *MenuBar;
+	TMenuItem *wmiOPtion;
+	TMenuItem *wmiUpdate;
+	TMenuItem *wmiAbout;
+	TMenuItem *MenuItem5;
+	TMenuItem *wmiDebug;
+	TMenuItem *wmiUpdateURL;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -187,8 +194,8 @@ __published: // IDE-managed Components
 	void __fastcall btOpenBookNavClick(TObject *Sender);
 	void __fastcall btPrevJuanClick(TObject *Sender);
 	void __fastcall btNextJuanClick(TObject *Sender);
-	void __fastcall MenuItem1Click(TObject *Sender);
-	void __fastcall MenuItem4Click(TObject *Sender);
+	void __fastcall mmiAboutClick(TObject *Sender);
+	void __fastcall mmiUpdateClick(TObject *Sender);
 	void __fastcall btNavWidthSwitchClick(TObject *Sender);
 	void __fastcall btMuluWidthSwitchClick(TObject *Sender);
 	void __fastcall fanNavWidthFinish(TObject *Sender);
@@ -196,6 +203,7 @@ __published: // IDE-managed Components
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall rbFontSmallChange(TObject *Sender);
 	void __fastcall btOpenSimpleNavClick(TObject *Sender);
+	void __fastcall wmiUpdateURLClick(TObject *Sender);
 
 private: // User declarations
 
@@ -206,7 +214,8 @@ private: // User declarations
 public: // User declarations
 
     String Version;     	// 版本
-    String ProgramTitle;    // 程式名稱
+	String ProgramTitle;    // 程式名稱
+    bool IsDebug;           // debug 變數
 
     int SelectedBook;   // 目前選中的書, -1 表示還沒選
 

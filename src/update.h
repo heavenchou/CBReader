@@ -68,19 +68,19 @@ public:		// User declarations
 
 	String DestFile;
 
-    String ServiceURL;  // 要檢查更新的網頁目錄
+	String ServerURL;  // 要檢查更新的網頁目錄
+	bool UseLocalhostURL;  // 使用 localhost 的測試網址
+	String LocalhostURL;    // 內部測試的網址
 
-	// 三個版本
+	// 二個版本
 	//String CBRVer;  // CBReader 的版本
 	//String DataVer;	// 經文資料的版本
-	//String UpdateVer;   // 更新程式的版本
 
 	// 判斷要不要秀訊息
 	// 如果傳入參數 true , 表示要秀訊息
 	// 自動檢查更新時, 若沒更新就自行離開
 	// 手動檢查更新, 沒更新就需要秀訊息 "目前是最新版".
 	bool IsShowMessage;
-    bool IsShowDebug;
 
 	TStringList * slReceive;	// 接收網頁訊息
 

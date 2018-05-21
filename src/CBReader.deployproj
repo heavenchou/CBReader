@@ -73,18 +73,18 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\cc32250mt.dll" Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'">
+        <DeployFile Include="$(BDS)\bin\cc32240mt.dll" Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'">
             <RemoteDir>CBReader\</RemoteDir>
-            <RemoteName>cc32250mt.dll</RemoteName>
+            <RemoteName>cc32240mt.dll</RemoteName>
             <DeployClass>DependencyModule</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
-        <DeployFile Include="$(BDS)\bin\cc32240mt.dll" Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'">
+        <DeployFile Include="$(BDS)\bin\cc32250mt.dll" Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'">
             <RemoteDir>CBReader\</RemoteDir>
-            <RemoteName>cc32240mt.dll</RemoteName>
+            <RemoteName>cc32250mt.dll</RemoteName>
             <DeployClass>DependencyModule</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>

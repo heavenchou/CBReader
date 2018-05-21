@@ -47,7 +47,7 @@ void __fastcall CCatalog::LoadCatalog(String sFile)
 
 	if(!TFile::Exists(sFile))
 	{
-		ShowMessage(u"目錄文件不存在 : " + sFile);
+		TDialogService::ShowMessage(u"目錄文件不存在 : " + sFile);
 		return;
 	}
 

@@ -105,7 +105,7 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 	GaijiImageFirst = false;   // 優先使用缺字圖檔
 
 	ShowSiddamWay = 6;		// 悉曇字處理法 0:悉曇字型(siddam.ttf) 1:羅馬轉寫(unicode) 2:羅馬轉寫(純文字) 3:悉曇圖檔 4:自訂符號 5:CB碼 6:悉曇羅馬對照
-	UserSiddamSign = "◇";	// 使用者自訂悉曇字符號
+	UserSiddamSign = u"◇";	// 使用者自訂悉曇字符號
     ShowPaliWay = 0;		// 梵巴字處理法 0:Unicode 1:純文字 2:Ent 碼
     ShowUnicode30 = true;  // 呈現 Unicode 3.0 , 在 P5 XML , 這個可以預設為
 
