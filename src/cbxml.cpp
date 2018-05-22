@@ -87,6 +87,7 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	HTMLText += ParseXML();     		// 處理內文
 
 	HTMLText = AddOrigNote(HTMLText);   // 原本的 orig 校勘還沒加入, 此時才要加入
+	HTMLCollation = AddOrigNote(HTMLCollation);
 
 	// 塗色否?
 	if(bShowHighlight)
