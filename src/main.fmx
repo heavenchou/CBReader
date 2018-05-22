@@ -118,7 +118,7 @@ object fmMain: TfmMain
       Size.Height = 584.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 1
+      TabIndex = 0
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -134,7 +134,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 54.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -162,17 +162,17 @@ object fmMain: TfmMain
           object btOpenBuleiNav: TButton
             Position.X = 8.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 81.000000000000000000
+            Size.Width = 73.000000000000000000
             Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            Text = #37096#39006#30446#37636
+            Text = #20027#30446#37636
             OnClick = btOpenBuleiNavClick
           end
           object btOpenBookNav: TButton
-            Position.X = 96.000000000000000000
+            Position.X = 176.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 81.000000000000000000
+            Size.Width = 41.000000000000000000
             Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 2
@@ -195,7 +195,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False

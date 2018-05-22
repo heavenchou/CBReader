@@ -59,6 +59,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	btOpenBookcase->Visible = false;
 	btBuildIndex->Visible = false;
 	btOpenSimpleNav->Visible = false;
+	btOpenBookNav->Visible = false;
+
 	#ifdef _Windows
 	wmiDebug->Visible = false;
 	#endif
@@ -359,6 +361,8 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	int iType = tvItem->Tag;
 
 	// ¤@¯ë³sµ²
+	tvNavTree->Cursor = crHourGlass;
+
 	if(iType == nit_NormalLink)
 	{
 		if(sURL.SubString(1,4) == "http")
@@ -377,6 +381,7 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	{
 		ShowCBXML(sURL);
 	}
+	tvNavTree->Cursor = crDefault;
 }
 //---------------------------------------------------------------------------
 

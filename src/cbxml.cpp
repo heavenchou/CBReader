@@ -1214,14 +1214,14 @@ String __fastcall CCBXML::tag_item(_di_IXMLNode Node)
 		{
 			String sItemId = GetAttr(Node, u"xml:id");
 
-            // 第一個, 或在行首, 就要依 list 數量來空格
+			// 第一個, 或在行首, 就要依 list 數量 * 2 來空格
 			if(ItemNum[ListCount] == 1 || sPreNodeName == u"lb" || sPreChildNodeName == u"list")
             {
 				//itemX63p0502b0319 是特例
 				// 在切換校註呈現時如何處理? 待研究 ????
 				//if(Setting->CorrSelect == 0 && sItemId == u"itemX63p0502b0319"){}
 				//else
-					sHtml += u"<span class=\"line_space\">" + String::StringOfChar(u'　',ListCount) + u"</span>";
+					sHtml += u"<span class=\"line_space\">" + String::StringOfChar(u'　',ListCount*2) + u"</span>";
             }
             else
             {
