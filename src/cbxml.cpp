@@ -1184,7 +1184,7 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 	if(sParentNodeName == u"list")
 	{
 		// 詳細說明參考 list 的規則
-		sHtml += u"<ul>";
+		sHtml += u"<ul data-tagname='ul'>";
 	}
 
 	return sHtml;
@@ -1448,6 +1448,16 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 	String sEd = GetAttr(Node, u"ed");
 	String sN = GetAttr(Node, "n");
 
+	// Debug
+	/*
+	if(sN == u"0014a06")
+	{
+		int deb = 10;
+		deb++;
+	}
+    */
+
+
 	// 印順導師著作有 type="old" 要忽略
 	if(sType == u"old") return u"";
 
@@ -1547,7 +1557,7 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 		// 下一個不是 list 或 item 才要空 item 的空格
 		if(ListCount > 0 && sNextSiblNodeName != u"list" && sNextSiblNodeName != u"item")
 		{
-			sSpace += String::StringOfChar(u'　',ListCount);	// Item 的空格
+			sSpace += String::StringOfChar(u'　',ListCount*2);	// Item 的空格
 		}
 	}
 
@@ -1566,7 +1576,7 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 	// 加入品資料, 引用複製會用到
 	// 待處理: 引用複製在品的位置也要處理 ?????
 
-	if(MuluLabel != u"")
+	//if(MuluLabel != u"")
 		// T21n1251_p0233a27 有品名有缺字造成的問題, 待處理 ????
 		//sHtml += u"<a pin_name=\"" + MuluLabel + "\"></a>";
 
@@ -1943,9 +1953,9 @@ String __fastcall CCBXML::tag_list(_di_IXMLNode Node)
 	if(!bHasHead)
 	{
 		if(sRendition == u"simple")
-			sHtml += u"<ul style=\"list-style:none;\">";
+			sHtml += u"<ul style=\"list-style:none;\" data-tagname='ul'>";
 		else
-			sHtml += u"<ul>";
+			sHtml += u"<ul data-tagname='ul'>";
     }
 
 	sHtml += parseChild(Node); // 處理內容
@@ -3047,6 +3057,7 @@ void __fastcall CCBXML::ThisNoteHasMod(String sId)
 // 原本的 orig 校勘還沒加入, 此時才要加入
 String __fastcall CCBXML::AddOrigNote(String HTMLText)
 {
+    if(HTMLText == u"") return u"";
 	vector<System::WideChar> vOut;
 
 	System::WideChar * pPoint = HTMLText.FirstChar();
