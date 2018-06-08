@@ -12,6 +12,7 @@
 // 傳入參數為 XML 檔, 呈現的設定
 __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, String sJSFile , bool bShowHighlight, TmyMonster * seSearchEngine)
 {
+	IsDebug = false;
 	// 初值
 	XMLFile = sFile;
 	Setting = cSetting;
@@ -568,7 +569,7 @@ String __fastcall CCBXML::tag_app(_di_IXMLNode Node)
 
 		HTMLCollation += u"<div id=\"txt_note_app_" + sId + "\">\n";
 		sHtml += u"<a id=\"note_star_" + sId + u"\" class=\"note_star_removed\" "
-			   + u"href=\"\" onclick=\"return false;\">[＊]</a>\n";
+			   + u"href=\"\" onclick=\"return false;\">[＊]</a>";
 		sHtml += u"<span id=\"note_app_" + sId + u"\" class=\"note_app\">"
 			  + parseChild(Node) // 處理內容
 			  + u"</span>";
@@ -1449,13 +1450,14 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 	String sN = GetAttr(Node, "n");
 
 	// Debug
-	/*
-	if(sN == u"0014a06")
+
+	if(sN == u"0755c15")
 	{
 		int deb = 10;
 		deb++;
+		IsDebug = true;
 	}
-    */
+
 
 
 	// 印順導師著作有 type="old" 要忽略
@@ -2651,7 +2653,7 @@ String __fastcall CCBXML::tag_table(_di_IXMLNode Node)
 
 	sHtml += u"</tbody></table>";
 
-	sHtml = mv_data_between_tr(sHtml);  // 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
+	//sHtml = mv_data_between_tr(sHtml);  // 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
 
 	return sHtml;
 }
@@ -3065,7 +3067,7 @@ String __fastcall CCBXML::AddOrigNote(String HTMLText)
 	// 標記用的 <<tmp_note_orig_xxxxxxx>>
 	while(*pPoint)
 	{
-		if(*pPoint != u'<' && *(pPoint+1) != u'<')
+		if(*pPoint != u'<' || *(pPoint+1) != u'<')
 		{
 			vOut.push_back(*pPoint);
 			pPoint++;
@@ -3223,7 +3225,9 @@ String __fastcall CCBXML::mv_data_between_tr(String sHtml)
 {
     TRegEx *regex = new TRegEx();
 	String sPattern = u"(<\\/tr>)(.*?)(<tr [^>]*>(<td [^>]*>))";
+	if(IsDebug) ShowMessage(sHtml);
 	String Out = regex->Replace(sHtml, sPattern, &TableTrReplace, TRegExOptions() << roSingleLine);
+	if(IsDebug) ShowMessage(Out);
 	return Out;
 }
 // ---------------------------------------------------------------------------
@@ -3235,5 +3239,8 @@ String __fastcall CCBXML::TableTrReplace (const TMatch &Match)
 	String b = reMatch.Groups.Item[2].Value;
 	String c = reMatch.Groups.Item[3].Value;
 	// 把二個括號交換
+	if(IsDebug) ShowMessage(a);
+	if(IsDebug) ShowMessage(b);
+	if(IsDebug) ShowMessage(c);
 	return a+c+b;
 }

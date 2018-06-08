@@ -281,6 +281,12 @@
             <DependentOn>cbxml.h</DependentOn>
             <BuildOrder>8</BuildOrder>
         </CppCompile>
+        <CppCompile Include="createhtml.cpp">
+            <Form>fmCreateHtml</Form>
+            <FormType>fmx</FormType>
+            <DependentOn>createhtml.h</DependentOn>
+            <BuildOrder>39</BuildOrder>
+        </CppCompile>
         <CppCompile Include="highlight.cpp">
             <DependentOn>highlight.h</DependentOn>
             <BuildOrder>28</BuildOrder>
@@ -424,6 +430,7 @@
         <FormResources Include="searchrange.fmx"/>
         <FormResources Include="logo.fmx"/>
         <FormResources Include="main.fmx"/>
+        <FormResources Include="createhtml.fmx"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -497,6 +504,11 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
+                    <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
                     <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
@@ -511,11 +523,6 @@
                     <Platform Name="OSX32">
                         <RemoteDir>Assets\</RemoteDir>
                         <RemoteName>Logo44x44.png</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
-                    <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -627,6 +634,12 @@
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx32\libcgsqlite3.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName=".\Win32\Debug\CBReader.tds" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win32">
+                        <RemoteName>CBReader.tds</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

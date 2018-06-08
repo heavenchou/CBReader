@@ -141,7 +141,6 @@ __published: // IDE-managed Components
 	TLabel *lbSearchMsg;
 	TStringColumn *StringColumn17;
 	TCheckBox *cbSearchRange;
-	TCornerButton *btBuildIndex;
 	TStyleBook *sbMid;
 	TPanel *Panel8;
 	TButton *btOpenBuleiNav;
@@ -176,6 +175,8 @@ __published: // IDE-managed Components
 	TMenuItem *MenuItem5;
 	TMenuItem *wmiDebug;
 	TMenuItem *wmiUpdateURL;
+	TMenuItem *wmiCreateHtml;
+	TMenuItem *wmiBuildIndex;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -189,7 +190,6 @@ __published: // IDE-managed Components
 	void __fastcall sgTextSearchCellDblClick(TColumn * const Column, const int Row);
 	void __fastcall cbSearchRangeChange(TObject *Sender);
 	void __fastcall btGoByKeywordClick(TObject *Sender);
-	void __fastcall btBuildIndexClick(TObject *Sender);
 	void __fastcall btOpenBuleiNavClick(TObject *Sender);
 	void __fastcall btOpenBookNavClick(TObject *Sender);
 	void __fastcall btPrevJuanClick(TObject *Sender);
@@ -204,6 +204,8 @@ __published: // IDE-managed Components
 	void __fastcall rbFontSmallChange(TObject *Sender);
 	void __fastcall btOpenSimpleNavClick(TObject *Sender);
 	void __fastcall wmiUpdateURLClick(TObject *Sender);
+	void __fastcall wmiCreateHtmlClick(TObject *Sender);
+	void __fastcall wmiBuildIndexClick(TObject *Sender);
 
 private: // User declarations
 

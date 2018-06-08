@@ -118,7 +118,7 @@ object fmMain: TfmMain
       Size.Height = 584.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 0
+      TabIndex = 2
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -134,7 +134,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 54.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -436,7 +436,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 38.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -944,13 +944,13 @@ object fmMain: TfmMain
     Size.PlatformDefault = False
     TabOrder = 6
     object btOpenBookcase: TCornerButton
-      Position.X = 1000.000000000000000000
+      Position.X = 776.000000000000000000
       Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
       Size.Width = 113.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 4
+      TabOrder = 3
       Text = #38283#21855#30446#37636' ('#38577#34255')'
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
@@ -968,19 +968,6 @@ object fmMain: TfmMain
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
       OnClick = btOptionClick
-    end
-    object btBuildIndex: TCornerButton
-      Position.X = 848.000000000000000000
-      Position.Y = 8.000000000000000000
-      Sides = [Top, Left, Bottom, Right]
-      Size.Width = 145.000000000000000000
-      Size.Height = 33.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 3
-      Text = #29986#29983#32034#24341#27284' ('#38577#34255')'
-      XRadius = 3.000000000000000000
-      YRadius = 3.000000000000000000
-      OnClick = btBuildIndexClick
     end
     object btPrevJuan: TCornerButton
       Position.X = 296.000000000000000000
@@ -1015,7 +1002,7 @@ object fmMain: TfmMain
       Size.Width = 89.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 5
+      TabOrder = 4
       Text = '<<'#20027#21151#33021
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
@@ -1028,7 +1015,7 @@ object fmMain: TfmMain
       Size.Width = 81.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 6
+      TabOrder = 5
       Text = #30446#27425'>>'
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
@@ -1043,7 +1030,7 @@ object fmMain: TfmMain
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
       Text = #20027#21151#33021#21312#23383#39636
-      TabOrder = 7
+      TabOrder = 6
     end
     object rbFontSmall: TRadioButton
       StyledSettings = [Family, Style, FontColor]
@@ -1053,7 +1040,7 @@ object fmMain: TfmMain
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 10
+      TabOrder = 9
       Text = #23567
       OnChange = rbFontSmallChange
     end
@@ -1065,7 +1052,7 @@ object fmMain: TfmMain
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 9
+      TabOrder = 8
       Text = #20013
       TextSettings.Font.Size = 14.000000000000000000
       OnChange = rbFontSmallChange
@@ -1079,7 +1066,7 @@ object fmMain: TfmMain
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 8
+      TabOrder = 7
       Text = #22823
       TextSettings.Font.Size = 16.000000000000000000
       OnChange = rbFontSmallChange
@@ -6366,11 +6353,21 @@ object fmMain: TfmMain
       OnClick = mmiAboutClick
     end
     object wmiDebug: TMenuItem
-      Text = 'Debug Mode'
+      Text = #31649#29702#32773#21151#33021
       object wmiUpdateURL: TMenuItem
         Locked = True
         Text = #26356#26032#30340#32178#22336#25563#25104' localhost'
         OnClick = wmiUpdateURLClick
+      end
+      object wmiCreateHtml: TMenuItem
+        Locked = True
+        Text = #25209#37327#29986#29983'HTML'
+        OnClick = wmiCreateHtmlClick
+      end
+      object wmiBuildIndex: TMenuItem
+        Locked = True
+        Text = #29986#29983#32034#24341#27284
+        OnClick = wmiBuildIndexClick
       end
     end
   end

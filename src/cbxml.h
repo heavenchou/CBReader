@@ -30,6 +30,7 @@ class CCBXML
 {
 private: // User declarations
 
+    bool IsDebug;
 	String XMLFile; // XML 檔名
 	String HTMLText;	// HTML 的結果
 	String HTMLCollation;    // HTML 校註

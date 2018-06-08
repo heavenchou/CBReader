@@ -10,6 +10,7 @@
 #include "logo.h"
 #include "about.h"
 #include "update.h"
+#include "createhtml.h"
 
 #ifdef _Windows
 #include <System.Win.Registry.hpp>
@@ -57,7 +58,6 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 
 	// 初始畫面的設定
 	btOpenBookcase->Visible = false;
-	btBuildIndex->Visible = false;
 	btOpenSimpleNav->Visible = false;
 	btOpenBookNav->Visible = false;
 
@@ -405,7 +405,6 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 		IsDebug = true;
 		edFindSutra_SutraName->Text = u"";
 		#ifdef _Windows
-		btBuildIndex->Visible = true;
 		wmiDebug->Visible = true;
     	#endif
 		return;
@@ -846,29 +845,7 @@ void __fastcall TfmMain::btGoByKeywordClick(TObject *Sender)
 
 }
 //---------------------------------------------------------------------------
-// 建立索引檔
-void __fastcall TfmMain::btBuildIndexClick(TObject *Sender)
-{
-	// 先關掉全文檢索引擎
 
-	Bookcase->CBETA->FreeSearchEngine();
-
-	// 產生索引
-
-	fmBuildIndex->edBuildListDir->Text = Bookcase->CBETA->Dir;
-	fmBuildIndex->edBuildList->Text = Bookcase->CBETA->Dir + Bookcase->CBETA->SpineFile;
-	fmBuildIndex->edWordIndex->Text = Bookcase->CBETA->Dir + "index/wordindex.ndx";
-	fmBuildIndex->edMainIndex->Text = Bookcase->CBETA->Dir + "index/main.ndx";
-	fmBuildIndex->ShowModal();
-
-	// 重新建立全文檢索引擎
-
-	Bookcase->CBETA->LoadSearchEngine();
-
-	SetSearchEngine();
-
-}
-//---------------------------------------------------------------------------
 // 將檔案載入導覽樹
 void __fastcall TfmMain::LoadNavTree(String sFile)
 {
@@ -1143,12 +1120,39 @@ String __fastcall TfmMain::GetTodayString()
 	return str;
 }
 //---------------------------------------------------------------------------
-
 // 更換更新的 URL , 換成測試用的
 void __fastcall TfmMain::wmiUpdateURLClick(TObject *Sender)
 {
 	wmiUpdateURL->IsChecked = !wmiUpdateURL->IsChecked;
 	fmUpdate->UseLocalhostURL = wmiUpdateURL->IsChecked;
+}
+//---------------------------------------------------------------------------
+// 批量產生 HTML , 主要是用來檢查錯誤
+void __fastcall TfmMain::wmiCreateHtmlClick(TObject *Sender)
+{
+    fmCreateHtml->ShowModal();
+}
+//---------------------------------------------------------------------------
+// 建立索引檔
+void __fastcall TfmMain::wmiBuildIndexClick(TObject *Sender)
+{
+	// 先關掉全文檢索引擎
+
+	Bookcase->CBETA->FreeSearchEngine();
+
+	// 產生索引
+
+	fmBuildIndex->edBuildListDir->Text = Bookcase->CBETA->Dir;
+	fmBuildIndex->edBuildList->Text = Bookcase->CBETA->Dir + Bookcase->CBETA->SpineFile;
+	fmBuildIndex->edWordIndex->Text = Bookcase->CBETA->Dir + "index/wordindex.ndx";
+	fmBuildIndex->edMainIndex->Text = Bookcase->CBETA->Dir + "index/main.ndx";
+	fmBuildIndex->ShowModal();
+
+	// 重新建立全文檢索引擎
+
+	Bookcase->CBETA->LoadSearchEngine();
+
+	SetSearchEngine();
 }
 //---------------------------------------------------------------------------
 
