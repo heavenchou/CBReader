@@ -74,7 +74,7 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 
 	Document = interface_cast<Xmlintf::IXMLDocument>(new TXMLDocument(NULL));
 	Document->FileName = XMLFile;
-	//Document->ParseOptions = Document->ParseOptions + (TParseOptions() << poPreserveWhiteSpace);
+	Document->ParseOptions = Document->ParseOptions + (TParseOptions() << poPreserveWhiteSpace);
 
 	HTMLText += MakeHTMLHead(); // 先產生 html 的 head
 
@@ -2101,7 +2101,7 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 
 	if(sType == u"")
 	{
-		if(sPlace == u"inline" || sPlace == u"interlinear")
+		if(sPlace == u"inline" || sPlace == u"inline2" || sPlace == u"interlinear")
 		{
 			sHtml += u"<span class=\"note\">(" + parseChild(Node) + u")</span>";
 			return sHtml;
@@ -2188,6 +2188,23 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 		String sNoteText = parseChild(Node);
 		// <div id="txt_note_orig_0001001">校勘內容</div>
 		HTMLCollation += u"<div id=\"txt_note_add_A" + sIdNum + u"\">" + sNoteText + u"</div>\n";
+	}
+	// 2018 新增加的版本 <note type="authorial" ...
+	// Y13n0013 }<lb n="0303a11" ed="Y"/>
+	// ...〈書<note type="authorial">（菊池寬）</note>復讎以後〉...
+	else if(sType == u"authorial")
+	{
+		sHtml += parseChild(Node);
+	}
+	// N19n0007.xml
+	// <note type="star" corresp="#0211020"></note>
+	else if(sType == u"star")
+	{
+		String sCorresp = GetAttr(Node, u"corresp");
+		sCorresp = String(sCorresp.begin()+1);
+		String sTmp = u"<a id=\"note_star_" + sCorresp +
+				 u"\" class=\"note_orig note_mod\" href=\"\" onclick=\"return false;\">[＊]</a>";
+		sHtml += sTmp;
 	}
 
 	// parseChild(Node); // 處理內容
@@ -2843,6 +2860,8 @@ inline String __fastcall CCBXML::GetAttr(_di_IXMLNode Node, String sAttr)
 // ---------------------------------------------------------------------------
 // 把校勘ID 變成校勘數字 0001001 -> 1 , 0001001a -> 1a
 // 科標解的為 0001k01 -> 1
+// 0004001-n01 -> 1 (B06n0003_p0004b18)
+// 0561001-1 -> 1 (B13n0080_p0561a14)
 String __fastcall CCBXML::NoteId2Num(String sId)
 {
 	if(sId == "") return "";
@@ -2851,6 +2870,15 @@ String __fastcall CCBXML::NoteId2Num(String sId)
 
 	int iStdLen;
 	String::iterator it = sId.begin();
+	String::iterator itend = sId.end();
+
+	// 處理 - 號
+	int iPos = sId.Pos0(u"-");
+	if(iPos >= 0)
+	{
+		itend = it + iPos;
+	}
+
 	it += 4; // 跳過頁碼
 
 	// 處理科標解的校勘
@@ -2858,12 +2886,12 @@ String __fastcall CCBXML::NoteId2Num(String sId)
 	if(*(it) == u'k' || *(it) == u'b' || *(it) == u'j')
 		it++;
 
-	while(*(it) == '0' && it != sId.end()-1)
+	while(*(it) == '0' && it != itend-1)
 	{
 		it++;
-    }
+	}
 
-	return String(it);
+	return String(it,itend-it);
 }
 
 //---------------------------------------------------------------------------

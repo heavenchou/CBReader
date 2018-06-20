@@ -707,7 +707,7 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 
     // 秀出找到幾個的訊息
 
-	lbSearchMsg->Text = u"找到" + String(iFoundCount) + u"筆，共花時間：" + String(t2-t1);
+	lbSearchMsg->Text = u"找到" + String(iFoundCount) + u"筆，共花時間：" + String((t2-t1)/1000.0) + u" 秒";
 
     int iTotalSearchFileNum = 0;
     bool bShowAll = false;

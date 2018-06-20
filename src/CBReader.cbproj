@@ -195,11 +195,11 @@
         <AppEnableHighDPI>true</AppEnableHighDPI>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <LinkPackageStatics>rtl.lib;fmx.lib;xmlrtl.lib</LinkPackageStatics>
         <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.2.0.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2018;LegalTrademarks=Copyright (C) CBETA 1998-2018;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.2;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
         <VerInfo_Debug>true</VerInfo_Debug>
+        <LinkPackageImports>rtl.bpi;fmx.bpi;xmlrtl.bpi</LinkPackageImports>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <Defines>NDEBUG;$(Defines)</Defines>
@@ -424,13 +424,13 @@
         </CppCompile>
         <FormResources Include="update.fmx"/>
         <FormResources Include="selectbook.fmx"/>
+        <FormResources Include="createhtml.fmx"/>
         <FormResources Include="about.fmx"/>
         <FormResources Include="buildindex.fmx"/>
         <FormResources Include="option.fmx"/>
         <FormResources Include="searchrange.fmx"/>
         <FormResources Include="logo.fmx"/>
         <FormResources Include="main.fmx"/>
-        <FormResources Include="createhtml.fmx"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -509,11 +509,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32240mt.dll" Class="DependencyModule">
                     <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
@@ -523,6 +518,11 @@
                     <Platform Name="OSX32">
                         <RemoteDir>Assets\</RemoteDir>
                         <RemoteName>Logo44x44.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

@@ -61,6 +61,8 @@ void __fastcall TfmCreateHtml::btStartClick(TObject *Sender)
 		Application->ProcessMessages();
 		if(Stop) return;
 	}
+
+    TDialogService::ShowMessage("OK");
 }
 //---------------------------------------------------------------------------
 
