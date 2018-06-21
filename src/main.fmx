@@ -118,7 +118,7 @@ object fmMain: TfmMain
       Size.Height = 584.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 3
+      TabIndex = 2
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -218,6 +218,7 @@ object fmMain: TfmMain
             Size.Width = 145.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object edFindSutra_Byline: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -227,6 +228,7 @@ object fmMain: TfmMain
             Size.Width = 145.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object btFindSutra: TButton
             Position.X = 224.000000000000000000
@@ -246,6 +248,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object edFindSutra_VolTo: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -255,6 +258,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object edFindSutra_SutraFrom: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -264,6 +268,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object edFindSutra_SutraTo: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -273,6 +278,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object Label15: TLabel
             Position.X = 16.000000000000000000
@@ -357,6 +363,7 @@ object fmMain: TfmMain
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
+            OnEnter = edFindSutra_VolFromEnter
           end
           object Label17: TLabel
             Position.X = 136.000000000000000000
@@ -436,7 +443,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 38.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -636,6 +643,7 @@ object fmMain: TfmMain
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoSutra_SutraNum: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -646,6 +654,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoSutra_Juan: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -656,6 +665,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoSutra_Page: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -666,6 +676,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoSutra_Field: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -676,6 +687,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoSutra_Line: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -686,6 +698,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoBook_Vol: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -696,6 +709,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoBook_VolEnter
           end
           object edGoBook_Page: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -706,6 +720,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoBook_VolEnter
           end
           object edGoBook_Field: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -716,6 +731,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoBook_VolEnter
           end
           object edGoBook_Line: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -726,6 +742,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoBook_VolEnter
           end
           object edGoByKeyword: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -736,6 +753,7 @@ object fmMain: TfmMain
             Size.Width = 209.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoByKeywordEnter
           end
           object cbGoBook_BookId: TComboBox
             Items.Strings = (
@@ -768,6 +786,7 @@ object fmMain: TfmMain
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 7
+            OnEnter = edGoBook_VolEnter
           end
           object btGoSutra: TButton
             Position.X = 192.000000000000000000
@@ -808,7 +827,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -841,6 +860,7 @@ object fmMain: TfmMain
             Size.Width = 217.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edTextSearchEnter
           end
           object btTextSearch: TButton
             Position.X = 192.000000000000000000
@@ -867,6 +887,7 @@ object fmMain: TfmMain
             TabOrder = 13
             Text = #25351#23450#27298#32034#31684#22285
             OnChange = cbSearchRangeChange
+            OnEnter = edTextSearchEnter
           end
         end
         object sgTextSearch: TStringGrid

@@ -206,6 +206,11 @@ __published: // IDE-managed Components
 	void __fastcall wmiUpdateURLClick(TObject *Sender);
 	void __fastcall wmiCreateHtmlClick(TObject *Sender);
 	void __fastcall wmiBuildIndexClick(TObject *Sender);
+	void __fastcall edFindSutra_VolFromEnter(TObject *Sender);
+	void __fastcall edGoSutra_SutraNumEnter(TObject *Sender);
+	void __fastcall edGoBook_VolEnter(TObject *Sender);
+	void __fastcall edGoByKeywordEnter(TObject *Sender);
+	void __fastcall edTextSearchEnter(TObject *Sender);
 
 private: // User declarations
 
@@ -263,6 +268,9 @@ public: // User declarations
 
     // 選擇全文檢索引擎
 	void __fastcall SetSearchEngine();
+
+	// 將所有的 Default 取消
+	void __fastcall CancelAllDefault();
 
 	// 初始資料
 	void __fastcall InitialData();

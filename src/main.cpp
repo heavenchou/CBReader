@@ -29,7 +29,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
     // 還有 fmAbout 的資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.2.0.0";
+	Version = u"0.3.0.0";
 	IsDebug = false;           // debug 變數
 
 #ifdef _Windows
@@ -524,6 +524,16 @@ void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
 	String sField = edGoSutra_Field->Text;
 	String sLine = edGoSutra_Line->Text;
 
+	if(sField == "1") sField = u"a";
+	else if(sField == "2") sField = u"b";
+	else if(sField == "3") sField = u"c";
+	else if(sField == "4") sField = u"d";
+	else if(sField == "5") sField = u"e";
+	else if(sField == "6") sField = u"f";
+	else if(sField == "7") sField = u"g";
+	else if(sField == "8") sField = u"h";
+	else if(sField == "9") sField = u"i";
+
 	CSeries * csCBETA = Bookcase->CBETA;
 
 	String sFile = csCBETA->CBGetFileNameBySutraNumJuan(sBook, sSutraNum, sJuan, sPage, sField, sLine);
@@ -637,6 +647,16 @@ void __fastcall TfmMain::btGoBookClick(TObject *Sender)
 	String sPage = edGoBook_Page->Text;
 	String sField = edGoBook_Field->Text;
 	String sLine = edGoBook_Line->Text;
+
+	if(sField == "1") sField = u"a";
+	else if(sField == "2") sField = u"b";
+	else if(sField == "3") sField = u"c";
+	else if(sField == "4") sField = u"d";
+	else if(sField == "5") sField = u"e";
+	else if(sField == "6") sField = u"f";
+	else if(sField == "7") sField = u"g";
+	else if(sField == "8") sField = u"h";
+	else if(sField == "9") sField = u"i";
 
 	CSeries * csCBETA = Bookcase->CBETA;
 
@@ -823,10 +843,18 @@ void __fastcall TfmMain::btGoByKeywordClick(TObject *Sender)
 
 	String sKey = edGoByKeyword->Text;
 	// T01n0001_p0001a01
-	String sPatten = "(\\D+)(\\d+)n.{5}p(.{4})(.)(\\d\\d)";
+	String sPatten = "([A-Z]+)(\\d+)n.{5}p(.{4})(.)(\\d\\d)";
 
 	regex = new TRegEx();
 	reMatch = regex->Matches(sKey, sPatten);
+	if(reMatch.Count == 0)
+	{
+		// (CBETA, T01, no. 1, p. 23c20-21)  , 新版
+		// (CBETA, T01, no. 1, p. 23, c20-21) , 舊版
+		sPatten = u"([A-Z]+)(\\d+), no\. .+?, pp?\. (\\S+?)(?:, )?([a-z])(\\d+)";
+		reMatch = regex->Matches(sKey, sPatten);
+    }
+
 	if(reMatch.Count)
 	{
 		reGroup = reMatch.Item[0].Groups;
@@ -842,7 +870,6 @@ void __fastcall TfmMain::btGoByKeywordClick(TObject *Sender)
 		String sFile = csCBETA->CBGetFileNameByVolPageFieldLine(sBook, sVol, sPage, sField, sLine);
 		ShowCBXML(sFile);
 	}
-
 }
 //---------------------------------------------------------------------------
 
@@ -1153,6 +1180,46 @@ void __fastcall TfmMain::wmiBuildIndexClick(TObject *Sender)
 	Bookcase->CBETA->LoadSearchEngine();
 
 	SetSearchEngine();
+}
+//---------------------------------------------------------------------------
+// 將所有的 Default 取消
+void __fastcall TfmMain::CancelAllDefault()
+{
+	btFindSutra->Default = false;
+	btGoSutra->Default = false;
+	btGoBook->Default = false;
+	btGoByKeyword->Default = false;
+	btTextSearch->Default = false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::edFindSutra_VolFromEnter(TObject *Sender)
+{
+	CancelAllDefault();
+	btFindSutra->Default = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::edGoSutra_SutraNumEnter(TObject *Sender)
+{
+	CancelAllDefault();
+	btGoSutra->Default = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::edGoBook_VolEnter(TObject *Sender)
+{
+	CancelAllDefault();
+	btGoBook->Default = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::edGoByKeywordEnter(TObject *Sender)
+{
+	CancelAllDefault();
+	btGoByKeyword->Default = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::edTextSearchEnter(TObject *Sender)
+{
+	CancelAllDefault();
+	btTextSearch->Default = true;
 }
 //---------------------------------------------------------------------------
 

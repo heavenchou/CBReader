@@ -102,9 +102,10 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	if(sLink != "")
 	{
 		HTMLText += "<script>\n"
-		"var gotoline = '#" + sLink + "';"
+		"location.href='#" + sLink + "';\n"
 		"</script>\n";
-		//"location.href='#" + sLink + "';\n"
+		// "var gotoline = '#" + sLink + "';"
+		// "location.href='#" + sLink + "';\n"
 	}
 
 	HTMLText += "\n</body>\n</html>";
