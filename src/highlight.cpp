@@ -157,12 +157,12 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 		iAfterThisPos = tpPtr->y;
     }
 
-	// 先移至 <div id="SearchHead"> 的地方
+	// 先移至 <div id='SearchHead'> 的地方
 
 	while(*pPoint)
 	{
-		//if (wcsncmp(pPoint, u"<div id=\"SearchHead\">", 21) == 0)
-		if (CMyStrUtil::StrHas(pPoint, u"<div id=\"SearchHead\">"))
+		//if (wcsncmp(pPoint, u"<div id='SearchHead'>", 21) == 0)
+		if (CMyStrUtil::StrHas(pPoint, u"<div id='SearchHead'>"))
 		{
 			pPoint += 21;
 			break;
