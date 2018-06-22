@@ -107,6 +107,12 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 		// "var gotoline = '#" + sLink + "';"
 		// "location.href='#" + sLink + "';\n"
 	}
+	else if(bShowHighlight)
+	{
+		HTMLText += "<script>\n"
+		"location.href='#Search_0_1';\n"
+		"</script>\n";
+    }
 
 	HTMLText += "\n</body>\n</html>";
 }

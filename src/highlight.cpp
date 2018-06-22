@@ -187,10 +187,10 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 		{
 			// 特殊狀況, 遇到行首標記
 
-			// if (wcsncmp(pPoint, u"<span class=\"linehead\">", 23) == 0 ||
-			// 	wcsncmp(pPoint, u"<span class=\"parahead\">", 23) == 0)
-			if (CMyStrUtil::StrHas(pPoint, u"<span class=\"linehead\">") ||
-				CMyStrUtil::StrHas(pPoint, u"<span class=\"parahead\">"))
+			// if (wcsncmp(pPoint, u"<span class='linehead'>", 23) == 0 ||
+			// 	wcsncmp(pPoint, u"<span class='parahead'>", 23) == 0)
+			if (CMyStrUtil::StrHas(pPoint, u"<span class='linehead'>") ||
+				CMyStrUtil::StrHas(pPoint, u"<span class='parahead'>"))
 			{
                 // <span class="linehead">GA009n0008_p0003a01║</span>
             	// <span class="linehead">ZS01n0001_p0001a01║</span>
@@ -218,7 +218,7 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 			}
 
 			// 處理缺字
-			if (CMyStrUtil::StrHas(pPoint, u"<span class=\"gaiji\""))
+			if (CMyStrUtil::StrHas(pPoint, u"<span class='gaiji'"))
 			{
 				AnalysisGiajiTag(&pPoint, &pDesPoint, &pUniPoint, &iDesLen, &iUniLen); // 處理缺字標記
 			}
@@ -620,9 +620,9 @@ void __fastcall CHighlight::AddWordAnchor(vector<System::WideChar> * vOutput, Sy
 	vector<int> * vData = &(mpWordAnchor[pPoint]);
 	for(int i=0; i<vData->size(); i+=3)
 	{
-		String sTag = u"<a name=\"Search_" + String((*vData)[i]) + u"_" +
-			String((*vData)[i+1]) + u"\" href=\"Search_" + String((*vData)[i]) +
-			u"_" + String((*vData)[i+2]) + "\"></a>";
+		String sTag = u"<a name='Search_" + String((*vData)[i]) + u"_" +
+			String((*vData)[i+1]) + u"' href='Search_" + String((*vData)[i]) +
+			u"_" + String((*vData)[i+2]) + "'></a>";
 		System::WideChar * wc = sTag.FirstChar();
 		while(*wc)
 		{
@@ -645,8 +645,8 @@ void __fastcall CHighlight::AddWordLink(vector<System::WideChar> * vOutput, Syst
 
 	// 先設定連結 <a href="
 
-	String sTag = u"<a href=\"#Search_" + String(iNum) + u"_" + String(iTime)
-		+ u"\" class=\"";
+	String sTag = u"<a href='#Search_" + String(iNum) + u"_" + String(iTime)
+		+ u"' class='";
 
 	// 設定 class
 
@@ -660,7 +660,7 @@ void __fastcall CHighlight::AddWordLink(vector<System::WideChar> * vOutput, Syst
 		sTag = sTag + u"SearchWord" + String(iMod);
 	}
 
-	sTag = sTag + u"\">";
+	sTag = sTag + u"'>";
 
 	System::WideChar * wc = sTag.FirstChar();
 	while(*wc)
@@ -810,7 +810,7 @@ void CHighlight::AnalysisGiajiTag(System::WideChar ** pPoint, System::WideChar *
 	{
 		*pDesPoint = sTag.FirstChar() + iPos + 10;	// 指到組字式的 [ 字
 		pTmp = *pDesPoint;
-		while(*pTmp != u'"')
+		while(*pTmp != u'\'')
 		{
 			*iDesLen = *iDesLen + 1;
 			pTmp++;
@@ -824,7 +824,7 @@ void CHighlight::AnalysisGiajiTag(System::WideChar ** pPoint, System::WideChar *
 	{
 		*pUniPoint = sTag.FirstChar() + iPos + 10;	// 指到 Unicode
 		pTmp = *pUniPoint;
-		while(*pTmp != u'"')
+		while(*pTmp != u'\'')
 		{
 			*iUniLen = *iUniLen + 1;
 			pTmp++;
