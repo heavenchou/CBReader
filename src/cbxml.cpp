@@ -159,6 +159,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		a:link		{color:#0000ff;}\n"
 	"		a:active	{color:#0000ff;}\n"
 	"		.nonhan	{font-family:'Times New Roman', 'Gandhari Unicode';}\n"
+	"       .gaiji {font-family:Arial,'Hanazono Mincho B';}\n"
 	"		.juannum {color:#008000; font-weight: normal; font-size:16pt;}\n"
 	"		.juanname {color:#0000FF; font-weight: bold; font-size:18pt;}\n"
 	"		.xu {color:#0000A0; font-weight: normal; font-size:16pt;}\n"

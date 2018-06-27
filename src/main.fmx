@@ -118,7 +118,7 @@ object fmMain: TfmMain
       Size.Height = 584.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 2
+      TabIndex = 3
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -443,7 +443,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 38.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -849,7 +849,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -861,7 +861,7 @@ object fmMain: TfmMain
         object Panel5: TPanel
           Align = Top
           Size.Width = 281.000000000000000000
-          Size.Height = 129.000000000000000000
+          Size.Height = 161.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
           object Label19: TLabel
@@ -896,7 +896,7 @@ object fmMain: TfmMain
           end
           object lbSearchMsg: TLabel
             Position.X = 8.000000000000000000
-            Position.Y = 104.000000000000000000
+            Position.Y = 136.000000000000000000
             Size.Width = 265.000000000000000000
             Size.Height = 17.000000000000000000
             Size.PlatformDefault = False
@@ -905,10 +905,22 @@ object fmMain: TfmMain
           end
           object cbSearchRange: TCheckBox
             Position.X = 8.000000000000000000
-            Position.Y = 72.000000000000000000
-            TabOrder = 13
+            Position.Y = 80.000000000000000000
+            TabOrder = 14
             Text = #25351#23450#27298#32034#31684#22285
             OnChange = cbSearchRangeChange
+            OnEnter = edTextSearchEnter
+          end
+          object cbSearchThisSutra: TCheckBox
+            Enabled = False
+            Position.X = 8.000000000000000000
+            Position.Y = 104.000000000000000000
+            Size.Width = 265.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 13
+            Text = #27298#32034#26412#32147#65306
+            OnChange = cbSearchThisSutraChange
             OnEnter = edTextSearchEnter
           end
         end
@@ -917,7 +929,7 @@ object fmMain: TfmMain
           CanFocus = True
           ClipChildren = True
           Size.Width = 281.000000000000000000
-          Size.Height = 406.000000000000000000
+          Size.Height = 374.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
           StyledSettings = [Family, Style, FontColor]
@@ -926,7 +938,7 @@ object fmMain: TfmMain
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
           Viewport.Width = 277.000000000000000000
-          Viewport.Height = 381.000000000000000000
+          Viewport.Height = 349.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000

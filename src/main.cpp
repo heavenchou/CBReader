@@ -26,7 +26,7 @@ TfmMain *fmMain;
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
 	// 更新版本注意事項, 要改底下, 還有 project 的版本與日期
-    // 還有 fmAbout 的資料
+    // 還有 fmAbout 的資料, 還有 debug 設定
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
 	Version = u"0.3.0.0";
@@ -632,7 +632,14 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 		String sCaption = ProgramTitle + u"《" + sName + u"》"
 				+ sVol + u", No. " + sSutra + u", 卷" + sJuan;
 		Caption = sCaption;
+
+		cbSearchThisSutra->Text = u"檢索本經：" + sName;
 	}
+
+	// 檢索本經
+
+	cbSearchThisSutra->Enabled = true;
+
 }
 //---------------------------------------------------------------------------
 // 由冊頁欄行呈現經文
@@ -713,7 +720,7 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 
 	clock_t t1 = clock();
 	bool bHasRange = false;     // 有範圍就要設定
-	if(cbSearchRange->IsChecked) bHasRange = true;
+	if(cbSearchRange->IsChecked || cbSearchThisSutra->IsChecked) bHasRange = true;
 
 	// 選擇全文檢索引擎, 若某一方為 0 , 則選另一方 (全 0 就不管了)
 	SetSearchEngine();
@@ -827,6 +834,7 @@ void __fastcall TfmMain::cbSearchRangeChange(TObject *Sender)
 		// 設定檢索範圍
 		TModalResult mr = fmSearchRange->ShowModal();
 		if(mr == mrCancel) cbSearchRange->IsChecked = false;
+        else cbSearchThisSutra->IsChecked = false;
 	}
 }
 //---------------------------------------------------------------------------
@@ -1220,6 +1228,32 @@ void __fastcall TfmMain::edTextSearchEnter(TObject *Sender)
 {
 	CancelAllDefault();
 	btTextSearch->Default = true;
+}
+//---------------------------------------------------------------------------
+// 檢索本經
+void __fastcall TfmMain::cbSearchThisSutraChange(TObject *Sender)
+{
+	if(cbSearchThisSutra->IsChecked)
+	{
+		// 設定檢索此經
+		if(SpineID == -1)
+		{
+			cbSearchThisSutra->IsChecked = false;
+			return;
+		}
+
+		cbSearchRange->IsChecked = false;
+
+		// 取出本經
+		String sThisBookId = Bookcase->CBETA->Spine->BookID->Strings[SpineID];
+		String sThisSutra = Bookcase->CBETA->Spine->Sutra->Strings[SpineID];
+
+		Bookcase->CBETA->SearchEngine_CB->BuildFileList->NoneSearch();
+		Bookcase->CBETA->SearchEngine_orig->BuildFileList->NoneSearch();
+
+		Bookcase->CBETA->SearchEngine_CB->BuildFileList->SearchThisSutra(sThisBookId,sThisSutra);
+		Bookcase->CBETA->SearchEngine_orig->BuildFileList->SearchThisSutra(sThisBookId,sThisSutra);
+	}
 }
 //---------------------------------------------------------------------------
 

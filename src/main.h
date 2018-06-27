@@ -179,6 +179,7 @@ __published: // IDE-managed Components
 	TMenuItem *wmiBuildIndex;
 	TLabel *Label22;
 	TLabel *Label23;
+	TCheckBox *cbSearchThisSutra;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -213,6 +214,7 @@ __published: // IDE-managed Components
 	void __fastcall edGoBook_VolEnter(TObject *Sender);
 	void __fastcall edGoByKeywordEnter(TObject *Sender);
 	void __fastcall edTextSearchEnter(TObject *Sender);
+	void __fastcall cbSearchThisSutraChange(TObject *Sender);
 
 private: // User declarations
 
