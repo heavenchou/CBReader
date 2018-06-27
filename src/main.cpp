@@ -851,9 +851,9 @@ void __fastcall TfmMain::btGoByKeywordClick(TObject *Sender)
 	{
 		// (CBETA, T01, no. 1, p. 23c20-21)  , ·sª©
 		// (CBETA, T01, no. 1, p. 23, c20-21) , ÂÂª©
-		sPatten = u"([A-Z]+)(\\d+), no\. .+?, pp?\. (\\S+?)(?:, )?([a-z])(\\d+)";
+		sPatten = u"([A-Z]+)(\\d+)\\s*,\\s*no\\.\\s*.+?,\\s*pp?\\.\\s*(\\S+?)(?:\\s*,\\s*)?([a-z])(\\d+)";
 		reMatch = regex->Matches(sKey, sPatten);
-    }
+	}
 
 	if(reMatch.Count)
 	{

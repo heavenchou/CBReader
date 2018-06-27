@@ -173,8 +173,8 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		.pts_head {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
 	"		.lg {color:#008040; font-weight: normal; font-size:16pt;}\n"
 	"		.corr {color:#FF0000; font-weight: normal; }\n"
-	"		.note {color:#9F5000; font-weight: normal; font-size:14pt;}\n";
-	"		table {border-collapse: collapse;}\n";
+	"		.note {color:#9F5000; font-weight: normal; font-size:14pt;}\n"
+	"		table {border-collapse: collapse; margin: 20px;}\n";
 
 	if(Setting->VerticalMode)
 		sHtml += u"		body {writing-mode: tb-rl;}\n";
@@ -362,7 +362,7 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 		else if (sTagName == u"ref")		sHtml = tag_ref(Node);
 		else if (sTagName == u"row")		sHtml = tag_row(Node);
 		else if (sTagName == u"cb:sg")		sHtml = tag_sg(Node);
-		else if (sTagName == u"cb:space")	sHtml = tag_space(Node);
+		else if (sTagName == u"space")		sHtml = tag_space(Node);
 		else if (sTagName == u"cb:t")		sHtml = tag_t(Node);
 		else if (sTagName == u"table")		sHtml = tag_table(Node);
 		else if (sTagName == u"term")		sHtml = tag_term(Node);
@@ -378,7 +378,11 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 		sHtml = Node->Text;
 		sHtml = StringReplace(sHtml, "\n", "", TReplaceFlags() << rfReplaceAll);
 		sHtml = StringReplace(sHtml, "\t", "", TReplaceFlags() << rfReplaceAll);
-
+		// xml 有 &amp; &lt;, 轉成 html 預設是 & < , CBR 程式讓 html 依然保持 &amp; &lt;
+		// 實際呈現會自動轉成 & <, 但引用複製需要處理校註的部份
+		// 所以只有 note_text 要處理 &amp; &lt; , text 不用處理
+		sHtml = StringReplace(sHtml, "&", "&amp;", TReplaceFlags() << rfReplaceAll);
+		sHtml = StringReplace(sHtml, "<", "&lt;", TReplaceFlags() << rfReplaceAll);
         // 移除新標待處理 ????
 	}
 
@@ -1570,10 +1574,18 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 		IsDebug = true;
 	}
 
-
-
 	// 印順導師著作有 type="old" 要忽略
 	if(sType == u"old") return u"";
+
+	// 卍續藏有 R 版的 lb <lb ed="R031" n="0622a03"/>
+	// 轉成 <span class='xr_head' data-linehead='R031p0622a03'></span>
+
+	if(BookId == "X" && *(sEd.FirstChar()) == 'R')
+	{
+		sHtml = "<span class='xr_head' data-linehead='" + sEd +
+		  "p" + sN + "'></span>";
+		return sHtml;
+	}
 
 	// 如果 ed 屬性不是本書, 則忽略, 主要是卍續藏是 X, 但有 ed="Rxxx" 的情況
 	if(sEd != BookId) return u"";
@@ -1691,7 +1703,7 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 		if(Setting->ShowLineFormat)
 			sHtml += u"<br class='lb_br' data-tagname='br'/>";
 		else
-			sHtml += u"<span class='lb_br' data-tagname='br'/>";
+			sHtml += u"<span class='lb_br' data-tagname='br'></span>";
 
 	sHtml += u"<a \nname='p" + PageLine + "'></a>";
 	if(Setting->ShowLineHead && Setting->ShowLineFormat)
@@ -2614,6 +2626,10 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 	{
 		PreFormatCount--;		// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
 	}
+	else if(sType.SubString0(0,4) == u"head")
+	{
+    	sHtml += u"</span>";
+    }
 
 	if(iSpecialType > 0) sHtml += u"</font></p>";
 	else
@@ -2658,14 +2674,16 @@ HTML 校註轉成 : <div type="rdg" data-wit="【宋】">長安</div>
 */
 String __fastcall CCBXML::tag_rdg(_di_IXMLNode Node)
 {
-String sHtml = u"";
+	String sHtml = u"";
 
 	String sWit = GetAttr(Node, "wit");
+	String sType = GetAttr(Node, "type");
 
 	bool bShowRdgText = false;
 	bool bRdgIsOrig = false;   // 判斷 lem 是否是原始校註
 
-	if(sWit.Pos0(BookVerName) >= 0) bRdgIsOrig = true;
+	if(sWit.Pos0(BookVerName) >= 0 && sType != "correctionRemark" && sType != "variantRemark")
+		bRdgIsOrig = true;
 
 	// 選擇原書校註, 且 rdg 是原始校註, 才呈現文字
 	if(Setting->CollationType == ctOrigCollation)

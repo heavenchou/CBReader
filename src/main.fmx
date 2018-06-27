@@ -467,7 +467,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#21367#32080#27083
-            TabOrder = 28
+            TabOrder = 30
           end
           object Label2: TLabel
             AutoSize = True
@@ -478,7 +478,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
-            TabOrder = 27
+            TabOrder = 29
           end
           object Label3: TLabel
             AutoSize = True
@@ -489,7 +489,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#34399
-            TabOrder = 26
+            TabOrder = 28
           end
           object Label4: TLabel
             AutoSize = True
@@ -500,7 +500,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21367#25976
-            TabOrder = 25
+            TabOrder = 27
           end
           object Label5: TLabel
             AutoSize = True
@@ -511,7 +511,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #38913#25976
-            TabOrder = 24
+            TabOrder = 26
           end
           object Label6: TLabel
             AutoSize = True
@@ -522,7 +522,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #27396
-            TabOrder = 23
+            TabOrder = 25
           end
           object Label7: TLabel
             AutoSize = True
@@ -533,7 +533,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34892#25976
-            TabOrder = 22
+            TabOrder = 24
           end
           object Label8: TLabel
             AutoSize = True
@@ -544,7 +544,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #26360#26412#32080#27083
-            TabOrder = 21
+            TabOrder = 23
           end
           object Label9: TLabel
             AutoSize = True
@@ -555,7 +555,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
-            TabOrder = 20
+            TabOrder = 22
           end
           object Label10: TLabel
             AutoSize = True
@@ -566,7 +566,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #20874#25976
-            TabOrder = 19
+            TabOrder = 21
           end
           object Label11: TLabel
             AutoSize = True
@@ -577,7 +577,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #38913#25976
-            TabOrder = 18
+            TabOrder = 20
           end
           object Label12: TLabel
             AutoSize = True
@@ -588,7 +588,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #27396
-            TabOrder = 17
+            TabOrder = 19
           end
           object Label13: TLabel
             AutoSize = True
@@ -599,7 +599,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34892#25976
-            TabOrder = 16
+            TabOrder = 18
           end
           object Label14: TLabel
             AutoSize = True
@@ -610,7 +610,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21069#24448#25351#23450#32147#25991
-            TabOrder = 15
+            TabOrder = 17
           end
           object cbGoSutra_BookId: TComboBox
             Items.Strings = (
@@ -820,6 +820,28 @@ object fmMain: TfmMain
             Text = 'Go'
             TextSettings.Font.Size = 18.000000000000000000
             OnClick = btGoByKeywordClick
+          end
+          object Label22: TLabel
+            AutoSize = True
+            Position.X = 16.000000000000000000
+            Position.Y = 424.000000000000000000
+            Size.Width = 233.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 18.000000000000000000
+            Text = #20363'1'#65306'T01n0001_p0001a01'
+            TabOrder = 16
+          end
+          object Label23: TLabel
+            AutoSize = True
+            Position.X = 16.000000000000000000
+            Position.Y = 448.000000000000000000
+            Size.Width = 233.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 18.000000000000000000
+            Text = #20363'2'#65306'T01, no. 1, p. 1a1'
+            TabOrder = 15
           end
         end
       end

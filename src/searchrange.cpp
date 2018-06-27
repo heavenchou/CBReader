@@ -42,7 +42,9 @@ void __fastcall TfmSearchRange::btOKClick(TObject *Sender)
 // 處理部類
 void __fastcall TfmSearchRange::BuleiSelect()
 {
-	fmMain->SearchEngine->BuildFileList->NoneSearch();
+	//fmMain->SearchEngine->BuildFileList->NoneSearch();
+	fmMain->Bookcase->CBETA->SearchEngine_CB->BuildFileList->NoneSearch();
+	fmMain->Bookcase->CBETA->SearchEngine_orig->BuildFileList->NoneSearch();
 	// 逐一搜尋樹狀
 	for(int i=0; i<tvBulei->Count; i++)
 	{
@@ -63,7 +65,9 @@ void __fastcall TfmSearchRange::BuleiSelect()
 				if(Catalog->Bulei->Strings[j] == sBuleiName)
 				{
 					// 此經要檢索
-					fmMain->SearchEngine->BuildFileList->SearchThisSutra(Catalog->ID->Strings[j],Catalog->SutraNum->Strings[j]);
+					//fmMain->SearchEngine->BuildFileList->SearchThisSutra(Catalog->ID->Strings[j],Catalog->SutraNum->Strings[j]);
+					fmMain->Bookcase->CBETA->SearchEngine_CB->BuildFileList->SearchThisSutra(Catalog->ID->Strings[j],Catalog->SutraNum->Strings[j]);
+					fmMain->Bookcase->CBETA->SearchEngine_orig->BuildFileList->SearchThisSutra(Catalog->ID->Strings[j],Catalog->SutraNum->Strings[j]);
                 }
 			}
 		}
@@ -73,7 +77,9 @@ void __fastcall TfmSearchRange::BuleiSelect()
 // 處理原書
 void __fastcall TfmSearchRange::BookSelect()
 {
-	fmMain->SearchEngine->BuildFileList->NoneSearch();
+	//fmMain->SearchEngine->BuildFileList->NoneSearch();
+	fmMain->Bookcase->CBETA->SearchEngine_CB->BuildFileList->NoneSearch();
+	fmMain->Bookcase->CBETA->SearchEngine_orig->BuildFileList->NoneSearch();
 	// 逐一搜尋樹狀
 	for(int i=0; i<tvBook->Count; i++)
 	{
@@ -84,7 +90,9 @@ void __fastcall TfmSearchRange::BookSelect()
 			// 取出前面的代碼
 			int iPos = sName.Pos0(" ");
 			String sBookId = sName.SubString0(0,iPos);
-			fmMain->SearchEngine->BuildFileList->SearchThisBoook(sBookId);
+			//fmMain->SearchEngine->BuildFileList->SearchThisBoook(sBookId);
+			fmMain->Bookcase->CBETA->SearchEngine_CB->BuildFileList->SearchThisBoook(sBookId);
+			fmMain->Bookcase->CBETA->SearchEngine_orig->BuildFileList->SearchThisBoook(sBookId);
 		}
 
 	}

@@ -177,6 +177,8 @@ __published: // IDE-managed Components
 	TMenuItem *wmiUpdateURL;
 	TMenuItem *wmiCreateHtml;
 	TMenuItem *wmiBuildIndex;
+	TLabel *Label22;
+	TLabel *Label23;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
