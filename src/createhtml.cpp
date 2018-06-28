@@ -17,6 +17,7 @@ __fastcall TfmCreateHtml::TfmCreateHtml(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TfmCreateHtml::btStartClick(TObject *Sender)
 {
+#ifdef _Windows
 	Stop = false;
 	// 如果找到第一筆, 而且有勾選 "繼續" , 就持續下去
 	bool bGoing = false;
@@ -62,7 +63,8 @@ void __fastcall TfmCreateHtml::btStartClick(TObject *Sender)
 		if(Stop) return;
 	}
 
-    TDialogService::ShowMessage("OK");
+	TDialogService::ShowMessage("OK");
+#endif
 }
 //---------------------------------------------------------------------------
 

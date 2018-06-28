@@ -1256,4 +1256,36 @@ void __fastcall TfmMain::cbSearchThisSutraChange(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+void __fastcall TfmMain::wmiOnlineDocClick(TObject *Sender)
+{
+#ifdef _Windows
+	String sURL = u"http://www.cbeta.org/cbreader/doc/";
+	ShellExecute(0,L"open",sURL.c_str(),L"",L"", SW_SHOW);
+#endif
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::wmiOnlineFAQClick(TObject *Sender)
+{
+#ifdef _Windows
+	String sURL = u"http://www.cbeta.org/CBReader2X_FAQ.php";
+	ShellExecute(0,L"open",sURL.c_str(),L"",L"", SW_SHOW);
+#endif
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::mmiOnlineDocClick(TObject *Sender)
+{
+#ifdef __APPLE__
+	String sURL = u"http://www.cbeta.org/cbreader/doc/";
+	system(AnsiString("open " + AnsiString(sURL)).c_str());
+#endif
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::mmiOnlineFAQClick(TObject *Sender)
+{
+#ifdef __APPLE__
+	String sURL = u"http://www.cbeta.org/CBReader2X_FAQ.php";
+	system(AnsiString("open " + AnsiString(sURL)).c_str());
+#endif
+}
+//---------------------------------------------------------------------------
 

@@ -180,6 +180,12 @@ __published: // IDE-managed Components
 	TLabel *Label22;
 	TLabel *Label23;
 	TCheckBox *cbSearchThisSutra;
+	TMenuItem *wmiHelp;
+	TMenuItem *wmiOnlineDoc;
+	TMenuItem *wmiOnlineFAQ;
+	TMenuItem *mmiHelp;
+	TMenuItem *mmiOnlineDoc;
+	TMenuItem *mmiOnlineFAQ;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -215,6 +221,10 @@ __published: // IDE-managed Components
 	void __fastcall edGoByKeywordEnter(TObject *Sender);
 	void __fastcall edTextSearchEnter(TObject *Sender);
 	void __fastcall cbSearchThisSutraChange(TObject *Sender);
+	void __fastcall wmiOnlineDocClick(TObject *Sender);
+	void __fastcall wmiOnlineFAQClick(TObject *Sender);
+	void __fastcall mmiOnlineDocClick(TObject *Sender);
+	void __fastcall mmiOnlineFAQClick(TObject *Sender);
 
 private: // User declarations
 

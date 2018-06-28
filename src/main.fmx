@@ -72,8 +72,8 @@ object fmMain: TfmMain
             Size.Height = 551.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            Viewport.Width = 229.000000000000000000
-            Viewport.Height = 547.000000000000000000
+            Viewport.Width = 233.000000000000000000
+            Viewport.Height = 551.000000000000000000
           end
           object Panel7: TPanel
             Align = Top
@@ -118,7 +118,7 @@ object fmMain: TfmMain
       Size.Height = 584.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 3
+      TabIndex = 0
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -134,7 +134,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 54.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -150,8 +150,8 @@ object fmMain: TfmMain
           Size.PlatformDefault = False
           TabOrder = 0
           Images = ImageList1
-          Viewport.Width = 277.000000000000000000
-          Viewport.Height = 482.000000000000000000
+          Viewport.Width = 281.000000000000000000
+          Viewport.Height = 486.000000000000000000
         end
         object Panel8: TPanel
           Align = Top
@@ -409,8 +409,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 277.000000000000000000
-          Viewport.Height = 332.000000000000000000
+          Viewport.Width = 281.000000000000000000
+          Viewport.Height = 357.000000000000000000
           object StringColumn1: TStringColumn
             Header = #32147#21517
             Size.Width = 130.000000000000000000
@@ -849,7 +849,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -872,11 +872,11 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #27298#32034#23383#20018
-            TabOrder = 11
+            TabOrder = 13
           end
           object edTextSearch: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
-            TabOrder = 5
+            TabOrder = 1
             Position.X = 8.000000000000000000
             Position.Y = 40.000000000000000000
             Size.Width = 217.000000000000000000
@@ -890,7 +890,7 @@ object fmMain: TfmMain
             Size.Width = 33.000000000000000000
             Size.Height = 25.000000000000000000
             Size.PlatformDefault = False
-            TabOrder = 1
+            TabOrder = 4
             Text = #25214
             OnClick = btTextSearchClick
           end
@@ -901,12 +901,12 @@ object fmMain: TfmMain
             Size.Height = 17.000000000000000000
             Size.PlatformDefault = False
             Text = #25991#23383#22312#21021#22987#26178#26371#28165#38500
-            TabOrder = 12
+            TabOrder = 14
           end
           object cbSearchRange: TCheckBox
             Position.X = 8.000000000000000000
             Position.Y = 80.000000000000000000
-            TabOrder = 14
+            TabOrder = 2
             Text = #25351#23450#27298#32034#31684#22285
             OnChange = cbSearchRangeChange
             OnEnter = edTextSearchEnter
@@ -918,7 +918,7 @@ object fmMain: TfmMain
             Size.Width = 265.000000000000000000
             Size.Height = 19.000000000000000000
             Size.PlatformDefault = False
-            TabOrder = 13
+            TabOrder = 3
             Text = #27298#32034#26412#32147#65306
             OnChange = cbSearchThisSutraChange
             OnEnter = edTextSearchEnter
@@ -937,8 +937,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
-          Viewport.Width = 277.000000000000000000
-          Viewport.Height = 349.000000000000000000
+          Viewport.Width = 281.000000000000000000
+          Viewport.Height = 374.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000
@@ -3755,6 +3755,19 @@ object fmMain: TfmMain
         Text = #26356#26032#27298#26597
         OnClick = mmiUpdateClick
       end
+    end
+    object mmiHelp: TMenuItem
+      Text = #24171#21161
+      object mmiOnlineDoc: TMenuItem
+        Locked = True
+        Text = #32218#19978#35498#26126
+        OnClick = mmiOnlineDocClick
+      end
+      object mmiOnlineFAQ: TMenuItem
+        Locked = True
+        Text = #24120#35211#21839#31572
+        OnClick = mmiOnlineFAQClick
+      end
       object mmiAbout: TMenuItem
         Locked = True
         Text = #38364#26044
@@ -6403,9 +6416,24 @@ object fmMain: TfmMain
       Text = #26356#26032#27298#26597
       OnClick = mmiUpdateClick
     end
-    object wmiAbout: TMenuItem
-      Text = #38364#26044
-      OnClick = mmiAboutClick
+    object wmiHelp: TMenuItem
+      Locked = True
+      Text = #24171#21161
+      object wmiOnlineDoc: TMenuItem
+        Locked = True
+        Text = #32218#19978#35498#26126
+        OnClick = wmiOnlineDocClick
+      end
+      object wmiOnlineFAQ: TMenuItem
+        Locked = True
+        Text = #24120#35211#21839#31572
+        OnClick = wmiOnlineFAQClick
+      end
+      object wmiAbout: TMenuItem
+        Locked = True
+        Text = #38364#26044
+        OnClick = mmiAboutClick
+      end
     end
     object wmiDebug: TMenuItem
       Text = #31649#29702#32773#21151#33021

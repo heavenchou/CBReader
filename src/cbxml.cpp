@@ -2799,7 +2799,7 @@ String __fastcall CCBXML::tag_space(_di_IXMLNode Node)
 	else
 	{
 		// 隔行對照時, 沒有字的地方也要秀出空格, 以便與悉曇字對應
-		if(true) // if(NextLine->InNextLine) // ???? 隔行對照待處理
+		if(NextLine->InNextLine)
 			sHtml += u"　";
 		else
 			sHtml += u"";
