@@ -55,6 +55,7 @@ __published:	// IDE-managed Components
 	TNetHTTPRequest *nhrDownload;
 	TEdit *edBookcasePath;
 	TLabel *Label2;
+	TLabel *lbMessage;
 	void __fastcall btUpdateClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall nhrCBRRequestCompleted(TObject * const Sender, IHTTPResponse * const AResponse);
