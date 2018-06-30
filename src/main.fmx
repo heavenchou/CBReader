@@ -72,8 +72,8 @@ object fmMain: TfmMain
             Size.Height = 551.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            Viewport.Width = 233.000000000000000000
-            Viewport.Height = 551.000000000000000000
+            Viewport.Width = 229.000000000000000000
+            Viewport.Height = 547.000000000000000000
           end
           object Panel7: TPanel
             Align = Top
@@ -118,7 +118,7 @@ object fmMain: TfmMain
       Size.Height = 584.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 0
+      TabIndex = 1
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -134,7 +134,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 54.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -150,8 +150,8 @@ object fmMain: TfmMain
           Size.PlatformDefault = False
           TabOrder = 0
           Images = ImageList1
-          Viewport.Width = 281.000000000000000000
-          Viewport.Height = 486.000000000000000000
+          Viewport.Width = 277.000000000000000000
+          Viewport.Height = 482.000000000000000000
         end
         object Panel8: TPanel
           Align = Top
@@ -195,7 +195,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -207,7 +207,7 @@ object fmMain: TfmMain
         object Panel3: TPanel
           Align = Top
           Size.Width = 281.000000000000000000
-          Size.Height = 169.000000000000000000
+          Size.Height = 201.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
           object edFindSutra_SutraName: TEdit
@@ -288,7 +288,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #20874#25976#24478
-            TabOrder = 13
+            TabOrder = 14
           end
           object Label35: TLabel
             Position.X = 16.000000000000000000
@@ -298,7 +298,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#34399#24478
-            TabOrder = 10
+            TabOrder = 11
           end
           object Label33: TLabel
             Position.X = 16.000000000000000000
@@ -308,7 +308,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#21517
-            TabOrder = 9
+            TabOrder = 10
           end
           object Label34: TLabel
             Position.X = 16.000000000000000000
@@ -318,7 +318,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #20316#35695#32773
-            TabOrder = 8
+            TabOrder = 9
           end
           object Label16: TLabel
             AutoSize = True
@@ -329,7 +329,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
-            TabOrder = 14
+            TabOrder = 15
           end
           object cbFindSutra_BookId: TComboBox
             Items.Strings = (
@@ -373,7 +373,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21040
-            TabOrder = 12
+            TabOrder = 13
           end
           object Label18: TLabel
             Position.X = 136.000000000000000000
@@ -383,14 +383,24 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21040
-            TabOrder = 11
+            TabOrder = 12
+          end
+          object lbFindSutraCount: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 176.000000000000000000
+            Size.Width = 201.000000000000000000
+            Size.Height = 25.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 18.000000000000000000
+            Text = #20849#25214#21040' 0 '#31558
+            TabOrder = 8
           end
         end
         object Splitter2: TSplitter
           Align = Top
           Cursor = crVSplit
           MinSize = 20.000000000000000000
-          Position.Y = 169.000000000000000000
+          Position.Y = 201.000000000000000000
           ShowGrip = False
           Size.Width = 281.000000000000000000
           Size.Height = 9.000000000000000000
@@ -401,7 +411,7 @@ object fmMain: TfmMain
           CanFocus = True
           ClipChildren = True
           Size.Width = 281.000000000000000000
-          Size.Height = 357.000000000000000000
+          Size.Height = 325.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
           StyledSettings = [Family, Style, FontColor]
@@ -409,8 +419,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 281.000000000000000000
-          Viewport.Height = 357.000000000000000000
+          Viewport.Width = 277.000000000000000000
+          Viewport.Height = 300.000000000000000000
           object StringColumn1: TStringColumn
             Header = #32147#21517
             Size.Width = 130.000000000000000000
@@ -937,8 +947,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
-          Viewport.Width = 281.000000000000000000
-          Viewport.Height = 374.000000000000000000
+          Viewport.Width = 277.000000000000000000
+          Viewport.Height = 349.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000

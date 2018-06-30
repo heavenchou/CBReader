@@ -505,7 +505,11 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 				sgFindSutra->RowCount += 10;
 		}
 		sgFindSutra->RowCount = iGridIndex;
-        sgFindSutra->EndUpdate();
+		sgFindSutra->EndUpdate();
+
+		lbFindSutraCount->Text = u"共找到 " + String(iGridIndex) + u" 筆";
+		if(iGridIndex == 0)
+            TDialogService::ShowMessage(u"沒有滿足此條件的資料");
 	}
 }
 //---------------------------------------------------------------------------

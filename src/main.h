@@ -186,6 +186,7 @@ __published: // IDE-managed Components
 	TMenuItem *mmiHelp;
 	TMenuItem *mmiOnlineDoc;
 	TMenuItem *mmiOnlineFAQ;
+	TLabel *lbFindSutraCount;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);

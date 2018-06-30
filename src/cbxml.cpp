@@ -2832,6 +2832,7 @@ String __fastcall CCBXML::tag_t(_di_IXMLNode Node)
 	String sHtml = u"";
 	String sPlace = GetAttr(Node, u"place");
 	String sRend = GetAttr(Node, u"rend");
+	String sOldMarginLeft = MarginLeft;
 	if(sPlace == u"foot") return u"";
 
 	// 如果是隔行對照, 就要累加 <t> 的計數器
@@ -2861,6 +2862,8 @@ String __fastcall CCBXML::tag_t(_di_IXMLNode Node)
 	}
 
 	sHtml += parseChild(Node); // 處理內容
+
+	MarginLeft = sOldMarginLeft;
 
     // 判斷是不是在隔行對照
 	if(NextLine->InNextLine || !NextLine->IsOutput)
