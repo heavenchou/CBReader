@@ -94,6 +94,11 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
         delete HL;
 	}
 
+	// 版本資訊
+
+	String sVerInfo = GetVerInfo();
+	HTMLText += sVerInfo;
+
 	// 記錄校勘
 	HTMLText += "<div id='CollationList' style='display:none'>\n";
 	HTMLText += HTMLCollation;
@@ -1849,7 +1854,7 @@ String __fastcall CCBXML::tag_lem(_di_IXMLNode Node)
 
 行首的Ｌ在段落模式會隱藏，<p> 在原書模式也會消失作用。
 
-/* 2018註 : 底下這一段怪怪的, 不看好了
+2018註 : 底下這一段怪怪的, 不看好了
 	// 2016 的新作法:
 	// 原本整段的空格是用空格. 例如 : <lg rend="margin-left:1"> , 2014 之前的版本是每一行前面都加上一個空格. 不過折行就不會空格了.
 	// 2016 就改成用段落 <p class="lg" style="margin-left:1em;"> , 因此每一行前面就不用加空格.
@@ -3538,3 +3543,56 @@ String __fastcall CCBXML::TableTrReplace (const TMatch &Match)
 	if(IsDebug) ShowMessage(c);
 	return a+c+b;
 }
+// ---------------------------------------------------------------------------
+// 取得經文版本資訊
+String __fastcall CCBXML::GetVerInfo()
+{
+	/*
+	<projectDesc>
+		<p xml:lang="en" cb:type="ly">Text as provided by Mr. Hsiao Chen-Kuo, Text as provided by Mr. Chang Wen-Ming, Text as provided by Anonymous from USA, Punctuated text as provided by Dhammavassarama</p>
+		<p xml:lang="zh-Hant" cb:type="ly">蕭鎮國大德提供，張文明大德提供，北美某大德提供，法雨道場提供新式標點</p>
+	</projectDesc>
+	*/
+
+	String sVerInfo = u"";
+	String sSourceFrom = u"";	// 來源
+	String sBookName = u""; 	// 版本名稱 : 大正藏
+	String sVolNum = CMyStrUtil::TrimLeft(VolId, u'0');    // 冊
+	String sSutraNum = CMyStrUtil::TrimLeft(SutraId, u'0');;  // 經號
+	String sSutraName = "";   // 經名
+	String sPublishDate = "";   // 發行日期
+
+	_di_IXMLNode xnProjectDesc = Document->DocumentElement->ChildNodes->Nodes["teiHeader"]->ChildNodes->Nodes["encodingDesc"]->ChildNodes->Nodes["projectDesc"];
+
+	for (int i = 0; i < xnProjectDesc->ChildNodes->Count; i++)
+	{
+		_di_IXMLNode Node = xnProjectDesc->ChildNodes->Get(i);
+		String sType = GetAttr(Node, "cb:type");
+		String sLang = GetAttr(Node, "xml:lang");
+		String sNodeName = Node->GetNodeName();
+
+		if(sNodeName == u"p" && sType == u"ly" && sLang == u"zh-Hant")
+		{
+			sSourceFrom = Node->GetText();
+		}
+	}
+
+	sBookName = fmMain->Bookcase->CBETA->BookData->GetBookName(BookId);
+	// 經名要移除 (第X卷)
+	// 為了還原 V0.3 這些先 mark 起來
+	//sSutraName = CMyCBUtil::CutJuanBeforeSutraName(SutraName);
+	sSutraName = SutraName;
+	sPublishDate = fmMain->Bookcase->CBETA->PublishDate;
+
+	sVerInfo = u"<br><br><span style='margin:15px; padding: 25px; border-radius: 20px; background-color: rgb(200, 234, 198); display:block; box-shadow:inset -3px -3px 10px #9bbc99'>\n";
+	sVerInfo += u"【經文資訊】" + sBookName + u"第 " + sVolNum + u" 冊 No. " + sSutraNum + u" " + sSutraName + u"<br>\n";
+	sVerInfo += u"【版本記錄】發行日期：" + sPublishDate + u"<br>\n";
+	sVerInfo += u"【編輯說明】本資料庫由中華電子佛典協會（CBETA）依" + sBookName + u"所編輯<br>\n";
+	sVerInfo += u"【原始資料】" + sSourceFrom + u"<br>\n";
+	sVerInfo += u"【版權宣告】詳細說明請參閱【<a href='http://www.cbeta.org/copyright.php' target='_blank'>中華電子佛典協會資料庫版權宣告</a>】<br>\n";
+	sVerInfo += u"</span><br>\n";
+
+    return sVerInfo;
+}
+// ---------------------------------------------------------------------------
+

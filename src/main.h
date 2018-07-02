@@ -187,6 +187,13 @@ __published: // IDE-managed Components
 	TMenuItem *mmiOnlineDoc;
 	TMenuItem *mmiOnlineFAQ;
 	TLabel *lbFindSutraCount;
+	TButton *btBoolean;
+	TPopupMenu *pmBoolean;
+	TMenuItem *miNear;
+	TMenuItem *miBefore;
+	TMenuItem *miAnd;
+	TMenuItem *miOr;
+	TMenuItem *miExclude;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -226,6 +233,12 @@ __published: // IDE-managed Components
 	void __fastcall wmiOnlineFAQClick(TObject *Sender);
 	void __fastcall mmiOnlineDocClick(TObject *Sender);
 	void __fastcall mmiOnlineFAQClick(TObject *Sender);
+	void __fastcall miNearClick(TObject *Sender);
+	void __fastcall btBooleanClick(TObject *Sender);
+	void __fastcall miOrClick(TObject *Sender);
+	void __fastcall miExcludeClick(TObject *Sender);
+	void __fastcall miAndClick(TObject *Sender);
+	void __fastcall miBeforeClick(TObject *Sender);
 
 private: // User declarations
 
@@ -237,7 +250,8 @@ public: // User declarations
 
     String Version;     	// 版本
 	String ProgramTitle;    // 程式名稱
-    bool IsDebug;           // debug 變數
+	bool IsDebug;           // debug 變數
+    String DebugString;     // debug 口令
 
     int SelectedBook;   // 目前選中的書, -1 表示還沒選
 

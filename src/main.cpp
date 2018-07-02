@@ -30,6 +30,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
 	Version = u"0.3.0.0";
+	DebugString = u"Heaven";     // debug 口令
 	IsDebug = false;           // debug 變數
 
 #ifdef _Windows
@@ -60,6 +61,12 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	btOpenBookcase->Visible = false;
 	btOpenSimpleNav->Visible = false;
 	btOpenBookNav->Visible = false;
+
+	// 因為下拉選單寬度不能為奇數, 所以要調整
+    // 為了還原 V0.3 這些先 mark 起來
+	//if(Floor(cbFindSutra_BookId->Width) % 2 == 1) cbFindSutra_BookId->Width -= 1;
+	//if(Floor(cbGoSutra_BookId->Width) % 2 == 1) cbGoSutra_BookId->Width -= 1;
+	//if(Floor(cbGoBook_BookId->Width) % 2 == 1) cbGoBook_BookId->Width -= 1;
 
 	#ifdef _Windows
 	wmiDebug->Visible = false;
@@ -400,7 +407,7 @@ bool __fastcall TfmMain::IsSelectedBook()
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 {
-	if(edFindSutra_SutraName->Text == u"Heaven")
+	if(edFindSutra_SutraName->Text == DebugString)
 	{
 		IsDebug = true;
 		edFindSutra_SutraName->Text = u"";
@@ -622,15 +629,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 		String sName = Bookcase->CBETA->Catalog->SutraName->Strings[iIndex];
 
 		// 經名移除 (第X卷-第x卷)
-		if(sName.Pos0(u"(第") >= 0)
-		{
-			int iPos = sName.Pos0(u"(第");
-			if(sName.Pos0(u"卷)") >= 0)
-			{
-                sName = sName.SubString0(0,iPos);
-            }
-		}
-
+		sName = CMyCBUtil::CutJuanBeforeSutraName(sName);
 		sJuan = CMyStrUtil::TrimLeft(sJuan, u'0');
 		sSutra = CMyStrUtil::TrimLeft(sSutra, u'0');
 		String sCaption = ProgramTitle + u"《" + sName + u"》"
@@ -786,8 +785,11 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 
 			// 找到了
 
+			// 經名要移除 (第X卷)
+			String sSutraName = CMyCBUtil::CutJuanBeforeSutraName(Catalog->SutraName->Strings[iCatalogIndex]);
+
 			sgTextSearch->Cells[0][iGridIndex]=SearchEngine->FileFound->Ints[i];
-			sgTextSearch->Cells[1][iGridIndex]=Catalog->SutraName->Strings[iCatalogIndex];
+			sgTextSearch->Cells[1][iGridIndex]=sSutraName;
 			sgTextSearch->Cells[2][iGridIndex]=Catalog->ID->Strings[iCatalogIndex];
 			sgTextSearch->Cells[3][iGridIndex]=Spine->VolNum->Strings[i];
 			sgTextSearch->Cells[4][iGridIndex]=Catalog->Part->Strings[iCatalogIndex];
@@ -1290,6 +1292,45 @@ void __fastcall TfmMain::mmiOnlineFAQClick(TObject *Sender)
 	String sURL = u"http://www.cbeta.org/CBReader2X_FAQ.php";
 	system(AnsiString("open " + AnsiString(sURL)).c_str());
 #endif
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btBooleanClick(TObject *Sender)
+{
+	TPointF FP;
+	// Initialize the coordinates to the origin of the button control.
+	FP.X = 0;
+	FP.Y = 0;
+	// Transposes the coordinates in the context of the form.
+	FP = btBoolean->LocalToAbsolute(FP);
+	// Transposes the coordinates in the context of the screen.
+	FP = ClientToScreen(FP);
+	// Display the popup menu at the computed coordinates.
+	pmBoolean->Popup(FP.X, FP.Y + btBoolean->Height + 10);
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::miNearClick(TObject *Sender)
+{
+	edTextSearch->Text = edTextSearch->Text + u"+";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::miOrClick(TObject *Sender)
+{
+	edTextSearch->Text = edTextSearch->Text + u",";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::miExcludeClick(TObject *Sender)
+{
+	edTextSearch->Text = edTextSearch->Text + u"-";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::miAndClick(TObject *Sender)
+{
+	edTextSearch->Text = edTextSearch->Text + u"&";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::miBeforeClick(TObject *Sender)
+{
+	edTextSearch->Text = edTextSearch->Text + u"*";
 }
 //---------------------------------------------------------------------------
 

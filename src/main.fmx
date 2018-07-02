@@ -231,13 +231,17 @@ object fmMain: TfmMain
             OnEnter = edFindSutra_VolFromEnter
           end
           object btFindSutra: TButton
+            Hint = #25628#23563
             Position.X = 224.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 41.000000000000000000
+            Size.Width = 33.000000000000000000
             Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
+            StyleLookup = 'searchtoolbuttonbordered'
             TabOrder = 7
             Text = #25214
+            ParentShowHint = False
+            ShowHint = True
             OnClick = btFindSutraClick
           end
           object edFindSutra_VolFrom: TEdit
@@ -359,11 +363,10 @@ object fmMain: TfmMain
             ItemIndex = 0
             Position.X = 72.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 144.000000000000000000
+            Size.Width = 145.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            OnEnter = edFindSutra_VolFromEnter
           end
           object Label17: TLabel
             Position.X = 136.000000000000000000
@@ -889,19 +892,23 @@ object fmMain: TfmMain
             TabOrder = 1
             Position.X = 8.000000000000000000
             Position.Y = 40.000000000000000000
-            Size.Width = 217.000000000000000000
+            Size.Width = 225.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             OnEnter = edTextSearchEnter
           end
           object btTextSearch: TButton
-            Position.X = 192.000000000000000000
-            Position.Y = 8.000000000000000000
+            Hint = #25628#23563
+            Position.X = 232.000000000000000000
+            Position.Y = 16.000000000000000000
             Size.Width = 33.000000000000000000
             Size.Height = 25.000000000000000000
             Size.PlatformDefault = False
+            StyleLookup = 'searchtoolbuttonbordered'
             TabOrder = 4
             Text = #25214
+            ParentShowHint = False
+            ShowHint = True
             OnClick = btTextSearchClick
           end
           object lbSearchMsg: TLabel
@@ -932,6 +939,20 @@ object fmMain: TfmMain
             Text = #27298#32034#26412#32147#65306
             OnChange = cbSearchThisSutraChange
             OnEnter = edTextSearchEnter
+          end
+          object btBoolean: TButton
+            Hint = #25628#23563#24067#26519#36939#31639#31526#34399
+            Position.X = 232.000000000000000000
+            Position.Y = 48.000000000000000000
+            Size.Width = 33.000000000000000000
+            Size.Height = 25.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'playtoolbuttonbordered'
+            TabOrder = 15
+            Text = 'btBoolean'
+            ParentShowHint = False
+            ShowHint = True
+            OnClick = btBooleanClick
           end
         end
         object sgTextSearch: TStringGrid
@@ -6462,6 +6483,30 @@ object fmMain: TfmMain
         Text = #29986#29983#32034#24341#27284
         OnClick = wmiBuildIndexClick
       end
+    end
+  end
+  object pmBoolean: TPopupMenu
+    Left = 243
+    Top = 208
+    object miNear: TMenuItem
+      Text = #65291' near'
+      OnClick = miNearClick
+    end
+    object miBefore: TMenuItem
+      Text = #65290' before'
+      OnClick = miBeforeClick
+    end
+    object miAnd: TMenuItem
+      Text = #65286' and'
+      OnClick = miAndClick
+    end
+    object miOr: TMenuItem
+      Text = #65292' or'
+      OnClick = miOrClick
+    end
+    object miExclude: TMenuItem
+      Text = #65293' exclude'
+      OnClick = miExcludeClick
     end
   end
   object ImageList1: TImageList

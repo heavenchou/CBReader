@@ -6,6 +6,22 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 
+// 將經名後面的 (第X卷-第X卷) or (第X卷) 移除
+String __fastcall CMyCBUtil::CutJuanBeforeSutraName(String sName)
+{
+	if(sName.Pos0(u"(第") >= 0)
+	{
+		int iPos = sName.Pos0(u"(第");
+		int iPos2 = sName.Pos0(u"卷)");
+		// (第 x 卷) 必須在最後
+		if(iPos2 == sName.Length()-2)
+		{
+			sName = sName.SubString0(0,iPos);
+		}
+	}
+	return sName;
+}
+//---------------------------------------------------------------------------
 String __fastcall CMyStrUtil::SubString(String s, int i)
 {
 	int iLen = s.Length();

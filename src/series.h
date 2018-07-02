@@ -33,6 +33,7 @@ public: // User declarations
     String ID;          // ID 代碼, CBETA 的指定為 CBEAT
 	String Title;       // 標題
 	String Creator;     // 作者
+	String PublishDate; // 出版日期
 
 	String NavFile;     // 導覽文件
 	String Nav2File;     // 導覽文件 (CBETA 特有的, 未來再考慮如何處理多目錄)

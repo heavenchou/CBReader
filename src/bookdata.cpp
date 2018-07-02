@@ -120,6 +120,16 @@ String __fastcall CBookData::GetVerName(String sBook)
 		return u""; // 找不到傳回空字串
 }
 // ---------------------------------------------------------------------------
+// 傳入 T, 傳回 "大正新脩大藏經" 版本名稱 , 找不到傳回空字串
+String __fastcall CBookData::GetBookName(String sBook)
+{
+	int i = GetBookIndex(sBook);
+	if(i >= 0)
+		return BookName->Strings[i];
+	else
+		return u""; // 找不到傳回空字串
+}
+// ---------------------------------------------------------------------------
 // 由 bookdata 做出 map , 傳入 "T" , 傳回 "【大】"
 // 這是要傳給全文檢索用的
 void __fastcall CBookData::BookToVerNameMap(map<String, String> & mpBookToVerName)

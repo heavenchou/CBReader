@@ -14,6 +14,9 @@ private:
 
 public:
 
+	// 將經名後面的 (第X卷-第X卷) or (第X卷) 移除
+	static String __fastcall CutJuanBeforeSutraName(String sName);
+
 };
 //---------------------------------------------------------------------------
 

@@ -32,8 +32,8 @@ object fmSearchRange: TfmSearchRange
       DefaultItemStyles.ItemStyle = ''
       DefaultItemStyles.GroupHeaderStyle = ''
       DefaultItemStyles.GroupFooterStyle = ''
-      Viewport.Width = 149.000000000000000000
-      Viewport.Height = 628.000000000000000000
+      Viewport.Width = 145.000000000000000000
+      Viewport.Height = 624.000000000000000000
       object ListBoxItem1: TListBoxItem
         TextSettings.Font.Size = 16.000000000000000000
         StyledSettings = [Family, Style, FontColor, Other]
@@ -127,7 +127,7 @@ object fmSearchRange: TfmSearchRange
     Size.Height = 648.000000000000000000
     Size.PlatformDefault = False
     StyleLookup = 'tabcontrolstyle'
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 1
     TabPosition = None
     Sizes = (
@@ -139,7 +139,7 @@ object fmSearchRange: TfmSearchRange
       CustomIcon = <
         item
         end>
-      IsSelected = False
+      IsSelected = True
       Size.Width = 8.000000000000000000
       Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
@@ -160,8 +160,8 @@ object fmSearchRange: TfmSearchRange
         StyleLookup = 'treeviewstyle'
         TabOrder = 0
         ShowCheckboxes = True
-        Viewport.Width = 395.000000000000000000
-        Viewport.Height = 628.000000000000000000
+        Viewport.Width = 391.000000000000000000
+        Viewport.Height = 624.000000000000000000
         object triBulei0: TTreeViewItem
           TextSettings.Font.Size = 16.000000000000000000
           IsChecked = False
@@ -338,7 +338,7 @@ object fmSearchRange: TfmSearchRange
           IsExpanded = False
           IsSelected = False
           TabOrder = 21
-          Text = #28450#35695#21335#20659#22823#34255#32147#37096#39006
+          Text = #21335#20659#22823#34255#32147#37096#39006
         end
         object TreeViewItem40: TTreeViewItem
           TextSettings.Font.Size = 16.000000000000000000
@@ -354,7 +354,7 @@ object fmSearchRange: TfmSearchRange
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 8.000000000000000000
       Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
@@ -374,8 +374,8 @@ object fmSearchRange: TfmSearchRange
         Size.PlatformDefault = False
         TabOrder = 0
         ShowCheckboxes = True
-        Viewport.Width = 395.000000000000000000
-        Viewport.Height = 628.000000000000000000
+        Viewport.Width = 391.000000000000000000
+        Viewport.Height = 624.000000000000000000
         object tviT: TTreeViewItem
           TextSettings.Font.Size = 16.000000000000000000
           IsChecked = False
