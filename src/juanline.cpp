@@ -116,10 +116,12 @@ int __fastcall CJuanLine::CBGetSpineIndexByVolPageFieldLine(String sBook, String
 		String sNowPageLine = GetNewPageLine(plPageLine->PageLine->Strings[i]);
 
 		if(sNewPageLine < sNowPageLine)
+		{
 			if(i == 0)
 				return plPageLine->SerialNo[i];
 			else
 				return plPageLine->SerialNo[i-1];
+        }
     }
 
 	return plPageLine->SerialNo[cCount - 1];

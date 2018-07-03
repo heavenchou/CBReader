@@ -157,12 +157,12 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 		iAfterThisPos = tpPtr->y;
     }
 
-	// 先移至 <div id="SearchHead"> 的地方
+	// 先移至 <div id='SearchHead'> 的地方
 
 	while(*pPoint)
 	{
-		//if (wcsncmp(pPoint, u"<div id=\"SearchHead\">", 21) == 0)
-		if (CMyStrUtil::StrHas(pPoint, u"<div id=\"SearchHead\">"))
+		//if (wcsncmp(pPoint, u"<div id='SearchHead'>", 21) == 0)
+		if (CMyStrUtil::StrHas(pPoint, u"<div id='SearchHead'>"))
 		{
 			pPoint += 21;
 			break;
@@ -187,10 +187,10 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 		{
 			// 特殊狀況, 遇到行首標記
 
-			// if (wcsncmp(pPoint, u"<span class=\"linehead\">", 23) == 0 ||
-			// 	wcsncmp(pPoint, u"<span class=\"parahead\">", 23) == 0)
-			if (CMyStrUtil::StrHas(pPoint, u"<span class=\"linehead\">") ||
-				CMyStrUtil::StrHas(pPoint, u"<span class=\"parahead\">"))
+			// if (wcsncmp(pPoint, u"<span class='linehead'>", 23) == 0 ||
+			// 	wcsncmp(pPoint, u"<span class='parahead'>", 23) == 0)
+			if (CMyStrUtil::StrHas(pPoint, u"<span class='linehead'") ||
+				CMyStrUtil::StrHas(pPoint, u"<span class='parahead'"))
 			{
                 // <span class="linehead">GA009n0008_p0003a01║</span>
             	// <span class="linehead">ZS01n0001_p0001a01║</span>
@@ -199,12 +199,17 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 				// <span class="linehead">T30n1579_p0279a10║</span>
 				// <span class="parahead">[0279a09] </span>
 
-				if(pPoint[23] == u'[') pPoint += 40;
-				else if(pPoint[36] == u'p') pPoint += 52;
-				else if(pPoint[35] == u'p') pPoint += 51;
-				else if(pPoint[34] == u'p') pPoint += 50;
-				else if(pPoint[33] == u'p') pPoint += 49;
-				else if(pPoint[32] == u'p') pPoint += 48;
+				// 有時是 <span class='linehead' style='display:none'>
+
+				int iDisplay = 0;   // 加上 display:'none' 的位移
+				if(pPoint[22] == u' ' && pPoint[23] == u's') iDisplay = 21;
+
+				if(pPoint[23+iDisplay] == u'[') pPoint += 40+iDisplay;
+				else if(pPoint[36+iDisplay] == u'p') pPoint += 52+iDisplay;
+				else if(pPoint[35+iDisplay] == u'p') pPoint += 51+iDisplay;
+				else if(pPoint[34+iDisplay] == u'p') pPoint += 50+iDisplay;
+				else if(pPoint[33+iDisplay] == u'p') pPoint += 49+iDisplay;
+				else if(pPoint[32+iDisplay] == u'p') pPoint += 48+iDisplay;
 				else
                 {
                     if(!bShowError)
@@ -218,7 +223,7 @@ void __fastcall CHighlight::GetOneFoundPos(int iNum)
 			}
 
 			// 處理缺字
-			if (CMyStrUtil::StrHas(pPoint, u"<span class=\"gaiji\""))
+			if (CMyStrUtil::StrHas(pPoint, u"<span class='gaiji'"))
 			{
 				AnalysisGiajiTag(&pPoint, &pDesPoint, &pUniPoint, &iDesLen, &iUniLen); // 處理缺字標記
 			}
@@ -620,9 +625,9 @@ void __fastcall CHighlight::AddWordAnchor(vector<System::WideChar> * vOutput, Sy
 	vector<int> * vData = &(mpWordAnchor[pPoint]);
 	for(int i=0; i<vData->size(); i+=3)
 	{
-		String sTag = u"<a name=\"Search_" + String((*vData)[i]) + u"_" +
-			String((*vData)[i+1]) + u"\" href=\"Search_" + String((*vData)[i]) +
-			u"_" + String((*vData)[i+2]) + "\"></a>";
+		String sTag = u"<a name='Search_" + String((*vData)[i]) + u"_" +
+			String((*vData)[i+1]) + u"' href='Search_" + String((*vData)[i]) +
+			u"_" + String((*vData)[i+2]) + "'></a>";
 		System::WideChar * wc = sTag.FirstChar();
 		while(*wc)
 		{
@@ -645,8 +650,8 @@ void __fastcall CHighlight::AddWordLink(vector<System::WideChar> * vOutput, Syst
 
 	// 先設定連結 <a href="
 
-	String sTag = u"<a href=\"#Search_" + String(iNum) + u"_" + String(iTime)
-		+ u"\" class=\"";
+	String sTag = u"<a href='#Search_" + String(iNum) + u"_" + String(iTime)
+		+ u"' class='";
 
 	// 設定 class
 
@@ -660,7 +665,7 @@ void __fastcall CHighlight::AddWordLink(vector<System::WideChar> * vOutput, Syst
 		sTag = sTag + u"SearchWord" + String(iMod);
 	}
 
-	sTag = sTag + u"\">";
+	sTag = sTag + u"'>";
 
 	System::WideChar * wc = sTag.FirstChar();
 	while(*wc)
@@ -810,7 +815,7 @@ void CHighlight::AnalysisGiajiTag(System::WideChar ** pPoint, System::WideChar *
 	{
 		*pDesPoint = sTag.FirstChar() + iPos + 10;	// 指到組字式的 [ 字
 		pTmp = *pDesPoint;
-		while(*pTmp != u'"')
+		while(*pTmp != u'\'')
 		{
 			*iDesLen = *iDesLen + 1;
 			pTmp++;
@@ -824,7 +829,7 @@ void CHighlight::AnalysisGiajiTag(System::WideChar ** pPoint, System::WideChar *
 	{
 		*pUniPoint = sTag.FirstChar() + iPos + 10;	// 指到 Unicode
 		pTmp = *pUniPoint;
-		while(*pTmp != u'"')
+		while(*pTmp != u'\'')
 		{
 			*iUniLen = *iUniLen + 1;
 			pTmp++;

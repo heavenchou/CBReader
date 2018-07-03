@@ -100,11 +100,19 @@ void __fastcall TfmUpdate::FormShow(TObject *Sender)
 	Memo->Text = sMsg;
 
 	edBookcasePath->Text = IncludeTrailingPathDelimiter(fmMain->Bookcase->BookcaseDir);
+	lbMessage->Text = u"準備更新";
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmUpdate::btUpdateClick(TObject *Sender)
 {
 	// 開始更新
+	btUpdate->Cursor = crHourGlass;
+	Cursor = crHourGlass;
+	String sMessage = lbMessage->Text;
+	lbMessage->Text = u"載入中...";
+
+	// 先關掉全文檢索引擎
+	fmMain->Bookcase->CBETA->FreeSearchEngine();
 
 	for(int i=1; i<slReceive->Count; i++)
 	{
@@ -135,6 +143,23 @@ void __fastcall TfmUpdate::btUpdateClick(TObject *Sender)
             }
         }
 	}
+
+	// 重新建立全文檢索引擎
+
+	lbMessage->Text = u"設定中...";
+	Application->ProcessMessages();
+
+	fmMain->Bookcase->CBETA->LoadSearchEngine();
+
+	lbMessage->Text = u"設定中...";
+	Application->ProcessMessages();
+
+	fmMain->SetSearchEngine();
+
+	btUpdate->Cursor = crDefault;
+	Cursor = crDefault;
+
+	lbMessage->Text = u"更新完成";
 	TDialogService::ShowMessage(u"更新完成！");
 	Close();
 }
@@ -165,6 +190,9 @@ void __fastcall TfmUpdate::nhrDownloadReceiveData(TObject * const Sender, __int6
 void __fastcall TfmUpdate::nhrDownloadRequestCompleted(TObject * const Sender,
           IHTTPResponse * const AResponse)
 {
+	lbMessage->Text = u"設定中...";
+	Application->ProcessMessages();
+
 	TStream * inf = AResponse->GetContentStream();
 
 	// 主程式更新

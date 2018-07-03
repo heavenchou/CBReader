@@ -34,6 +34,8 @@ public: // User declarations
 	String __fastcall GetNormalVolNumString(String sBook, String sVol);
 	// 傳入 T, 傳回 "【大】" 版本名稱 , 找不到傳回空字串
 	String __fastcall GetVerName(String sBook);
+	// 傳入 T, 傳回 "大正新脩大藏經" 版本名稱 , 找不到傳回空字串
+	String __fastcall GetBookName(String sBook);
 	// 傳入 T, 傳回其在 TStringList 的 Index , 沒有則傳回 -1
 	int __fastcall GetBookIndex(String sBook);
 
