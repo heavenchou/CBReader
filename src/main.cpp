@@ -25,11 +25,11 @@ TfmMain *fmMain;
 // ---------------------------------------------------------------------------
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
-	// 更新版本注意事項, 要改底下, 還有 project 的版本與日期
-    // 還有 fmAbout 的資料, 還有 debug 設定
+	// 更新版本注意事項, 要改底下, 還有 project 的版本
+    // 還有 fmAbout 的版本與日期資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.3.0.0";
+	Version = u"0.3.1.0";
 	DebugString = u"Heaven";     // debug 口令
 	IsDebug = false;           // debug 變數
 
@@ -63,10 +63,9 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	btOpenBookNav->Visible = false;
 
 	// 因為下拉選單寬度不能為奇數, 所以要調整
-    // 為了還原 V0.3 這些先 mark 起來
-	//if(Floor(cbFindSutra_BookId->Width) % 2 == 1) cbFindSutra_BookId->Width -= 1;
-	//if(Floor(cbGoSutra_BookId->Width) % 2 == 1) cbGoSutra_BookId->Width -= 1;
-	//if(Floor(cbGoBook_BookId->Width) % 2 == 1) cbGoBook_BookId->Width -= 1;
+	if(Floor(cbFindSutra_BookId->Width) % 2 == 1) cbFindSutra_BookId->Width -= 1;
+	if(Floor(cbGoSutra_BookId->Width) % 2 == 1) cbGoSutra_BookId->Width -= 1;
+	if(Floor(cbGoBook_BookId->Width) % 2 == 1) cbGoBook_BookId->Width -= 1;
 
 	#ifdef _Windows
 	wmiDebug->Visible = false;

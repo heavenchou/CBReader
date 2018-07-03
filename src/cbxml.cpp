@@ -3579,9 +3579,7 @@ String __fastcall CCBXML::GetVerInfo()
 
 	sBookName = fmMain->Bookcase->CBETA->BookData->GetBookName(BookId);
 	// 經名要移除 (第X卷)
-	// 為了還原 V0.3 這些先 mark 起來
-	//sSutraName = CMyCBUtil::CutJuanBeforeSutraName(SutraName);
-	sSutraName = SutraName;
+	sSutraName = CMyCBUtil::CutJuanBeforeSutraName(SutraName);
 	sPublishDate = fmMain->Bookcase->CBETA->PublishDate;
 
 	sVerInfo = u"<br><br><span style='margin:15px; padding: 25px; border-radius: 20px; background-color: rgb(200, 234, 198); display:block; box-shadow:inset -3px -3px 10px #9bbc99'>\n";
