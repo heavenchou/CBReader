@@ -141,7 +141,6 @@ __published: // IDE-managed Components
 	TLabel *lbSearchMsg;
 	TStringColumn *StringColumn17;
 	TCheckBox *cbSearchRange;
-	TCornerButton *btBuildIndex;
 	TStyleBook *sbMid;
 	TPanel *Panel8;
 	TButton *btOpenBuleiNav;
@@ -176,6 +175,25 @@ __published: // IDE-managed Components
 	TMenuItem *MenuItem5;
 	TMenuItem *wmiDebug;
 	TMenuItem *wmiUpdateURL;
+	TMenuItem *wmiCreateHtml;
+	TMenuItem *wmiBuildIndex;
+	TLabel *Label22;
+	TLabel *Label23;
+	TCheckBox *cbSearchThisSutra;
+	TMenuItem *wmiHelp;
+	TMenuItem *wmiOnlineDoc;
+	TMenuItem *wmiOnlineFAQ;
+	TMenuItem *mmiHelp;
+	TMenuItem *mmiOnlineDoc;
+	TMenuItem *mmiOnlineFAQ;
+	TLabel *lbFindSutraCount;
+	TButton *btBoolean;
+	TPopupMenu *pmBoolean;
+	TMenuItem *miNear;
+	TMenuItem *miBefore;
+	TMenuItem *miAnd;
+	TMenuItem *miOr;
+	TMenuItem *miExclude;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -189,7 +207,6 @@ __published: // IDE-managed Components
 	void __fastcall sgTextSearchCellDblClick(TColumn * const Column, const int Row);
 	void __fastcall cbSearchRangeChange(TObject *Sender);
 	void __fastcall btGoByKeywordClick(TObject *Sender);
-	void __fastcall btBuildIndexClick(TObject *Sender);
 	void __fastcall btOpenBuleiNavClick(TObject *Sender);
 	void __fastcall btOpenBookNavClick(TObject *Sender);
 	void __fastcall btPrevJuanClick(TObject *Sender);
@@ -204,6 +221,24 @@ __published: // IDE-managed Components
 	void __fastcall rbFontSmallChange(TObject *Sender);
 	void __fastcall btOpenSimpleNavClick(TObject *Sender);
 	void __fastcall wmiUpdateURLClick(TObject *Sender);
+	void __fastcall wmiCreateHtmlClick(TObject *Sender);
+	void __fastcall wmiBuildIndexClick(TObject *Sender);
+	void __fastcall edFindSutra_VolFromEnter(TObject *Sender);
+	void __fastcall edGoSutra_SutraNumEnter(TObject *Sender);
+	void __fastcall edGoBook_VolEnter(TObject *Sender);
+	void __fastcall edGoByKeywordEnter(TObject *Sender);
+	void __fastcall edTextSearchEnter(TObject *Sender);
+	void __fastcall cbSearchThisSutraChange(TObject *Sender);
+	void __fastcall wmiOnlineDocClick(TObject *Sender);
+	void __fastcall wmiOnlineFAQClick(TObject *Sender);
+	void __fastcall mmiOnlineDocClick(TObject *Sender);
+	void __fastcall mmiOnlineFAQClick(TObject *Sender);
+	void __fastcall miNearClick(TObject *Sender);
+	void __fastcall btBooleanClick(TObject *Sender);
+	void __fastcall miOrClick(TObject *Sender);
+	void __fastcall miExcludeClick(TObject *Sender);
+	void __fastcall miAndClick(TObject *Sender);
+	void __fastcall miBeforeClick(TObject *Sender);
 
 private: // User declarations
 
@@ -215,7 +250,8 @@ public: // User declarations
 
     String Version;     	// 版本
 	String ProgramTitle;    // 程式名稱
-    bool IsDebug;           // debug 變數
+	bool IsDebug;           // debug 變數
+    String DebugString;     // debug 口令
 
     int SelectedBook;   // 目前選中的書, -1 表示還沒選
 
@@ -261,6 +297,9 @@ public: // User declarations
 
     // 選擇全文檢索引擎
 	void __fastcall SetSearchEngine();
+
+	// 將所有的 Default 取消
+	void __fastcall CancelAllDefault();
 
 	// 初始資料
 	void __fastcall InitialData();

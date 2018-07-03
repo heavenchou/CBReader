@@ -6,6 +6,22 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 
+// 將經名後面的 (第X卷-第X卷) or (第X卷) 移除
+String __fastcall CMyCBUtil::CutJuanBeforeSutraName(String sName)
+{
+	if(sName.Pos0(u"(第") >= 0)
+	{
+		int iPos = sName.Pos0(u"(第");
+		int iPos2 = sName.Pos0(u"卷)");
+		// (第 x 卷) 必須在最後
+		if(iPos2 == sName.Length()-2)
+		{
+			sName = sName.SubString0(0,iPos);
+		}
+	}
+	return sName;
+}
+//---------------------------------------------------------------------------
 String __fastcall CMyStrUtil::SubString(String s, int i)
 {
 	int iLen = s.Length();
@@ -63,11 +79,7 @@ String __fastcall CMyStrUtil::LongToUnicode(unsigned long UTF32)
 {
 	if (UTF32 < 0x10000)
 	{
-		#ifdef _Windows
-		String s = (wchar_t) UTF32;
-		#else
-		String s = (char16_t) UTF32;
-		#endif
+		String s = (System::WideChar) UTF32;
 		return s;
     }
 	unsigned long t = UTF32 - 0x10000;
@@ -75,13 +87,9 @@ String __fastcall CMyStrUtil::LongToUnicode(unsigned long UTF32)
 	unsigned int l = (((t<<22)>>22) + 0xDC00);
     unsigned int ret = ((h<<16) | ( l & 0x0000FFFF));
 
-	#ifdef _Windows
-	String sh = (wchar_t) h;
-	String sl = (wchar_t) l;
-	#else
-	String sh = (char16_t) h;
-	String sl = (char16_t) l;
-	#endif
+	String sh = (System::WideChar) h;
+	String sl = (System::WideChar) l;
+
 	return sh + sl;
 }
 //---------------------------------------------------------------------------
@@ -93,7 +101,7 @@ unsigned long __fastcall CMyStrUtil::StrToULong(String s, int iBase)
 }
 //---------------------------------------------------------------------------
 // 去除頭尾指定字元
-String __fastcall CMyStrUtil::Trim(String sStr, wchar_t wChar)
+String __fastcall CMyStrUtil::Trim(String sStr, System::WideChar wChar)
 {
 	sStr = TrimLeft(sStr, wChar);
 	sStr = TrimRight(sStr, wChar);
@@ -101,7 +109,7 @@ String __fastcall CMyStrUtil::Trim(String sStr, wchar_t wChar)
 }
 //---------------------------------------------------------------------------
 // 去除左邊指定字元
-String __fastcall CMyStrUtil::TrimLeft(String sStr, wchar_t wChar)
+String __fastcall CMyStrUtil::TrimLeft(String sStr, System::WideChar wChar)
 {
 	while((sStr.Length() > 0) && (*(sStr.begin()) == wChar))
 	{
@@ -112,7 +120,7 @@ String __fastcall CMyStrUtil::TrimLeft(String sStr, wchar_t wChar)
 }
 //---------------------------------------------------------------------------
 // 去除右邊指定字元
-String __fastcall CMyStrUtil::TrimRight(String sStr, wchar_t wChar)
+String __fastcall CMyStrUtil::TrimRight(String sStr, System::WideChar wChar)
 {
 	while((sStr.Length() > 0) && (*(sStr.LastChar()) == wChar))
 	{

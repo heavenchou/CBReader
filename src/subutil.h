@@ -14,6 +14,9 @@ private:
 
 public:
 
+	// 將經名後面的 (第X卷-第X卷) or (第X卷) 移除
+	static String __fastcall CutJuanBeforeSutraName(String sName);
+
 };
 //---------------------------------------------------------------------------
 
@@ -47,13 +50,13 @@ public:
 	static unsigned long __fastcall StrToULong(String s, int iBase=10);
 
 	// 將傳入字串去除頭尾指定字元
-	static String __fastcall Trim(String sStr, wchar_t wChar);
+	static String __fastcall Trim(String sStr, System::WideChar wChar);
 
 	// 將傳入字串去除左邊指定字元
-	static String __fastcall TrimLeft(String sStr, wchar_t wChar);
+	static String __fastcall TrimLeft(String sStr, System::WideChar wChar);
 
 	// 將傳入字串去除右邊指定字元
-	static String __fastcall TrimRight(String sStr, wchar_t wChar);
+	static String __fastcall TrimRight(String sStr, System::WideChar wChar);
 
 	// 比對指定長度的字串
 	static bool __fastcall StrnCmp(System::WideChar * p1, System::WideChar * p2, int len);

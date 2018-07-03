@@ -1,5 +1,6 @@
 # 檢查程式中 u"xxx" 的 u 是否有使用, 尤其是漢字部份
-
+# 檢查有沒有 showmessage
+# 檢查有沒有 wchar_t
 use utf8;
 use strict;
 
@@ -22,13 +23,8 @@ sub check
     while(<IN>)
     {
         $count++;
-        my $line = $_;
 
-        
         s/\/\/.*//g;
-        s/\\"//g;
-        s/\\'//g;
-
         s/\/\*.*?\*\///; # 移除單行註解
 
         if(/\*\//)
@@ -44,7 +40,12 @@ sub check
         elsif($innote == 1)
         {
             $_ = "";
-        }
+        }        
+        
+        my $line = $_;
+
+        s/\\"//g;
+        s/\\'//g;
 
         while(/.".*?"/)
         {
@@ -71,8 +72,13 @@ sub check
             print "$file : $count : $line";
         }
 
+        # 查 wchar_t
+        $_ = $line;
+        if(/wchar_t/)
+        {
+            print "$file : $count : $line";
+        }
+
     }
 }
-
-
-
+<>;

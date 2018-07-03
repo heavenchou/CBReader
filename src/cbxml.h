@@ -30,6 +30,7 @@ class CCBXML
 {
 private: // User declarations
 
+    bool IsDebug;
 	String XMLFile; // XML 檔名
 	String HTMLText;	// HTML 的結果
 	String HTMLCollation;    // HTML 校註
@@ -202,6 +203,9 @@ public: // User declarations
 	String __fastcall mv_data_between_tr(String sHtml);
 	// 取代正規式 : 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
 	String __fastcall TableTrReplace (const TMatch &Match);
+
+	// 取得經文版本資訊
+	String __fastcall GetVerInfo();
 
 	// 傳入參數為 XML 檔, 呈現的設定
 	__fastcall CCBXML(String sFile, String sLink, CSetting * csSetting, String sJSFile, bool bShowHighlight = false, TmyMonster * seSearchEngine = 0);

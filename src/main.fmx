@@ -162,17 +162,17 @@ object fmMain: TfmMain
           object btOpenBuleiNav: TButton
             Position.X = 8.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 81.000000000000000000
+            Size.Width = 73.000000000000000000
             Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            Text = #37096#39006#30446#37636
+            Text = #20027#30446#37636
             OnClick = btOpenBuleiNavClick
           end
           object btOpenBookNav: TButton
-            Position.X = 96.000000000000000000
+            Position.X = 176.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 81.000000000000000000
+            Size.Width = 41.000000000000000000
             Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 2
@@ -207,7 +207,7 @@ object fmMain: TfmMain
         object Panel3: TPanel
           Align = Top
           Size.Width = 281.000000000000000000
-          Size.Height = 169.000000000000000000
+          Size.Height = 201.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
           object edFindSutra_SutraName: TEdit
@@ -218,6 +218,7 @@ object fmMain: TfmMain
             Size.Width = 145.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object edFindSutra_Byline: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -227,15 +228,20 @@ object fmMain: TfmMain
             Size.Width = 145.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object btFindSutra: TButton
+            Hint = #25628#23563
             Position.X = 224.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 41.000000000000000000
+            Size.Width = 33.000000000000000000
             Size.Height = 33.000000000000000000
             Size.PlatformDefault = False
+            StyleLookup = 'searchtoolbuttonbordered'
             TabOrder = 7
             Text = #25214
+            ParentShowHint = False
+            ShowHint = True
             OnClick = btFindSutraClick
           end
           object edFindSutra_VolFrom: TEdit
@@ -246,6 +252,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object edFindSutra_VolTo: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -255,6 +262,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object edFindSutra_SutraFrom: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -264,6 +272,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object edFindSutra_SutraTo: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -273,6 +282,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edFindSutra_VolFromEnter
           end
           object Label15: TLabel
             Position.X = 16.000000000000000000
@@ -282,7 +292,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #20874#25976#24478
-            TabOrder = 13
+            TabOrder = 14
           end
           object Label35: TLabel
             Position.X = 16.000000000000000000
@@ -292,7 +302,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#34399#24478
-            TabOrder = 10
+            TabOrder = 11
           end
           object Label33: TLabel
             Position.X = 16.000000000000000000
@@ -302,7 +312,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#21517
-            TabOrder = 9
+            TabOrder = 10
           end
           object Label34: TLabel
             Position.X = 16.000000000000000000
@@ -312,7 +322,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #20316#35695#32773
-            TabOrder = 8
+            TabOrder = 9
           end
           object Label16: TLabel
             AutoSize = True
@@ -323,7 +333,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
-            TabOrder = 14
+            TabOrder = 15
           end
           object cbFindSutra_BookId: TComboBox
             Items.Strings = (
@@ -353,7 +363,7 @@ object fmMain: TfmMain
             ItemIndex = 0
             Position.X = 72.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 144.000000000000000000
+            Size.Width = 145.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
@@ -366,7 +376,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21040
-            TabOrder = 12
+            TabOrder = 13
           end
           object Label18: TLabel
             Position.X = 136.000000000000000000
@@ -376,14 +386,24 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21040
-            TabOrder = 11
+            TabOrder = 12
+          end
+          object lbFindSutraCount: TLabel
+            Position.X = 16.000000000000000000
+            Position.Y = 176.000000000000000000
+            Size.Width = 201.000000000000000000
+            Size.Height = 25.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 18.000000000000000000
+            Text = #20849#25214#21040' 0 '#31558
+            TabOrder = 8
           end
         end
         object Splitter2: TSplitter
           Align = Top
           Cursor = crVSplit
           MinSize = 20.000000000000000000
-          Position.Y = 169.000000000000000000
+          Position.Y = 201.000000000000000000
           ShowGrip = False
           Size.Width = 281.000000000000000000
           Size.Height = 9.000000000000000000
@@ -394,7 +414,7 @@ object fmMain: TfmMain
           CanFocus = True
           ClipChildren = True
           Size.Width = 281.000000000000000000
-          Size.Height = 357.000000000000000000
+          Size.Height = 325.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
           StyledSettings = [Family, Style, FontColor]
@@ -403,7 +423,7 @@ object fmMain: TfmMain
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
           Viewport.Width = 277.000000000000000000
-          Viewport.Height = 332.000000000000000000
+          Viewport.Height = 300.000000000000000000
           object StringColumn1: TStringColumn
             Header = #32147#21517
             Size.Width = 130.000000000000000000
@@ -460,7 +480,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#21367#32080#27083
-            TabOrder = 28
+            TabOrder = 30
           end
           object Label2: TLabel
             AutoSize = True
@@ -471,7 +491,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
-            TabOrder = 27
+            TabOrder = 29
           end
           object Label3: TLabel
             AutoSize = True
@@ -482,7 +502,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #32147#34399
-            TabOrder = 26
+            TabOrder = 28
           end
           object Label4: TLabel
             AutoSize = True
@@ -493,7 +513,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21367#25976
-            TabOrder = 25
+            TabOrder = 27
           end
           object Label5: TLabel
             AutoSize = True
@@ -504,7 +524,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #38913#25976
-            TabOrder = 24
+            TabOrder = 26
           end
           object Label6: TLabel
             AutoSize = True
@@ -515,7 +535,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #27396
-            TabOrder = 23
+            TabOrder = 25
           end
           object Label7: TLabel
             AutoSize = True
@@ -526,7 +546,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34892#25976
-            TabOrder = 22
+            TabOrder = 24
           end
           object Label8: TLabel
             AutoSize = True
@@ -537,7 +557,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #26360#26412#32080#27083
-            TabOrder = 21
+            TabOrder = 23
           end
           object Label9: TLabel
             AutoSize = True
@@ -548,7 +568,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34255#32147
-            TabOrder = 20
+            TabOrder = 22
           end
           object Label10: TLabel
             AutoSize = True
@@ -559,7 +579,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #20874#25976
-            TabOrder = 19
+            TabOrder = 21
           end
           object Label11: TLabel
             AutoSize = True
@@ -570,7 +590,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #38913#25976
-            TabOrder = 18
+            TabOrder = 20
           end
           object Label12: TLabel
             AutoSize = True
@@ -581,7 +601,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #27396
-            TabOrder = 17
+            TabOrder = 19
           end
           object Label13: TLabel
             AutoSize = True
@@ -592,7 +612,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #34892#25976
-            TabOrder = 16
+            TabOrder = 18
           end
           object Label14: TLabel
             AutoSize = True
@@ -603,7 +623,7 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #21069#24448#25351#23450#32147#25991
-            TabOrder = 15
+            TabOrder = 17
           end
           object cbGoSutra_BookId: TComboBox
             Items.Strings = (
@@ -636,6 +656,7 @@ object fmMain: TfmMain
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoSutra_SutraNum: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -646,6 +667,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoSutra_Juan: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -656,6 +678,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoSutra_Page: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -666,6 +689,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoSutra_Field: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -676,6 +700,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoSutra_Line: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -686,6 +711,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoSutra_SutraNumEnter
           end
           object edGoBook_Vol: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -696,6 +722,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoBook_VolEnter
           end
           object edGoBook_Page: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -706,6 +733,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoBook_VolEnter
           end
           object edGoBook_Field: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -716,6 +744,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoBook_VolEnter
           end
           object edGoBook_Line: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -726,6 +755,7 @@ object fmMain: TfmMain
             Size.Width = 49.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoBook_VolEnter
           end
           object edGoByKeyword: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -736,6 +766,7 @@ object fmMain: TfmMain
             Size.Width = 209.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edGoByKeywordEnter
           end
           object cbGoBook_BookId: TComboBox
             Items.Strings = (
@@ -768,6 +799,7 @@ object fmMain: TfmMain
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 7
+            OnEnter = edGoBook_VolEnter
           end
           object btGoSutra: TButton
             Position.X = 192.000000000000000000
@@ -802,6 +834,28 @@ object fmMain: TfmMain
             TextSettings.Font.Size = 18.000000000000000000
             OnClick = btGoByKeywordClick
           end
+          object Label22: TLabel
+            AutoSize = True
+            Position.X = 16.000000000000000000
+            Position.Y = 424.000000000000000000
+            Size.Width = 233.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 18.000000000000000000
+            Text = #20363'1'#65306'T01n0001_p0001a01'
+            TabOrder = 16
+          end
+          object Label23: TLabel
+            AutoSize = True
+            Position.X = 16.000000000000000000
+            Position.Y = 448.000000000000000000
+            Size.Width = 233.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            TextSettings.Font.Size = 18.000000000000000000
+            Text = #20363'2'#65306'T01, no. 1, p. 1a1'
+            TabOrder = 15
+          end
         end
       end
       object TabItem5: TTabItem
@@ -820,7 +874,7 @@ object fmMain: TfmMain
         object Panel5: TPanel
           Align = Top
           Size.Width = 281.000000000000000000
-          Size.Height = 129.000000000000000000
+          Size.Height = 161.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 1
           object Label19: TLabel
@@ -831,42 +885,74 @@ object fmMain: TfmMain
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
             Text = #27298#32034#23383#20018
-            TabOrder = 11
+            TabOrder = 13
           end
           object edTextSearch: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
-            TabOrder = 5
+            TabOrder = 1
             Position.X = 8.000000000000000000
             Position.Y = 40.000000000000000000
-            Size.Width = 217.000000000000000000
+            Size.Width = 225.000000000000000000
             Size.Height = 32.000000000000000000
             Size.PlatformDefault = False
+            OnEnter = edTextSearchEnter
           end
           object btTextSearch: TButton
-            Position.X = 192.000000000000000000
-            Position.Y = 8.000000000000000000
+            Hint = #25628#23563
+            Position.X = 232.000000000000000000
+            Position.Y = 16.000000000000000000
             Size.Width = 33.000000000000000000
             Size.Height = 25.000000000000000000
             Size.PlatformDefault = False
-            TabOrder = 1
+            StyleLookup = 'searchtoolbuttonbordered'
+            TabOrder = 4
             Text = #25214
+            ParentShowHint = False
+            ShowHint = True
             OnClick = btTextSearchClick
           end
           object lbSearchMsg: TLabel
             Position.X = 8.000000000000000000
-            Position.Y = 104.000000000000000000
+            Position.Y = 136.000000000000000000
             Size.Width = 265.000000000000000000
             Size.Height = 17.000000000000000000
             Size.PlatformDefault = False
             Text = #25991#23383#22312#21021#22987#26178#26371#28165#38500
-            TabOrder = 12
+            TabOrder = 14
           end
           object cbSearchRange: TCheckBox
             Position.X = 8.000000000000000000
-            Position.Y = 72.000000000000000000
-            TabOrder = 13
+            Position.Y = 80.000000000000000000
+            TabOrder = 2
             Text = #25351#23450#27298#32034#31684#22285
             OnChange = cbSearchRangeChange
+            OnEnter = edTextSearchEnter
+          end
+          object cbSearchThisSutra: TCheckBox
+            Enabled = False
+            Position.X = 8.000000000000000000
+            Position.Y = 104.000000000000000000
+            Size.Width = 265.000000000000000000
+            Size.Height = 19.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 3
+            Text = #27298#32034#26412#32147#65306
+            OnChange = cbSearchThisSutraChange
+            OnEnter = edTextSearchEnter
+          end
+          object btBoolean: TButton
+            Hint = #25628#23563#24067#26519#36939#31639#31526#34399
+            Position.X = 232.000000000000000000
+            Position.Y = 48.000000000000000000
+            Size.Width = 33.000000000000000000
+            Size.Height = 25.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'playtoolbuttonbordered'
+            TabOrder = 15
+            Text = 'btBoolean'
+            ParentShowHint = False
+            ShowHint = True
+            OnClick = btBooleanClick
           end
         end
         object sgTextSearch: TStringGrid
@@ -874,7 +960,7 @@ object fmMain: TfmMain
           CanFocus = True
           ClipChildren = True
           Size.Width = 281.000000000000000000
-          Size.Height = 406.000000000000000000
+          Size.Height = 374.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 16.000000000000000000
           StyledSettings = [Family, Style, FontColor]
@@ -883,7 +969,7 @@ object fmMain: TfmMain
           Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
           Viewport.Width = 277.000000000000000000
-          Viewport.Height = 381.000000000000000000
+          Viewport.Height = 349.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000
@@ -944,13 +1030,13 @@ object fmMain: TfmMain
     Size.PlatformDefault = False
     TabOrder = 6
     object btOpenBookcase: TCornerButton
-      Position.X = 1000.000000000000000000
+      Position.X = 776.000000000000000000
       Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
       Size.Width = 113.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 4
+      TabOrder = 3
       Text = #38283#21855#30446#37636' ('#38577#34255')'
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
@@ -968,19 +1054,6 @@ object fmMain: TfmMain
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
       OnClick = btOptionClick
-    end
-    object btBuildIndex: TCornerButton
-      Position.X = 848.000000000000000000
-      Position.Y = 8.000000000000000000
-      Sides = [Top, Left, Bottom, Right]
-      Size.Width = 145.000000000000000000
-      Size.Height = 33.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 3
-      Text = #29986#29983#32034#24341#27284' ('#38577#34255')'
-      XRadius = 3.000000000000000000
-      YRadius = 3.000000000000000000
-      OnClick = btBuildIndexClick
     end
     object btPrevJuan: TCornerButton
       Position.X = 296.000000000000000000
@@ -1015,7 +1088,7 @@ object fmMain: TfmMain
       Size.Width = 89.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 5
+      TabOrder = 4
       Text = '<<'#20027#21151#33021
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
@@ -1028,7 +1101,7 @@ object fmMain: TfmMain
       Size.Width = 81.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 6
+      TabOrder = 5
       Text = #30446#27425'>>'
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
@@ -1043,7 +1116,7 @@ object fmMain: TfmMain
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
       Text = #20027#21151#33021#21312#23383#39636
-      TabOrder = 7
+      TabOrder = 6
     end
     object rbFontSmall: TRadioButton
       StyledSettings = [Family, Style, FontColor]
@@ -1053,7 +1126,7 @@ object fmMain: TfmMain
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 10
+      TabOrder = 9
       Text = #23567
       OnChange = rbFontSmallChange
     end
@@ -1065,7 +1138,7 @@ object fmMain: TfmMain
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 9
+      TabOrder = 8
       Text = #20013
       TextSettings.Font.Size = 14.000000000000000000
       OnChange = rbFontSmallChange
@@ -1079,7 +1152,7 @@ object fmMain: TfmMain
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 8
+      TabOrder = 7
       Text = #22823
       TextSettings.Font.Size = 16.000000000000000000
       OnChange = rbFontSmallChange
@@ -3712,6 +3785,19 @@ object fmMain: TfmMain
         Locked = True
         Text = #26356#26032#27298#26597
         OnClick = mmiUpdateClick
+      end
+    end
+    object mmiHelp: TMenuItem
+      Text = #24171#21161
+      object mmiOnlineDoc: TMenuItem
+        Locked = True
+        Text = #32218#19978#35498#26126
+        OnClick = mmiOnlineDocClick
+      end
+      object mmiOnlineFAQ: TMenuItem
+        Locked = True
+        Text = #24120#35211#21839#31572
+        OnClick = mmiOnlineFAQClick
       end
       object mmiAbout: TMenuItem
         Locked = True
@@ -6361,17 +6447,66 @@ object fmMain: TfmMain
       Text = #26356#26032#27298#26597
       OnClick = mmiUpdateClick
     end
-    object wmiAbout: TMenuItem
-      Text = #38364#26044
-      OnClick = mmiAboutClick
+    object wmiHelp: TMenuItem
+      Locked = True
+      Text = #24171#21161
+      object wmiOnlineDoc: TMenuItem
+        Locked = True
+        Text = #32218#19978#35498#26126
+        OnClick = wmiOnlineDocClick
+      end
+      object wmiOnlineFAQ: TMenuItem
+        Locked = True
+        Text = #24120#35211#21839#31572
+        OnClick = wmiOnlineFAQClick
+      end
+      object wmiAbout: TMenuItem
+        Locked = True
+        Text = #38364#26044
+        OnClick = mmiAboutClick
+      end
     end
     object wmiDebug: TMenuItem
-      Text = 'Debug Mode'
+      Text = #31649#29702#32773#21151#33021
       object wmiUpdateURL: TMenuItem
         Locked = True
         Text = #26356#26032#30340#32178#22336#25563#25104' localhost'
         OnClick = wmiUpdateURLClick
       end
+      object wmiCreateHtml: TMenuItem
+        Locked = True
+        Text = #25209#37327#29986#29983'HTML'
+        OnClick = wmiCreateHtmlClick
+      end
+      object wmiBuildIndex: TMenuItem
+        Locked = True
+        Text = #29986#29983#32034#24341#27284
+        OnClick = wmiBuildIndexClick
+      end
+    end
+  end
+  object pmBoolean: TPopupMenu
+    Left = 243
+    Top = 208
+    object miNear: TMenuItem
+      Text = #65291' near'
+      OnClick = miNearClick
+    end
+    object miBefore: TMenuItem
+      Text = #65290' before'
+      OnClick = miBeforeClick
+    end
+    object miAnd: TMenuItem
+      Text = #65286' and'
+      OnClick = miAndClick
+    end
+    object miOr: TMenuItem
+      Text = #65292' or'
+      OnClick = miOrClick
+    end
+    object miExclude: TMenuItem
+      Text = #65293' exclude'
+      OnClick = miExcludeClick
     end
   end
   object ImageList1: TImageList

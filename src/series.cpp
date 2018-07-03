@@ -14,6 +14,7 @@ __fastcall CSeries::CSeries(String sDir)
 
 	Title = "";       // 標題
 	Creator = "";     // 作者
+	PublishDate = ""; // 出版日期
 	NavFile = "";     // 導覽文件
 	Nav2File = "";     // 導覽文件
 	Nav3File = "";     // 導覽文件
@@ -132,6 +133,14 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	if(Node->ChildNodes->Count > 0)
 	{
 		Creator = Node->ChildNodes->Get(0)->Text;
+	}
+
+	// 讀 date
+
+	Node = Document->DocumentElement->ChildNodes->Nodes["date"];
+	if(Node->ChildNodes->Count > 0)
+	{
+		PublishDate = Node->ChildNodes->Get(0)->Text;
 	}
 
 	// 讀 nav

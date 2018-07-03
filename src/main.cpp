@@ -10,6 +10,7 @@
 #include "logo.h"
 #include "about.h"
 #include "update.h"
+#include "createhtml.h"
 
 #ifdef _Windows
 #include <System.Win.Registry.hpp>
@@ -25,10 +26,11 @@ TfmMain *fmMain;
 __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 {
 	// 更新版本注意事項, 要改底下, 還有 project 的版本與日期
-    // 還有 fmAbout 的資料
+    // 還有 fmAbout 的資料, 還有 debug 設定
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.2.0.0";
+	Version = u"0.3.0.0";
+	DebugString = u"Heaven";     // debug 口令
 	IsDebug = false;           // debug 變數
 
 #ifdef _Windows
@@ -57,8 +59,15 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 
 	// 初始畫面的設定
 	btOpenBookcase->Visible = false;
-	btBuildIndex->Visible = false;
 	btOpenSimpleNav->Visible = false;
+	btOpenBookNav->Visible = false;
+
+	// 因為下拉選單寬度不能為奇數, 所以要調整
+    // 為了還原 V0.3 這些先 mark 起來
+	//if(Floor(cbFindSutra_BookId->Width) % 2 == 1) cbFindSutra_BookId->Width -= 1;
+	//if(Floor(cbGoSutra_BookId->Width) % 2 == 1) cbGoSutra_BookId->Width -= 1;
+	//if(Floor(cbGoBook_BookId->Width) % 2 == 1) cbGoBook_BookId->Width -= 1;
+
 	#ifdef _Windows
 	wmiDebug->Visible = false;
 	#endif
@@ -359,6 +368,8 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	int iType = tvItem->Tag;
 
 	// 一般連結
+	tvNavTree->Cursor = crHourGlass;
+
 	if(iType == nit_NormalLink)
 	{
 		if(sURL.SubString(1,4) == "http")
@@ -377,6 +388,7 @@ void __fastcall TfmMain::NavTreeItemClick(TObject *Sender)
 	{
 		ShowCBXML(sURL);
 	}
+	tvNavTree->Cursor = crDefault;
 }
 //---------------------------------------------------------------------------
 
@@ -395,12 +407,11 @@ bool __fastcall TfmMain::IsSelectedBook()
 //---------------------------------------------------------------------------
 void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 {
-	if(edFindSutra_SutraName->Text == u"Heaven")
+	if(edFindSutra_SutraName->Text == DebugString)
 	{
 		IsDebug = true;
 		edFindSutra_SutraName->Text = u"";
 		#ifdef _Windows
-		btBuildIndex->Visible = true;
 		wmiDebug->Visible = true;
     	#endif
 		return;
@@ -501,7 +512,11 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 				sgFindSutra->RowCount += 10;
 		}
 		sgFindSutra->RowCount = iGridIndex;
-        sgFindSutra->EndUpdate();
+		sgFindSutra->EndUpdate();
+
+		lbFindSutraCount->Text = u"共找到 " + String(iGridIndex) + u" 筆";
+		if(iGridIndex == 0)
+            TDialogService::ShowMessage(u"沒有滿足此條件的資料");
 	}
 }
 //---------------------------------------------------------------------------
@@ -519,6 +534,16 @@ void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
 	String sPage = edGoSutra_Page->Text;
 	String sField = edGoSutra_Field->Text;
 	String sLine = edGoSutra_Line->Text;
+
+	if(sField == "1") sField = u"a";
+	else if(sField == "2") sField = u"b";
+	else if(sField == "3") sField = u"c";
+	else if(sField == "4") sField = u"d";
+	else if(sField == "5") sField = u"e";
+	else if(sField == "6") sField = u"f";
+	else if(sField == "7") sField = u"g";
+	else if(sField == "8") sField = u"h";
+	else if(sField == "9") sField = u"i";
 
 	CSeries * csCBETA = Bookcase->CBETA;
 
@@ -604,21 +629,20 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 		String sName = Bookcase->CBETA->Catalog->SutraName->Strings[iIndex];
 
 		// 經名移除 (第X卷-第x卷)
-		if(sName.Pos0(u"(第") >= 0)
-		{
-			int iPos = sName.Pos0(u"(第");
-			if(sName.Pos0(u"卷)") >= 0)
-			{
-                sName = sName.SubString0(0,iPos);
-            }
-		}
-
+		sName = CMyCBUtil::CutJuanBeforeSutraName(sName);
 		sJuan = CMyStrUtil::TrimLeft(sJuan, u'0');
 		sSutra = CMyStrUtil::TrimLeft(sSutra, u'0');
 		String sCaption = ProgramTitle + u"《" + sName + u"》"
 				+ sVol + u", No. " + sSutra + u", 卷" + sJuan;
 		Caption = sCaption;
+
+		cbSearchThisSutra->Text = u"檢索本經：" + sName;
 	}
+
+	// 檢索本經
+
+	cbSearchThisSutra->Enabled = true;
+
 }
 //---------------------------------------------------------------------------
 // 由冊頁欄行呈現經文
@@ -633,6 +657,16 @@ void __fastcall TfmMain::btGoBookClick(TObject *Sender)
 	String sPage = edGoBook_Page->Text;
 	String sField = edGoBook_Field->Text;
 	String sLine = edGoBook_Line->Text;
+
+	if(sField == "1") sField = u"a";
+	else if(sField == "2") sField = u"b";
+	else if(sField == "3") sField = u"c";
+	else if(sField == "4") sField = u"d";
+	else if(sField == "5") sField = u"e";
+	else if(sField == "6") sField = u"f";
+	else if(sField == "7") sField = u"g";
+	else if(sField == "8") sField = u"h";
+	else if(sField == "9") sField = u"i";
 
 	CSeries * csCBETA = Bookcase->CBETA;
 
@@ -689,7 +723,7 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 
 	clock_t t1 = clock();
 	bool bHasRange = false;     // 有範圍就要設定
-	if(cbSearchRange->IsChecked) bHasRange = true;
+	if(cbSearchRange->IsChecked || cbSearchThisSutra->IsChecked) bHasRange = true;
 
 	// 選擇全文檢索引擎, 若某一方為 0 , 則選另一方 (全 0 就不管了)
 	SetSearchEngine();
@@ -703,7 +737,7 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 
     // 秀出找到幾個的訊息
 
-	lbSearchMsg->Text = u"找到" + String(iFoundCount) + u"筆，共花時間：" + String(t2-t1);
+	lbSearchMsg->Text = u"找到" + String(iFoundCount) + u"筆，共花時間：" + String((t2-t1)/1000.0) + u" 秒";
 
     int iTotalSearchFileNum = 0;
     bool bShowAll = false;
@@ -751,8 +785,11 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 
 			// 找到了
 
+			// 經名要移除 (第X卷)
+			String sSutraName = CMyCBUtil::CutJuanBeforeSutraName(Catalog->SutraName->Strings[iCatalogIndex]);
+
 			sgTextSearch->Cells[0][iGridIndex]=SearchEngine->FileFound->Ints[i];
-			sgTextSearch->Cells[1][iGridIndex]=Catalog->SutraName->Strings[iCatalogIndex];
+			sgTextSearch->Cells[1][iGridIndex]=sSutraName;
 			sgTextSearch->Cells[2][iGridIndex]=Catalog->ID->Strings[iCatalogIndex];
 			sgTextSearch->Cells[3][iGridIndex]=Spine->VolNum->Strings[i];
 			sgTextSearch->Cells[4][iGridIndex]=Catalog->Part->Strings[iCatalogIndex];
@@ -803,6 +840,7 @@ void __fastcall TfmMain::cbSearchRangeChange(TObject *Sender)
 		// 設定檢索範圍
 		TModalResult mr = fmSearchRange->ShowModal();
 		if(mr == mrCancel) cbSearchRange->IsChecked = false;
+        else cbSearchThisSutra->IsChecked = false;
 	}
 }
 //---------------------------------------------------------------------------
@@ -819,10 +857,18 @@ void __fastcall TfmMain::btGoByKeywordClick(TObject *Sender)
 
 	String sKey = edGoByKeyword->Text;
 	// T01n0001_p0001a01
-	String sPatten = "(\\D+)(\\d+)n.{5}p(.{4})(.)(\\d\\d)";
+	String sPatten = "([A-Z]+)(\\d+)n.{5}p(.{4})(.)(\\d\\d)";
 
 	regex = new TRegEx();
 	reMatch = regex->Matches(sKey, sPatten);
+	if(reMatch.Count == 0)
+	{
+		// (CBETA, T01, no. 1, p. 23c20-21)  , 新版
+		// (CBETA, T01, no. 1, p. 23, c20-21) , 舊版
+		sPatten = u"([A-Z]+)(\\d+)\\s*,\\s*no\\.\\s*.+?,\\s*pp?\\.\\s*(\\S+?)(?:\\s*,\\s*)?([a-z])(\\d+)";
+		reMatch = regex->Matches(sKey, sPatten);
+	}
+
 	if(reMatch.Count)
 	{
 		reGroup = reMatch.Item[0].Groups;
@@ -838,32 +884,9 @@ void __fastcall TfmMain::btGoByKeywordClick(TObject *Sender)
 		String sFile = csCBETA->CBGetFileNameByVolPageFieldLine(sBook, sVol, sPage, sField, sLine);
 		ShowCBXML(sFile);
 	}
-
 }
 //---------------------------------------------------------------------------
-// 建立索引檔
-void __fastcall TfmMain::btBuildIndexClick(TObject *Sender)
-{
-	// 先關掉全文檢索引擎
 
-	Bookcase->CBETA->FreeSearchEngine();
-
-	// 產生索引
-
-	fmBuildIndex->edBuildListDir->Text = Bookcase->CBETA->Dir;
-	fmBuildIndex->edBuildList->Text = Bookcase->CBETA->Dir + Bookcase->CBETA->SpineFile;
-	fmBuildIndex->edWordIndex->Text = Bookcase->CBETA->Dir + "index/wordindex.ndx";
-	fmBuildIndex->edMainIndex->Text = Bookcase->CBETA->Dir + "index/main.ndx";
-	fmBuildIndex->ShowModal();
-
-	// 重新建立全文檢索引擎
-
-	Bookcase->CBETA->LoadSearchEngine();
-
-	SetSearchEngine();
-
-}
-//---------------------------------------------------------------------------
 // 將檔案載入導覽樹
 void __fastcall TfmMain::LoadNavTree(String sFile)
 {
@@ -1138,12 +1161,176 @@ String __fastcall TfmMain::GetTodayString()
 	return str;
 }
 //---------------------------------------------------------------------------
-
 // 更換更新的 URL , 換成測試用的
 void __fastcall TfmMain::wmiUpdateURLClick(TObject *Sender)
 {
 	wmiUpdateURL->IsChecked = !wmiUpdateURL->IsChecked;
 	fmUpdate->UseLocalhostURL = wmiUpdateURL->IsChecked;
+}
+//---------------------------------------------------------------------------
+// 批量產生 HTML , 主要是用來檢查錯誤
+void __fastcall TfmMain::wmiCreateHtmlClick(TObject *Sender)
+{
+    fmCreateHtml->ShowModal();
+}
+//---------------------------------------------------------------------------
+// 建立索引檔
+void __fastcall TfmMain::wmiBuildIndexClick(TObject *Sender)
+{
+	// 先關掉全文檢索引擎
+
+	Bookcase->CBETA->FreeSearchEngine();
+
+	// 產生索引
+
+	fmBuildIndex->edBuildListDir->Text = Bookcase->CBETA->Dir;
+	fmBuildIndex->edBuildList->Text = Bookcase->CBETA->Dir + Bookcase->CBETA->SpineFile;
+	fmBuildIndex->edWordIndex->Text = Bookcase->CBETA->Dir + "index/wordindex.ndx";
+	fmBuildIndex->edMainIndex->Text = Bookcase->CBETA->Dir + "index/main.ndx";
+	fmBuildIndex->ShowModal();
+
+	// 重新建立全文檢索引擎
+
+	Bookcase->CBETA->LoadSearchEngine();
+
+	SetSearchEngine();
+}
+//---------------------------------------------------------------------------
+// 將所有的 Default 取消
+void __fastcall TfmMain::CancelAllDefault()
+{
+	btFindSutra->Default = false;
+	btGoSutra->Default = false;
+	btGoBook->Default = false;
+	btGoByKeyword->Default = false;
+	btTextSearch->Default = false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::edFindSutra_VolFromEnter(TObject *Sender)
+{
+	CancelAllDefault();
+	btFindSutra->Default = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::edGoSutra_SutraNumEnter(TObject *Sender)
+{
+	CancelAllDefault();
+	btGoSutra->Default = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::edGoBook_VolEnter(TObject *Sender)
+{
+	CancelAllDefault();
+	btGoBook->Default = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::edGoByKeywordEnter(TObject *Sender)
+{
+	CancelAllDefault();
+	btGoByKeyword->Default = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::edTextSearchEnter(TObject *Sender)
+{
+	CancelAllDefault();
+	btTextSearch->Default = true;
+}
+//---------------------------------------------------------------------------
+// 檢索本經
+void __fastcall TfmMain::cbSearchThisSutraChange(TObject *Sender)
+{
+	if(cbSearchThisSutra->IsChecked)
+	{
+		// 設定檢索此經
+		if(SpineID == -1)
+		{
+			cbSearchThisSutra->IsChecked = false;
+			return;
+		}
+
+		cbSearchRange->IsChecked = false;
+
+		// 取出本經
+		String sThisBookId = Bookcase->CBETA->Spine->BookID->Strings[SpineID];
+		String sThisSutra = Bookcase->CBETA->Spine->Sutra->Strings[SpineID];
+
+		Bookcase->CBETA->SearchEngine_CB->BuildFileList->NoneSearch();
+		Bookcase->CBETA->SearchEngine_orig->BuildFileList->NoneSearch();
+
+		Bookcase->CBETA->SearchEngine_CB->BuildFileList->SearchThisSutra(sThisBookId,sThisSutra);
+		Bookcase->CBETA->SearchEngine_orig->BuildFileList->SearchThisSutra(sThisBookId,sThisSutra);
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::wmiOnlineDocClick(TObject *Sender)
+{
+#ifdef _Windows
+	String sURL = u"http://www.cbeta.org/cbreader/doc/";
+	ShellExecute(0,L"open",sURL.c_str(),L"",L"", SW_SHOW);
+#endif
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::wmiOnlineFAQClick(TObject *Sender)
+{
+#ifdef _Windows
+	String sURL = u"http://www.cbeta.org/CBReader2X_FAQ.php";
+	ShellExecute(0,L"open",sURL.c_str(),L"",L"", SW_SHOW);
+#endif
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::mmiOnlineDocClick(TObject *Sender)
+{
+#ifdef __APPLE__
+	String sURL = u"http://www.cbeta.org/cbreader/doc/";
+	system(AnsiString("open " + AnsiString(sURL)).c_str());
+#endif
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::mmiOnlineFAQClick(TObject *Sender)
+{
+#ifdef __APPLE__
+	String sURL = u"http://www.cbeta.org/CBReader2X_FAQ.php";
+	system(AnsiString("open " + AnsiString(sURL)).c_str());
+#endif
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btBooleanClick(TObject *Sender)
+{
+	TPointF FP;
+	// Initialize the coordinates to the origin of the button control.
+	FP.X = 0;
+	FP.Y = 0;
+	// Transposes the coordinates in the context of the form.
+	FP = btBoolean->LocalToAbsolute(FP);
+	// Transposes the coordinates in the context of the screen.
+	FP = ClientToScreen(FP);
+	// Display the popup menu at the computed coordinates.
+	pmBoolean->Popup(FP.X, FP.Y + btBoolean->Height + 10);
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::miNearClick(TObject *Sender)
+{
+	edTextSearch->Text = edTextSearch->Text + u"+";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::miOrClick(TObject *Sender)
+{
+	edTextSearch->Text = edTextSearch->Text + u",";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::miExcludeClick(TObject *Sender)
+{
+	edTextSearch->Text = edTextSearch->Text + u"-";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::miAndClick(TObject *Sender)
+{
+	edTextSearch->Text = edTextSearch->Text + u"&";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::miBeforeClick(TObject *Sender)
+{
+	edTextSearch->Text = edTextSearch->Text + u"*";
 }
 //---------------------------------------------------------------------------
 
