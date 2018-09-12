@@ -77,14 +77,14 @@ __published: // IDE-managed Components
 	TStringColumn *StringColumn2;
 	TPanel *Panel4;
 	TLabel *Label1;
-	TLabel *Label2;
-	TLabel *Label3;
+	TLabel *lbGoSutra_Book;
+	TLabel *lbGoSutra_SutraNum;
 	TLabel *Label4;
 	TLabel *Label5;
 	TLabel *Label6;
 	TLabel *Label7;
 	TLabel *Label8;
-	TLabel *Label9;
+	TLabel *lbGoBook_Book;
 	TLabel *Label10;
 	TLabel *Label11;
 	TLabel *Label12;
@@ -115,14 +115,13 @@ __published: // IDE-managed Components
 	TEdit *edFindSutra_SutraFrom;
 	TEdit *edFindSutra_SutraTo;
 	TLabel *Label15;
-	TLabel *Label35;
-	TLabel *Label33;
+	TLabel *lbFindSutra_SutraNum;
+	TLabel *lbFindSutra_SutraName;
 	TLabel *Label34;
-	TLabel *Label16;
+	TLabel *lbFindSutra_Book;
 	TComboBox *cbFindSutra_BookId;
 	TLabel *Label17;
 	TLabel *Label18;
-	TStringColumn *StringColumn8;
 	TCornerButton *btOption;
 	TTabItem *TabItem5;
 	TPanel *Panel5;
@@ -136,7 +135,6 @@ __published: // IDE-managed Components
 	TStringColumn *StringColumn13;
 	TStringColumn *StringColumn14;
 	TStringColumn *StringColumn15;
-	TStringColumn *StringColumn16;
 	TButton *btTextSearch;
 	TLabel *lbSearchMsg;
 	TStringColumn *StringColumn17;
@@ -159,7 +157,6 @@ __published: // IDE-managed Components
 	TPanel *Panel7;
 	TLabel *Label20;
 	TSplitter *Splitter3;
-	TStringColumn *StringColumn18;
 	TLabel *Label21;
 	TRadioButton *rbFontSmall;
 	TRadioButton *rbFontMid;
@@ -194,6 +191,8 @@ __published: // IDE-managed Components
 	TMenuItem *miAnd;
 	TMenuItem *miOr;
 	TMenuItem *miExclude;
+	TStringColumn *StringColumn8;
+	TStringColumn *StringColumn16;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);

@@ -121,6 +121,7 @@ private: // User declarations
 	String __fastcall tag_rdg(_di_IXMLNode Node);
 	String __fastcall tag_ref(_di_IXMLNode Node);
 	String __fastcall tag_row(_di_IXMLNode Node);
+	String __fastcall tag_seg(_di_IXMLNode Node);
 	String __fastcall tag_sg(_di_IXMLNode Node);
 	String __fastcall tag_space(_di_IXMLNode Node);
 	String __fastcall tag_t(_di_IXMLNode Node);

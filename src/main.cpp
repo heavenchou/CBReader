@@ -29,9 +29,62 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
     // 還有 fmAbout 的版本與日期資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.3.1.0";
-	DebugString = u"Heaven";     // debug 口令
+	Version = u"0.3.1.1";
+	DebugString = u"Debug";     // debug 口令
 	IsDebug = false;           // debug 變數
+
+	// 西蓮淨苑 SLReader 專用
+	Application->Title = u"SLReader";
+	if(Application->Title == u"SLReader")
+	{
+		ProgramTitle = u"西蓮淨苑文獻集成";
+		Caption = ProgramTitle;
+
+		cbFindSutra_BookId->Items->Clear();
+		cbFindSutra_BookId->Items->Add(u"全部");
+		cbFindSutra_BookId->Items->Add(u"DA 道安法師著作全集");
+		cbFindSutra_BookId->Items->Add(u"ZY 智諭法師著作全集");
+		cbFindSutra_BookId->Items->Add(u"HM 惠敏法師蓮風集");
+		cbFindSutra_BookId->ItemIndex = 0;
+
+		cbGoSutra_BookId->Items->Clear();
+		cbGoSutra_BookId->Items->Add(u"全部");
+		cbGoSutra_BookId->Items->Add(u"DA 道安法師著作全集");
+		cbGoSutra_BookId->Items->Add(u"ZY 智諭法師著作全集");
+		cbGoSutra_BookId->Items->Add(u"HM 惠敏法師蓮風集");
+		cbGoSutra_BookId->ItemIndex = 0;
+
+		cbGoBook_BookId->Items->Clear();
+		cbGoBook_BookId->Items->Add(u"全部");
+		cbGoBook_BookId->Items->Add(u"DA 道安法師著作全集");
+		cbGoBook_BookId->Items->Add(u"ZY 智諭法師著作全集");
+		cbGoBook_BookId->Items->Add(u"HM 惠敏法師蓮風集");
+		cbGoBook_BookId->ItemIndex = 0;
+
+        Panel8->Visible = false;
+
+		lbFindSutra_Book->Text = u"叢書";
+		lbGoSutra_Book->Text = u"叢書";
+		lbGoBook_Book->Text = u"叢書";
+
+		lbFindSutra_SutraNum->Text = u"編號從";
+		lbGoSutra_SutraNum->Text = u"編號";
+
+		lbFindSutra_SutraName->Text = u"著作";
+
+		sgFindSutra->Columns[0]->Header = u"著作";
+		sgFindSutra->Columns[1]->Header = u"叢書";
+		sgFindSutra->Columns[3]->Width = 1;
+		sgFindSutra->Columns[4]->Header = u"編號";
+
+		sgTextSearch->Columns[1]->Header = u"著作";
+		sgTextSearch->Columns[2]->Header = u"叢書";
+		sgTextSearch->Columns[4]->Width = 1;
+		sgTextSearch->Columns[5]->Header = u"編號";
+
+		cbSearchRange->Visible = false;
+	}
+
 
 #ifdef _Windows
 	MainMenu->Free();
@@ -632,7 +685,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 		sJuan = CMyStrUtil::TrimLeft(sJuan, u'0');
 		sSutra = CMyStrUtil::TrimLeft(sSutra, u'0');
 		String sCaption = ProgramTitle + u"《" + sName + u"》"
-				+ sVol + u", No. " + sSutra + u", 卷" + sJuan;
+				+ sVol + u", No. " + sSutra + u", 卷/篇章" + sJuan;
 		Caption = sCaption;
 
 		cbSearchThisSutra->Text = u"檢索本經：" + sName;
@@ -964,7 +1017,7 @@ void __fastcall TfmMain::btPrevJuanClick(TObject *Sender)
 		}
 	}
 
-	TDialogService::ShowMessage(u"本卷已是最初卷");
+	TDialogService::ShowMessage(u"目前已是第一卷/篇章。");
 }
 //---------------------------------------------------------------------------
 // 下一卷
@@ -984,7 +1037,7 @@ void __fastcall TfmMain::btNextJuanClick(TObject *Sender)
 		}
 	}
 
-	TDialogService::ShowMessage(u"本卷已是最後一卷");
+	TDialogService::ShowMessage(u"目前已是最後一卷/篇章。");
 }
 //---------------------------------------------------------------------------
 
@@ -1247,17 +1300,22 @@ void __fastcall TfmMain::cbSearchThisSutraChange(TObject *Sender)
 			return;
 		}
 
-		cbSearchRange->IsChecked = false;
+		if(cbSearchRange->Visible)
+			cbSearchRange->IsChecked = false;
 
 		// 取出本經
 		String sThisBookId = Bookcase->CBETA->Spine->BookID->Strings[SpineID];
 		String sThisSutra = Bookcase->CBETA->Spine->Sutra->Strings[SpineID];
 
-		Bookcase->CBETA->SearchEngine_CB->BuildFileList->NoneSearch();
-		Bookcase->CBETA->SearchEngine_orig->BuildFileList->NoneSearch();
+		if(Bookcase->CBETA->SearchEngine_CB)
+			Bookcase->CBETA->SearchEngine_CB->BuildFileList->NoneSearch();
+		if(Bookcase->CBETA->SearchEngine_orig)
+			Bookcase->CBETA->SearchEngine_orig->BuildFileList->NoneSearch();
 
-		Bookcase->CBETA->SearchEngine_CB->BuildFileList->SearchThisSutra(sThisBookId,sThisSutra);
-		Bookcase->CBETA->SearchEngine_orig->BuildFileList->SearchThisSutra(sThisBookId,sThisSutra);
+		if(Bookcase->CBETA->SearchEngine_CB)
+			Bookcase->CBETA->SearchEngine_CB->BuildFileList->SearchThisSutra(sThisBookId,sThisSutra);
+        if(Bookcase->CBETA->SearchEngine_orig)
+			Bookcase->CBETA->SearchEngine_orig->BuildFileList->SearchThisSutra(sThisBookId,sThisSutra);
 	}
 }
 //---------------------------------------------------------------------------

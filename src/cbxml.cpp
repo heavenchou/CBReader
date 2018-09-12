@@ -149,7 +149,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	sHtml += JSFile;
 	sHtml += u"'></script>\n"
 	"	<style>\n"
-	"		body { background:#DDF1DC; font-weight: normal; line-height:20pt; color:#000000; font-size:16pt;}\n"
+	"		body { background:#DDF1DC; font-weight: normal; line-height:20pt; color:#000000; font-size:16pt; font-family:細明體;}\n"
 	"		a.SearchWord0 {color:#0000ff; background: #ffff66;}\n"
 	"		a.SearchWord1 {color:#0000ff; background: #a0ffff;}\n"
 	"		a.SearchWord2 {color:#0000ff; background: #99ff99;}\n"
@@ -367,6 +367,7 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 		else if (sTagName == u"rdg")		sHtml = tag_rdg(Node);
 		else if (sTagName == u"ref")		sHtml = tag_ref(Node);
 		else if (sTagName == u"row")		sHtml = tag_row(Node);
+		else if (sTagName == u"seg")		sHtml = tag_seg(Node);
 		else if (sTagName == u"cb:sg")		sHtml = tag_sg(Node);
 		else if (sTagName == u"space")		sHtml = tag_space(Node);
 		else if (sTagName == u"cb:t")		sHtml = tag_t(Node);
@@ -1727,9 +1728,13 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 
 	// 印出行首空格
 
-	if(PreFormatCount || bForceCutLine) // 強迫指定依原書就不輸 span 標記
-		sHtml += sSpace;
-	else
+	// 2018/07/28 強迫切行後, 空格也不一定要呈現, 例如
+	// <item><p type=pre>xxxxx
+	// item 本身就會縮排, 下一個 lb 若再空二格, 就會多出空格了,
+    // 所以底下三行移除
+	//if(PreFormatCount || bForceCutLine) // 強迫指定依原書就不輸 span 標記
+	//	sHtml += sSpace;
+	//else
 	{
 		if(Setting->ShowLineFormat)
 			sHtml += u"<span class='line_space'>" + sSpace + u"</span>";
@@ -2590,13 +2595,15 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 	if(iSpecialType == 0)
 	{
 		// 處理空格及段首
-		if(sTextIndentSpace == u"" && bAddSpace)
+		if(sTextIndentSpace == u"" && iMarginLeft + iTextIndent == 0 && bAddSpace)
 		{
 			iTextIndent++;
 			if(bHasLg) iTextIndent++;
 		}
 		MarginLeft += String::StringOfChar(u'　', iMarginLeft);
-		String sSpace = String::StringOfChar(u'　', iMarginLeft + iTextIndent);
+		String sSpace = "";
+		if(iMarginLeft + iTextIndent > 0)
+			sSpace = String::StringOfChar(u'　', iMarginLeft + iTextIndent);
 
 		if(Setting->ShowLineFormat)
 			sHtml += u"<span class='line_space'>";
@@ -2773,6 +2780,23 @@ String __fastcall CCBXML::tag_row(_di_IXMLNode Node)
 		sHtml += u"</tr>";
 	}
 
+	return sHtml;
+}
+// ---------------------------------------------------------------------------
+// <seg rend="border">p.12</seg> 要加外框
+String __fastcall CCBXML::tag_seg(_di_IXMLNode Node)
+{
+	String sHtml = u"";
+	String sRend = GetAttr(Node, u"rend");
+	if(sRend == u"border")
+	{
+        sHtml += "<span style='border:1px black solid'>";
+    }
+	sHtml += parseChild(Node); // 處理內容
+	if(sRend == u"border")
+	{
+		sHtml += "</span>";
+	}
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -3583,11 +3607,22 @@ String __fastcall CCBXML::GetVerInfo()
 	sPublishDate = fmMain->Bookcase->CBETA->PublishDate;
 
 	sVerInfo = u"<br><br><span style='margin:15px; padding: 25px; border-radius: 20px; background-color: rgb(200, 234, 198); display:block; box-shadow:inset -3px -3px 10px #9bbc99'>\n";
-	sVerInfo += u"【經文資訊】" + sBookName + u"第 " + sVolNum + u" 冊 No. " + sSutraNum + u" " + sSutraName + u"<br>\n";
+    if(Application->Title == u"CBReader")
+	{
+		sVerInfo += u"【經文資訊】" ;
+	}
+	else
+	{
+		sVerInfo += u"【著作資訊】" ;
+	}
+	sVerInfo += sBookName + u"第 " + sVolNum + u" 冊 No. " + sSutraNum + u" " + sSutraName + u"<br>\n";
 	sVerInfo += u"【版本記錄】發行日期：" + sPublishDate + u"<br>\n";
 	sVerInfo += u"【編輯說明】本資料庫由中華電子佛典協會（CBETA）依" + sBookName + u"所編輯<br>\n";
-	sVerInfo += u"【原始資料】" + sSourceFrom + u"<br>\n";
-	sVerInfo += u"【版權宣告】詳細說明請參閱【<a href='http://www.cbeta.org/copyright.php' target='_blank'>中華電子佛典協會資料庫版權宣告</a>】<br>\n";
+	if(Application->Title == u"CBReader")
+	{
+		sVerInfo += u"【原始資料】" + sSourceFrom + u"<br>\n";
+		sVerInfo += u"【版權宣告】詳細說明請參閱【<a href='http://www.cbeta.org/copyright.php' target='_blank'>中華電子佛典協會資料庫版權宣告</a>】<br>\n";
+	}
 	sVerInfo += u"</span><br>\n";
 
     return sVerInfo;

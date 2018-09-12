@@ -118,7 +118,7 @@ object fmMain: TfmMain
       Size.Height = 584.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 0
+      TabIndex = 1
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -134,7 +134,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 54.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -195,7 +195,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -294,7 +294,7 @@ object fmMain: TfmMain
             Text = #20874#25976#24478
             TabOrder = 14
           end
-          object Label35: TLabel
+          object lbFindSutra_SutraNum: TLabel
             Position.X = 16.000000000000000000
             Position.Y = 72.000000000000000000
             Size.Width = 57.000000000000000000
@@ -304,10 +304,10 @@ object fmMain: TfmMain
             Text = #32147#34399#24478
             TabOrder = 11
           end
-          object Label33: TLabel
+          object lbFindSutra_SutraName: TLabel
             Position.X = 16.000000000000000000
             Position.Y = 104.000000000000000000
-            Size.Width = 41.000000000000000000
+            Size.Width = 57.000000000000000000
             Size.Height = 25.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
@@ -324,7 +324,7 @@ object fmMain: TfmMain
             Text = #20316#35695#32773
             TabOrder = 9
           end
-          object Label16: TLabel
+          object lbFindSutra_Book: TLabel
             AutoSize = True
             Position.X = 16.000000000000000000
             Position.Y = 8.000000000000000000
@@ -442,7 +442,7 @@ object fmMain: TfmMain
             Header = #32147
           end
           object StringColumn6: TStringColumn
-            Header = #21367
+            Header = #21367'/'#31687#31456
           end
           object StringColumn7: TStringColumn
             Header = #20316#35695#32773
@@ -482,7 +482,7 @@ object fmMain: TfmMain
             Text = #32147#21367#32080#27083
             TabOrder = 30
           end
-          object Label2: TLabel
+          object lbGoSutra_Book: TLabel
             AutoSize = True
             Position.X = 16.000000000000000000
             Position.Y = 48.000000000000000000
@@ -493,7 +493,7 @@ object fmMain: TfmMain
             Text = #34255#32147
             TabOrder = 29
           end
-          object Label3: TLabel
+          object lbGoSutra_SutraNum: TLabel
             AutoSize = True
             Position.X = 16.000000000000000000
             Position.Y = 80.000000000000000000
@@ -508,11 +508,11 @@ object fmMain: TfmMain
             AutoSize = True
             Position.X = 16.000000000000000000
             Position.Y = 112.000000000000000000
-            Size.Width = 49.000000000000000000
-            Size.Height = 21.000000000000000000
+            Size.Width = 57.000000000000000000
+            Size.Height = 22.000000000000000000
             Size.PlatformDefault = False
             TextSettings.Font.Size = 18.000000000000000000
-            Text = #21367#25976
+            Text = #21367'/'#31687#31456
             TabOrder = 27
           end
           object Label5: TLabel
@@ -559,7 +559,7 @@ object fmMain: TfmMain
             Text = #26360#26412#32080#27083
             TabOrder = 23
           end
-          object Label9: TLabel
+          object lbGoBook_Book: TLabel
             AutoSize = True
             Position.X = 16.000000000000000000
             Position.Y = 224.000000000000000000
@@ -992,15 +992,13 @@ object fmMain: TfmMain
             Header = #32147
           end
           object StringColumn14: TStringColumn
-            Header = #21367
+            Header = #21367'/'#31687#31456
           end
           object StringColumn15: TStringColumn
             Header = #20316#35695#32773
           end
           object StringColumn16: TStringColumn
             Visible = False
-          end
-          object StringColumn18: TStringColumn
           end
         end
       end
@@ -1059,24 +1057,24 @@ object fmMain: TfmMain
       Position.X = 296.000000000000000000
       Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
-      Size.Width = 65.000000000000000000
+      Size.Width = 97.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
-      Text = #19978#19968#21367
+      Text = #19978#19968#21367'/'#31687#31456
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
       OnClick = btPrevJuanClick
     end
     object btNextJuan: TCornerButton
-      Position.X = 376.000000000000000000
+      Position.X = 400.000000000000000000
       Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
-      Size.Width = 65.000000000000000000
+      Size.Width = 97.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 2
-      Text = #19979#19968#21367
+      Text = #19979#19968#21367'/'#31687#31456
       XRadius = 3.000000000000000000
       YRadius = 3.000000000000000000
       OnClick = btNextJuanClick
@@ -1109,7 +1107,7 @@ object fmMain: TfmMain
     end
     object Label21: TLabel
       ClipChildren = True
-      Position.X = 456.000000000000000000
+      Position.X = 504.000000000000000000
       Position.Y = 8.000000000000000000
       Size.Width = 113.000000000000000000
       Size.Height = 41.000000000000000000
@@ -1121,7 +1119,7 @@ object fmMain: TfmMain
     object rbFontSmall: TRadioButton
       StyledSettings = [Family, Style, FontColor]
       GroupName = 'gnFontSize'
-      Position.X = 576.000000000000000000
+      Position.X = 616.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
@@ -1133,7 +1131,7 @@ object fmMain: TfmMain
     object rbFontMid: TRadioButton
       StyledSettings = [Family, Style, FontColor]
       GroupName = 'gnFontSize'
-      Position.X = 616.000000000000000000
+      Position.X = 656.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
@@ -1147,7 +1145,7 @@ object fmMain: TfmMain
       StyledSettings = [Family, Style, FontColor]
       GroupName = 'gnFontSize'
       IsChecked = True
-      Position.X = 656.000000000000000000
+      Position.X = 704.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000

@@ -71,7 +71,7 @@ __fastcall CSeries::CSeries(String sDir)
 	}
 
 	// CBETA 專用, 要處理 JuanLine 資料
-	if(ID == "CBETA")
+	if((ID == "CBETA")||(ID == "SEELAND"))
 	{
 		JuanLine = new CJuanLine();
 		JuanLine->LoadFromSpine(Spine);
