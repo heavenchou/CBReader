@@ -3607,18 +3607,11 @@ String __fastcall CCBXML::GetVerInfo()
 	sPublishDate = fmMain->Bookcase->CBETA->PublishDate;
 
 	sVerInfo = u"<br><br><span style='margin:15px; padding: 25px; border-radius: 20px; background-color: rgb(200, 234, 198); display:block; box-shadow:inset -3px -3px 10px #9bbc99'>\n";
-    if(Application->Title == u"CBReader")
-	{
-		sVerInfo += u"【經文資訊】" ;
-	}
-	else
-	{
-		sVerInfo += u"【著作資訊】" ;
-	}
+	sVerInfo += u"【典籍資訊】" ;
 	sVerInfo += sBookName + u"第 " + sVolNum + u" 冊 No. " + sSutraNum + u" " + sSutraName + u"<br>\n";
 	sVerInfo += u"【版本記錄】發行日期：" + sPublishDate + u"<br>\n";
 	sVerInfo += u"【編輯說明】本資料庫由中華電子佛典協會（CBETA）依" + sBookName + u"所編輯<br>\n";
-	if(Application->Title == u"CBReader")
+	//if(Application->Title == u"CBReader")
 	{
 		sVerInfo += u"【原始資料】" + sSourceFrom + u"<br>\n";
 		sVerInfo += u"【版權宣告】詳細說明請參閱【<a href='http://www.cbeta.org/copyright.php' target='_blank'>中華電子佛典協會資料庫版權宣告</a>】<br>\n";

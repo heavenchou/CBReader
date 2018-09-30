@@ -29,38 +29,38 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
     // 還有 fmAbout 的版本與日期資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.3.1.1";
-	DebugString = u"Debug";     // debug 口令
+	Version = u"0.3.1.2";
+	DebugString = u"Test";     // debug 口令
 	IsDebug = false;           // debug 變數
 
 	// 西蓮淨苑 SLReader 專用
 	Application->Title = u"SLReader";
 	if(Application->Title == u"SLReader")
 	{
-		ProgramTitle = u"西蓮淨苑文獻集成";
+		//ProgramTitle = u"西蓮淨苑文獻集成";
 		Caption = ProgramTitle;
 
-		cbFindSutra_BookId->Items->Clear();
-		cbFindSutra_BookId->Items->Add(u"全部");
+		//cbFindSutra_BookId->Items->Clear();
+		//cbFindSutra_BookId->Items->Add(u"全部");
 		cbFindSutra_BookId->Items->Add(u"DA 道安法師著作全集");
 		cbFindSutra_BookId->Items->Add(u"ZY 智諭法師著作全集");
 		cbFindSutra_BookId->Items->Add(u"HM 惠敏法師蓮風集");
 		cbFindSutra_BookId->ItemIndex = 0;
 
-		cbGoSutra_BookId->Items->Clear();
-		cbGoSutra_BookId->Items->Add(u"全部");
+		//cbGoSutra_BookId->Items->Clear();
+		//cbGoSutra_BookId->Items->Add(u"全部");
 		cbGoSutra_BookId->Items->Add(u"DA 道安法師著作全集");
 		cbGoSutra_BookId->Items->Add(u"ZY 智諭法師著作全集");
 		cbGoSutra_BookId->Items->Add(u"HM 惠敏法師蓮風集");
 		cbGoSutra_BookId->ItemIndex = 0;
 
-		cbGoBook_BookId->Items->Clear();
-		cbGoBook_BookId->Items->Add(u"全部");
+		//cbGoBook_BookId->Items->Clear();
+		//cbGoBook_BookId->Items->Add(u"全部");
 		cbGoBook_BookId->Items->Add(u"DA 道安法師著作全集");
 		cbGoBook_BookId->Items->Add(u"ZY 智諭法師著作全集");
 		cbGoBook_BookId->Items->Add(u"HM 惠敏法師蓮風集");
 		cbGoBook_BookId->ItemIndex = 0;
-
+		/*
         Panel8->Visible = false;
 
 		lbFindSutra_Book->Text = u"叢書";
@@ -83,6 +83,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 		sgTextSearch->Columns[5]->Header = u"編號";
 
 		cbSearchRange->Visible = false;
+        */
 	}
 
 
@@ -357,6 +358,24 @@ void __fastcall TfmMain::InitialData()
 		WebBrowser->URL = "file://" + Bookcase->CBETA->Dir + u"help/index.htm";
 		WebBrowser->Navigate();
 	}
+
+	// 西蓮淨苑 SLReader 專用
+	// 檢索範圍要加上西蓮
+	if(Application->Title == u"SLReader")
+	{
+		TTreeViewItem * newItem1 = new TTreeViewItem(fmSearchRange->tvBook);
+		newItem1->Text = u"DA 道安法師著作全集";   // 標題
+		fmSearchRange->tvBook->AddObject(newItem1);
+
+		TTreeViewItem * newItem2 = new TTreeViewItem(fmSearchRange->tvBook);
+		newItem2->Text = u"ZY 智諭法師著作全集";   // 標題
+		fmSearchRange->tvBook->AddObject(newItem2);
+
+		TTreeViewItem * newItem3 = new TTreeViewItem(fmSearchRange->tvBook);
+		newItem3->Text = u"HM 惠敏法師蓮風集";   // 標題
+		fmSearchRange->tvBook->AddObject(newItem3);
+    }
+
 }
 //---------------------------------------------------------------------------
 // 開啟指定的書櫃
@@ -648,8 +667,8 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	}
 	catch(...)
 	{
-        //WebBrowser->Navigate(u"file://" + sOutFile);
-    }
+		//WebBrowser->Navigate(u"file://" + sOutFile);
+	}
 
 	// 產生目錄
 
