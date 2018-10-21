@@ -52,7 +52,7 @@ void __fastcall CBookcase::LoadBookcase(String sDir)
 		if(s->NavFile != "")
 		{
 			Books->Add(s);   // 至少要找到導覽文件 NavFile
-			if(s->ID == "SEELAND")
+			if(s->ID == "CBETA" || s->ID == "SEELAND")
 				CBETA = s;
 		}
 		else

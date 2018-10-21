@@ -18,6 +18,7 @@
 #include "subutil.h"
 #include "highlight.h"
 #include "rendattr.h"
+#include "styleattr.h"
 #include "nextline.h"
 #include "main.h"
 #include "../../Monster/src/monster.h"
