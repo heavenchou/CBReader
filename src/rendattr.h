@@ -18,7 +18,7 @@ private:
 public:
 
 	String Rend;
-	String Style;   // 由 Rend 的內容自動產生相對應的 Style
+	String NewStyle;   // 由 Rend 的內容自動產生相對應的 Style
 	TStringList * RendList; // 存放每一組 Rend
 	int MarginLeft;
 	int TextIndent;

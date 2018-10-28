@@ -10,7 +10,7 @@ __fastcall CRendAttr::CRendAttr(String sStr)
 {
 	// 初值
 	Rend = sStr;
-	Style = u"";
+	NewStyle = u"";
 	RendList = new TStringList;
 
 	MarginLeft = 0;
@@ -70,29 +70,29 @@ void __fastcall CRendAttr::CreateStyle()
 		String sStr = RendList->Strings[i];
 
 		if(sStr == u"border")
-			Style += u"border:1px black solid;";
+			NewStyle += u"border:1px black solid;";
 		else if(sStr == u"no-border")
-			Style += u"border:0;";
+			NewStyle += u"border:0;";
 		else if(sStr == u"no-marker")
-            Style += u"list-style:none;";
+			NewStyle += u"list-style:none;";
 		else if(sStr == u"bold")
-			Style += u"font-weight:bold;";
+			NewStyle += u"font-weight:bold;";
 		else if(sStr == u"italic")
-			Style += u"font-style:italic;";
+			NewStyle += u"font-style:italic;";
 		else if(sStr == u"circle-above")
-			Style += u"text-emphasize:circle-above;";
+			NewStyle += u"text-emphasize:circle-above;";
 		else if(sStr == u"mingti" || sStr == u"songti")
 			// SimSun/NSimSun 簡體宋體
 			// Songti TC Mac 宋體
-			Style += u"font-family:MingLiU,細明體,PMingLiU,新細明體,SimSun,NSimSun,\"Songti TC\";";
+			NewStyle += u"font-family:MingLiU,細明體,PMingLiU,新細明體,SimSun,NSimSun,\"Songti TC\";";
 		else if(sStr == u"kaiti")
 			// STKaiti 是簡體楷體
 			// Kaiti TC Mac 楷體
-			Style += u"font-family:DFKai-SB,標楷體,STKaiti,\"Kaiti TC\";";
+			NewStyle += u"font-family:DFKai-SB,標楷體,STKaiti,\"Kaiti TC\";";
 		else if(sStr == u"heiti")
 			// simhei 簡體黑體, Microsoft YaHei 微軟雅黑
 			// Heiti TC Mac 黑體
-			Style += u"font-family:\"Microsoft JhengHei\",微軟正黑體,\"Microsoft YaHei\",simhei,\"Heiti TC\";";
+			NewStyle += u"font-family:\"Microsoft JhengHei\",微軟正黑體,\"Microsoft YaHei\",simhei,\"Heiti TC\";";
     }
 }
 // ---------------------------------------------------------------------------
