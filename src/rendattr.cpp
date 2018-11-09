@@ -79,20 +79,24 @@ void __fastcall CRendAttr::CreateStyle()
 			NewStyle += u"font-weight:bold;";
 		else if(sStr == u"italic")
 			NewStyle += u"font-style:italic;";
+		else if(sStr == u"small")
+			NewStyle += u"font-size:14pt;";
+		else if(sStr == u"large")
+			NewStyle += u"font-size:18pt;";
 		else if(sStr == u"circle-above")
 			NewStyle += u"text-emphasize:circle-above;";
 		else if(sStr == u"mingti" || sStr == u"songti")
 			// SimSun/NSimSun 簡體宋體
 			// Songti TC Mac 宋體
-			NewStyle += u"font-family:MingLiU,細明體,PMingLiU,新細明體,SimSun,NSimSun,\"Songti TC\";";
+			NewStyle += u"font-family:\"Times New Roman\",MingLiU,細明體,PMingLiU,新細明體,SimSun,NSimSun,\"Songti TC\";";
 		else if(sStr == u"kaiti")
 			// STKaiti 是簡體楷體
 			// Kaiti TC Mac 楷體
-			NewStyle += u"font-family:DFKai-SB,標楷體,STKaiti,\"Kaiti TC\";";
+			NewStyle += u"font-family:\"Times New Roman\",DFKai-SB,標楷體,STKaiti,\"Kaiti TC\";";
 		else if(sStr == u"heiti")
 			// simhei 簡體黑體, Microsoft YaHei 微軟雅黑
 			// Heiti TC Mac 黑體
-			NewStyle += u"font-family:\"Microsoft JhengHei\",微軟正黑體,\"Microsoft YaHei\",simhei,\"Heiti TC\";";
+			NewStyle += u"font-family:\"Times New Roman\",\"Microsoft JhengHei\",微軟正黑體,\"Microsoft YaHei\",simhei,\"Heiti TC\";";
     }
 }
 // ---------------------------------------------------------------------------

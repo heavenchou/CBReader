@@ -149,7 +149,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	sHtml += JSFile;
 	sHtml += u"'></script>\n"
 	"	<style>\n"
-	"		body { background:#DDF1DC; font-weight: normal; line-height:20pt; color:#000000; font-size:16pt; font-family:MingLiU,細明體,PMingLiU,新細明體,SimSun,NSimSun,\"Songti TC\";}\n"
+	"		body { background:#DDF1DC; font-weight: normal; line-height:20pt; color:#000000; font-size:16pt; font-family:'Times New Roman', MingLiU,細明體,PMingLiU,新細明體,SimSun,NSimSun,'Songti TC';}\n"
 	"		a.SearchWord0 {color:#0000ff; background: #ffff66;}\n"
 	"		a.SearchWord1 {color:#0000ff; background: #a0ffff;}\n"
 	"		a.SearchWord2 {color:#0000ff; background: #99ff99;}\n"
@@ -163,8 +163,8 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		a:visited 	{color:#0000ff;}\n"
 	"		a:link		{color:#0000ff;}\n"
 	"		a:active	{color:#0000ff;}\n"
-	"		.nonhan	{font-family:'Times New Roman', 'Gandhari Unicode';}\n"
-	"       .gaiji {font-family:Arial,'Hanazono Mincho B';}\n"
+	"		.foreign	{font-family:'Times New Roman', 'Gandhari Unicode';}\n"
+	"       .gaiji {font-family:'Times New Roman','Hanazono Mincho B';}\n"
 	"		.juannum {color:#008000; font-size:16pt;}\n"
 	"		.juanname {color:#0000FF; font-weight: bold; font-size:18pt;}\n"
 	"		.xu {color:#0000A0; font-size:16pt;}\n"
@@ -340,6 +340,7 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 
 		if (sTagName == u"anchor")			sHtml = tag_anchor(Node);
 		else if (sTagName == u"app")		sHtml = tag_app(Node);
+		else if (sTagName == u"biblScope")	sHtml = tag_biblScope(Node);
 		else if (sTagName == u"byline")		sHtml = tag_byline(Node);
 		else if (sTagName == u"cell")		sHtml = tag_cell(Node);
 		else if (sTagName == u"cb:div")		sHtml = tag_div(Node);
@@ -619,6 +620,31 @@ String __fastcall CCBXML::tag_app(_di_IXMLNode Node)
 		HTMLCollation += u"</div>\n";
 	}
 
+	return sHtml;
+}
+// ---------------------------------------------------------------------------
+//  <biblScope n="41" unit="卷" rend="small">
+String __fastcall CCBXML::tag_biblScope(_di_IXMLNode Node)
+{
+	String sHtml = u"";
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+	if(myRend->NewStyle != u"" || myStyle->NewStyle != u"" )
+	{
+		sHtml += u"<span style='";
+		sHtml += myRend->NewStyle;
+		sHtml += myStyle->NewStyle;
+		sHtml += "'>";
+    }
+	sHtml += parseChild(Node); // 處理內容
+	if(myRend->NewStyle != u"" || myStyle->NewStyle != u"" )
+	{
+		sHtml += "</span>";
+	}
+	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -948,17 +974,16 @@ String __fastcall CCBXML::tag_foreign(_di_IXMLNode Node)
 	CRendAttr * myRend = new CRendAttr(sRend);
 	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 
+	sHtml += u"<span class='foreign'";
 	if(myRend->NewStyle != u"" || myStyle->NewStyle != u"")
 	{
-		sHtml += "<span style='" + myRend->NewStyle + myStyle->NewStyle + "'>";
+		sHtml += " style='" + myRend->NewStyle + myStyle->NewStyle + "'";
 	}
+	sHtml += u">";
 
 	sHtml += parseChild(Node); // 處理內容
 
-	if(myRend->NewStyle != u"" || myStyle->NewStyle != u"")
-	{
-		sHtml += "</span>";
-	}
+	sHtml += "</span>";
 
 	delete myRend;
 	delete myStyle;
@@ -1151,7 +1176,7 @@ String __fastcall CCBXML::tag_g(_di_IXMLNode Node)
 
 			if(sUnicode != u"")
 			{
-				sUnicode = u"<span class='nonhan'>" + sUnicode + u"</span>";
+				sUnicode = u"<span class='foreign'>" + sUnicode + u"</span>";
 				if(bSpecial)    // 特殊格式, 給悉曇網用的, 200802 加入
 					sUnicode = u"(" + sUnicode + u")";
 				sHtml += sUnicode;
@@ -2143,8 +2168,10 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 		}
 	}
 
-	sHtml += u"<span class='lg'>";	// 偈頌折行
-	if(bIsNote) sHtml += u"(";		// type 是 note1 or note2 要在偈誦前後要加括號
+	sHtml += u"<span class='lg'";// 偈頌折行
+	if(!bIsNote) sHtml += u">";
+	// type 是 note1 or note2 要在偈誦前後要加括號以及變成小字
+	else sHtml += u" style='font-size:14pt;'>(";
 
 	// -----------------------------------
 	sHtml += parseChild(Node); // 處理內容
@@ -2321,7 +2348,7 @@ String __fastcall CCBXML::tag_mulu(_di_IXMLNode Node)
 		InMuluPin = true;
 
 		// 目錄的內容有可能有這些標記, 要處理掉 ????
-		// 1. 羅馬拼音加上 <span class="nonhan">xx</span>
+		// 1. 羅馬拼音加上 <span class="foreign">xx</span>
 		// 2. 缺字會加上 <span class="gaiji">...</span>
 		// 3. 缺字的 <!--gaiji,缽,1[金*本],2&#Xxxxx;,3-->
 
@@ -2865,35 +2892,34 @@ String __fastcall CCBXML::tag_rdg(_di_IXMLNode Node)
 }
 // ---------------------------------------------------------------------------
 // 南傳經文的巴利藏對照頁數
-// <ref target="#PTS.Vin.3.1"></ref>
+// <ref cRef="PTS.Vin.3.1"></ref>
 // 呈現 [P.1]
 // 實際上則是 <span class="pts_head" title="PTS.Vin.3.1">[P.1]</span>
 
 // 不過在各卷最前面, 可能有一個隱形的標記, 記錄著上一卷最後一個 PTS 頁碼, 這個就不要呈現出來
-// 它的格式是 <ref target="#PTS.Vin.3.109" type="PTS_hide"></ref>
+// 它的格式是 <ref cRef="PTS.Vin.3.109" type="PTS_hide"></ref>
 String __fastcall CCBXML::tag_ref(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	String sType= GetAttr(Node, u"type");
-	String sTarget= GetAttr(Node, u"target");
+	String sCRef= GetAttr(Node, u"cRef");
 
 	bool bHidePTS = false;  // 判斷是不是隱藏版的 PTS 標記
 	if(sType == u"PTS_hide") bHidePTS = true;
 
-	if(sTarget != u"")
+	if(sCRef != u"")
 	{
-		if(sTarget.SubString0(0,4) == u"#PTS")
+		if(sCRef.SubString0(0,3) == u"PTS")
 		{
-			sTarget.Delete0(0,1);
-			String sPage = sTarget;
+			String sPage = sCRef;
 			int iPos = sPage.LastDelimiter0(u".");	// 找到最後.的位置
 			sPage.Delete0(0,iPos+1);   // 最後一個數字, 也就是頁碼
 
 			// 隱藏的加要寫? 可能是引用複製要用的吧, 我也忘了....
 			if(Setting->ShowLineHead)
-				sHtml += u"<span class='pts_head' title='" + sTarget + "'>";
+				sHtml += u"<span class='pts_head' title='" + sCRef + "'>";
 			else
-				sHtml += u"<span class='pts_head' title='" + sTarget + "' style='display:none'>";
+				sHtml += u"<span class='pts_head' title='" + sCRef + "' style='display:none'>";
 			if(bHidePTS == false)
 				sHtml += u" [P." + sPage + u"] ";
 			sHtml += u"</span>";
@@ -3120,9 +3146,9 @@ String __fastcall CCBXML::tag_term(_di_IXMLNode Node)
 	String sHtml = u"";
 	String sBehaviour = GetAttr(Node, u"cb:behaviour");
 
-	if(sBehaviour == u"no_nor")  NoNormal++;
+	if(sBehaviour == u"no-norm")  NoNormal++;
 	sHtml += parseChild(Node); // 處理內容
-	if(sBehaviour == u"no_nor")  NoNormal--;
+	if(sBehaviour == u"no-norm")  NoNormal--;
 
 	return sHtml;
 }

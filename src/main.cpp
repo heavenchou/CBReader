@@ -138,6 +138,7 @@ void __fastcall TfmMain::FormDestroy(TObject *Sender)
 	if(Bookcase) delete Bookcase;
 	if(NavTree) delete NavTree;
 	if(MuluTree) delete MuluTree;
+    OleUninitialize;
 }
 // ---------------------------------------------------------------------------
 // 將 IE 設定為 IE 11
@@ -1409,4 +1410,6 @@ void __fastcall TfmMain::miBeforeClick(TObject *Sender)
 	edTextSearch->Text = edTextSearch->Text + u"*";
 }
 //---------------------------------------------------------------------------
+
+
 
