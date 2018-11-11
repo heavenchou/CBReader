@@ -1075,9 +1075,12 @@ void __fastcall TfmMain::CheckUpdate(bool bShowNoUpdate)
 
 	fmUpdate->CheckUpdate(Version, sDataVer, bShowNoUpdate);
 
-	String sToday = GetTodayString();
-	Setting->LastUpdateChk = sToday;
-	Setting->SaveToFile();
+	if(!fmUpdate->IsUpdate)    // 有更新就不要修改更新日期
+	{
+		String sToday = GetTodayString();
+		Setting->LastUpdateChk = sToday;
+		Setting->SaveToFile();
+	}
 
 /* 舊的, 讀取 update.exe, 不用了
 #ifdef _Windows

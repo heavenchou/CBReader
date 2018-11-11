@@ -83,6 +83,10 @@ public:		// User declarations
 	// 手動檢查更新, 沒更新就需要秀訊息 "目前是最新版".
 	bool IsShowMessage;
 
+	// 判斷有沒有更新, 如果有更新, 就不修改更新時期,
+	// 這樣才能再次執行時, 再次檢查有沒有更新的更新
+	bool IsUpdate;
+
 	TStringList * slReceive;	// 接收網頁訊息
 
 	// 檢查需不需要更新, 傳入 cbreader 版本, 資料版本, 以及要不要回應目前是最新的 (手動更新才需要)
