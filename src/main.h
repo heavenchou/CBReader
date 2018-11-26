@@ -193,6 +193,8 @@ __published: // IDE-managed Components
 	TMenuItem *miExclude;
 	TStringColumn *StringColumn8;
 	TStringColumn *StringColumn16;
+	TCornerButton *btCopy;
+	TCornerButton *btCiteCopy;
 
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall btOpenBookcaseClick(TObject *Sender);
@@ -238,6 +240,10 @@ __published: // IDE-managed Components
 	void __fastcall miExcludeClick(TObject *Sender);
 	void __fastcall miAndClick(TObject *Sender);
 	void __fastcall miBeforeClick(TObject *Sender);
+	void __fastcall btCopyClick(TObject *Sender);
+	void __fastcall btCiteCopyClick(TObject *Sender);
+
+
 
 private: // User declarations
 

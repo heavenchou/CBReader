@@ -3059,6 +3059,13 @@ String __fastcall CCBXML::tag_t(_di_IXMLNode Node)
 	else if(NextLine->InNextLine)
 		// 在隔行對照時, 除非 rend = "" , 否則一律加上全型空格
 		sHtml += u"<add_sp>";
+	
+	// <add_sp> 要先處理
+	if(NextLine->InNextLine)
+	{
+		NextLine->Add(sHtml);
+		sHtml = u"";
+	}
 
 	if(InTTNormal)
 	{

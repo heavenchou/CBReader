@@ -115,6 +115,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	btOpenBookcase->Visible = false;
 	btOpenSimpleNav->Visible = false;
 	btOpenBookNav->Visible = false;
+	btCopy->Visible = false;
+	btCiteCopy->Visible = false;
 
 	// 因為下拉選單寬度不能為奇數, 所以要調整
 	if(Floor(cbFindSutra_BookId->Width) % 2 == 1) cbFindSutra_BookId->Width -= 1;
@@ -138,7 +140,6 @@ void __fastcall TfmMain::FormDestroy(TObject *Sender)
 	if(Bookcase) delete Bookcase;
 	if(NavTree) delete NavTree;
 	if(MuluTree) delete MuluTree;
-    OleUninitialize;
 }
 // ---------------------------------------------------------------------------
 // 將 IE 設定為 IE 11
@@ -570,12 +571,12 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 
 			// 找到了
 
-			sgFindSutra->Cells[0][iGridIndex]=Catalog->SutraName->Strings[i];
-			sgFindSutra->Cells[1][iGridIndex]=Catalog->ID->Strings[i];
-			sgFindSutra->Cells[2][iGridIndex]=Catalog->Vol->Strings[i];
-			sgFindSutra->Cells[3][iGridIndex]=Catalog->Part->Strings[i];
-			sgFindSutra->Cells[4][iGridIndex]=Catalog->SutraNum->Strings[i];
-			sgFindSutra->Cells[5][iGridIndex]=Catalog->JuanNum->Strings[i];
+			sgFindSutra->Cells[0][iGridIndex]=Catalog->ID->Strings[i];
+			sgFindSutra->Cells[1][iGridIndex]=Catalog->Vol->Strings[i];
+			sgFindSutra->Cells[2][iGridIndex]=Catalog->SutraNum->Strings[i];
+			sgFindSutra->Cells[3][iGridIndex]=Catalog->SutraName->Strings[i];
+			sgFindSutra->Cells[4][iGridIndex]=Catalog->JuanNum->Strings[i];
+			sgFindSutra->Cells[5][iGridIndex]=Catalog->Part->Strings[i];
 			sgFindSutra->Cells[6][iGridIndex]=Catalog->Byline->Strings[i];
 			sgFindSutra->Cells[7][iGridIndex]=i;
 			iGridIndex++;
@@ -861,12 +862,12 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 			String sSutraName = CMyCBUtil::CutJuanBeforeSutraName(Catalog->SutraName->Strings[iCatalogIndex]);
 
 			sgTextSearch->Cells[0][iGridIndex]=SearchEngine->FileFound->Ints[i];
-			sgTextSearch->Cells[1][iGridIndex]=sSutraName;
-			sgTextSearch->Cells[2][iGridIndex]=Catalog->ID->Strings[iCatalogIndex];
-			sgTextSearch->Cells[3][iGridIndex]=Spine->VolNum->Strings[i];
-			sgTextSearch->Cells[4][iGridIndex]=Catalog->Part->Strings[iCatalogIndex];
-			sgTextSearch->Cells[5][iGridIndex]=Catalog->SutraNum->Strings[iCatalogIndex];
-			sgTextSearch->Cells[6][iGridIndex]=SearchEngine->BuildFileList->JuanNum[i];
+			sgTextSearch->Cells[1][iGridIndex]=Catalog->ID->Strings[iCatalogIndex];
+			sgTextSearch->Cells[2][iGridIndex]=Spine->VolNum->Strings[i];
+			sgTextSearch->Cells[3][iGridIndex]=Catalog->SutraNum->Strings[iCatalogIndex];
+			sgTextSearch->Cells[4][iGridIndex]=sSutraName;
+			sgTextSearch->Cells[5][iGridIndex]=SearchEngine->BuildFileList->JuanNum[i];
+			sgTextSearch->Cells[6][iGridIndex]=Catalog->Part->Strings[iCatalogIndex];
 			sgTextSearch->Cells[7][iGridIndex]=Catalog->Byline->Strings[iCatalogIndex];
 			sgTextSearch->Cells[8][iGridIndex]=i;
 			iGridIndex++;
@@ -1413,6 +1414,37 @@ void __fastcall TfmMain::miBeforeClick(TObject *Sender)
 	edTextSearch->Text = edTextSearch->Text + u"*";
 }
 //---------------------------------------------------------------------------
+void __fastcall TfmMain::btCopyClick(TObject *Sender)
+{
+	try
+	{
+		WebBrowser->EvaluateJavaScript("document.execCommand('copy');");
+	}
+	catch(...)
+	{
+		TDialogService::ShowMessage("複製有問題");
+	}
+}
+//---------------------------------------------------------------------------
 
+void __fastcall TfmMain::btCiteCopyClick(TObject *Sender)
+{
+	try
+	{
+		WebBrowser->EvaluateJavaScript("CBCopy.go()");
+	}
+	catch(...)
+	{
+		try
+		{
+			WebBrowser->EvaluateJavaScript("document.execCommand('copy');");
+		}
+		catch(...)
+		{
+			TDialogService::ShowMessage("引用複製有問題");
+		}
 
+	}
+}
+//---------------------------------------------------------------------------
 

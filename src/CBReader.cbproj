@@ -6,7 +6,7 @@
         <MainSource>CBReader.cpp</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>7</TargetedPlatforms>
         <AppType>Application</AppType>
         <Profile Condition="'$(Platform)'=='OSX32'">macos1013</Profile>
@@ -174,7 +174,7 @@
         <VerInfo_MinorVer>4</VerInfo_MinorVer>
         <BCC_InstructionSet>5</BCC_InstructionSet>
         <VerInfo_Keys>CFBundleName=$(MSBuildProjectName);CFBundleDisplayName=$(MSBuildProjectName);CFBundleIdentifier=$(MSBuildProjectName);CFBundleVersion=0.4.0;CFBundlePackageType=APPL;CFBundleSignature=????;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=$(MSBuildProjectName);NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.utilities;NSLocationAlwaysUsageDescription=The reason for accessing the location information of the user;NSLocationWhenInUseUsageDescription=The reason for accessing the location information of the user;NSContactsUsageDescription=The reason for accessing the contacts;CFBundleShortVersionString=0.4.0</VerInfo_Keys>
-        <ILINK_FullDebugInfo>false</ILINK_FullDebugInfo>
+        <UsingDelphiRTL>true</UsingDelphiRTL>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -187,7 +187,7 @@
         <VerInfo_MinorVer>4</VerInfo_MinorVer>
         <VerInfo_Debug>true</VerInfo_Debug>
         <BCC_InstructionSet>5</BCC_InstructionSet>
-        <Icon_MainIcon>cbeta.ico</Icon_MainIcon>
+        <Icon_MainIcon>..\image\CBETA ICON\cbeta.ico</Icon_MainIcon>
         <DynamicRTL>false</DynamicRTL>
         <UsePackages>false</UsePackages>
         <LinkPackageStatics>rtl.lib;fmx.lib;xmlrtl.lib</LinkPackageStatics>
@@ -232,7 +232,7 @@
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
         <VerInfo_MinorVer>4</VerInfo_MinorVer>
         <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.4.0.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2018;LegalTrademarks=Copyright (C) CBETA 1998-2018;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.4.0.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
-        <Icon_MainIcon>cbeta.ico</Icon_MainIcon>
+        <Icon_MainIcon>..\image\CBETA ICON\cbeta.ico</Icon_MainIcon>
         <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
         <BCC_InstructionSet>5</BCC_InstructionSet>
     </PropertyGroup>
@@ -512,11 +512,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
                     <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
@@ -531,6 +526,11 @@
                     <Platform Name="OSX32">
                         <RemoteDir>Assets\</RemoteDir>
                         <RemoteName>Logo44x44.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -654,12 +654,6 @@
                 </DeployFile>
                 <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin64\cc64250mt.dll" Class="DependencyModule">
                     <Platform Name="Win64">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName=".\Win32\Debug\CBReader.tds" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="Win32">
-                        <RemoteName>CBReader.tds</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
