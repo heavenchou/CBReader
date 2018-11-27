@@ -3661,7 +3661,7 @@ void __fastcall CCBXML::GetInitialFromFileName()
 	JuanNum = String(mygrps.Item[4].Value).ToInt();		// 第幾卷
 	BookVolnSutra = BookId + VolId + u"n" + SutraId_;	// 內容是 T01n0001_
 
-	int iIndex = fmMain->Bookcase->CBETA->Catalog->FindIndexBySutraNum(BookId,SutraId);
+	int iIndex = fmMain->Bookcase->CBETA->Catalog->FindIndexBySutraNum(BookId,VolId,SutraId);
 	SutraName = fmMain->Bookcase->CBETA->Catalog->SutraName->Strings[iIndex];
 	TotalJuan = fmMain->Bookcase->CBETA->Catalog->JuanNum->Strings[iIndex].ToIntDef(0);
 
@@ -3800,7 +3800,7 @@ String __fastcall CCBXML::GetVerInfo()
 
 	sBookName = fmMain->Bookcase->CBETA->BookData->GetBookName(BookId);
 	// 經名要移除 (第X卷)
-	sSutraName = CMyCBUtil::CutJuanBeforeSutraName(SutraName);
+	sSutraName = CMyCBUtil::CutJuanAfterSutraName(SutraName);
 	sPublishDate = fmMain->Bookcase->CBETA->PublishDate;
 
 	sVerInfo = u"<br><br><span style='margin:15px; padding: 25px; border-radius: 20px; background-color: rgb(200, 234, 198); display:block; box-shadow:inset -3px -3px 10px #9bbc99'>\n";

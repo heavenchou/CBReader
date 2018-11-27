@@ -238,9 +238,9 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 }
 // ---------------------------------------------------------------------------
 // 則由經卷去找 XML 檔名
-String __fastcall CSeries::CBGetFileNameBySutraNumJuan(String sBookID, String sSutraNum, String sJuan, String sPage, String sField, String sLine)
+String __fastcall CSeries::CBGetFileNameBySutraNumJuan(String sBookID, String sVol, String sSutraNum, String sJuan, String sPage, String sField, String sLine)
 {
-	String sFileName = Spine->CBGetFileNameBySutraNumJuan(sBookID, sSutraNum, sJuan);
+	String sFileName = Spine->CBGetFileNameBySutraNumJuan(sBookID, sVol, sSutraNum, sJuan);
 
  	// 檔名要補上 #p0001a01 這種格式的位置
 

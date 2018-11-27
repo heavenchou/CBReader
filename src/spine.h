@@ -32,9 +32,9 @@ public: // User declarations
 	String __fastcall CBGetSutraNumFormat(String sSutraNum);
 
 	// 由經卷去找 Spine 的 Index , 也可以不指定卷
-	int __fastcall CBGetSpineIndexBySutraNumJuan(String sBookID,String sSutraNum,String sJuan = "");
+	int __fastcall CBGetSpineIndexBySutraNumJuan(String sBookID,String sVol,String sSutraNum,String sJuan = "");
 	// 由經卷去找 XML 檔名
-	String __fastcall CBGetFileNameBySutraNumJuan(String sBookID,String sSutraNum,String sJuan = "");
+	String __fastcall CBGetFileNameBySutraNumJuan(String sBookID,String sVol,String sSutraNum,String sJuan = "");
 	// 由 Spine 的 Index 去找 XML 檔名
 	String __fastcall CBGetFileNameBySpineIndex(int iIndex);
 

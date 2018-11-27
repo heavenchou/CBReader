@@ -68,12 +68,32 @@ void __fastcall CCatalog::LoadCatalog(String sFile)
 }
 // ---------------------------------------------------------------------------
 // 取得 Catalog 的編號, 傳回 -1 表示找不到
+/*
 int __fastcall CCatalog::FindIndexBySutraNum(String sBook, String sSutraNum)
 {
 	for(int i=0; i<ID->Count; i++)
 	{
 		if(ID->Strings[i] == sBook && SutraNum->Strings[i] == sSutraNum)
 			return i;
+	}
+	return -1;
+}
+*/
+// ---------------------------------------------------------------------------
+// 取得 Catalog 的編號, 傳回 -1 表示找不到
+int __fastcall CCatalog::FindIndexBySutraNum(String sBook, String sVol, String sSutraNum)
+{
+	return FindIndexBySutraNum(sBook, sVol.ToInt(), sSutraNum);
+}
+// ---------------------------------------------------------------------------
+// 取得 Catalog 的編號, 傳回 -1 表示找不到
+int __fastcall CCatalog::FindIndexBySutraNum(String sBook, int iVol, String sSutraNum)
+{
+	for(int i=0; i<ID->Count; i++)
+	{
+		if(ID->Strings[i] == sBook && SutraNum->Strings[i] == sSutraNum)
+			if(Vol->Strings[i].ToInt() == iVol && iVol != 0)
+				return i;
 	}
 	return -1;
 }

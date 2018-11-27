@@ -596,7 +596,6 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 // 由經卷頁欄行呈現經文
 void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
 {
-
 	String sBook = cbGoSutra_BookId->Items->Strings[cbGoSutra_BookId->ItemIndex];
 
 	int iPos = sBook.Pos0(u" ");
@@ -620,7 +619,7 @@ void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
 
 	CSeries * csCBETA = Bookcase->CBETA;
 
-	String sFile = csCBETA->CBGetFileNameBySutraNumJuan(sBook, sSutraNum, sJuan, sPage, sField, sLine);
+	String sFile = csCBETA->CBGetFileNameBySutraNumJuan(sBook, "", sSutraNum, sJuan, sPage, sField, sLine);
 	ShowCBXML(sFile);
 
 }
@@ -696,20 +695,24 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	{
 		String sBook = Bookcase->CBETA->Spine->BookID->Strings[SpineID];
 		String sVol = Bookcase->CBETA->Spine->Vol->Strings[SpineID];
+		String sVolNum = Bookcase->CBETA->Spine->VolNum->Strings[SpineID];
 		String sSutra = Bookcase->CBETA->Spine->Sutra->Strings[SpineID];
 		String sJuan = Bookcase->CBETA->Spine->Juan->Strings[SpineID];
-		int iIndex = Bookcase->CBETA->Catalog->FindIndexBySutraNum(sBook, sSutra);
+		int iIndex = Bookcase->CBETA->Catalog->FindIndexBySutraNum(sBook, sVolNum, sSutra);
 		String sName = Bookcase->CBETA->Catalog->SutraName->Strings[iIndex];
 
 		// 經名移除 (第X卷-第x卷)
-		sName = CMyCBUtil::CutJuanBeforeSutraName(sName);
+		sName = CMyCBUtil::CutJuanAfterSutraName(sName);
 		sJuan = CMyStrUtil::TrimLeft(sJuan, u'0');
 		sSutra = CMyStrUtil::TrimLeft(sSutra, u'0');
 		String sCaption = ProgramTitle + u"《" + sName + u"》"
 				+ sVol + u", No. " + sSutra + u", 卷/篇章" + sJuan;
 		Caption = sCaption;
 
+		// 將經名後面的 （上中下一二三......十）移除
+		sName = CMyCBUtil::CutNumberAfterSutraName(sName);
 		cbSearchThisSutra->Text = u"檢索本經：" + sName;
+        cbSearchThisSutraChange(this);  // 設定檢索本經的相關資料
 	}
 
 	// 檢索本經
@@ -754,9 +757,10 @@ void __fastcall TfmMain::sgFindSutraCellDblClick(TColumn * const Column, const i
 
 	CCatalog * cbCatalog = Bookcase->CBETA->Catalog;
 	String sBookID = cbCatalog->ID->Strings[iIndex];
+	String sVol = cbCatalog->Vol->Strings[iIndex];
 	String sSutra = cbCatalog->SutraNum->Strings[iIndex];
 
-	String sFile = Bookcase->CBETA->CBGetFileNameBySutraNumJuan(sBookID, sSutra);
+	String sFile = Bookcase->CBETA->CBGetFileNameBySutraNumJuan(sBookID, sVol, sSutra);
 	ShowCBXML(sFile);
 }
 //---------------------------------------------------------------------------
@@ -846,6 +850,7 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 		{
 			String sSutraNum  = SearchEngine->BuildFileList->SutraNum[i];		// 取得經號
 			String sBook = SearchEngine->BuildFileList->Book[i];
+			int iVol = SearchEngine->BuildFileList->VolNum[i];
 
 			// 這裡可能找到 T220 第 600 卷, 卻傳回 T05 而不是 T07
 			// 有待改進處理 ????
@@ -854,12 +859,12 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 				int j;
 				j++;
             }
-			int iCatalogIndex = Catalog->FindIndexBySutraNum(sBook,sSutraNum);	// 取得 TripitakaMenu 的編號
+			int iCatalogIndex = Catalog->FindIndexBySutraNum(sBook,iVol,sSutraNum);	// 取得 TripitakaMenu 的編號
 
 			// 找到了
 
 			// 經名要移除 (第X卷)
-			String sSutraName = CMyCBUtil::CutJuanBeforeSutraName(Catalog->SutraName->Strings[iCatalogIndex]);
+			String sSutraName = CMyCBUtil::CutJuanAfterSutraName(Catalog->SutraName->Strings[iCatalogIndex]);
 
 			sgTextSearch->Cells[0][iGridIndex]=SearchEngine->FileFound->Ints[i];
 			sgTextSearch->Cells[1][iGridIndex]=Catalog->ID->Strings[iCatalogIndex];
