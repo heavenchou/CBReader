@@ -677,7 +677,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	int iLen = sMulu.Length();
 	sMulu = sMulu.SubString0(0,iLen-8); // ¦©±¼³Ì«áªº _001.xml
 
-	// Toc/T/T01/T01n0001 => Toc/T/T0001
+	// toc/T/T01/T01n0001 => toc/T/T0001
 	TRegEx *regex = new TRegEx();
 	sMulu = regex->Replace(sMulu, "\\d+[\\/][A-Z]+\\d+n", "");
 	sMulu = Bookcase->CBETA->Dir + sMulu + ".xml";

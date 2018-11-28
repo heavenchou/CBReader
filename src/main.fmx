@@ -118,7 +118,7 @@ object fmMain: TfmMain
       Size.Height = 584.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 3
+      TabIndex = 0
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -134,7 +134,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 54.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -868,7 +868,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -1118,7 +1118,7 @@ object fmMain: TfmMain
     end
     object Label21: TLabel
       ClipChildren = True
-      Position.X = 512.000000000000000000
+      Position.X = 504.000000000000000000
       Position.Y = 8.000000000000000000
       Size.Width = 113.000000000000000000
       Size.Height = 41.000000000000000000

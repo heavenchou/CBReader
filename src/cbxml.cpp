@@ -3805,7 +3805,7 @@ String __fastcall CCBXML::GetVerInfo()
 
 	sVerInfo = u"<br><br><span style='margin:15px; padding: 25px; border-radius: 20px; background-color: rgb(200, 234, 198); display:block; box-shadow:inset -3px -3px 10px #9bbc99'>\n";
 	sVerInfo += u"【典籍資訊】" ;
-	sVerInfo += sBookName + u"第 " + sVolNum + u" 冊 No. " + sSutraNum + u" " + sSutraName + u"<br>\n";
+	sVerInfo += sBookName + u"第 " + sVolNum + u" 冊 No. " + sSutraNum + u"《" + sSutraName + u"》<br>\n";
 	sVerInfo += u"【版本記錄】發行日期：" + sPublishDate + u"<br>\n";
 	sVerInfo += u"【編輯說明】本資料庫由中華電子佛典協會（CBETA）依" + sBookName + u"所編輯<br>\n";
     //不管什麼版本, 都要列出版權宣告比較好
