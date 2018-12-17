@@ -54,7 +54,7 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	InHead = false;			// 用來判斷本行是否是標題
 	InTTNormal = false;		// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 , T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
 	PreFormatCount = 0;		// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
-	NoNormal = 0;          // 用來判斷是否可用通用字 , 大於 0 就不用通用字, 這二種就不用通用字 <text rend="no_nor"> 及 <term rend="no_nor">
+	NoNormal = 0;          // 用來判斷是否可用通用字 , 大於 0 就不用通用字, 這二種就不用通用字 <text cb:behaviour="no-norm"> 及 <term cb:behaviour="no-norm">
 
 	// 要判斷品的範圍, 若出現品的 mulu, 則記錄 level, 等到 level 數字再次大於或等於時, 此品才結束
 	// <mulu level="3" label="3 轉輪聖王品" type="品"/>
@@ -149,7 +149,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	sHtml += JSFile;
 	sHtml += u"'></script>\n"
 	"	<style>\n"
-	"		body { background:#DDF1DC; font-weight: normal; line-height:20pt; color:#000000; font-size:16pt; font-family:細明體;}\n"
+	"		body { background:#DDF1DC; font-weight: normal; line-height:20pt; color:#000000; font-size:16pt; font-family:'Times New Roman', MingLiU,細明體,PMingLiU,新細明體,SimSun,NSimSun,'Songti TC';}\n"
 	"		a.SearchWord0 {color:#0000ff; background: #ffff66;}\n"
 	"		a.SearchWord1 {color:#0000ff; background: #a0ffff;}\n"
 	"		a.SearchWord2 {color:#0000ff; background: #99ff99;}\n"
@@ -163,23 +163,23 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		a:visited 	{color:#0000ff;}\n"
 	"		a:link		{color:#0000ff;}\n"
 	"		a:active	{color:#0000ff;}\n"
-	"		.nonhan	{font-family:'Times New Roman', 'Gandhari Unicode';}\n"
-	"       .gaiji {font-family:Arial,'Hanazono Mincho B';}\n"
-	"		.juannum {color:#008000; font-weight: normal; font-size:16pt;}\n"
+	"		.foreign	{font-family:'Times New Roman', 'Gandhari Unicode';}\n"
+	"       .gaiji {font-family:'Times New Roman','Hanazono Mincho B';}\n"
+	"		.juannum {color:#008000; font-size:16pt;}\n"
 	"		.juanname {color:#0000FF; font-weight: bold; font-size:18pt;}\n"
-	"		.xu {color:#0000A0; font-weight: normal; font-size:16pt;}\n"
-	"		.w {color:#0000A0; font-weight: normal; font-size:16pt;}\n"
-	"		.byline {color:#408080; font-weight: normal; font-size:16pt;}\n"
+	"		.xu {color:#0000A0; font-size:16pt;}\n"
+	"		.w {color:#0000A0; font-size:16pt;}\n"
+	"		.byline {color:#408080; font-size:16pt;}\n"
 	"		.headname {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
 	"		.headname2 {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
 	"		.headname3 {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
 	"		.headname4 {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
-	"		.linehead {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
-	"		.parahead {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
-	"		.pts_head {color:#0000A0; font-weight: normal; font-size:14pt;}\n"
-	"		.lg {color:#008040; font-weight: normal; font-size:16pt;}\n"
-	"		.corr {color:#FF0000; font-weight: normal; }\n"
-	"		.note {color:#9F5000; font-weight: normal; font-size:14pt;}\n"
+	"		.linehead {color:#0000A0; font-weight: normal; font-size:14pt;font-family:MingLiU,細明體,SimSun,NSimSun,\"Songti TC\";}\n"
+	"		.parahead {color:#0000A0; font-weight: normal; font-size:14pt;font-family:MingLiU,細明體,SimSun,NSimSun,\"Songti TC\";}\n"
+	"		.pts_head {color:#0000A0; font-weight: normal; font-size:14pt;font-family:MingLiU,細明體,SimSun,NSimSun,\"Songti TC\";}\n"
+	"		.lg {color:#008040; font-size:16pt;}\n"
+	"		.corr {color:#FF0000; }\n"
+	"		.note {color:#9F5000; font-size:14pt;}\n"
 	"		table {border-collapse: collapse; margin: 20px;}\n";
 
 	if(Setting->VerticalMode)
@@ -340,6 +340,7 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 
 		if (sTagName == u"anchor")			sHtml = tag_anchor(Node);
 		else if (sTagName == u"app")		sHtml = tag_app(Node);
+		else if (sTagName == u"biblScope")	sHtml = tag_biblScope(Node);
 		else if (sTagName == u"byline")		sHtml = tag_byline(Node);
 		else if (sTagName == u"cell")		sHtml = tag_cell(Node);
 		else if (sTagName == u"cb:div")		sHtml = tag_div(Node);
@@ -622,13 +623,51 @@ String __fastcall CCBXML::tag_app(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
+//  <biblScope n="41" unit="卷" rend="small">
+String __fastcall CCBXML::tag_biblScope(_di_IXMLNode Node)
+{
+	String sHtml = u"";
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+	if(myRend->NewStyle != u"" || myStyle->NewStyle != u"" )
+	{
+		sHtml += u"<span style='";
+		sHtml += myRend->NewStyle;
+		sHtml += myStyle->NewStyle;
+		sHtml += "'>";
+    }
+	sHtml += parseChild(Node); // 處理內容
+	if(myRend->NewStyle != u"" || myStyle->NewStyle != u"" )
+	{
+		sHtml += "</span>";
+	}
+	delete myRend;
+	delete myStyle;
+	return sHtml;
+}
+// ---------------------------------------------------------------------------
  // <byline cb:type="Translator">
 String __fastcall CCBXML::tag_byline(_di_IXMLNode Node)
 {
 	String sHtml = u"";
-	if(ListCount == 0) InByline = true;
+	if(ListCount == 0) InByline = true;  // ???? 和底下 InByline 不太一樣
+
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+
+	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
 
 	sHtml = parseChild(Node); // 處理內容
+
+	if(sNewStyle != "")
+	{
+		sHtml = u"<span style='" + sNewStyle + "'>" + sHtml + "</span>";
+	}
 
 	if(ListCount)
 		sHtml = u"<span class='byline'>　" + sHtml + u"</span>";
@@ -643,6 +682,8 @@ String __fastcall CCBXML::tag_byline(_di_IXMLNode Node)
 				u"<p class='byline' data-tagname='p'>" + sHtml + u"</p>";
 	}
 
+	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -715,6 +756,15 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 	String sHtml = u"";
 	String sType = GetAttr(Node, u"type");
 
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
+	if(sNewStyle != u"")
+		sNewStyle = " style='" + sNewStyle + "'";
+
 	DivCount++;
 
 	if(sType != u"")
@@ -726,10 +776,10 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 	{
 		FuWenCount++;
 		if(Setting->ShowLineFormat)
-			sHtml += u"<span class='w' data-tagname='div'>";   
+			sHtml += u"<span class='w' data-tagname='div'" + sNewStyle + ">";
 		else
 			// 要用 div , 才不會有 span 包 p 的困境
-			sHtml += u"<div class='w' data-tagname='div'>";
+			sHtml += u"<div class='w' data-tagname='div'" + sNewStyle + ">";
 
 		if(FuWenCount == 1)
 		{
@@ -744,10 +794,18 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 	else if (DivType[DivCount] == u"xu")		// 序文
 	{
 		if(Setting->ShowLineFormat)
-			sHtml += u"<span class='xu' data-tagname='div'>";
+			sHtml += u"<span class='xu' data-tagname='div'" + sNewStyle + ">";
 		else
 			// 要用 div , 才不會有 span 包 p 的困境
-			sHtml += u"<div class='xu' data-tagname='div'>";   
+			sHtml += u"<div class='xu' data-tagname='div'" + sNewStyle + ">";
+	}
+	else
+	{
+		if(Setting->ShowLineFormat)
+			sHtml += u"<span data-tagname='div'" + sNewStyle + ">";
+		else
+			// 要用 div , 才不會有 span 包 p 的困境
+			sHtml += u"<div data-tagname='div'" + sNewStyle + ">";
 	}
 
 	// ----------------------------------
@@ -771,9 +829,15 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 	{
 		sHtml += sEndTag;
 	}
+	else
+	{
+		sHtml += sEndTag;
+	}
 
 	DivCount--;
 
+	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -815,7 +879,11 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
 	String sPlace = GetAttr(Node, u"cb:place");
+
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 
 	String sOldMarginLeft = MarginLeft;
 	String sTextIndentSpace = MarginLeft;	// 先設為原來的 MarginLeft
@@ -823,12 +891,10 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 	int iMarginLeft = 0;
 	int iTextIndent = 0;
 
-	if(sRend != u"")
+	if(sStyle != u"")
 	{
-		CRendAttr * myRend = new CRendAttr(sRend);
-		iMarginLeft = myRend->MarginLeft;
-		iTextIndent = myRend->TextIndent;
-		delete myRend;
+		iMarginLeft = myStyle->MarginLeft;
+		iTextIndent = myStyle->TextIndent;
 
 		MarginLeft += String::StringOfChar(u'　',iMarginLeft);// 這是第二行之後要空的
 		sTextIndentSpace += String::StringOfChar(u'　',iMarginLeft+iTextIndent);
@@ -844,7 +910,10 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 	{
 		sHtml += u"<span class='entry' style='text-indent: ";
 		sHtml += String(iTextIndent);
-		sHtml += u"em' data-margin-left='";
+		sHtml += u"em;";
+		sHtml += myRend->NewStyle;
+		sHtml += myStyle->NewStyle;
+		sHtml += u"' data-margin-left='";
 		sHtml += String(iMarginLeft);
 		sHtml += u"em' data-tagname='div'>";
 		sHtml += u"<span class='line_space'>";
@@ -857,7 +926,10 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 		sHtml += String(iTextIndent);
 		sHtml += u"em; margin-left: ";
 		sHtml += String(iMarginLeft);
-		sHtml += u"em' data-margin-left='";
+		sHtml += u"em;";
+		sHtml += myRend->NewStyle;
+		sHtml += myStyle->NewStyle;
+		sHtml += u"' data-margin-left='";
 		sHtml += String(iMarginLeft);
 		sHtml += u"em' data-tagname='div'>";
 		sHtml += u"<span class='line_space' style='display:none'>";
@@ -873,8 +945,11 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 		sHtml += u"</span>";
 	else
 		sHtml += u"</div>";
+
 	MarginLeft = sOldMarginLeft;
 
+	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -892,7 +967,27 @@ String __fastcall CCBXML::tag_foreign(_di_IXMLNode Node)
 	String sPlace = GetAttr(Node, u"cb:place");
 	if(sPlace == u"foot") return u"";
 
-	sHtml = parseChild(Node); // 處理內容
+
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+
+	sHtml += u"<span class='foreign'";
+	if(myRend->NewStyle != u"" || myStyle->NewStyle != u"")
+	{
+		sHtml += " style='" + myRend->NewStyle + myStyle->NewStyle + "'";
+	}
+	sHtml += u">";
+
+	sHtml += parseChild(Node); // 處理內容
+
+	sHtml += "</span>";
+
+	delete myRend;
+	delete myStyle;
+
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -924,9 +1019,9 @@ String __fastcall CCBXML::tag_form(_di_IXMLNode Node)
 String __fastcall CCBXML::tag_formula(_di_IXMLNode Node)
 {
 	String sHtml = u"";
-	String sRend = GetAttr(Node, "rend");
+	String sStyle = GetAttr(Node, "style");
 
-	if(sRend == u"vertical-align:super")
+	if(sStyle.Pos0(u"vertical-align:super")>=0)
 	{
 		sHtml += u"<sup>";
 		sHtml += parseChild(Node); // 處理內容
@@ -1081,7 +1176,7 @@ String __fastcall CCBXML::tag_g(_di_IXMLNode Node)
 
 			if(sUnicode != u"")
 			{
-				sUnicode = u"<span class='nonhan'>" + sUnicode + u"</span>";
+				sUnicode = u"<span class='foreign'>" + sUnicode + u"</span>";
 				if(bSpecial)    // 特殊格式, 給悉曇網用的, 200802 加入
 					sUnicode = u"(" + sUnicode + u")";
 				sHtml += sUnicode;
@@ -1175,7 +1270,16 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 		// 只出現在 T06, T07 <head type="added">No. 220</head>,
 		// T21 <head type="added">No. 1222</head>
 		return u"";
-    }
+	}
+
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CRendAttr * myStyle = new CRendAttr(sStyle);
+	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
+	if(sNewStyle != u"")
+		sNewStyle = u" style='" + sNewStyle + u"'";
 
 	if(sType == u"pin")     // 品名
 	{
@@ -1197,7 +1301,7 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 	if(sParentNodeName == u"list")
 	{
 			// list 的規則參考 list 的項目
-			sHtml += u"<span class='headname'>";
+			sHtml += u"<span class='headname'" + sNewStyle + ">";
 	}
 	else
 	{
@@ -1226,25 +1330,25 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 		{
 			if(DivCount == 0 || DivCount % 3 == 1)
 				sHtml += u"<span class='line_space'>　　</span>"
-						"<span class='headname2' data-tagname='p'>";
+						"<span class='headname2' data-tagname='p'" + sNewStyle + ">";
 			else if(DivCount % 3 == 2)
 				sHtml += u"<span class='line_space'>　　　</span>"
-						"<span class='headname3' data-tagname='p'>";
+						"<span class='headname3' data-tagname='p'" + sNewStyle + ">";
 			else if(DivCount % 3 == 0)
 				sHtml += u"<span class='line_space'>　　　　</span>"
-						"<span class='headname4' data-tagname='p'>";
+						"<span class='headname4' data-tagname='p'" + sNewStyle + ">";
 		}
 		else
 		{
 			if(DivCount == 0 || DivCount % 3 == 1)
 				sHtml += u"<span class='line_space' style='display:none'>　　</span>"
-						"<p class='headname2' data-tagname='p'>";
+						"<p class='headname2' data-tagname='p'" + sNewStyle + ">";
 			else if(DivCount % 3 == 2)
 				sHtml += u"<span class='line_space' style='display:none'>　　　</span>"
-						"<p class='headname3' data-tagname='p'>";
+						"<p class='headname3' data-tagname='p'" + sNewStyle + ">";
 			else if(DivCount % 3 == 0)
 				sHtml += u"<span class='line_space' style='display:none'>　　　　</span>"
-						"<p class='headname4' data-tagname='p'>";
+						"<p class='headname4' data-tagname='p'" + sNewStyle + ">";
 		}
 	}
 
@@ -1292,6 +1396,8 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 			sHtml += u"<ul data-tagname='ul'>";
 	}
 
+	delete myRend;
+    delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -1299,104 +1405,113 @@ String __fastcall CCBXML::tag_item(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 
-    ItemNum[ListCount]++;
+	ItemNum[ListCount]++;
 
-        // 先看其前是不是 lb, list, head.
+	// 先看其前是不是 lb, list, head.
 
-		String sPreNodeName = u"";
-		String sPreChildNodeName = u"";
+	String sPreNodeName = u"";
+	String sPreChildNodeName = u"";
 
-		_di_IXMLNode PreNode = Node->PreviousSibling();
-		if(PreNode)
+	_di_IXMLNode PreNode = Node->PreviousSibling();
+	if(PreNode)
+	{
+		sPreNodeName = PreNode->NodeName;
+
+		_di_IXMLNode PreChildNode = PreNode->GetChildNodes()->Last();
+		if(PreChildNode) sPreChildNodeName = PreChildNode->NodeName;
+	}
+
+	// 這是在 item 之間空格用的, 原本 item 在第一個或行首才要依 list 的層次來空格
+	// 但若它前一層有 list, 則空格也要依原來的層次.
+	// 就類似 <I5>.....<I6>....<I5> , 則 <I5> 也要空5格.
+	// 實例 X26n0524.xml <lb ed="X" n="0633a23"/>
+
+	if(Setting->ShowLineFormat)
+		sHtml += u"<span data-tagname='li'>";
+	else
+		sHtml += u"<li data-tagname='li'>";
+	//if(Setting->CutLine)	// 大正藏切行
+	{
+		String sItemId = GetAttr(Node, u"xml:id");
+
+		// 第一個, 或在行首, 就要依 list 數量 * 2 來空格
+		if(ItemNum[ListCount] == 1 || sPreNodeName == u"lb" || sPreChildNodeName == u"list")
 		{
-			sPreNodeName = PreNode->NodeName;
+			//itemX63p0502b0319 是特例
+			// 在切換校註呈現時如何處理? 待研究 ????
+			//if(Setting->CorrSelect == 0 && sItemId == u"itemX63p0502b0319"){}
+			//else
+				if(Setting->ShowLineFormat)
+					sHtml += u"<span class='line_space'>" + String::StringOfChar(u'　',ListCount*2) + u"</span>";
+				else
+					sHtml += u"<span class='line_space' style='display:none'>" + String::StringOfChar(u'　',ListCount*2) + u"</span>";
 
-			_di_IXMLNode PreChildNode = PreNode->GetChildNodes()->Last();
-			if(PreChildNode) sPreChildNodeName = PreChildNode->NodeName;
 		}
-
-        // 這是在 item 之間空格用的, 原本 item 在第一個或行首才要依 list 的層次來空格
-        // 但若它前一層有 list, 則空格也要依原來的層次.
-        // 就類似 <I5>.....<I6>....<I5> , 則 <I5> 也要空5格.
-        // 實例 X26n0524.xml <lb ed="X" n="0633a23"/>
-
-		if(Setting->ShowLineFormat)
-        	sHtml += u"<span data-tagname='li'>";
 		else
-        	sHtml += u"<li data-tagname='li'>";
-		//if(Setting->CutLine)	// 大正藏切行
 		{
-			String sItemId = GetAttr(Node, u"xml:id");
-
-			// 第一個, 或在行首, 就要依 list 數量 * 2 來空格
-			if(ItemNum[ListCount] == 1 || sPreNodeName == u"lb" || sPreChildNodeName == u"list")
-            {
-				//itemX63p0502b0319 是特例
-				// 在切換校註呈現時如何處理? 待研究 ????
-				//if(Setting->CorrSelect == 0 && sItemId == u"itemX63p0502b0319"){}
-				//else
-					if(Setting->ShowLineFormat)
-						sHtml += u"<span class='line_space'>" + String::StringOfChar(u'　',ListCount*2) + u"</span>";
-					else
-						sHtml += u"<span class='line_space' style='display:none'>" + String::StringOfChar(u'　',ListCount*2) + u"</span>";
-
-            }
-            else
-            {
-				// 這幾組在呈現修訂用字時不空格
-				// 在切換校註呈現時如何處理? 待研究 ????
-                /*
-				if(Setting->CorrSelect == 0)
+			// 這幾組在呈現修訂用字時不空格
+			// 在切換校註呈現時如何處理? 待研究 ????
+			/*
+			if(Setting->CorrSelect == 0)
+			{
+				if(sItemId.SubString(1,7) == u"itemX63")
 				{
-					if(sItemId.SubString(1,7) == u"itemX63")
-					{
-						if     (sItemId == u"itemX63p0416b1820") {}
-						else if(sItemId == u"itemX63p0445c0619") {}
-						else if(sItemId == u"itemX63p0448b0220") {}
-						else if(sItemId == u"itemX63p0450b1619") {}
-						else if(sItemId == u"itemX63p0452a2319") {}
-						else if(sItemId == u"itemX63p0452b0619") {}
-						else if(sItemId == u"itemX63p0453b1820") {}
-						else if(sItemId == u"itemX63p0455b1019") {}
-						else if(sItemId == u"itemX63p0456b1319") {}
-						else if(sItemId == u"itemX63p0456c1119") {}
-						else if(sItemId == u"itemX63p0456c1320") {}
-						else if(sItemId == u"itemX63p0456c2020") {}
-						else if(sItemId == u"itemX63p0457b0919") {}
-						else if(sItemId == u"itemX63p0457b1020") {}
-						else if(sItemId == u"itemX63p0457b1520") {}
-						else if(sItemId == u"itemX63p0468c2329") {}
-						else if(sItemId == u"itemX63p0469a0337") {}
-						else if(sItemId == u"itemX63p0474a0320") {}
-						else if(sItemId == u"itemX63p0474a0719") {}
-						else if(sItemId == u"itemX63p0474a1320") {}
-						else if(sItemId == u"itemX63p0488a0919") {}
-						else if(sItemId == u"itemX63p0488a1320") {}
-						else if(sItemId == u"itemX63p0489a0520") {}
-						else if(sItemId == u"itemX63p0489a0819") {}
-						else if(sItemId == u"itemX63p0489c2420") {}
-						else if(sItemId == u"itemX63p0490a2219") {}
-						else if(sItemId == u"itemX63p0492c1019") {}
-						else if(sItemId == u"itemX63p0493a1019") {}
-						else if(sItemId == u"itemX63p0502a0919") {}
-						else if(sItemId == u"itemX63p0502a1519") {}
-						else if(sItemId == u"itemX63p0502b0319") {}
-						else if(sItemId == u"itemX63p0505b0120") {}
-						else if(sItemId == u"itemX63p0508c0220") {}
-						else if(sItemId == u"itemX63p0508c1319") {}
-						else sHtml += u"　";  // 行中的 item 只空一格
-					}
+					if     (sItemId == u"itemX63p0416b1820") {}
+					else if(sItemId == u"itemX63p0445c0619") {}
+					else if(sItemId == u"itemX63p0448b0220") {}
+					else if(sItemId == u"itemX63p0450b1619") {}
+					else if(sItemId == u"itemX63p0452a2319") {}
+					else if(sItemId == u"itemX63p0452b0619") {}
+					else if(sItemId == u"itemX63p0453b1820") {}
+					else if(sItemId == u"itemX63p0455b1019") {}
+					else if(sItemId == u"itemX63p0456b1319") {}
+					else if(sItemId == u"itemX63p0456c1119") {}
+					else if(sItemId == u"itemX63p0456c1320") {}
+					else if(sItemId == u"itemX63p0456c2020") {}
+					else if(sItemId == u"itemX63p0457b0919") {}
+					else if(sItemId == u"itemX63p0457b1020") {}
+					else if(sItemId == u"itemX63p0457b1520") {}
+					else if(sItemId == u"itemX63p0468c2329") {}
+					else if(sItemId == u"itemX63p0469a0337") {}
+					else if(sItemId == u"itemX63p0474a0320") {}
+					else if(sItemId == u"itemX63p0474a0719") {}
+					else if(sItemId == u"itemX63p0474a1320") {}
+					else if(sItemId == u"itemX63p0488a0919") {}
+					else if(sItemId == u"itemX63p0488a1320") {}
+					else if(sItemId == u"itemX63p0489a0520") {}
+					else if(sItemId == u"itemX63p0489a0819") {}
+					else if(sItemId == u"itemX63p0489c2420") {}
+					else if(sItemId == u"itemX63p0490a2219") {}
+					else if(sItemId == u"itemX63p0492c1019") {}
+					else if(sItemId == u"itemX63p0493a1019") {}
+					else if(sItemId == u"itemX63p0502a0919") {}
+					else if(sItemId == u"itemX63p0502a1519") {}
+					else if(sItemId == u"itemX63p0502b0319") {}
+					else if(sItemId == u"itemX63p0505b0120") {}
+					else if(sItemId == u"itemX63p0508c0220") {}
+					else if(sItemId == u"itemX63p0508c1319") {}
 					else sHtml += u"　";  // 行中的 item 只空一格
 				}
-				else
-				*/
-					if(Setting->ShowLineFormat)
-						sHtml += u"<span class='line_space'>　</span>";  // 行中的 item 只空一格
-					else
-						sHtml += u"<span class='line_space' style='display:none'>　</span>";  // 行中的 item 只空一格
+				else sHtml += u"　";  // 行中的 item 只空一格
 			}
-        }
+			else
+			*/
+				if(Setting->ShowLineFormat)
+					sHtml += u"<span class='line_space'>　</span>";  // 行中的 item 只空一格
+				else
+					sHtml += u"<span class='line_space' style='display:none'>　</span>";  // 行中的 item 只空一格
+		}
+	}
 
+
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+
+	if(myRend->NewStyle != "" || myStyle->NewStyle != "")
+		sHtml += "<span style='" + myRend->NewStyle + myStyle->NewStyle + "'>";
 
 	// item 的屬性要印出來 , <list xml:lang="sa-Sidd" type="ordered">
 	//                         <item n="（一）" xml:id="itemT18p0087a1401">....
@@ -1406,11 +1521,17 @@ String __fastcall CCBXML::tag_item(_di_IXMLNode Node)
 	// -----------------------------------
 	sHtml += parseChild(Node); // 處理內容
 	// -----------------------------------
+
+	if(myRend->NewStyle != "" || myStyle->NewStyle != "")
+		sHtml += "</span>";
+
 	if(Setting->ShowLineFormat)
 		sHtml += u"</span>";
 	else
 		sHtml += u"</li>";
 
+	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -1464,17 +1585,19 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 	bool bHasRend = false;	// 若有 rend 就不使用預設的空格
 	// 檢查移位 <l rend="margin-left:1">
 
-	String sRend = GetAttr(Node, "rend");
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 
-	if(sRend != ""
+	if((myStyle->MarginLeft != 0 || myStyle->TextIndent != 0)
 		&& !(!Setting->ShowPunc && LgNormal)      //若不秀標點且是標準格式, 就不依 rend
 		&& !(Setting->NoShowLgPunc && LgNormal))  //若在偈頌中且偈頌不秀新標
 	{
 		bHasRend = true;
-		CRendAttr * myRend = new CRendAttr(sRend);
-		iMarginLeft = myRend->MarginLeft;
-		iTextIndent = myRend->TextIndent;
-		delete myRend;
+		iMarginLeft = myStyle->MarginLeft;
+		iTextIndent = myStyle->TextIndent;
+
 		// l 標記應該不處理 LgMarginLeft 比較好吧
 		//if(iMarginLeft)
 		//	LgMarginLeft += String::StringOfChar(u'　',myRend->MarginLeft);  // lg 整段要空的格
@@ -1554,6 +1677,8 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 
 	LMarginLeft = u"";
 
+	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -1885,6 +2010,12 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	// 先處理 type 屬性
 
 	String sType = GetAttr(Node, u"type");
+	String sPlace = GetAttr(Node, "cb:place");
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 
 	if(sType == u"normal") LgNormal = true;		// lg 的 type 是 normal
 	if(sType == u"abnormal") LgNormal = false;    // 因為舊版有 type=inline
@@ -1895,40 +2026,30 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	}
 
 	// 處理 place="inline"
-	// V2.0 之後, 由 type=inline 改成 place=inline
+	// V2.0 之後, 由 type=inline 改成 cb:place=inline
 
-	String sPlace = GetAttr(Node, "place");
 	if(sPlace == "inline")			// 行中段落加句點
 	{
 		LgInline = true;
 		LgNormal = false;
 	}
 
-	// 再處理 rend 屬性
-
-	String sRend = GetAttr(Node, u"rend");
+	// 再處理 style 屬性
 
 	int iMarginLeft = 0;
 	int iTextIndent = 0;
-	// 檢查移位 <lg rend="margin-left:1">
-	// 舊版的會有 <lg type="inline">或<lg rend="inline''> , 要改成 type=abnormal
-	if(sRend != u""
+	// 檢查移位 <lg style="margin-left:1">
+	if((myStyle->MarginLeft != 0 || myStyle->TextIndent != 0)
 		&& !(!Setting->ShowPunc && LgNormal)    //若不秀標點且是標準格式, 就不依 rend
 		&& !(Setting->NoShowLgPunc && LgNormal))     //若在偈頌中且偈頌不秀新標
 	{
 		bHasRend = true;
 
-		CRendAttr * myRend = new CRendAttr(sRend);
-		iMarginLeft = myRend->MarginLeft;
-		iTextIndent = myRend->TextIndent;
-		if(myRend->IsInline)
-		{
-			LgNormal = false;
-			LgInline = true;
-		}
+		iMarginLeft = myStyle->MarginLeft;
+		iTextIndent = myStyle->TextIndent;
+
         // lg 整段要空的格
 		LgMarginLeft = String::StringOfChar(u'　',iMarginLeft);
-		delete myRend;
 	}
 	else
 	{
@@ -1956,10 +2077,18 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	{
 		// 標準偈頌, 完全利用空格來處理, 不由 <p> 來控制縮排, copy 才會好看
 		if(Setting->ShowLineFormat)
-			sHtml += u"<span data-tagname='p'>";
+			sHtml += u"<span data-tagname='p'";
 		else
-			sHtml += u"<p data-tagname='p'>";
+			sHtml += u"<p data-tagname='p'";
 
+		// 處理 style
+
+		if(myRend->NewStyle != u"" || myStyle->NewStyle != u"")
+		{
+			sHtml += " style='" + myRend->NewStyle + myStyle->NewStyle + "'";
+		}
+
+		sHtml += ">";
 		sHtml += sLgTextIndent;
 	}
 	else
@@ -1969,13 +2098,16 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 		{
 			if(Setting->ShowLineFormat)
 			{
-				sHtml += u"<span";
+				sHtml += u"<span style='";
 				if(iTextIndent != 0)
 				{
-					sHtml += u" style='text-indent:";
+					sHtml += u"text-indent:";
 					sHtml += String(iTextIndent);
-					sHtml += u"em'";
+					sHtml += u"em;";
 				}
+				sHtml += myRend->NewStyle;
+				sHtml += myStyle->NewStyle;
+				sHtml += u"'";
 				if(iMarginLeft != 0)
 				{
 					sHtml += u" data-margin-left='";
@@ -1987,7 +2119,6 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 				sHtml += u"<span class='line_space'>";
 				sHtml += sLgTextIndent;
 				sHtml += u"</span>";
-
 			}
 			else
 			{
@@ -2004,6 +2135,8 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 					sHtml += String(iTextIndent);
 					sHtml += u"em;";
 				}
+				sHtml += myRend->NewStyle;
+				sHtml += myStyle->NewStyle;
 				sHtml += u"'";
 				if(iMarginLeft != 0)
 				{
@@ -2021,14 +2154,24 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 		else
 		{
 			if(Setting->ShowLineFormat)
-				sHtml += u"<span data-tagname='p'>";
+				sHtml += u"<span data-tagname='p'";
 			else
-				sHtml += u"<p data-tagname='p'>";
+				sHtml += u"<p data-tagname='p'";
+
+			// 處理 style
+
+			if(myRend->NewStyle != u"" || myStyle->NewStyle != u"")
+			{
+				sHtml += " style='" + myRend->NewStyle + myStyle->NewStyle + "'";
+			}
+			sHtml += u">";
 		}
 	}
 
-	sHtml += u"<span class='lg'>";	// 偈頌折行
-	if(bIsNote) sHtml += u"(";		// type 是 note1 or note2 要在偈誦前後要加括號
+	sHtml += u"<span class='lg'";// 偈頌折行
+	if(!bIsNote) sHtml += u">";
+	// type 是 note1 or note2 要在偈誦前後要加括號以及變成小字
+	else sHtml += u" style='font-size:14pt;'>(";
 
 	// -----------------------------------
 	sHtml += parseChild(Node); // 處理內容
@@ -2043,7 +2186,8 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	else
 		sHtml += u"</p>";
 
-
+	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -2116,26 +2260,35 @@ String __fastcall CCBXML::tag_list(_di_IXMLNode Node)
 		}
 	}
 
-	// 如果是 <list rendition="simple"> 要轉成 <ul style="list-style:none;">
-	String sRendition = GetAttr(Node, "rendition");
+	// 如果是 <list rend="no-marker"> 要轉成 <ul style="list-style:none;">
+	String sRend = GetAttr(Node, "rend");
+	CRendAttr * myRend = new CRendAttr(sRend);
 
 	if(!bHasHead)
 	{
 		if(Setting->ShowLineFormat)
 		{
-			if(sRendition == u"simple")
-				sHtml += u"<span style='list-style:none' data-tagname='ul'>";
+			if(myRend->NewStyle != "")
+			{
+				sHtml += u"<span style='";
+				sHtml += myRend->NewStyle;
+				sHtml += u"' data-tagname='ul'>";
+			}
 			else
 				sHtml += u"<span data-tagname='ul'>";
 		}
 		else
 		{
-			if(sRendition == u"simple")
-				sHtml += u"<ul style='list-style:none' data-tagname='ul'>";
+			if(myRend->NewStyle != "")
+			{
+				sHtml += u"<ul style='";
+				sHtml += myRend->NewStyle;
+				sHtml += u"' data-tagname='ul'>";
+			}
 			else
 				sHtml += u"<ul data-tagname='ul'>";
 		}
-    }
+	}
 
 	sHtml += parseChild(Node); // 處理內容
 
@@ -2143,7 +2296,9 @@ String __fastcall CCBXML::tag_list(_di_IXMLNode Node)
 		sHtml += u"</span>";
 	else
 		sHtml += u"</ul>";
+
 	ListCount--;
+	delete myRend;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -2193,7 +2348,7 @@ String __fastcall CCBXML::tag_mulu(_di_IXMLNode Node)
 		InMuluPin = true;
 
 		// 目錄的內容有可能有這些標記, 要處理掉 ????
-		// 1. 羅馬拼音加上 <span class="nonhan">xx</span>
+		// 1. 羅馬拼音加上 <span class="foreign">xx</span>
 		// 2. 缺字會加上 <span class="gaiji">...</span>
 		// 3. 缺字的 <!--gaiji,缽,1[金*本],2&#Xxxxx;,3-->
 
@@ -2432,7 +2587,13 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
 	String sType = GetAttr(Node, u"cb:type");
+	String sPlace = GetAttr(Node, u"cb:place");
+
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+
     #ifdef _Windows
 		TNodeType nodetype;
 	#else
@@ -2443,51 +2604,49 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 	String sOldMarginLeft = MarginLeft; // 先存起舊的
 	int iMarginLeft = 0;
 	int iTextIndent = 0;
-	bool bHasRend = false;	    // 若有 rend 就不使用預設的空格
+	//bool bHasStyle = false;	    // 若有 rend 就不使用預設的空格
 	bool bHasInline = false;    // 有沒有 inline
 	bool bAddSpace = false;		// 要不要加空格, 有 inline 不一定加空格, 若前面有空格就不加
 	bool bHasLg = false;	    // 用來判斷前面是不是 lg, 若是就要空二格了
 	int  iSpecialType = 0;      // 0 : 一般情況 , 1 : cb:type ="各家會釋" , 2 : cb:type="訂解總論"
 
-	// 處理 rend
-	// 檢查移位 <p xml:id="pX78p0420a0401" rend="margin-left:2em">
-	//          <p xml:id="pX78p0802a1901" rend="margin-left:1em;text-indent:-1em">
-	//          <p xml:id="xxxxxxxxxxxxxx" rend="margin-left:1em;text-indent:-1em;inline">
+	// 處理 style, rend, cb:place
+	// 檢查移位 <p xml:id="pX78p0420a0401" style="margin-left:2em">
+	//          <p xml:id="pX78p0802a1901" style="margin-left:1em;text-indent:-1em">
+	//          <p xml:id="xxxxxxxxxxxxxx" cb:place="inline" style="margin-left:1em;text-indent:-1em">
+	//          <p xml:id="xxxxxxxxxxxxxx" rend="kaiti">
 
-	if(sRend != u"")
+	if(sStyle != u"")
 	{
-		bHasRend = true;
+		//bHasStyle = true;
+		iMarginLeft = myStyle->MarginLeft;
+		iTextIndent = myStyle->TextIndent;
+	}
 
-		CRendAttr * myRend = new CRendAttr(sRend);
-		iMarginLeft = myRend->MarginLeft;
-		iTextIndent = myRend->TextIndent;
+	// 處理 inline
+	if(sPlace == u"inline")
+	{
+		bHasInline = true;
+		bAddSpace = true;		// 要不要加空格
 
-		// 處理 inline
-		if(myRend->IsInline)
+		// 新的用法, 若 <p cb:place="inline"> 前無空格, 則依原書切行時都加上空格, 否則一律不加
+
+		_di_IXMLNode PreSiblNode = Node->PreviousSibling();  	// 取得上一層
+		if(PreSiblNode != NULL)
 		{
-			bHasInline = true;
-			bAddSpace = true;		// 要不要加空格
-
-			// 新的用法, 若 <p rend="inline"> 前無空格, 則依原書切行時都加上空格, 否則一律不加
-
-			_di_IXMLNode PreSiblNode = Node->PreviousSibling();  	// 取得上一層
-			if(PreSiblNode != NULL)
+			nodetype = PreSiblNode->NodeType;
+			if(nodetype == 3) // 這是純 data
 			{
-				nodetype = PreSiblNode->NodeType;
-				if(nodetype == 3) // 這是純 data
-				{
-					String sData = PreSiblNode->Text;
+				String sData = PreSiblNode->Text;
 
-					if(*(sData.LastChar()) == u'　')
-						bAddSpace = false;
-				}
-				else if(nodetype == 1) // 這是純 element
-				{
-					if(PreSiblNode->NodeName == u"lg") bHasLg = true;
-				}
+				if(*(sData.LastChar()) == u'　')
+					bAddSpace = false;
+			}
+			else if(nodetype == 1) // 這是純 element
+			{
+				if(PreSiblNode->NodeName == u"lg") bHasLg = true;
 			}
 		}
-		delete myRend;
 	}
 
 	// 處理 cb:type
@@ -2520,7 +2679,10 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 		sHtml += String(iTextIndent);
 		sHtml += u"em; margin-left: ";
 		sHtml += String(iMarginLeft);
-		sHtml += u"em; margin-top: 5px; margin-bottom: 0em;' data-tagname='p'>";
+		sHtml += u"em; margin-top: 5px; margin-bottom: 0em;";
+		sHtml += myRend->NewStyle;
+		sHtml += myStyle->NewStyle;
+		sHtml += u"' data-tagname='p'>";
 
 		if(iSpecialType == 1)
 			sHtml += u"<font color=#800000>";
@@ -2533,7 +2695,10 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 		{
 			sHtml += u"<span style='text-indent: ";
 			sHtml += String(iTextIndent);
-			sHtml += u"em' data-margin-left='";
+			sHtml += u"em;";
+			sHtml += myRend->NewStyle;
+			sHtml += myStyle->NewStyle;
+			sHtml += u"' data-margin-left='";
 			sHtml += String(iMarginLeft);
 			sHtml += u"em' data-tagname='p'>";
 		}
@@ -2543,7 +2708,10 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 			sHtml += String(iTextIndent);
 			sHtml += u"em; margin-left: ";
 			sHtml += String(iMarginLeft);
-			sHtml += u"em' data-margin-left='";
+			sHtml += u"em;";
+			sHtml += myRend->NewStyle;
+			sHtml += myStyle->NewStyle;
+			sHtml += u"' data-margin-left='";
 			sHtml += String(iMarginLeft);
 			sHtml += u"em' data-tagname='p'>";
 		}
@@ -2651,6 +2819,8 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 		else
 			sHtml += u"</p>";
 
+	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 
@@ -2722,35 +2892,34 @@ String __fastcall CCBXML::tag_rdg(_di_IXMLNode Node)
 }
 // ---------------------------------------------------------------------------
 // 南傳經文的巴利藏對照頁數
-// <ref target="#PTS.Vin.3.1"></ref>
+// <ref cRef="PTS.Vin.3.1"></ref>
 // 呈現 [P.1]
 // 實際上則是 <span class="pts_head" title="PTS.Vin.3.1">[P.1]</span>
 
 // 不過在各卷最前面, 可能有一個隱形的標記, 記錄著上一卷最後一個 PTS 頁碼, 這個就不要呈現出來
-// 它的格式是 <ref target="#PTS.Vin.3.109" type="PTS_hide"></ref>
+// 它的格式是 <ref cRef="PTS.Vin.3.109" type="PTS_hide"></ref>
 String __fastcall CCBXML::tag_ref(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	String sType= GetAttr(Node, u"type");
-	String sTarget= GetAttr(Node, u"target");
+	String sCRef= GetAttr(Node, u"cRef");
 
 	bool bHidePTS = false;  // 判斷是不是隱藏版的 PTS 標記
 	if(sType == u"PTS_hide") bHidePTS = true;
 
-	if(sTarget != u"")
+	if(sCRef != u"")
 	{
-		if(sTarget.SubString0(0,4) == u"#PTS")
+		if(sCRef.SubString0(0,3) == u"PTS")
 		{
-			sTarget.Delete0(0,1);
-			String sPage = sTarget;
+			String sPage = sCRef;
 			int iPos = sPage.LastDelimiter0(u".");	// 找到最後.的位置
 			sPage.Delete0(0,iPos+1);   // 最後一個數字, 也就是頁碼
 
 			// 隱藏的加要寫? 可能是引用複製要用的吧, 我也忘了....
 			if(Setting->ShowLineHead)
-				sHtml += u"<span class='pts_head' title='" + sTarget + "'>";
+				sHtml += u"<span class='pts_head' title='" + sCRef + "'>";
 			else
-				sHtml += u"<span class='pts_head' title='" + sTarget + "' style='display:none'>";
+				sHtml += u"<span class='pts_head' title='" + sCRef + "' style='display:none'>";
 			if(bHidePTS == false)
 				sHtml += u" [P." + sPage + u"] ";
 			sHtml += u"</span>";
@@ -2788,15 +2957,23 @@ String __fastcall CCBXML::tag_seg(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	String sRend = GetAttr(Node, u"rend");
-	if(sRend == u"border")
+	String sStyle = GetAttr(Node, u"style");
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+	if(myRend->NewStyle != u"" || myStyle->NewStyle != u"" )
 	{
-        sHtml += "<span style='border:1px black solid'>";
+		sHtml += u"<span style='";
+		sHtml += myRend->NewStyle;
+		sHtml += myStyle->NewStyle;
+		sHtml += "'>";
     }
 	sHtml += parseChild(Node); // 處理內容
-	if(sRend == u"border")
+	if(myRend->NewStyle != u"" || myStyle->NewStyle != u"" )
 	{
 		sHtml += "</span>";
 	}
+	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -2860,26 +3037,35 @@ String __fastcall CCBXML::tag_t(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	String sPlace = GetAttr(Node, u"place");
-	String sRend = GetAttr(Node, u"rend");
-	String sOldMarginLeft = MarginLeft;
 	if(sPlace == u"foot") return u"";
+
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+	String sOldMarginLeft = MarginLeft;
+
+	//CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 
 	// 如果是隔行對照, 就要累加 <t> 的計數器
 	if(NextLine->InNextLine)	NextLine->TCount = NextLine->TCount+1;
 
-	if(sRend != u"")
+	if(sStyle != u"")
 	{
-		CRendAttr * myRend = new CRendAttr(sRend);
-		int iMarginLeft = myRend->MarginLeft;
-
+		int iMarginLeft = myStyle->MarginLeft;
 		MarginLeft += String::StringOfChar(u'　',iMarginLeft);
 		sHtml += MarginLeft;
-		delete myRend;
 	}
 	// "<add_sp>" 是故意的, 在 TmyNextLineOfTT 物件處理
 	else if(NextLine->InNextLine)
 		// 在隔行對照時, 除非 rend = "" , 否則一律加上全型空格
 		sHtml += u"<add_sp>";
+	
+	// <add_sp> 要先處理
+	if(NextLine->InNextLine)
+	{
+		NextLine->Add(sHtml);
+		sHtml = u"";
+	}
 
 	if(InTTNormal)
 	{
@@ -2887,12 +3073,14 @@ String __fastcall CCBXML::tag_t(_di_IXMLNode Node)
 			sHtml += u"<span class='para_br' data-tagname='br'></span>";
 		else
 			sHtml += u"<br class='para_br' data-tagname='br'/>";
-
 	}
 
 	sHtml += parseChild(Node); // 處理內容
 
 	MarginLeft = sOldMarginLeft;
+
+	//delete myRend;
+	delete myStyle;
 
     // 判斷是不是在隔行對照
 	if(NextLine->InNextLine || !NextLine->IsOutput)
@@ -2915,23 +3103,33 @@ String __fastcall CCBXML::tag_table(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
 	String sBorder = u"1";      // 預設表格線為 1
 
 	CRendAttr * myRend = new CRendAttr(sRend);
-	if(myRend->Border != "") sBorder = myRend->Border;
-	delete myRend;
+	CRendAttr * myStyle = new CRendAttr(sStyle);
+	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
+
+    // 如果用 style="border:1" 只會最外圍有框線, 格子沒有, 細節要再研究
+	if(myRend->Find("no-border")) sBorder = u"0";
 
 	if(Setting->ShowLineFormat)
 	{
 		sHtml += u"<span data-tagname='table' border='";
 		sHtml += sBorder;
-		sHtml += u"'><span data-tagname='tbody'>";
+		sHtml += u"'";
+		if(sNewStyle != u"")
+			sHtml += u" style='" + sNewStyle + "'";
+		sHtml += u"><span data-tagname='tbody'>";
 	}
 	else
 	{
 		sHtml += u"<table data-tagname='table' border='";
 		sHtml += sBorder;
-		sHtml += u"'><tbody data-tagname='tbody'>";
+		sHtml += u"'";
+		if(sNewStyle != u"")
+			sHtml += u" style='" + sNewStyle + "'";
+		sHtml += u"><tbody data-tagname='tbody'>";
 	}
 
 	sHtml += parseChild(Node); // 處理內容
@@ -2941,22 +3139,23 @@ String __fastcall CCBXML::tag_table(_di_IXMLNode Node)
 	else
 		sHtml += u"</tbody></table>";
 
-
 	//sHtml = mv_data_between_tr(sHtml);  // 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
 
+	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
 // 用來判斷是否可用通用字 , 大於 0 就不用通用字,
-// 這二種就不用通用字 <text rend="no_nor"> 及 <term rend="no_nor">
+// 這二種就不用通用字 <text cb:behaviour="no-norm"> 及 <term cb:behaviour="no-norm">
 String __fastcall CCBXML::tag_term(_di_IXMLNode Node)
 {
 	String sHtml = u"";
-	String sRend = GetAttr(Node, u"rend");
+	String sBehaviour = GetAttr(Node, u"cb:behaviour");
 
-	if(sRend == u"no_nor")  NoNormal++;
+	if(sBehaviour == u"no-norm")  NoNormal++;
 	sHtml += parseChild(Node); // 處理內容
-	if(sRend == u"no_nor")  NoNormal--;
+	if(sBehaviour == u"no-norm")  NoNormal--;
 
 	return sHtml;
 }
@@ -2986,8 +3185,8 @@ String __fastcall CCBXML::tag_trailer(_di_IXMLNode Node)
     					# <cb:tt type="app" from="#begxxxxxx" to="#endxxxxxx"> : 在 back 區獨立出來的
     					# <cb:tt word-count="xx" type="app" from="#begxxxxxx" to="#endxxxxxx">
 
-	同一行的 tt						# <cb:tt rend="inline">
-	已經自動將漢字和悉曇分開的 tt	# <cb:tt rend="normal">
+	同一行的 tt						# <cb:tt place="inline"> 舊版是 <cb:tt rend="inline">
+	已經自動將漢字和悉曇分開的 tt	# <cb:tt type="single-line"> 舊版是 <cb:tt rend="normal">
 
 	這是要隔行對照的 tt 			# <cb:tt>
 	這是要隔行對照的 tt 			# <cb:tt type="tr"> : 只出現在 T20n1168B
@@ -3066,23 +3265,21 @@ T01n0026.xml
 String __fastcall CCBXML::tag_tt(_di_IXMLNode Node)
 {
 	String sHtml = u"";
-	String sRend = GetAttr(Node, u"rend");
+	//String sRend = GetAttr(Node, u"rend");
 	String sType = GetAttr(Node, u"type");
 	String sPlace = GetAttr(Node, u"place");
 
-	if((sRend == u"" && sType == u"") || (sRend == u"" && sType == u"tr"))
+	if((sPlace != u"inline" && sType == u"tr") || (sPlace != u"inline" && sType == u""))
 		NextLine->FindNextLine();	// 這是隔行對照
 
-    // 在 <cb:tt rend="normal"> 中, 這時每一個 <t> 都要換行 ,
-	// T54n2133A : <lb n="1194c17"/><p><cb:tt rend="normal"><cb:t lang="san-sd">
-	if(sRend == u"normal")	InTTNormal = true;
+	// 在 <cb:tt type="single-line"> 中, 這時每一個 <t> 都要換行 ,
+	// T54n2133A : <lb n="1194c17"/><p><cb:tt type="single-line"><cb:t lang="san-sd">
+	if(sType == u"single-line")	InTTNormal = true;
 
 	sHtml = parseChild(Node); // 處理內容
 
 	NextLine->FindNextLineEnd();
 	InTTNormal = false;
-	// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 ,
-	// T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
 
 	return sHtml;
 }
@@ -3464,7 +3661,7 @@ void __fastcall CCBXML::GetInitialFromFileName()
 	JuanNum = String(mygrps.Item[4].Value).ToInt();		// 第幾卷
 	BookVolnSutra = BookId + VolId + u"n" + SutraId_;	// 內容是 T01n0001_
 
-	int iIndex = fmMain->Bookcase->CBETA->Catalog->FindIndexBySutraNum(BookId,SutraId);
+	int iIndex = fmMain->Bookcase->CBETA->Catalog->FindIndexBySutraNum(BookId,VolId,SutraId);
 	SutraName = fmMain->Bookcase->CBETA->Catalog->SutraName->Strings[iIndex];
 	TotalJuan = fmMain->Bookcase->CBETA->Catalog->JuanNum->Strings[iIndex].ToIntDef(0);
 
@@ -3603,14 +3800,15 @@ String __fastcall CCBXML::GetVerInfo()
 
 	sBookName = fmMain->Bookcase->CBETA->BookData->GetBookName(BookId);
 	// 經名要移除 (第X卷)
-	sSutraName = CMyCBUtil::CutJuanBeforeSutraName(SutraName);
+	sSutraName = CMyCBUtil::CutJuanAfterSutraName(SutraName);
 	sPublishDate = fmMain->Bookcase->CBETA->PublishDate;
 
 	sVerInfo = u"<br><br><span style='margin:15px; padding: 25px; border-radius: 20px; background-color: rgb(200, 234, 198); display:block; box-shadow:inset -3px -3px 10px #9bbc99'>\n";
 	sVerInfo += u"【典籍資訊】" ;
-	sVerInfo += sBookName + u"第 " + sVolNum + u" 冊 No. " + sSutraNum + u" " + sSutraName + u"<br>\n";
+	sVerInfo += sBookName + u"第 " + sVolNum + u" 冊 No. " + sSutraNum + u"《" + sSutraName + u"》<br>\n";
 	sVerInfo += u"【版本記錄】發行日期：" + sPublishDate + u"<br>\n";
 	sVerInfo += u"【編輯說明】本資料庫由中華電子佛典協會（CBETA）依" + sBookName + u"所編輯<br>\n";
+    //不管什麼版本, 都要列出版權宣告比較好
 	//if(Application->Title == u"CBReader")
 	{
 		sVerInfo += u"【原始資料】" + sSourceFrom + u"<br>\n";

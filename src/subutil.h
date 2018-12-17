@@ -4,6 +4,7 @@
 #define SubUtilH
 
 #include <fmx.h>
+#include "System.RegularExpressions.hpp"
 //---------------------------------------------------------------------------
 
 // CBETA 相關函式
@@ -15,7 +16,9 @@ private:
 public:
 
 	// 將經名後面的 (第X卷-第X卷) or (第X卷) 移除
-	static String __fastcall CutJuanBeforeSutraName(String sName);
+	static String __fastcall CutJuanAfterSutraName(String sName);
+	// 將經名後面的 （上中下一二三......十）移除
+	static String __fastcall CutNumberAfterSutraName(String sName);
 
 };
 //---------------------------------------------------------------------------

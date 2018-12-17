@@ -29,12 +29,12 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
     // 還有 fmAbout 的版本與日期資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.3.1.2";
-	DebugString = u"Test";     // debug 口令
+	Version = u"0.4.0.0";
+	DebugString = u"Heaven";     // debug 口令
 	IsDebug = false;           // debug 變數
 
 	// 西蓮淨苑 SLReader 專用
-	Application->Title = u"SLReader";
+	// Application->Title = u"SLReader";
 	if(Application->Title == u"SLReader")
 	{
 		//ProgramTitle = u"西蓮淨苑文獻集成";
@@ -115,6 +115,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	btOpenBookcase->Visible = false;
 	btOpenSimpleNav->Visible = false;
 	btOpenBookNav->Visible = false;
+	btCopy->Visible = false;
+	btCiteCopy->Visible = false;
 
 	// 因為下拉選單寬度不能為奇數, 所以要調整
 	if(Floor(cbFindSutra_BookId->Width) % 2 == 1) cbFindSutra_BookId->Width -= 1;
@@ -569,12 +571,12 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 
 			// 找到了
 
-			sgFindSutra->Cells[0][iGridIndex]=Catalog->SutraName->Strings[i];
-			sgFindSutra->Cells[1][iGridIndex]=Catalog->ID->Strings[i];
-			sgFindSutra->Cells[2][iGridIndex]=Catalog->Vol->Strings[i];
-			sgFindSutra->Cells[3][iGridIndex]=Catalog->Part->Strings[i];
-			sgFindSutra->Cells[4][iGridIndex]=Catalog->SutraNum->Strings[i];
-			sgFindSutra->Cells[5][iGridIndex]=Catalog->JuanNum->Strings[i];
+			sgFindSutra->Cells[0][iGridIndex]=Catalog->ID->Strings[i];
+			sgFindSutra->Cells[1][iGridIndex]=Catalog->Vol->Strings[i];
+			sgFindSutra->Cells[2][iGridIndex]=Catalog->SutraNum->Strings[i];
+			sgFindSutra->Cells[3][iGridIndex]=Catalog->SutraName->Strings[i];
+			sgFindSutra->Cells[4][iGridIndex]=Catalog->JuanNum->Strings[i];
+			sgFindSutra->Cells[5][iGridIndex]=Catalog->Part->Strings[i];
 			sgFindSutra->Cells[6][iGridIndex]=Catalog->Byline->Strings[i];
 			sgFindSutra->Cells[7][iGridIndex]=i;
 			iGridIndex++;
@@ -594,7 +596,6 @@ void __fastcall TfmMain::btFindSutraClick(TObject *Sender)
 // 由經卷頁欄行呈現經文
 void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
 {
-
 	String sBook = cbGoSutra_BookId->Items->Strings[cbGoSutra_BookId->ItemIndex];
 
 	int iPos = sBook.Pos0(u" ");
@@ -618,7 +619,7 @@ void __fastcall TfmMain::btGoSutraClick(TObject *Sender)
 
 	CSeries * csCBETA = Bookcase->CBETA;
 
-	String sFile = csCBETA->CBGetFileNameBySutraNumJuan(sBook, sSutraNum, sJuan, sPage, sField, sLine);
+	String sFile = csCBETA->CBGetFileNameBySutraNumJuan(sBook, "", sSutraNum, sJuan, sPage, sField, sLine);
 	ShowCBXML(sFile);
 
 }
@@ -676,7 +677,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	int iLen = sMulu.Length();
 	sMulu = sMulu.SubString0(0,iLen-8); // 扣掉最後的 _001.xml
 
-	// Toc/T/T01/T01n0001 => Toc/T/T0001
+	// toc/T/T01/T01n0001 => toc/T/T0001
 	TRegEx *regex = new TRegEx();
 	sMulu = regex->Replace(sMulu, "\\d+[\\/][A-Z]+\\d+n", "");
 	sMulu = Bookcase->CBETA->Dir + sMulu + ".xml";
@@ -694,20 +695,24 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 	{
 		String sBook = Bookcase->CBETA->Spine->BookID->Strings[SpineID];
 		String sVol = Bookcase->CBETA->Spine->Vol->Strings[SpineID];
+		String sVolNum = Bookcase->CBETA->Spine->VolNum->Strings[SpineID];
 		String sSutra = Bookcase->CBETA->Spine->Sutra->Strings[SpineID];
 		String sJuan = Bookcase->CBETA->Spine->Juan->Strings[SpineID];
-		int iIndex = Bookcase->CBETA->Catalog->FindIndexBySutraNum(sBook, sSutra);
+		int iIndex = Bookcase->CBETA->Catalog->FindIndexBySutraNum(sBook, sVolNum, sSutra);
 		String sName = Bookcase->CBETA->Catalog->SutraName->Strings[iIndex];
 
 		// 經名移除 (第X卷-第x卷)
-		sName = CMyCBUtil::CutJuanBeforeSutraName(sName);
+		sName = CMyCBUtil::CutJuanAfterSutraName(sName);
 		sJuan = CMyStrUtil::TrimLeft(sJuan, u'0');
 		sSutra = CMyStrUtil::TrimLeft(sSutra, u'0');
 		String sCaption = ProgramTitle + u"《" + sName + u"》"
 				+ sVol + u", No. " + sSutra + u", 卷/篇章" + sJuan;
 		Caption = sCaption;
 
+		// 將經名後面的 （上中下一二三......十）移除
+		sName = CMyCBUtil::CutNumberAfterSutraName(sName);
 		cbSearchThisSutra->Text = u"檢索本經：" + sName;
+        cbSearchThisSutraChange(this);  // 設定檢索本經的相關資料
 	}
 
 	// 檢索本經
@@ -752,9 +757,10 @@ void __fastcall TfmMain::sgFindSutraCellDblClick(TColumn * const Column, const i
 
 	CCatalog * cbCatalog = Bookcase->CBETA->Catalog;
 	String sBookID = cbCatalog->ID->Strings[iIndex];
+	String sVol = cbCatalog->Vol->Strings[iIndex];
 	String sSutra = cbCatalog->SutraNum->Strings[iIndex];
 
-	String sFile = Bookcase->CBETA->CBGetFileNameBySutraNumJuan(sBookID, sSutra);
+	String sFile = Bookcase->CBETA->CBGetFileNameBySutraNumJuan(sBookID, sVol, sSutra);
 	ShowCBXML(sFile);
 }
 //---------------------------------------------------------------------------
@@ -844,6 +850,7 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 		{
 			String sSutraNum  = SearchEngine->BuildFileList->SutraNum[i];		// 取得經號
 			String sBook = SearchEngine->BuildFileList->Book[i];
+			int iVol = SearchEngine->BuildFileList->VolNum[i];
 
 			// 這裡可能找到 T220 第 600 卷, 卻傳回 T05 而不是 T07
 			// 有待改進處理 ????
@@ -852,20 +859,20 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
 				int j;
 				j++;
             }
-			int iCatalogIndex = Catalog->FindIndexBySutraNum(sBook,sSutraNum);	// 取得 TripitakaMenu 的編號
+			int iCatalogIndex = Catalog->FindIndexBySutraNum(sBook,iVol,sSutraNum);	// 取得 TripitakaMenu 的編號
 
 			// 找到了
 
 			// 經名要移除 (第X卷)
-			String sSutraName = CMyCBUtil::CutJuanBeforeSutraName(Catalog->SutraName->Strings[iCatalogIndex]);
+			String sSutraName = CMyCBUtil::CutJuanAfterSutraName(Catalog->SutraName->Strings[iCatalogIndex]);
 
 			sgTextSearch->Cells[0][iGridIndex]=SearchEngine->FileFound->Ints[i];
-			sgTextSearch->Cells[1][iGridIndex]=sSutraName;
-			sgTextSearch->Cells[2][iGridIndex]=Catalog->ID->Strings[iCatalogIndex];
-			sgTextSearch->Cells[3][iGridIndex]=Spine->VolNum->Strings[i];
-			sgTextSearch->Cells[4][iGridIndex]=Catalog->Part->Strings[iCatalogIndex];
-			sgTextSearch->Cells[5][iGridIndex]=Catalog->SutraNum->Strings[iCatalogIndex];
-			sgTextSearch->Cells[6][iGridIndex]=SearchEngine->BuildFileList->JuanNum[i];
+			sgTextSearch->Cells[1][iGridIndex]=Catalog->ID->Strings[iCatalogIndex];
+			sgTextSearch->Cells[2][iGridIndex]=Spine->VolNum->Strings[i];
+			sgTextSearch->Cells[3][iGridIndex]=Catalog->SutraNum->Strings[iCatalogIndex];
+			sgTextSearch->Cells[4][iGridIndex]=sSutraName;
+			sgTextSearch->Cells[5][iGridIndex]=SearchEngine->BuildFileList->JuanNum[i];
+			sgTextSearch->Cells[6][iGridIndex]=Catalog->Part->Strings[iCatalogIndex];
 			sgTextSearch->Cells[7][iGridIndex]=Catalog->Byline->Strings[iCatalogIndex];
 			sgTextSearch->Cells[8][iGridIndex]=i;
 			iGridIndex++;
@@ -1074,9 +1081,12 @@ void __fastcall TfmMain::CheckUpdate(bool bShowNoUpdate)
 
 	fmUpdate->CheckUpdate(Version, sDataVer, bShowNoUpdate);
 
-	String sToday = GetTodayString();
-	Setting->LastUpdateChk = sToday;
-	Setting->SaveToFile();
+	if(!fmUpdate->IsUpdate)    // 有更新就不要修改更新日期
+	{
+		String sToday = GetTodayString();
+		Setting->LastUpdateChk = sToday;
+		Setting->SaveToFile();
+	}
 
 /* 舊的, 讀取 update.exe, 不用了
 #ifdef _Windows
@@ -1407,6 +1417,39 @@ void __fastcall TfmMain::miAndClick(TObject *Sender)
 void __fastcall TfmMain::miBeforeClick(TObject *Sender)
 {
 	edTextSearch->Text = edTextSearch->Text + u"*";
+}
+//---------------------------------------------------------------------------
+void __fastcall TfmMain::btCopyClick(TObject *Sender)
+{
+	try
+	{
+		WebBrowser->EvaluateJavaScript("document.execCommand('copy');");
+	}
+	catch(...)
+	{
+		TDialogService::ShowMessage("複製有問題");
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfmMain::btCiteCopyClick(TObject *Sender)
+{
+	try
+	{
+		WebBrowser->EvaluateJavaScript("CBCopy.go()");
+	}
+	catch(...)
+	{
+		try
+		{
+			WebBrowser->EvaluateJavaScript("document.execCommand('copy');");
+		}
+		catch(...)
+		{
+			TDialogService::ShowMessage("引用複製有問題");
+		}
+
+	}
 }
 //---------------------------------------------------------------------------
 

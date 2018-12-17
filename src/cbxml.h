@@ -18,6 +18,7 @@
 #include "subutil.h"
 #include "highlight.h"
 #include "rendattr.h"
+#include "styleattr.h"
 #include "nextline.h"
 #include "main.h"
 #include "../../Monster/src/monster.h"
@@ -96,6 +97,7 @@ private: // User declarations
 	String __fastcall tag_anchor(_di_IXMLNode Node);
 	String __fastcall tag_app(_di_IXMLNode Node);
 	String __fastcall tag_byline(_di_IXMLNode Node);
+	String __fastcall tag_biblScope(_di_IXMLNode Node);
 	String __fastcall tag_cell(_di_IXMLNode Node);
 	String __fastcall tag_div(_di_IXMLNode Node);
 	String __fastcall tag_docNumber(_di_IXMLNode Node);

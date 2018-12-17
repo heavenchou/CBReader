@@ -9,13 +9,13 @@
 // ---------------------------------------------------------------------------
 USEFORM("update.cpp", fmUpdate);
 USEFORM("selectbook.cpp", fmSelectBook);
+USEFORM("createhtml.cpp", fmCreateHtml);
 USEFORM("about.cpp", fmAbout);
 USEFORM("buildindex.cpp", fmBuildIndex);
 USEFORM("option.cpp", fmOption);
 USEFORM("searchrange.cpp", fmSearchRange);
 USEFORM("logo.cpp", fmLogo);
 USEFORM("main.cpp", fmMain);
-USEFORM("createhtml.cpp", fmCreateHtml);
 //---------------------------------------------------------------------------
 extern "C" int FMXmain()
 {

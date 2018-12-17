@@ -27,6 +27,10 @@ void __fastcall TfmUpdate::CheckUpdate(String sCBRVer, String sDataVer, bool bSh
 {
 	IsShowMessage = bShowNoUpdate;
 
+	// 判斷有沒有更新, 如果有更新, 就不修改更新時期,
+	// 這樣才能再次執行時, 再次檢查有沒有更新的更新
+	IsUpdate = false;
+
 	// 傳過去的版本格式 ?cbr=0.1.0.0&data=0.1.0.0
 	// 作業系統 &os=win
     // debug 模式 &type=debug
@@ -105,6 +109,8 @@ void __fastcall TfmUpdate::FormShow(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TfmUpdate::btUpdateClick(TObject *Sender)
 {
+	IsUpdate = true;    // 表示有更新, 不要修改更新日期
+
 	// 開始更新
 	btUpdate->Cursor = crHourGlass;
 	Cursor = crHourGlass;
