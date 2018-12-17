@@ -43,7 +43,7 @@ void __fastcall CSpine::LoadSpineFile(String sFile)
 
 // ---------------------------------------------------------------------------
 // 由經卷去找 Spine 的 Index , 也可以不指定卷
-int __fastcall CSpine::CBGetSpineIndexBySutraNumJuan(String sBookID,String sSutraNum,String sJuan)
+int __fastcall CSpine::CBGetSpineIndexBySutraNumJuan(String sBookID,String sVol,String sSutraNum,String sJuan)
 {
 	// 傳回標準的經號格式
 	sSutraNum = CBGetSutraNumFormat(sSutraNum);
@@ -83,8 +83,9 @@ int __fastcall CSpine::CBGetSpineIndexBySutraNumJuan(String sBookID,String sSutr
 
 			if(sThisSutra == sMySutra)
 			{
-				if(sJuan == "" || Juan->Strings[i].ToInt() == iJuan)
-					return i;
+				if(sVol == "" || VolNum->Strings[i].ToInt() == sVol.ToInt())
+					if(sJuan == "" || Juan->Strings[i].ToInt() == iJuan)
+						return i;
 			}
 			else if(sThisSutra > sMySutra)
 				// 經號超過了
@@ -101,9 +102,9 @@ int __fastcall CSpine::CBGetSpineIndexBySutraNumJuan(String sBookID,String sSutr
 
 // ---------------------------------------------------------------------------
 // 則由經卷去找檔名
-String __fastcall CSpine::CBGetFileNameBySutraNumJuan(String sBookID,String sSutraNum,String sJuan)
+String __fastcall CSpine::CBGetFileNameBySutraNumJuan(String sBookID,String sVol,String sSutraNum,String sJuan)
 {
-	int iIndex = CBGetSpineIndexBySutraNumJuan(sBookID, sSutraNum, sJuan);
+	int iIndex = CBGetSpineIndexBySutraNumJuan(sBookID, sVol, sSutraNum, sJuan);
 	return CBGetFileNameBySpineIndex(iIndex);
 }
 // ---------------------------------------------------------------------------

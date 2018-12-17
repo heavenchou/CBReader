@@ -9,86 +9,94 @@
 __fastcall CRendAttr::CRendAttr(String sStr)
 {
 	// 初值
+	Rend = sStr;
+	NewStyle = u"";
+	RendList = new TStringList;
+
 	MarginLeft = 0;
 	TextIndent = 0;
-	Border = u"";
+	Border = "";
 	IsInline = false;
-	Rend = sStr;
 
-	if(Rend != "")	Analysis();	// 進行分析
+	// 移除最前面的空格
+	while(Rend != u"" && *Rend.FirstChar() == u' ') Rend.Delete0(0,1);
+	if(Rend != "")
+	{
+		// 尾端補上空格
+		if(*Rend.LastChar() != u' ') Rend += u" ";
+		Analysis();	// 進行分析
+		CreateStyle();  // 產生相對應的 Style
+	}
 }
 // ---------------------------------------------------------------------------
 __fastcall CRendAttr::~CRendAttr(void) // 解構函式
 {
+	if(RendList) delete RendList;
+	RendList = 0;
 }
 // ---------------------------------------------------------------------------
 void __fastcall CRendAttr::Analysis()
 {
 	String sRend = Rend;
-
-	// 尾端補上 ;
-	if(*sRend.LastChar() != u';') sRend += u";";
-	sRend = StringReplace(sRend, u" ", "", TReplaceFlags() << rfReplaceAll);
-
 	int iPos;
-	String sMarginLeft = u"";
-	String sTextIndent = u"";
 
-	// 逐一取出 rend 裡面的內容, 可能是 "margin-left:2em;text-indent:1em;inline;"
+	// 逐一取出 rend 裡面的內容, 可能是 "no-marker border"
 	while(sRend != u"")
 	{
 		String sTmp = u"";
 
-		if((iPos = sRend.Pos0(u";")) >= 0)
-		{
-			sTmp = sRend.SubString0(0,iPos);
-			sRend.Delete0(0,iPos+1);
-		}
+		int iPos = sRend.Pos0(u" ");
+		sTmp = sRend.SubString0(0,iPos);
+		RendList->Add(sTmp);
 
-		if(sTmp.SubString0(0,12) == u"margin-left:")
-		{
-			sMarginLeft = sTmp;
-		}
-		else if(sTmp.SubString0(0,12) == u"text-indent:")
-		{
-			sTextIndent = sTmp;
-		}
-		else if(sTmp.SubString0(0,7) == u"border:")
-		{
-			Border = sTmp;
-		}
-		else if(sTmp.SubString0(0,6) == u"inline")
-		{
-			IsInline = true;
-		}
+		sRend.Delete0(0,iPos+1);
+		// 移除可能多出的空格
+		while(sRend != u"" && *sRend.FirstChar() == u' ') sRend.Delete0(0,1);
 	}
-
-	// 如果有 MarginLeft:
-	if(sMarginLeft != u"")
+}
+// ---------------------------------------------------------------------------
+// 在 RendList 找到某字串
+bool __fastcall CRendAttr::Find(String sStr)
+{
+	int i;
+    return RendList->Find(sStr,i);
+}
+// ---------------------------------------------------------------------------
+// 產生相對應的 Style
+void __fastcall CRendAttr::CreateStyle()
+{
+	for(int i=0; i<RendList->Count; i++)
 	{
-		// 支援 rend="margin-left:1em" 格式
-		if((iPos = sMarginLeft.Pos0(u"em")) >= 0)
-		{
-			sMarginLeft = sMarginLeft.SubString0(12,iPos-12); // 取出數字
-		}
-		MarginLeft = sMarginLeft.ToIntDef(0);
-	}
+		String sStr = RendList->Strings[i];
 
-	// 如果有 sTextIndent:
-	if(sTextIndent != u"")
-	{
-		if((iPos = sTextIndent.Pos0(u"em")) >= 0)
-		{
-			sTextIndent = sTextIndent.SubString0(12,iPos-12);
-		}
-		TextIndent = sTextIndent.ToIntDef(0);
-	}
-
-	// 如果有 Border:
-	if(Border != u"")
-	{
-		Border.Delete0(0,7);
-	}
-
+		if(sStr == u"border")
+			NewStyle += u"border:1px black solid;";
+		else if(sStr == u"no-border")
+			NewStyle += u"border:0;";
+		else if(sStr == u"no-marker")
+			NewStyle += u"list-style:none;";
+		else if(sStr == u"bold")
+			NewStyle += u"font-weight:bold;";
+		else if(sStr == u"italic")
+			NewStyle += u"font-style:italic;";
+		else if(sStr == u"small")
+			NewStyle += u"font-size:14pt;";
+		else if(sStr == u"large")
+			NewStyle += u"font-size:18pt;";
+		else if(sStr == u"circle-above")
+			NewStyle += u"text-emphasize:circle-above;";
+		else if(sStr == u"mingti" || sStr == u"songti")
+			// SimSun/NSimSun 簡體宋體
+			// Songti TC Mac 宋體
+			NewStyle += u"font-family:\"Times New Roman\",MingLiU,細明體,PMingLiU,新細明體,SimSun,NSimSun,\"Songti TC\";";
+		else if(sStr == u"kaiti")
+			// STKaiti 是簡體楷體
+			// Kaiti TC Mac 楷體
+			NewStyle += u"font-family:\"Times New Roman\",DFKai-SB,標楷體,STKaiti,\"Kaiti TC\";";
+		else if(sStr == u"heiti")
+			// simhei 簡體黑體, Microsoft YaHei 微軟雅黑
+			// Heiti TC Mac 黑體
+			NewStyle += u"font-family:\"Times New Roman\",\"Microsoft JhengHei\",微軟正黑體,\"Microsoft YaHei\",simhei,\"Heiti TC\";";
+    }
 }
 // ---------------------------------------------------------------------------

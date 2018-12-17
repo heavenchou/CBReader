@@ -45,6 +45,10 @@ __fastcall CSeries::CSeries(String sDir)
 	{
 		LoadMetaData(asFileName);
 	}
+	else
+	{
+		TDialogService::ShowMessage(u"沒有找到後設文件 index.xml");
+	}
 
 	Catalog = new CCatalog(); // 載入目錄資料
 	if(!CatalogFile.IsEmpty())
@@ -57,12 +61,13 @@ __fastcall CSeries::CSeries(String sDir)
 	{
 		Spine->LoadSpineFile(Dir + SpineFile);
 	}
-
+	/* 為什麼當初寫二次?
 	Spine = new CSpine();
 	if(!SpineFile.IsEmpty())
 	{
 		Spine->LoadSpineFile(Dir + SpineFile);
 	}
+	*/
 
 	BookData = new CBookData();
 	if(!BookDataFile.IsEmpty())
@@ -118,6 +123,10 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	{
 		ID = Node->ChildNodes->Get(0)->Text;
 	}
+	else
+	{
+		TDialogService::ShowMessage(u"沒有找到資料 ID");
+	}
 
 	// 讀 Title
 
@@ -150,6 +159,10 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	{
 		NavFile = Node->GetAttribute("src");
 	}
+	else
+	{
+		TDialogService::ShowMessage(u"沒有找到導覽目錄");
+	}
 
 	// 讀 nav
 
@@ -172,6 +185,10 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	{
 		CatalogFile = Node->GetAttribute("src");
 	}
+	else
+	{
+		TDialogService::ShowMessage(u"沒有找到目錄資料");
+	}
 
 	// 讀 Spine
 
@@ -180,6 +197,10 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	{
 		SpineFile = Node->GetAttribute("src");
 	}
+	else
+	{
+		TDialogService::ShowMessage(u"沒有找到遍歷資料");
+	}
 
 	// 讀 BookData
 	Node = Document->DocumentElement->ChildNodes->Nodes["bookdata"];
@@ -187,12 +208,20 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	{
 		BookDataFile = Node->GetAttribute("src");
 	}
+	else
+	{
+		TDialogService::ShowMessage(u"沒有找到 BookData");
+	}
 
 	// 讀 JSFile
 	Node = Document->DocumentElement->ChildNodes->Nodes["javascript"];
 	if(Node->HasAttribute("src"))
 	{
 		JSFile = Node->GetAttribute("src");
+	}
+	else
+	{
+		TDialogService::ShowMessage(u"沒有找到 Javascript");
 	}
 
 	// 讀 Version
@@ -202,12 +231,16 @@ void __fastcall CSeries::LoadMetaData(String sMeta)
 	{
 		Version = Node->ChildNodes->Get(0)->Text;
 	}
+	else
+	{
+		TDialogService::ShowMessage(u"沒有找到資料的版本資訊");
+	}
 }
 // ---------------------------------------------------------------------------
 // 則由經卷去找 XML 檔名
-String __fastcall CSeries::CBGetFileNameBySutraNumJuan(String sBookID, String sSutraNum, String sJuan, String sPage, String sField, String sLine)
+String __fastcall CSeries::CBGetFileNameBySutraNumJuan(String sBookID, String sVol, String sSutraNum, String sJuan, String sPage, String sField, String sLine)
 {
-	String sFileName = Spine->CBGetFileNameBySutraNumJuan(sBookID, sSutraNum, sJuan);
+	String sFileName = Spine->CBGetFileNameBySutraNumJuan(sBookID, sVol, sSutraNum, sJuan);
 
  	// 檔名要補上 #p0001a01 這種格式的位置
 
@@ -307,6 +340,10 @@ void __fastcall CSeries::LoadSearchEngine()
 		{
 			SearchEngine_CB = new TmyMonster(Dir + SpineFile, sWordIndexFile, sMainIndexFile);
 		}
+		else
+		{
+			TDialogService::ShowMessage(u"沒有 CBETA 版的索引檔");
+		}
 
 		// 原書的索引
 
@@ -318,6 +355,15 @@ void __fastcall CSeries::LoadSearchEngine()
 		{
 			SearchEngine_orig = new TmyMonster(Dir + SpineFile, sWordIndexFile, sMainIndexFile);
 		}
+		else
+		{
+			TDialogService::ShowMessage(u"沒有原書資料的索引檔");
+		}
+	}
+	else
+	{
+		String sMsg = u"沒有找到全文檢索目錄:" + Dir + "index";
+		TDialogService::ShowMessage(sMsg);
 	}
 }
 // ---------------------------------------------------------------------------

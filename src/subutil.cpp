@@ -7,7 +7,7 @@
 #pragma package(smart_init)
 
 // 將經名後面的 (第X卷-第X卷) or (第X卷) 移除
-String __fastcall CMyCBUtil::CutJuanBeforeSutraName(String sName)
+String __fastcall CMyCBUtil::CutJuanAfterSutraName(String sName)
 {
 	if(sName.Pos0(u"(第") >= 0)
 	{
@@ -21,6 +21,23 @@ String __fastcall CMyCBUtil::CutJuanBeforeSutraName(String sName)
 	}
 	return sName;
 }
+//---------------------------------------------------------------------------
+// 將經名後面的 （上中下一二三......十）移除
+String __fastcall CMyCBUtil::CutNumberAfterSutraName(String sName)
+{
+	if(sName.Pos0(u"（") >= 0)
+	{
+		// 華雨集（一）... 是不同經
+		if(sName.Pos0(u"華雨集（") >= 0) return sName;
+		// 日記（八）（含墨蹟、函札、法語、編後贅語）
+		if(sName == u"日記（八）（含墨蹟、函札、法語、編後贅語）") return u"日記";
+
+		TRegEx *regex = new TRegEx();
+		sName = regex->Replace(sName, "（[上中下一二三四五六七八九十、]+）$", "");
+	}
+	return sName;
+}
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 String __fastcall CMyStrUtil::SubString(String s, int i)
 {

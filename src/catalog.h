@@ -28,7 +28,9 @@ public: // User declarations
 	TStringList * SutraName;  // 經名
 	TStringList * Byline;     // 作譯者
 
-	int __fastcall FindIndexBySutraNum(String sBook, String sSutraNum);	// 取得 Catalog 的編號
+	int __fastcall FindIndexBySutraNum(String sBook, String sVol, String sSutraNum);	// 取得 Catalog 的編號
+	int __fastcall FindIndexBySutraNum(String sBook, int iVol, String sSutraNum);	// 取得 Catalog 的編號
+	//int __fastcall FindIndexBySutraNum(String sBook, String sSutraNum);	// 取得 Catalog 的編號
 	void __fastcall LoadCatalog(String sFile);      	// 傳入檔案, 初值化
 	__fastcall CCatalog();
 	__fastcall ~CCatalog();

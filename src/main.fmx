@@ -420,34 +420,40 @@ object fmMain: TfmMain
           StyledSettings = [Family, Style, FontColor]
           TabOrder = 0
           RowCount = 0
-          Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
+          Options = [ColumnResize, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
           Viewport.Width = 277.000000000000000000
           Viewport.Height = 300.000000000000000000
-          object StringColumn1: TStringColumn
-            Header = #32147#21517
-            Size.Width = 130.000000000000000000
-          end
           object StringColumn2: TStringColumn
             Header = #34255
             Size.Width = 31.000000000000000000
           end
           object StringColumn3: TStringColumn
             Header = #20874
-          end
-          object StringColumn4: TStringColumn
-            Header = #37096
+            Size.Width = 49.000000000000000000
           end
           object StringColumn5: TStringColumn
             Header = #32147
+            Size.Width = 71.000000000000000000
+          end
+          object StringColumn1: TStringColumn
+            Header = #32147#21517
+            Size.Width = 130.000000000000000000
           end
           object StringColumn6: TStringColumn
             Header = #21367'/'#31687#31456
+            Size.Width = 60.000000000000000000
+          end
+          object StringColumn4: TStringColumn
+            Header = #37096
+            Size.Width = 87.000000000000000000
           end
           object StringColumn7: TStringColumn
             Header = #20316#35695#32773
+            Size.Width = 183.000000000000000000
           end
           object StringColumn8: TStringColumn
+            Header = #20445#30041
             Visible = False
           end
         end
@@ -900,7 +906,7 @@ object fmMain: TfmMain
           object btTextSearch: TButton
             Hint = #25628#23563
             Position.X = 232.000000000000000000
-            Position.Y = 16.000000000000000000
+            Position.Y = 40.000000000000000000
             Size.Width = 33.000000000000000000
             Size.Height = 25.000000000000000000
             Size.PlatformDefault = False
@@ -943,7 +949,7 @@ object fmMain: TfmMain
           object btBoolean: TButton
             Hint = #25628#23563#24067#26519#36939#31639#31526#34399
             Position.X = 232.000000000000000000
-            Position.Y = 48.000000000000000000
+            Position.Y = 72.000000000000000000
             Size.Width = 33.000000000000000000
             Size.Height = 25.000000000000000000
             Size.PlatformDefault = False
@@ -966,7 +972,7 @@ object fmMain: TfmMain
           StyledSettings = [Family, Style, FontColor]
           TabOrder = 0
           RowCount = 0
-          Options = [ColumnResize, ColLines, RowLines, Tabs, Header, HeaderClick, AutoDisplacement]
+          Options = [ColumnResize, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
           Viewport.Width = 277.000000000000000000
           Viewport.Height = 349.000000000000000000
@@ -974,30 +980,35 @@ object fmMain: TfmMain
             Header = #31558#25976
             Size.Width = 49.000000000000000000
           end
-          object StringColumn9: TStringColumn
-            Header = #32147#21517
-            Size.Width = 130.000000000000000000
-          end
           object StringColumn10: TStringColumn
             Header = #34255
             Size.Width = 31.000000000000000000
           end
           object StringColumn11: TStringColumn
             Header = #20874
+            Size.Width = 55.000000000000000000
+          end
+          object StringColumn13: TStringColumn
+            Header = #32147
+            Size.Width = 71.000000000000000000
+          end
+          object StringColumn9: TStringColumn
+            Header = #32147#21517
+            Size.Width = 130.000000000000000000
+          end
+          object StringColumn14: TStringColumn
+            Header = #21367'/'#31687#31456
+            Size.Width = 60.000000000000000000
           end
           object StringColumn12: TStringColumn
             Header = #37096
           end
-          object StringColumn13: TStringColumn
-            Header = #32147
-          end
-          object StringColumn14: TStringColumn
-            Header = #21367'/'#31687#31456
-          end
           object StringColumn15: TStringColumn
             Header = #20316#35695#32773
+            Size.Width = 194.000000000000000000
           end
           object StringColumn16: TStringColumn
+            Header = #20445#30041
             Visible = False
           end
         end
@@ -1028,7 +1039,7 @@ object fmMain: TfmMain
     Size.PlatformDefault = False
     TabOrder = 6
     object btOpenBookcase: TCornerButton
-      Position.X = 776.000000000000000000
+      Position.X = 888.000000000000000000
       Position.Y = 8.000000000000000000
       Sides = [Top, Left, Bottom, Right]
       Size.Width = 113.000000000000000000
@@ -1119,7 +1130,7 @@ object fmMain: TfmMain
     object rbFontSmall: TRadioButton
       StyledSettings = [Family, Style, FontColor]
       GroupName = 'gnFontSize'
-      Position.X = 616.000000000000000000
+      Position.X = 624.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
@@ -1131,7 +1142,7 @@ object fmMain: TfmMain
     object rbFontMid: TRadioButton
       StyledSettings = [Family, Style, FontColor]
       GroupName = 'gnFontSize'
-      Position.X = 656.000000000000000000
+      Position.X = 664.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
@@ -1145,7 +1156,7 @@ object fmMain: TfmMain
       StyledSettings = [Family, Style, FontColor]
       GroupName = 'gnFontSize'
       IsChecked = True
-      Position.X = 704.000000000000000000
+      Position.X = 712.000000000000000000
       Position.Y = 16.000000000000000000
       Size.Width = 49.000000000000000000
       Size.Height = 27.000000000000000000
@@ -3763,6 +3774,38 @@ object fmMain: TfmMain
         end>
       Left = 1000
       Top = 56
+    end
+    object btCopy: TCornerButton
+      Hint = #35079#35069#36984#21462#25991#23383
+      Position.X = 792.000000000000000000
+      Position.Y = 8.000000000000000000
+      Sides = [Top, Left, Bottom, Right]
+      Size.Width = 49.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 11
+      Text = #35079#35069
+      XRadius = 3.000000000000000000
+      YRadius = 3.000000000000000000
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = btCopyClick
+    end
+    object btCiteCopy: TCornerButton
+      Hint = 'CBETA '#24341#29992#35079#35069
+      Position.X = 840.000000000000000000
+      Position.Y = 8.000000000000000000
+      Sides = [Top, Left, Bottom, Right]
+      Size.Width = 49.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 10
+      Text = #24341#29992
+      XRadius = 3.000000000000000000
+      YRadius = 3.000000000000000000
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = btCiteCopyClick
     end
   end
   object MainMenu: TMainMenu
@@ -6484,8 +6527,8 @@ object fmMain: TfmMain
     end
   end
   object pmBoolean: TPopupMenu
-    Left = 243
-    Top = 208
+    Left = 227
+    Top = 224
     object miNear: TMenuItem
       Text = #65291' near'
       OnClick = miNearClick
