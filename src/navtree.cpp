@@ -21,7 +21,7 @@ __fastcall CNavTree::~CNavTree(void) // 解構函式
 	{
 		// 先清除所有的 Item
 		for (int i = 0; i < TreeRoot->Count; i++)
-			delete TreeRoot->Items[i];
+			delete (SNavItem *)TreeRoot->Items[i];
 		TreeRoot->Clear();
 		delete TreeRoot;
 	}
