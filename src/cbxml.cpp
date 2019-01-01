@@ -692,6 +692,13 @@ String __fastcall CCBXML::tag_cell(_di_IXMLNode Node)
 	String sHtml = u"";
 	String sCols = GetAttr(Node, u"cols");
 	String sRows = GetAttr(Node, u"rows");
+	String sRend = GetAttr(Node, u"rend");
+	String sStyle = GetAttr(Node, u"style");
+	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
+	if(sNewStyle != u"")
+		sNewStyle = " style='" + sNewStyle + "'";
 
 	CellNum++;        // cell 格式數量累加
 	String sColspan = u"";
@@ -716,6 +723,7 @@ String __fastcall CCBXML::tag_cell(_di_IXMLNode Node)
 
 	sHtml += sColspan;
 	sHtml += sRowspan;
+	sHtml += sNewStyle;
 	sHtml += u" data-tagname='td'>";
 
 	// 第一個空一格, 其它空三格
@@ -746,6 +754,8 @@ String __fastcall CCBXML::tag_cell(_di_IXMLNode Node)
 	else
 		sHtml += u"</td>";
 
+	delete myRend;
+    delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------

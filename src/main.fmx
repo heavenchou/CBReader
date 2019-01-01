@@ -422,8 +422,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 277.000000000000000000
-          Viewport.Height = 300.000000000000000000
+          Viewport.Width = 281.000000000000000000
+          Viewport.Height = 325.000000000000000000
           object StringColumn2: TStringColumn
             Header = #34255
             Size.Width = 31.000000000000000000
@@ -974,8 +974,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
-          Viewport.Width = 277.000000000000000000
-          Viewport.Height = 349.000000000000000000
+          Viewport.Width = 281.000000000000000000
+          Viewport.Height = 374.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000
