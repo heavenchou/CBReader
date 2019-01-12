@@ -29,12 +29,12 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
     // 還有 fmAbout 的版本與日期資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.4.0.2";
+	Version = u"0.4.1.0";
 	DebugString = u"Heaven";     // debug 口令
 	IsDebug = false;           // debug 變數
 
 	// 西蓮淨苑 SLReader 專用
-	Application->Title = u"SLReader";
+	//Application->Title = u"SLReader";
 	if(Application->Title == u"SLReader")
 	{
 		//ProgramTitle = u"西蓮淨苑文獻集成";
@@ -709,7 +709,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 				+ sVol + u", No. " + sSutra + u", 卷/篇章" + sJuan;
 		Caption = sCaption;
 
-		// 將經名後面的 （上中下一二三......十）移除
+		// 將經名後面的 （上中下一二三......十）移除
 		sName = CMyCBUtil::CutNumberAfterSutraName(sName);
 		cbSearchThisSutra->Text = u"檢索本經：" + sName;
         cbSearchThisSutraChange(this);  // 設定檢索本經的相關資料
