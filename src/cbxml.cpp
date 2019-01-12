@@ -78,7 +78,10 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	if(bShowHighlight)
 	{
 		// 加上搜尋字串的 <div>
-		HTMLText += u"<div id='SearchHead'>檢索字串：" + seSearchEngine->SearchSentence + u"<hr></div>";
+		// 把搜尋字串中的 ? 換成 ⍰
+		String s = seSearchEngine->SearchSentence;
+		s = StringReplace(s, u"?", u"⍰", TReplaceFlags() << rfReplaceAll);
+		HTMLText += u"<div id='SearchHead'>檢索字串：" + s + u"<hr></div>";
     }
 
 	HTMLText += ParseXML();     		// 處理內文
