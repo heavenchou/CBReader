@@ -1289,7 +1289,7 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 	String sStyle = GetAttr(Node, u"style");
 
 	CRendAttr * myRend = new CRendAttr(sRend);
-	CRendAttr * myStyle = new CRendAttr(sStyle);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
 	if(sNewStyle != u"")
 		sNewStyle = u" style='" + sNewStyle + u"'";
@@ -3120,7 +3120,7 @@ String __fastcall CCBXML::tag_table(_di_IXMLNode Node)
 	String sBorder = u"1";      // 預設表格線為 1
 
 	CRendAttr * myRend = new CRendAttr(sRend);
-	CRendAttr * myStyle = new CRendAttr(sStyle);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
 
     // 如果用 style="border:1" 只會最外圍有框線, 格子沒有, 細節要再研究
