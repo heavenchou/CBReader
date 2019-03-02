@@ -29,12 +29,12 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
     // 還有 fmAbout 的版本與日期資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.4.1.1";   // 末位 .1 是全西蓮, .2 是西蓮+CBETA
+	Version = u"0.4.1.0";   // 末位 .1 是全西蓮, .2 是西蓮+CBETA
 	DebugString = u"Heaven";     // debug 口令
 	IsDebug = false;           // debug 變數
 
 	// 西蓮淨苑 SLReader 專用
-	Application->Title = u"SLReader";
+	//Application->Title = u"SLReader";
 
 	bool IsAllSL = true;    // 是否全部都是西蓮?
 	if(*Version.LastChar() != '1') IsAllSL = false;
@@ -142,7 +142,10 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 	tcMainFunc->TabIndex = 0;
 	SelectedBook = -1;   // 目前選中的書, -1 表示還沒選
     pnMulu->Width = 0;  // 書目先縮到最小
-    MuluWidth = 200;    // 初始書目寬度
+	MuluWidth = 200;    // 初始書目寬度
+
+	sgTextSearch->OnKeyDown = sgTextSearchKeyDown;
+	sgFindSutra->OnKeyDown = sgFindSutraKeyDown;
 }
 // ---------------------------------------------------------------------------
 void __fastcall TfmMain::FormDestroy(TObject *Sender)
@@ -724,7 +727,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 				+ sVol + u", No. " + sSutra + u", 卷/篇章" + sJuan;
 		Caption = sCaption;
 
-		// 將經名後面的 （上中下一二三......十）移除
+		// 將經名後面的 （上中下一二三......十）移除
 		sName = CMyCBUtil::CutNumberAfterSutraName(sName);
 		cbSearchThisSutra->Text = u"檢索本經：" + sName;
         cbSearchThisSutraChange(this);  // 設定檢索本經的相關資料
@@ -765,7 +768,15 @@ void __fastcall TfmMain::btGoBookClick(TObject *Sender)
 	ShowCBXML(sFile);
 }
 //---------------------------------------------------------------------------
-
+// 自訂的搜尋列表 OnKeyDown
+void __fastcall TfmMain::sgFindSutraKeyDown(TObject *Sender, System::Word &Key, System::WideChar &KeyChar, System::Classes::TShiftState Shift)
+{
+	if(Key == 13)
+	{
+		sgFindSutraCellDblClick(sgFindSutra->Columns[0],sgFindSutra->Selected);
+	}
+}
+//---------------------------------------------------------------------------
 void __fastcall TfmMain::sgFindSutraCellDblClick(TColumn * const Column, const int Row)
 {
 	int iIndex = sgFindSutra->Cells[7][Row].ToInt();
@@ -913,6 +924,15 @@ void __fastcall TfmMain::btTextSearchClick(TObject *Sender)
     else
 	{
 		TDialogService::ShowMessage(u"查詢字串語法有問題，請再檢查看看。");
+	}
+}
+//---------------------------------------------------------------------------
+// 自訂的搜尋列表 OnKeyDown
+void __fastcall TfmMain::sgTextSearchKeyDown(TObject *Sender, System::Word &Key, System::WideChar &KeyChar, System::Classes::TShiftState Shift)
+{
+	if(Key == 13)
+	{
+		sgTextSearchCellDblClick(sgTextSearch->Columns[0],sgTextSearch->Selected);
 	}
 }
 //---------------------------------------------------------------------------
