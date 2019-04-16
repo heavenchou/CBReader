@@ -104,7 +104,7 @@ void __fastcall TfmUpdate::FormShow(TObject *Sender)
 	Memo->Text = sMsg;
 
 	edBookcasePath->Text = IncludeTrailingPathDelimiter(fmMain->Bookcase->BookcaseDir);
-	lbMessage->Text = u"準備更新";
+	lbMessage->Text = u"";
 }
 //---------------------------------------------------------------------------
 void __fastcall TfmUpdate::btUpdateClick(TObject *Sender)

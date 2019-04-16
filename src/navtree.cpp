@@ -75,18 +75,18 @@ void __fastcall CNavTree::SaveToTreeView(TTreeView * tvTreeView, TNotifyEvent fn
 TTreeViewItem *  __fastcall CNavTree::TreeViewAddItem(TTreeViewItem * tvItem, SNavItem * nItem, TNotifyEvent fnLinkFunc)
 {
 	TTreeViewItem * newItem = new TTreeViewItem(TreeView);
-	newItem->Text = nItem->Title;   // 標題
+	newItem->Text = nItem->Title;   	// 標題
 	newItem->TagString = nItem->URL;    // URL
-	newItem->Tag = nItem->Type;     // Type
-	newItem->OnDblClick = fnLinkFunc;    // Double Click 要連結的
+	newItem->Tag = nItem->Type;     	// Type
+	newItem->OnDblClick = fnLinkFunc;	// Double Click 要連結的
 	if(nItem->Type == nit_Title)
-		newItem->ImageIndex = 0;    // 目錄
+		newItem->ImageIndex = 0;    	// 目錄
 	else if(nItem->Type == nit_NavLink)
-		newItem->ImageIndex = 2;    // 另一個目錄
+		newItem->ImageIndex = 2;    	// 另一個目錄
 	else if(nItem->Type == nit_CBLink)
-		newItem->ImageIndex = 3;    // CBETA 經文
+		newItem->ImageIndex = 3;    	// CBETA 經文
 	else if(nItem->Type == nit_NormalLink)
-		newItem->ImageIndex = 4;    // 一般經文
+		newItem->ImageIndex = 4;    	// 一般經文
 
 	tvItem->AddObject(newItem);
 	return newItem ;

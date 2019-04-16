@@ -65,7 +65,7 @@ object fmUpdate: TfmUpdate
     Size.Width = 401.000000000000000000
     Size.Height = 25.000000000000000000
     Size.PlatformDefault = False
-    Text = #28310#20633#26356#26032
+    Text = '-'
     TabOrder = 6
   end
   object NetHTTPClient: TNetHTTPClient

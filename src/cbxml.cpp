@@ -135,6 +135,8 @@ __fastcall CCBXML::~CCBXML(void) // 解構函式
 // 先產生 html 的 head
 String __fastcall CCBXML::MakeHTMLHead()
 {
+	// 字型大小說明 : 主要為了用中文和等寬英文畫圖, 中文要 21px, 英文用 17.5px 才能對齊
+
 	String sJqueryFile = StringReplace(JSFile, u"cbreader.js", "jquery.min.js", TReplaceFlags() << rfReplaceAll << rfIgnoreCase);
 	String sHtml = u"<!DOCTYPE html>\n"
 	"<html>\n"
@@ -152,7 +154,16 @@ String __fastcall CCBXML::MakeHTMLHead()
 	sHtml += JSFile;
 	sHtml += u"'></script>\n"
 	"	<style>\n"
-	"		body { background:#DDF1DC; font-weight: normal; line-height:20pt; color:#000000; font-size:16pt; font-family:'Times New Roman', MingLiU,細明體,PMingLiU,新細明體,SimSun,NSimSun,'Songti TC';}\n"
+	"		@font-face {\n"
+	"			font-family: CBFont;\n"
+	"			src: local('Times New Roman'), local(MingLiU), local(細明體), local(PMingLiU), local(新細明體), local(NSimSun), local(SimSun), local('Songti TC');\n"
+	"		}\n"
+	"		@font-face {\n"
+	"			font-family: CBFont;\n"
+	"			unicode-range: U+2500-25ff;\n"
+	"			src: local(MingLiU), local(細明體), local(NSimSun), local('Songti TC');\n"
+	"		}\n"
+	"		body { background:#DDF1DC; font-weight: normal; line-height:26px; color:#000000; font-size:21px; font-family:CBFont;}\n"
 	"		a.SearchWord0 {color:#0000ff; background: #ffff66;}\n"
 	"		a.SearchWord1 {color:#0000ff; background: #a0ffff;}\n"
 	"		a.SearchWord2 {color:#0000ff; background: #99ff99;}\n"
@@ -167,22 +178,24 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		a:link		{color:#0000ff;}\n"
 	"		a:active	{color:#0000ff;}\n"
 	"		.foreign	{font-family:'Times New Roman', 'Gandhari Unicode';}\n"
+	"		.preformat	{font-family:細明體,MingLiU,NSimSun,'Songti TC'; font-size:21px;}\n"
+	"		.preformat .foreign	{font-family:'Courier New'; font-size:17.5px;}\n"
 	"       .gaiji {font-family:'Times New Roman','Hanazono Mincho B';}\n"
-	"		.juannum {color:#008000; font-size:16pt;}\n"
-	"		.juanname {color:#0000FF; font-weight: bold; font-size:18pt;}\n"
-	"		.xu {color:#0000A0; font-size:16pt;}\n"
-	"		.w {color:#0000A0; font-size:16pt;}\n"
-	"		.byline {color:#408080; font-size:16pt;}\n"
-	"		.headname {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
-	"		.headname2 {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
-	"		.headname3 {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
-	"		.headname4 {color:#0000A0; font-weight: bold; font-size:18pt;}\n"
-	"		.linehead {color:#0000A0; font-weight: normal; font-size:14pt;font-family:MingLiU,細明體,SimSun,NSimSun,\"Songti TC\";}\n"
-	"		.parahead {color:#0000A0; font-weight: normal; font-size:14pt;font-family:MingLiU,細明體,SimSun,NSimSun,\"Songti TC\";}\n"
-	"		.pts_head {color:#0000A0; font-weight: normal; font-size:14pt;font-family:MingLiU,細明體,SimSun,NSimSun,\"Songti TC\";}\n"
-	"		.lg {color:#008040; font-size:16pt;}\n"
+	"		.juannum {color:#008000; font-size:21px;}\n"
+	"		.juanname {color:#0000FF; font-weight: bold; font-size:24px;}\n"
+	"		.xu {color:#0000A0; font-size:21px;}\n"
+	"		.w {color:#0000A0; font-size:21px;}\n"
+	"		.byline {color:#408080; font-size:21px;}\n"
+	"		.headname {color:#0000A0; font-weight: bold; font-size:24px;}\n"
+	"		.headname2 {color:#0000A0; font-weight: bold; font-size:24px;}\n"
+	"		.headname3 {color:#0000A0; font-weight: bold; font-size:24px;}\n"
+	"		.headname4 {color:#0000A0; font-weight: bold; font-size:24px;}\n"
+	"		.linehead {color:#0000A0; font-weight: normal; font-size:18px;font-family:MingLiU,細明體,NSimSun,'Songti TC';}\n"
+	"		.parahead {color:#0000A0; font-weight: normal; font-size:18px;font-family:MingLiU,細明體,NSimSun,'Songti TC';}\n"
+	"		.pts_head {color:#0000A0; font-weight: normal; font-size:18px;font-family:MingLiU,細明體,NSimSun,'Songti TC';}\n"
+	"		.lg {color:#008040; font-size:21px;}\n"
 	"		.corr {color:#FF0000; }\n"
-	"		.note {color:#9F5000; font-size:14pt;}\n"
+	"		.note {color:#9F5000; font-size:18px;}\n"
 	"		table {border-collapse: collapse; margin: 20px;}\n";
 
 	if(Setting->VerticalMode)
@@ -2184,7 +2197,7 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	sHtml += u"<span class='lg'";// 偈頌折行
 	if(!bIsNote) sHtml += u">";
 	// type 是 note1 or note2 要在偈誦前後要加括號以及變成小字
-	else sHtml += u" style='font-size:14pt;'>(";
+	else sHtml += u" style='font-size:18px;'>(";
 
 	// -----------------------------------
 	sHtml += parseChild(Node); // 處理內容
@@ -2739,6 +2752,7 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 	else if(sType == u"pre")	// 依原書格式
 	{
 		PreFormatCount++;	   // 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
+		sHtml += u"<span class='preformat'>";
 	}
 	else if(sType.SubString0(0,4) == u"head")	// 比照 head 處理
 	{
@@ -2819,6 +2833,7 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 	else if(sType == u"pre")			// 依原書格式
 	{
 		PreFormatCount--;		// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
+        sHtml += u"</span>";
 	}
 	else if(sType.SubString0(0,4) == u"head")
 	{
@@ -3123,26 +3138,71 @@ String __fastcall CCBXML::tag_table(_di_IXMLNode Node)
 	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
 
+	String sOldMarginLeft = MarginLeft;
+	String sTextIndentSpace = MarginLeft;	// 先設為原來的 MarginLeft
+	int iMarginLeft = 0;
+	int iTextIndent = 0;
+
+	if(sStyle != u"")
+	{
+		iMarginLeft = myStyle->MarginLeft;
+		iTextIndent = myStyle->TextIndent;
+		MarginLeft += String::StringOfChar(u'　',iMarginLeft);
+		sTextIndentSpace += String::StringOfChar(u'　',iMarginLeft+iTextIndent);
+	}
+
     // 如果用 style="border:1" 只會最外圍有框線, 格子沒有, 細節要再研究
 	if(myRend->Find("no-border")) sBorder = u"0";
 
 	if(Setting->ShowLineFormat)
 	{
+		sHtml += u"<span class='line_space'>";
+		sHtml += sTextIndentSpace;
+		sHtml += u"</span>";
 		sHtml += u"<span data-tagname='table' border='";
 		sHtml += sBorder;
 		sHtml += u"'";
-		if(sNewStyle != u"")
-			sHtml += u" style='" + sNewStyle + "'";
-		sHtml += u"><span data-tagname='tbody'>";
+		if(sNewStyle != u"" || iMarginLeft != 0 || iTextIndent != 0)
+		{
+			sHtml += u" style='" + sNewStyle;
+			if(iTextIndent != 0)
+			{
+				sHtml += u"text-indent: ";
+				sHtml += String(iTextIndent);
+				sHtml += u"em;";
+			}
+			sHtml += u"'";
+		}
+		sHtml += u" data-margin-left='";
+		sHtml += String(iMarginLeft);
+		sHtml += u"em'><span data-tagname='tbody'>";
 	}
 	else
 	{
+		sHtml += u"<span class='line_space' style='display:none'>";
+		sHtml += sTextIndentSpace;
+		sHtml += u"</span>";
 		sHtml += u"<table data-tagname='table' border='";
 		sHtml += sBorder;
 		sHtml += u"'";
-		if(sNewStyle != u"")
-			sHtml += u" style='" + sNewStyle + "'";
-		sHtml += u"><tbody data-tagname='tbody'>";
+		if(sNewStyle != u"" || iMarginLeft != 0 || iTextIndent != 0)
+		{
+			sHtml += u" style='" + sNewStyle;
+			if(iMarginLeft != 0 || iTextIndent != 0)
+			{
+				sHtml += u"text-indent: ";
+				sHtml += String(iTextIndent);
+				sHtml += u"em;";
+				sHtml += u"margin-left: ";
+				sHtml += String(iMarginLeft);
+				sHtml += u"em;";
+			}
+			sHtml += u"'";
+		}
+
+		sHtml += u" data-margin-left='";
+		sHtml += String(iMarginLeft);
+		sHtml += u"em'><tbody data-tagname='tbody'>";
 	}
 
 	sHtml += parseChild(Node); // 處理內容
@@ -3153,7 +3213,7 @@ String __fastcall CCBXML::tag_table(_di_IXMLNode Node)
 		sHtml += u"</tbody></table>";
 
 	//sHtml = mv_data_between_tr(sHtml);  // 把 <tr/>..<tr><td> 中間的資料移到 <td> 裡面
-
+    MarginLeft = sOldMarginLeft;
 	delete myRend;
 	delete myStyle;
 	return sHtml;
