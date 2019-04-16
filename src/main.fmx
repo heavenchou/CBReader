@@ -72,8 +72,8 @@ object fmMain: TfmMain
             Size.Height = 551.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            Viewport.Width = 233.000000000000000000
-            Viewport.Height = 551.000000000000000000
+            Viewport.Width = 229.000000000000000000
+            Viewport.Height = 547.000000000000000000
           end
           object Panel7: TPanel
             Align = Top
@@ -118,7 +118,7 @@ object fmMain: TfmMain
       Size.Height = 584.000000000000000000
       Size.PlatformDefault = False
       TabHeight = 49.000000000000000000
-      TabIndex = 3
+      TabIndex = 1
       TabOrder = 0
       TabPosition = PlatformDefault
       Sizes = (
@@ -150,8 +150,8 @@ object fmMain: TfmMain
           Size.PlatformDefault = False
           TabOrder = 0
           Images = ImageList1
-          Viewport.Width = 281.000000000000000000
-          Viewport.Height = 486.000000000000000000
+          Viewport.Width = 277.000000000000000000
+          Viewport.Height = 482.000000000000000000
         end
         object Panel8: TPanel
           Align = Top
@@ -195,7 +195,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = False
+        IsSelected = True
         Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -422,8 +422,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 281.000000000000000000
-          Viewport.Height = 325.000000000000000000
+          Viewport.Width = 277.000000000000000000
+          Viewport.Height = 300.000000000000000000
           object StringColumn2: TStringColumn
             Header = #34255
             Size.Width = 31.000000000000000000
@@ -868,7 +868,7 @@ object fmMain: TfmMain
         CustomIcon = <
           item
           end>
-        IsSelected = True
+        IsSelected = False
         Size.Width = 86.000000000000000000
         Size.Height = 49.000000000000000000
         Size.PlatformDefault = False
@@ -974,8 +974,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
-          Viewport.Width = 281.000000000000000000
-          Viewport.Height = 374.000000000000000000
+          Viewport.Width = 277.000000000000000000
+          Viewport.Height = 349.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000

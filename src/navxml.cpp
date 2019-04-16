@@ -41,6 +41,10 @@ void __fastcall CNavXML::ClearThisItem()
 void __fastcall CNavXML::AddThisItem()
 {
 	SNavItem * item = new SNavItem;
+	if(*ThisItem.Title.FirstChar() == ' ')
+	{
+		ThisItem.Title.Delete0(0,1);
+	}
 	*item = ThisItem;
 	TreeRoot->Add(item);
 }

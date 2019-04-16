@@ -308,6 +308,12 @@ public: // User declarations
 
 	// 初始資料
 	void __fastcall InitialData();
+
+	// 自訂的搜尋列表 OnKeyDown
+	void __fastcall sgTextSearchKeyDown(TObject *Sender, System::Word &Key, System::WideChar &KeyChar, System::Classes::TShiftState Shift);
+	// 自訂的目錄列表 OnKeyDown
+	void __fastcall sgFindSutraKeyDown(TObject *Sender, System::Word &Key, System::WideChar &KeyChar, System::Classes::TShiftState Shift);
+
 	__fastcall TfmMain(TComponent* Owner);
 };
 
