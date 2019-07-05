@@ -5,8 +5,8 @@
         <FrameworkType>FMX</FrameworkType>
         <MainSource>CBReader.cpp</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
-        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Platform Condition="'$(Platform)'==''">OSX32</Platform>
         <TargetedPlatforms>7</TargetedPlatforms>
         <AppType>Application</AppType>
         <Profile Condition="'$(Platform)'=='OSX32'">macos1013</Profile>
@@ -173,19 +173,19 @@
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
         <VerInfo_MinorVer>4</VerInfo_MinorVer>
         <BCC_InstructionSet>5</BCC_InstructionSet>
-        <VerInfo_Keys>CFBundleName=$(MSBuildProjectName);CFBundleDisplayName=$(MSBuildProjectName);CFBundleIdentifier=$(MSBuildProjectName);CFBundleVersion=0.4.2;CFBundlePackageType=APPL;CFBundleSignature=????;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=$(MSBuildProjectName);NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.utilities;NSLocationAlwaysUsageDescription=The reason for accessing the location information of the user;NSLocationWhenInUseUsageDescription=The reason for accessing the location information of the user;NSContactsUsageDescription=The reason for accessing the contacts;CFBundleShortVersionString=0.4.2</VerInfo_Keys>
+        <VerInfo_Keys>CFBundleName=$(MSBuildProjectName);CFBundleDisplayName=$(MSBuildProjectName);CFBundleIdentifier=$(MSBuildProjectName);CFBundleVersion=0.4.3;CFBundlePackageType=APPL;CFBundleSignature=????;CFBundleAllowMixedLocalizations=YES;CFBundleExecutable=$(MSBuildProjectName);NSHighResolutionCapable=true;LSApplicationCategoryType=public.app-category.utilities;NSLocationAlwaysUsageDescription=The reason for accessing the location information of the user;NSLocationWhenInUseUsageDescription=The reason for accessing the location information of the user;NSContactsUsageDescription=The reason for accessing the contacts;CFBundleShortVersionString=0.4.3</VerInfo_Keys>
         <UsingDelphiRTL>true</UsingDelphiRTL>
         <ILINK_FullDebugInfo>false</ILINK_FullDebugInfo>
         <BCC_SourceDebuggingOn>false</BCC_SourceDebuggingOn>
         <BCC_DebugLineNumbers>false</BCC_DebugLineNumbers>
-        <VerInfo_Build>2</VerInfo_Build>
+        <VerInfo_Build>3</VerInfo_Build>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
         <VerInfo_Locale>1028</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.4.2.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2019;LegalTrademarks=Copyright (C) CBETA 1998-2019;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.4.2.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.4.3.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2019;LegalTrademarks=Copyright (C) CBETA 1998-2019;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.4.3.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
         <VerInfo_MinorVer>4</VerInfo_MinorVer>
@@ -195,7 +195,7 @@
         <DynamicRTL>false</DynamicRTL>
         <UsePackages>false</UsePackages>
         <LinkPackageStatics>rtl.lib;fmx.lib;xmlrtl.lib</LinkPackageStatics>
-        <VerInfo_Release>2</VerInfo_Release>
+        <VerInfo_Release>3</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -234,11 +234,11 @@
         <DynamicRTL>false</DynamicRTL>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
         <VerInfo_MinorVer>4</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.4.2.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2019;LegalTrademarks=Copyright (C) CBETA 1998-2019;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.4.2.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.4.3.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2019;LegalTrademarks=Copyright (C) CBETA 1998-2019;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.4.3.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
         <Icon_MainIcon>..\image\CBETA ICON\cbeta.ico</Icon_MainIcon>
         <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
         <BCC_InstructionSet>5</BCC_InstructionSet>
-        <VerInfo_Release>2</VerInfo_Release>
+        <VerInfo_Release>3</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -283,7 +283,6 @@
         </CppCompile>
         <PCHCompile Include="CBReaderPCH1.h">
             <BuildOrder>2</BuildOrder>
-            <PCH>true</PCH>
         </PCHCompile>
         <CppCompile Include="cbxml.cpp">
             <DependentOn>cbxml.h</DependentOn>
@@ -516,12 +515,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
-                    <Platform Name="OSX32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32240mt.dll" Class="DependencyModule">
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
                     <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
@@ -533,7 +527,12 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
+                <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
+                    <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32240mt.dll" Class="DependencyModule">
                     <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>

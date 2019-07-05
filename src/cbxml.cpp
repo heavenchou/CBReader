@@ -2717,6 +2717,35 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 	}
 	else
 	{
+		if(sType.SubString0(0,4) == u"head")	// 比照 head 處理
+		{
+			//IsOtherHead = true;
+			// Q1 ==> 空2格
+			// Q2 ==> 空3格
+			// Q3 ==> 空4格
+			// Q4 ==> 空2格
+			// Q5 ==> 空3格
+			// Q6 ==> 空4格
+			// Q7 ==> 空2格
+			// Q8 ==> 空3格
+
+			if(sType == u"head1" || sType == u"head4" || sType == u"head7")
+			{
+				iMarginLeft += 2;
+				bAddSpace = false;
+			}
+			else if(sType == u"head2" || sType == u"head5" || sType == u"head8")
+			{
+				iMarginLeft += 3;
+				bAddSpace = false;
+			}
+			else if(sType == u"head3" || sType == u"head6" || sType == u"head9")
+			{
+				iMarginLeft += 4;
+				bAddSpace = false;
+			}
+		}
+
 		if(Setting->ShowLineFormat)
 		{
 			sHtml += u"<span style='text-indent: ";
@@ -2756,35 +2785,8 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 	}
 	else if(sType.SubString0(0,4) == u"head")	// 比照 head 處理
 	{
-		//IsOtherHead = true;
-		// Q1 ==> 空2格
-		// Q2 ==> 空3格
-		// Q3 ==> 空4格
-		// Q4 ==> 空2格
-		// Q5 ==> 空3格
-		// Q6 ==> 空4格
-		// Q7 ==> 空2格
-		// Q8 ==> 空3格
-
-		if(sType == u"head1" || sType == u"head4" || sType == u"head7")
-		{
-			iMarginLeft += 2;
-			bAddSpace = false;
-		}
-		else if(sType == u"head2" || sType == u"head5" || sType == u"head8")
-		{
-			iMarginLeft += 3;
-			bAddSpace = false;
-		}
-		else if(sType == u"head3" || sType == u"head6" || sType == u"head9")
-		{
-			iMarginLeft += 4;
-			bAddSpace = false;
-		}
-
 		sHtml += u"<span class='headname'>";
 	}
-
 
 	// 卍續藏校注就不用段首了, 在校勘中也不用(藏外第一經第一卷就有例子)
 	if(iSpecialType == 0)

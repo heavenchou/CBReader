@@ -29,7 +29,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
     // 還有 fmAbout 的版本與日期資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.4.2.0";   // 末位 .1 是全西蓮, .2 是西蓮+CBETA
+	Version = u"0.4.3.0";   // 末位 .1 是全西蓮, .2 是西蓮+CBETA
 	DebugString = u"Heaven";     // debug 口令
 	IsDebug = false;           // debug 變數
 
