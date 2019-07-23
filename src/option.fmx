@@ -2,7 +2,7 @@ object fmOption: TfmOption
   Left = 0
   Top = 0
   Caption = #35373#23450
-  ClientHeight = 526
+  ClientHeight = 553
   ClientWidth = 562
   Position = ScreenCenter
   StyleBook = fmMain.sbBig
@@ -14,18 +14,18 @@ object fmOption: TfmOption
   object TabControl1: TTabControl
     Align = Client
     Size.Width = 562.000000000000000000
-    Size.Height = 454.000000000000000000
+    Size.Height = 481.000000000000000000
     Size.PlatformDefault = False
     TabIndex = 2
     TabOrder = 1
     TabPosition = None
     Sizes = (
       562s
-      454s
+      481s
       562s
-      454s
+      481s
       562s
-      454s)
+      481s)
     object TabItem1: TTabItem
       CustomIcon = <
         item
@@ -71,7 +71,7 @@ object fmOption: TfmOption
         Position.X = 24.000000000000000000
         Position.Y = 22.000000000000000000
         Size.Width = 193.000000000000000000
-        Size.Height = 139.000000000000000000
+        Size.Height = 211.000000000000000000
         Size.PlatformDefault = False
         Text = #32147#25991#26684#24335
         TabOrder = 0
@@ -94,8 +94,8 @@ object fmOption: TfmOption
           Text = #21152#19978#12300#38913#12289#27396#12289#34892#12301#36039#35338
         end
         object cbShowPunc: TCheckBox
-          Position.X = 248.000000000000000000
-          Position.Y = 352.000000000000000000
+          Position.X = 16.000000000000000000
+          Position.Y = 96.000000000000000000
           Size.Width = 153.000000000000000000
           Size.Height = 19.000000000000000000
           Size.PlatformDefault = False
@@ -104,24 +104,33 @@ object fmOption: TfmOption
           OnChange = cbShowPuncChange
         end
         object cbNoShowLgPunc: TCheckBox
-          Position.X = 248.000000000000000000
-          Position.Y = 384.000000000000000000
-          Size.Width = 113.000000000000000000
+          Position.X = 32.000000000000000000
+          Position.Y = 120.000000000000000000
+          Size.Width = 153.000000000000000000
           Size.Height = 19.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 4
-          Text = #20552#38924#38500#22806
+          Text = #19981#21576#29694#20552#38924#27161#40670
         end
         object cbVerticalMode: TCheckBox
           Position.X = 16.000000000000000000
-          Position.Y = 96.000000000000000000
-          TabOrder = 5
+          Position.Y = 176.000000000000000000
+          TabOrder = 6
           Text = #30452#25490
+        end
+        object cbNoShowAIPunc: TCheckBox
+          Position.X = 32.000000000000000000
+          Position.Y = 144.000000000000000000
+          Size.Width = 153.000000000000000000
+          Size.Height = 19.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 5
+          Text = #19981#21576#29694' AI '#27161#40670
         end
       end
       object gbCollationType: TGroupBox
         Position.X = 24.000000000000000000
-        Position.Y = 206.000000000000000000
+        Position.Y = 254.000000000000000000
         Size.Width = 193.000000000000000000
         Size.Height = 203.000000000000000000
         Size.PlatformDefault = False
@@ -242,7 +251,7 @@ object fmOption: TfmOption
   end
   object Panel1: TPanel
     Align = Bottom
-    Position.Y = 454.000000000000000000
+    Position.Y = 481.000000000000000000
     Size.Width = 562.000000000000000000
     Size.Height = 72.000000000000000000
     Size.PlatformDefault = False

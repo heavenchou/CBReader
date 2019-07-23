@@ -46,6 +46,7 @@ __published:	// IDE-managed Components
 	TCheckBox *cbShowCollation;
 	TRadioButton *rbCBETACollation;
 	TRadioButton *rbOrigCollation;
+	TCheckBox *cbNoShowAIPunc;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btOKClick(TObject *Sender);
 	void __fastcall btCancelClick(TObject *Sender);
