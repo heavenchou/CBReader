@@ -322,7 +322,7 @@ String __fastcall CCBXML::ParseXML()
 	String sEdition = NodeEdition->GetXML();
 	if(sEdition.Pos0(u"AI 標點版")>=0) {
 		IsAIPunc = true;
-		sHtml += u"<div><span id='AIPuncRemind'>【案：此資料標點由人工智能標點引擎提供，僅供參考。】</span></div>\n";
+		sHtml += u"<div><span id='AIPuncRemind'>【案：此資料標點由AI標點引擎提供，可從「設定/經文格式」選擇是否呈現。】</span></div>\n";
 	}
 
 	// 遍歷 XML
