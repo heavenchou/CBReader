@@ -318,9 +318,9 @@ String __fastcall CCBXML::ParseXML()
 	ReadGaiji(NodeGaijis); // 讀取缺字
 
 	// 檢查是不是 AI 標點
-	_di_IXMLNode NodeEdition = Document->DocumentElement->ChildNodes->Nodes["teiHeader"]->ChildNodes->Nodes["fileDesc"]->ChildNodes->Nodes["editionStmt"]->ChildNodes->Nodes["edition"];
+	_di_IXMLNode NodeEdition = Document->DocumentElement->ChildNodes->Nodes["teiHeader"]->ChildNodes->Nodes["encodingDesc"]->ChildNodes->Nodes["editorialDecl"]->ChildNodes->Nodes["punctuation"];
 	String sEdition = NodeEdition->GetXML();
-	if(sEdition.Pos0(u"AI 標點版")>=0) {
+	if(sEdition.Pos0(u"AI 標點")>=0) {
 		IsAIPunc = true;
 		sHtml += u"<div><span id='AIPuncRemind'>【案：此資料標點由AI標點引擎提供，可從「設定/經文格式」選擇是否呈現。】</span></div>\n";
 	}
@@ -1672,7 +1672,7 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 	CRendAttr * myRend = new CRendAttr(sRend);
 	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 
-	if((myStyle->MarginLeft != 0 || myStyle->TextIndent != 0)
+	if((myStyle->HasMarginLeft || myStyle->HasTextIndent)
 		&& !(!Setting->ShowPunc && LgNormal)      //若不秀標點且是標準格式, 就不依 rend
 		&& !(Setting->NoShowLgPunc && LgNormal))  //若在偈頌中且偈頌不秀新標
 	{
@@ -2121,7 +2121,7 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	int iMarginLeft = 0;
 	int iTextIndent = 0;
 	// 檢查移位 <lg style="margin-left:1">
-	if((myStyle->MarginLeft != 0 || myStyle->TextIndent != 0)
+	if((myStyle->HasMarginLeft || myStyle->HasTextIndent)
 		&& !(!Setting->ShowPunc && LgNormal)    //若不秀標點且是標準格式, 就不依 rend
 		&& !(Setting->NoShowLgPunc && LgNormal))     //若在偈頌中且偈頌不秀新標
 	{
