@@ -3920,6 +3920,7 @@ String __fastcall CCBXML::GetVerInfo()
 	String sSutraNum = CMyStrUtil::TrimLeft(SutraId, u'0');;  // 經號
 	String sSutraName = "";   // 經名
 	String sPublishDate = "";   // 發行日期
+	String sUpdateDate = "";   // 更新日期
 
 	_di_IXMLNode xnProjectDesc = Document->DocumentElement->ChildNodes->Nodes["teiHeader"]->ChildNodes->Nodes["encodingDesc"]->ChildNodes->Nodes["projectDesc"];
 
@@ -3936,6 +3937,12 @@ String __fastcall CCBXML::GetVerInfo()
 		}
 	}
 
+	// 讀取日期
+	// <date>2019-09-12 02:11:51 +0800</date>
+	_di_IXMLNode NodeDate = Document->DocumentElement->ChildNodes->Nodes["teiHeader"]->ChildNodes->Nodes["fileDesc"]->ChildNodes->Nodes["publicationStmt"]->ChildNodes->Nodes["date"];
+	sUpdateDate = NodeDate->GetText();
+	sUpdateDate = sUpdateDate.SubString0(0,10);
+
 	sBookName = fmMain->Bookcase->CBETA->BookData->GetBookName(BookId);
 	// 經名要移除 (第X卷)
 	sSutraName = CMyCBUtil::CutJuanAfterSutraName(SutraName);
@@ -3944,7 +3951,16 @@ String __fastcall CCBXML::GetVerInfo()
 	sVerInfo = u"<br><br><span style='margin:15px; padding: 25px; border-radius: 20px; background-color: rgb(200, 234, 198); display:block; box-shadow:inset -3px -3px 10px #9bbc99'>\n";
 	sVerInfo += u"【典籍資訊】" ;
 	sVerInfo += sBookName + u"第 " + sVolNum + u" 冊 No. " + sSutraNum + u"《" + sSutraName + u"》<br>\n";
-	sVerInfo += u"【版本記錄】發行日期：" + sPublishDate + u"<br>\n";
+	sVerInfo += u"【版本記錄】發行日期：" + sPublishDate;
+	if(sUpdateDate.Length() == 10) {
+		if(sUpdateDate.SubString0(0,4).ToIntDef(0)>0 &&
+		   sUpdateDate.SubString0(5,2).ToIntDef(0)>0 &&
+		   sUpdateDate.SubString0(8,2).ToIntDef(0)>0)
+		{
+			sVerInfo += u"，更新日期：" + sUpdateDate;
+		}
+	}
+	sVerInfo += u"<br>\n";
 	sVerInfo += u"【編輯說明】本資料庫由中華電子佛典協會（CBETA）依" + sBookName + u"所編輯<br>\n";
     //不管什麼版本, 都要列出版權宣告比較好
 	//if(Application->Title == u"CBReader")
