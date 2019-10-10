@@ -21,6 +21,8 @@ public:
     String NewStyle;    // 移除 段首空白與行首空白之後剩的 Style
 	int MarginLeft;
 	int TextIndent;
+	bool HasMarginLeft; // 用來判斷有沒有這個屬性
+	bool HasTextIndent;
 
     void __fastcall Analysis();
 	__fastcall CStyleAttr(String sStr);

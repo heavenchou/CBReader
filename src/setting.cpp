@@ -27,6 +27,7 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 	VerticalMode = false;			// 垂直顯示
 	ShowPunc = true;                // 呈現標點
 	NoShowLgPunc = false;           // 不呈現偈頌的標點
+	NoShowAIPunc = false;			// 不呈現AI的標點
 	//LgType = 1;                   // 這是2016新的暫時功能, 設定偈頌呈現的方式, 0 為舊的方式用空格, 1 為非標準偈頌用 <p> 呈現編排
 
 	CollationType = ctCBETACollation;  // 校勘格式 0:原書, 1:CBETA
@@ -90,10 +91,10 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 	UseFootFontColor = false;	// 是否使用校勘的顏色
 	UseFootFontSize = false;		// 是否使用校勘的文字大小
 
-    UseCSSFile = false;     		// 使用 CSS 檔案
-    CSSFileName = "cbreader.css";	// CSS 檔名
+	UseCSSFile = false;     		// 使用 CSS 檔案
+	CSSFileName = "";				// CSS 檔名
 
-    // 缺字處理
+	// 缺字處理
 
 	GaijiUseUniExt = true;    // 是否使用 Unicode Ext
 	GaijiUseNormal = true;    // 是否使用通用字
@@ -190,6 +191,7 @@ void __fastcall CSetting::LoadFromFile(String sFile)
 	ShowLineHead = IniFile->ReadBool(Section, "ShowLineHead", ShowLineHead);
 	ShowPunc = IniFile->ReadBool(Section, "ShowPunc", ShowPunc);
 	NoShowLgPunc = IniFile->ReadBool(Section, "NoShowLgPunc", NoShowLgPunc);
+	NoShowAIPunc = IniFile->ReadBool(Section, "NoShowAIPunc", NoShowAIPunc);
 	VerticalMode = IniFile->ReadBool(Section, "VerticalMode", VerticalMode);
 	ShowCollation = IniFile->ReadBool(Section, "ShowCollation", ShowCollation);
 	CollationType = ctCollationType(IniFile->ReadInteger(Section, "CollationType", CollationType));
@@ -214,6 +216,13 @@ void __fastcall CSetting::LoadFromFile(String sFile)
 	//MyFullPath = IniFile->ReadString(Section, "MyFullPath", MyFullPath);
 	BookcasePath = IniFile->ReadString(Section, "BookcasePath", BookcasePath);
 	BookcaseFullPath = IniFile->ReadString(Section, "BookcaseFullPath", BookcaseFullPath);
+
+	// 自訂 CSS
+
+	Section = "FontFormat";
+
+	UseCSSFile  = IniFile->ReadBool(Section, "UseCSSFile"     , UseCSSFile );
+	CSSFileName = IniFile->ReadString(Section, "CSSFileName"  , CSSFileName);
 
 	// 其他
 
@@ -260,6 +269,7 @@ void __fastcall CSetting::SaveToFile(String sFile)
 	IniFile->WriteBool(Section, "ShowLineHead", ShowLineHead);
 	IniFile->WriteBool(Section, "ShowPunc", ShowPunc);
 	IniFile->WriteBool(Section, "NoShowLgPunc", NoShowLgPunc);
+	IniFile->WriteBool(Section, "NoShowAIPunc", NoShowAIPunc);
 	IniFile->WriteBool(Section, "VerticalMode", VerticalMode);
 	IniFile->WriteBool(Section, "ShowCollation", ShowCollation);
 	IniFile->WriteInteger(Section, "CollationType", CollationType);
@@ -280,6 +290,14 @@ void __fastcall CSetting::SaveToFile(String sFile)
 	//IniFile->WriteString(Section, "MyFullPath", MyFullPath);
 	IniFile->WriteString(Section, "BookcasePath", BookcasePath);
 	IniFile->WriteString(Section, "BookcaseFullPath", BookcaseFullPath);
+
+
+	// 自訂 CSS
+
+	Section = "FontFormat";
+
+	IniFile->WriteBool(Section, "UseCSSFile"     , UseCSSFile );
+	IniFile->WriteString(Section, "CSSFileName"  , CSSFileName);
 
 	// 其他
 

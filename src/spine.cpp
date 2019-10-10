@@ -112,8 +112,17 @@ String __fastcall CSpine::CBGetFileNameBySutraNumJuan(String sBookID,String sVol
 String __fastcall CSpine::CBGetSutraNumFormat(String sSutraNum)
 {
 	if(sSutraNum == "") return "";
-	int iMyLen = sSutraNum.Length();
 
+	String sJPre = u"";
+	System::WideChar * wJPre = sSutraNum.FirstChar();
+	// 處理嘉興藏的 A, B經號
+	if(*wJPre == u'A' || *wJPre == u'B')
+	{
+		sJPre = *wJPre;
+		sSutraNum.Delete0(0,1);
+    }
+
+	int iMyLen = sSutraNum.Length();
 	int iStdLen;
 	String::iterator it = sSutraNum.end();
 	if(*(it-1) >= '0' && *(it-1) <= '9')
@@ -130,6 +139,12 @@ String __fastcall CSpine::CBGetSutraNumFormat(String sSutraNum)
 		sSutraNum = String().StringOfChar(L'0',iStdLen-iMyLen) + sSutraNum;
     }
 
+	// 再次處理嘉興藏
+	if(sJPre != "")
+	{
+		sSutraNum.Delete0(0,1);
+        sSutraNum = sJPre + sSutraNum;
+    }
 	return sSutraNum;
 }
 // ---------------------------------------------------------------------------

@@ -14,9 +14,6 @@ __fastcall TfmOption::TfmOption(TComponent* Owner)
 {
 	Setting = fmMain->Setting;
 
-    // 新標選項先隱藏
-	cbShowPunc->Visible = false;
-	cbNoShowLgPunc->Visible = false;
 }
 //---------------------------------------------------------------------------
 // 由設定載入
@@ -31,8 +28,10 @@ void __fastcall TfmOption::LoadFromSetting()
 
 	cbShowPunc->IsChecked = Setting->ShowPunc;
 	cbNoShowLgPunc->IsChecked = Setting->NoShowLgPunc;
+	cbNoShowAIPunc->IsChecked = Setting->NoShowAIPunc;
 
 	cbNoShowLgPunc->Enabled = cbShowPunc->IsChecked;      // 若不呈現標點, 就不出現 "偈頌呈現標點與否" 的選項
+	cbNoShowAIPunc->Enabled = cbShowPunc->IsChecked;      // 若不呈現標點, 就不出現 "偈頌呈現標點與否" 的選項
 
 	cbVerticalMode->IsChecked = Setting->VerticalMode;
 
@@ -120,10 +119,10 @@ void __fastcall TfmOption::LoadFromSetting()
 
 	cbFootFontColor->Checked = Setting->UseFootFontColor;
 	cbFootFontSize->Checked = Setting->UseFootFontSize;
-
-    cbCSSFile->Checked = Setting->UseCSSFile;
-    edCSSFile->Text = Setting->CSSFileName;
 	*/
+
+	cbUseCSSFile->IsChecked = Setting->UseCSSFile;
+	edCSSFileName->Text = Setting->CSSFileName;
 
     // 缺字處理
 
@@ -227,6 +226,7 @@ void __fastcall TfmOption::SaveToSetting()
 
 	Setting->ShowPunc = cbShowPunc->IsChecked;
 	Setting->NoShowLgPunc = cbNoShowLgPunc->IsChecked;
+	Setting->NoShowAIPunc = cbNoShowAIPunc->IsChecked;
 
 	Setting->VerticalMode = cbVerticalMode->IsChecked;
 	Setting->ShowCollation = cbShowCollation->IsChecked;
@@ -311,10 +311,11 @@ void __fastcall TfmOption::SaveToSetting()
 
 	Setting->UseFootFontColor = cbFootFontColor->Checked;
 	Setting->UseFootFontSize = cbFootFontSize->Checked;
-
-	Setting->UseCSSFile = cbCSSFile->Checked;
-    Setting->CSSFileName = edCSSFile->Text;
 	*/
+
+	Setting->UseCSSFile = cbUseCSSFile->IsChecked;
+	Setting->CSSFileName = edCSSFileName->Text;
+
 
 	// 缺字處理
 
@@ -426,6 +427,7 @@ void __fastcall TfmOption::btSaveClick(TObject *Sender)
 void __fastcall TfmOption::cbShowPuncChange(TObject *Sender)
 {
 	cbNoShowLgPunc->Enabled = cbShowPunc->IsChecked;
+	cbNoShowAIPunc->Enabled = cbShowPunc->IsChecked;
 }
 //---------------------------------------------------------------------------
 

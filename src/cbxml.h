@@ -42,6 +42,8 @@ private: // User declarations
 
 	// --------------------------
 
+    bool IsAIPunc;          // 判斷是不是 AI 標點文件
+
 	String DivType[30];		// 最多 20 層
 	int DivCount;   		// Div 的層次
 
@@ -52,11 +54,14 @@ private: // User declarations
 	bool InFuWenHead;		// 用來判斷本行是否是附文標題
 	bool InOtherHead;		// 用來判斷本行是否是其它標題
 	bool InHead;			// 用來判斷本行是否是標題
+	bool InNoteOrig;  		// 用來判斷是不是在 Note type=orig
+	bool InNoteMod;			// 用來判斷是不是在 Note type=mod
+	bool InNoteAdd;  		// 用來判斷是不是在 Note type=add
 	int  NoNormal;			// 用來判斷是否可用通用字 , 大於 0 就不用通用字, 這二種就不用通用字 <text rend="no_nor"> 及 <term rend="no_nor">
 
 	// 偈頌相關
 	bool IsFindLg;			// 一遇到 <lg> 就 true, 第一個 <l> 就會處理並設為 false;
-	int  LgCount;              // 判斷是不是在 <lg> 之中, 主要是用來處理偈頌中的標點要不要呈現.
+	bool InLg;           	// 判斷是不是在 <lg> 之中, 主要是用來處理偈頌中的標點要不要呈現.
 	bool LgNormal;		    // lg 的 type 是不是 normal? 有 normal 及 abnormal 二種
 	bool LgInline;          // lg 的 place 是不是 inline?
 	String LgMarginLeft;	// lg 整段要空的格
@@ -149,6 +154,9 @@ private: // User declarations
 
 	// 傳入 note 標記的 id , 傳回流水號, 若沒有就自動 + 1 並傳回
 	int __fastcall Get_Add_IdNum(String sId);
+
+	// 移除標點
+    String __fastcall RemovePunc(String sHtml);
 
 public: // User declarations
 

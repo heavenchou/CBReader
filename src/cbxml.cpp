@@ -23,13 +23,14 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	GetInitialFromFileName();   // 由經名取得一切相關資訊
 
 	// 初值
-	DivCount = 0;   // Div 的層次
-	ListCount = 0;    // list 層次
+	IsAIPunc = false;		// 判斷是不是 AI 標點文件
+	DivCount = 0;   		// Div 的層次
+	ListCount = 0;    		// list 層次
 	InByline = false;       // 用來判斷是否是作譯者
 
 	// 偈頌相關
 	IsFindLg = false;		// 一遇到 <lg> 就 true, 第一個 <l> 就會處理並設為 false;
-	LgCount = 0;            // 判斷是不是在 <lg> 之中, 主要是用來處理偈頌中的標點要不要呈現.
+	InLg = false;            // 判斷是不是在 <lg> 之中, 主要是用來處理偈頌中的標點要不要呈現.
 	LgNormal = true;		    // lg 的 type 是不是 normal? 有 normal 及 abnormal 二種
 	LgInline = false;          // lg 的 place 是不是 inline?
 	LgMarginLeft = "";      // Lg 整段的位移
@@ -52,6 +53,9 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	InFuWenHead = false;	// 用來判斷本行是否是附文標題
 	InOtherHead = false;	// 用來判斷本行是否是其它標題
 	InHead = false;			// 用來判斷本行是否是標題
+	InNoteOrig = false;  		// 用來判斷是不是在 Note type=orig
+	InNoteMod = false;			// 用來判斷是不是在 Note type=mod
+	InNoteAdd = false;  		// 用來判斷是不是在 Note type=add
 	InTTNormal = false;		// 在 <tt rend="normal"> 中, 這時每一個 <t> 都要換行 , T54n2133A : <lb n="1194c17"/><p><tt rend="normal"><t lang="san-sd">
 	PreFormatCount = 0;		// 判斷是否是要依據原始經文格式切行, 要累加的, 因為可能有巢狀的 pre
 	NoNormal = 0;          // 用來判斷是否可用通用字 , 大於 0 就不用通用字, 這二種就不用通用字 <text cb:behaviour="no-norm"> 及 <term cb:behaviour="no-norm">
@@ -82,7 +86,7 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 		String s = seSearchEngine->SearchSentence;
 		s = StringReplace(s, u"?", u"⍰", TReplaceFlags() << rfReplaceAll);
 		HTMLText += u"<div id='SearchHead'>檢索字串：" + s + u"<hr></div>";
-    }
+	}
 
 	HTMLText += ParseXML();     		// 處理內文
 
@@ -153,7 +157,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"	<script src='";
 	sHtml += JSFile;
 	sHtml += u"'></script>\n"
-	"	<style>\n"
+	"	<style type=\"text/css\">\n"
 	"		@font-face {\n"
 	"			font-family: CBFont;\n"
 	"			src: local('Times New Roman'), local(MingLiU), local(細明體), local(PMingLiU), local(新細明體), local(NSimSun), local(SimSun), local('Songti TC');\n"
@@ -164,6 +168,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"			src: local(MingLiU), local(細明體), local(NSimSun), local('Songti TC');\n"
 	"		}\n"
 	"		body { background:#DDF1DC; font-weight: normal; line-height:26px; color:#000000; font-size:21px; font-family:CBFont;}\n"
+	"		#AIPuncRemind {color:#ffffff; background: #d80000;}\n"
 	"		a.SearchWord0 {color:#0000ff; background: #ffff66;}\n"
 	"		a.SearchWord1 {color:#0000ff; background: #a0ffff;}\n"
 	"		a.SearchWord2 {color:#0000ff; background: #99ff99;}\n"
@@ -283,8 +288,17 @@ String __fastcall CCBXML::MakeHTMLHead()
 				  "		.note_add {display:inline;}\n"
 				  "		.note_star {display:inline;}\n"
 				  "		.note_star_removed {display:none;}\n";
+	sHtml += u"	</style>\n";
 
-	sHtml += u"	</style>\n</head>\n";
+	// 自訂 CSS
+	if(Setting->UseCSSFile)
+	{
+		sHtml += u"<link rel=stylesheet type=\"text/css\" href=\"";
+		sHtml += Setting->CSSFileName;
+		sHtml += u"\">\n";
+	}
+
+	sHtml += u"</head>\n";
 	sHtml += u"<body data-sutraname='" + SutraName
 		+ u"' data-juan='" + JuanNum
 		+ u"' data-totaljuan='" + TotalJuan + u"'";
@@ -312,6 +326,14 @@ String __fastcall CCBXML::ParseXML()
 	_di_IXMLNode NodeGaijis = Document->DocumentElement->ChildNodes->Nodes["teiHeader"]->ChildNodes->Nodes["encodingDesc"]->ChildNodes->Nodes["charDecl"];
 	ReadGaiji(NodeGaijis); // 讀取缺字
 
+	// 檢查是不是 AI 標點
+	_di_IXMLNode NodeEdition = Document->DocumentElement->ChildNodes->Nodes["teiHeader"]->ChildNodes->Nodes["encodingDesc"]->ChildNodes->Nodes["editorialDecl"]->ChildNodes->Nodes["punctuation"];
+	String sEdition = NodeEdition->GetXML();
+	if(sEdition.Pos0(u"AI 標點")>=0) {
+		IsAIPunc = true;
+		sHtml += u"<div><span id='AIPuncRemind'>【案：此資料標點由AI標點引擎提供，可從「設定/經文格式」選擇是否呈現。】</span></div>\n";
+	}
+
 	// 遍歷 XML
 
 	Node = Document->DocumentElement->ChildNodes->Nodes["text"];
@@ -319,7 +341,7 @@ String __fastcall CCBXML::ParseXML()
 	if (Node->ChildNodes->Count == 0)
 		TDialogService::ShowMessage(u"錯誤：找不到 text 標記。");
 	else
-		sHtml = ParseNode(Node);
+		sHtml += ParseNode(Node);
 
 	return sHtml;
 }
@@ -407,10 +429,53 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 		// 所以只有 note_text 要處理 &amp; &lt; , text 不用處理
 		sHtml = StringReplace(sHtml, "&", "&amp;", TReplaceFlags() << rfReplaceAll);
 		sHtml = StringReplace(sHtml, "<", "&lt;", TReplaceFlags() << rfReplaceAll);
-        // 移除新標待處理 ????
+
+		// 移除標點
+		if((Setting->ShowPunc == false) ||
+		   (Setting->NoShowLgPunc == true && InLg == true) ||
+		   (Setting->NoShowAIPunc == true && IsAIPunc == true))
+		{
+            // 校勘中不用移除標點
+			if(!InNoteOrig && !InNoteMod &&!InNoteAdd)
+			{
+				sHtml = RemovePunc(sHtml);
+			}
+		}
 	}
 
 	return sHtml;
+}
+// ---------------------------------------------------------------------------
+// 移除標點
+String __fastcall CCBXML::RemovePunc(String sHtml)
+{
+	sHtml = StringReplace(sHtml, u"．", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"、", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"，", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"：", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"；", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"。", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"？", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"！", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"—", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"…", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"「", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"」", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"『", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"』", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"〈", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"〉", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"《", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"》", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"“", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"”", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"（", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"）", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"【", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"】", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"〔", "", TReplaceFlags() << rfReplaceAll);
+	sHtml = StringReplace(sHtml, u"〕", "", TReplaceFlags() << rfReplaceAll);
+    return sHtml;
 }
 
 // ---------------------------------------------------------------------------
@@ -1616,7 +1681,7 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 	CRendAttr * myRend = new CRendAttr(sRend);
 	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 
-	if((myStyle->MarginLeft != 0 || myStyle->TextIndent != 0)
+	if((myStyle->HasMarginLeft || myStyle->HasTextIndent)
 		&& !(!Setting->ShowPunc && LgNormal)      //若不秀標點且是標準格式, 就不依 rend
 		&& !(Setting->NoShowLgPunc && LgNormal))  //若在偈頌中且偈頌不秀新標
 	{
@@ -2023,7 +2088,7 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	String sHtml = u"";
 
 	IsFindLg = true;			// 一遇到 <lg> 就 true, 第一個 <l> 就會處理並設為 false;
-	LgCount++;                  // 判斷是不是在 <lg> 之中, 主要是用來處理偈頌中的標點要不要呈現.
+	InLg = true;                // 判斷是不是在 <lg> 之中, 主要是用來處理偈頌中的標點要不要呈現.
 	LgNormal = true;			// 預設值, 因為有些舊的 xml 沒有 <lg type=normal>
 	LgInline = false;      		// lg 的 place 是不是 inline?
 	LgMarginLeft = u"";			// lg 整段要空的格
@@ -2065,7 +2130,7 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	int iMarginLeft = 0;
 	int iTextIndent = 0;
 	// 檢查移位 <lg style="margin-left:1">
-	if((myStyle->MarginLeft != 0 || myStyle->TextIndent != 0)
+	if((myStyle->HasMarginLeft || myStyle->HasTextIndent)
 		&& !(!Setting->ShowPunc && LgNormal)    //若不秀標點且是標準格式, 就不依 rend
 		&& !(Setting->NoShowLgPunc && LgNormal))     //若在偈頌中且偈頌不秀新標
 	{
@@ -2203,7 +2268,7 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	sHtml += parseChild(Node); // 處理內容
     // -----------------------------------
 
-	LgCount--;               // 判斷是不是在 <lg> 之中, 主要是用來處理偈頌中的標點要不要呈現.
+	InLg = false;               // 判斷是不是在 <lg> 之中, 主要是用來處理偈頌中的標點要不要呈現.
 	LgMarginLeft = "";
 	if(bIsNote) sHtml += u")";
 	sHtml += u"</span>";
@@ -2422,15 +2487,15 @@ String __fastcall CCBXML::tag_note(_di_IXMLNode Node)
 <note n="xxxxx" resp="xxxxx" type="mod" place="foot text" target="xxxxx">
 
 
-<note n="xxxxx" resp="xxxxx" place="foot text" type="orig_biao" target="xxxxx">	: 卍續藏特有的 "科, 標, 解"
-<note n="xxxxx" resp="xxxxx" place="foot text" type="orig_jie" target="xxxxx">
-<note n="xxxxx" resp="xxxxx" place="foot text" type="orig_ke" target="xxxxx">
-<note n="xxxxx" resp="xxxxx" place="foot" type="orig_ke" target="xxxxx">
-<note n="xxxxx" resp="xxxxx" place="text" type="orig_ke" target="xxxxx">
+<note n="xxxxx" resp="xxxxx" place="foot text" type="orig" subtype="biao" target="xxxxx">	: 卍續藏特有的 "科, 標, 解"
+<note n="xxxxx" resp="xxxxx" place="foot text" type="orig" subtype="jie" target="xxxxx">
+<note n="xxxxx" resp="xxxxx" place="foot text" type="orig" subtype="ke" target="xxxxx">
+<note n="xxxxx" resp="xxxxx" place="foot" type="orig" subtype="ke" target="xxxxx">
+<note n="xxxxx" resp="xxxxx" place="text" type="orig" subtype="ke" target="xxxxx">
 
-<note n="xxxxx" resp="xxxxx" type="mod_biao" target="xxxxx">
-<note n="xxxxx" resp="xxxxx" type="mod_jie" target="xxxxx">
-<note n="xxxxx" resp="xxxxx" type="mod_ke" target="xxxxx">                       : 卍續藏特有的 "科, 標, 解"
+<note n="xxxxx" resp="xxxxx" type="mod" subtype="biao" target="xxxxx">
+<note n="xxxxx" resp="xxxxx" type="mod" subtype="jie" target="xxxxx">
+<note n="xxxxx" resp="xxxxx" type="mod" subtype="ke" target="xxxxx">                       : 卍續藏特有的 "科, 標, 解"
 
 
 <note n="xxxxx" type="cf." place="foot" target="xxxxx">
@@ -2444,11 +2509,11 @@ String __fastcall CCBXML::tag_note(_di_IXMLNode Node)
 
 <note type="star" corresp="xxxxx"> : 在南傳才遇到, 因為星號在之前都是出現在 app 標記, 但南傳某些沒有 app 標記, 卻需要星號來表示重覆的註解, 待處理 ?????
 
-2016 新增 type = "editor" , 表示是編輯者自行加入的, 若 resp 是 CBETA , 就表示是 CBETA 自己加上的註解,
-                            又如 DILA 自己在佛寺志加上註解, 也是用 "editor" , 表示不是佛寺志原有的註解
+2016 新增 type = "add" , 表示是編輯者自行加入的, 若 resp 是 CBETA , 就表示是 CBETA 自己加上的註解,
+							又如 DILA 自己在佛寺志加上註解, 也是用 "add" , 表示不是佛寺志原有的註解
     B36n0159.xml
-p5a:<note n="0836001" resp="CBETA" type="editor">CBETA 按：「校記 A」 條目已加入本文註標連結。</note>
-p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_0836001">CBETA 按：「校記 A」 條目已加入本文註標連結。</note>
+p5a:<note n="0836001" resp="CBETA" type="add">CBETA 按：「校記 A」 條目已加入本文註標連結。</note>
+p5 :<note n="0836001" resp="#resp2" type="add" target="#nkr_note_editor_0836001">CBETA 按：「校記 A」 條目已加入本文註標連結。</note>
 
 */
 
@@ -2510,8 +2575,9 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 		sHtml += u"<<tmp_note_orig_" + sId + u">>"; // 先做個記錄
 
 		mOrigNote[sId] = sTmp;
-
+		InNoteOrig = true;
 		String sNoteText = parseChild(Node);
+		InNoteOrig = false;
 		// <div id="txt_note_orig_0001001">校勘內容</div>
 		HTMLCollation += u"<div id='txt_note_orig_" + sId + u"'>" + sNoteText + u"</div>\n";
 	}
@@ -2535,7 +2601,11 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 				 u"' class='note_mod' href='' style='display:" + sDisplay + 
 				 u"' onclick='return ShowCollation($(this));'>[" +
 				 sKBJ + sIdNum + u"]</a>";
+
+		InNoteMod = true;
 		String sNoteText = parseChild(Node);
+		InNoteMod = false;
+
 		HTMLCollation += u"<div id='txt_note_mod_" + sId + u"'>" + sNoteText + u"</div>\n";
 
 		//String sIdNormal = sId.SubString0(0,7); // 取出標準的 ID, 因為有些有 abc...
@@ -2543,7 +2613,7 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 		ThisNoteHasMod(sId);  // 通知 note orig , 此校勘有 mod 版
 	}
 
-	// 2016 新增加的版本 <note type="editor" ...
+	// 2016 新增加的版本 <note type="editor" (後來改成 "add" ...
 	else if(sType == u"editor" || sType == u"add")
 	{
 		if(sId == u"") TDialogService::ShowMessage (u"錯誤 : 校勘沒有 n 屬性");
@@ -2560,11 +2630,13 @@ p5 :<note n="0836001" resp="#resp2" type="editor" target="#nkr_note_editor_08360
 		else if(Setting->CollationType == ctCBETACollation) sDisplay = u"inline";
 
 		sHtml += u"<a id='note_add_A" + sIdNum +
-				 u"' class='note_add' href='' style='display:" + sDisplay + 
+				 u"' class='note_add' href='' style='display:" + sDisplay +
 				 u"' onclick='return ShowCollation($(this));'>[A" +
 				 sIdNum + u"]</a>";
 
+		InNoteAdd = true;
 		String sNoteText = parseChild(Node);
+		InNoteAdd = false;
 		// <div id="txt_note_orig_0001001">校勘內容</div>
 		HTMLCollation += u"<div id='txt_note_add_A" + sIdNum + u"'>" + sNoteText + u"</div>\n";
 	}
@@ -3857,6 +3929,7 @@ String __fastcall CCBXML::GetVerInfo()
 	String sSutraNum = CMyStrUtil::TrimLeft(SutraId, u'0');;  // 經號
 	String sSutraName = "";   // 經名
 	String sPublishDate = "";   // 發行日期
+	String sUpdateDate = "";   // 更新日期
 
 	_di_IXMLNode xnProjectDesc = Document->DocumentElement->ChildNodes->Nodes["teiHeader"]->ChildNodes->Nodes["encodingDesc"]->ChildNodes->Nodes["projectDesc"];
 
@@ -3873,6 +3946,12 @@ String __fastcall CCBXML::GetVerInfo()
 		}
 	}
 
+	// 讀取日期
+	// <date>2019-09-12 02:11:51 +0800</date>
+	_di_IXMLNode NodeDate = Document->DocumentElement->ChildNodes->Nodes["teiHeader"]->ChildNodes->Nodes["fileDesc"]->ChildNodes->Nodes["publicationStmt"]->ChildNodes->Nodes["date"];
+	sUpdateDate = NodeDate->GetText();
+	sUpdateDate = sUpdateDate.SubString0(0,10);
+
 	sBookName = fmMain->Bookcase->CBETA->BookData->GetBookName(BookId);
 	// 經名要移除 (第X卷)
 	sSutraName = CMyCBUtil::CutJuanAfterSutraName(SutraName);
@@ -3881,12 +3960,21 @@ String __fastcall CCBXML::GetVerInfo()
 	sVerInfo = u"<br><br><span style='margin:15px; padding: 25px; border-radius: 20px; background-color: rgb(200, 234, 198); display:block; box-shadow:inset -3px -3px 10px #9bbc99'>\n";
 	sVerInfo += u"【典籍資訊】" ;
 	sVerInfo += sBookName + u"第 " + sVolNum + u" 冊 No. " + sSutraNum + u"《" + sSutraName + u"》<br>\n";
-	sVerInfo += u"【版本記錄】發行日期：" + sPublishDate + u"<br>\n";
+	sVerInfo += u"【版本記錄】發行日期：" + sPublishDate;
+	if(sUpdateDate.Length() == 10) {
+		if(sUpdateDate.SubString0(0,4).ToIntDef(0)>0 &&
+		   sUpdateDate.SubString0(5,2).ToIntDef(0)>0 &&
+		   sUpdateDate.SubString0(8,2).ToIntDef(0)>0)
+		{
+			sVerInfo += u"，更新日期：" + sUpdateDate;
+		}
+	}
+	sVerInfo += u"<br>\n";
 	sVerInfo += u"【編輯說明】本資料庫由中華電子佛典協會（CBETA）依" + sBookName + u"所編輯<br>\n";
     //不管什麼版本, 都要列出版權宣告比較好
 	//if(Application->Title == u"CBReader")
 	{
-		sVerInfo += u"【原始資料】" + sSourceFrom + u"<br>\n";
+		sVerInfo += u"【資料說明】" + sSourceFrom + u"<br>\n";
 		sVerInfo += u"【版權宣告】詳細說明請參閱【<a href='http://www.cbeta.org/copyright.php' target='_blank'>中華電子佛典協會資料庫版權宣告</a>】<br>\n";
 	}
 	sVerInfo += u"</span><br>\n";

@@ -13,6 +13,8 @@ __fastcall CStyleAttr::CStyleAttr(String sStr)
 	NewStyle = "";    // 移除 段首空白與行首空白之後剩的 Style
 	MarginLeft = 0;
 	TextIndent = 0;
+	HasMarginLeft = false; // 用來判斷有沒有這個屬性
+	HasTextIndent = false;
 
 	if(Style != "")
 	{
@@ -68,6 +70,7 @@ void __fastcall CStyleAttr::Analysis()
 		if((iPos = sMarginLeft.Pos0(u"em")) >= 0)
 		{
 			sMarginLeft = sMarginLeft.SubString0(12,iPos-12); // 取出數字
+			HasMarginLeft = true;
 		}
 		MarginLeft = sMarginLeft.ToIntDef(0);
 	}
@@ -78,6 +81,7 @@ void __fastcall CStyleAttr::Analysis()
 		if((iPos = sTextIndent.Pos0(u"em")) >= 0)
 		{
 			sTextIndent = sTextIndent.SubString0(12,iPos-12);
+			HasTextIndent = true;
 		}
 		TextIndent = sTextIndent.ToIntDef(0);
 	}

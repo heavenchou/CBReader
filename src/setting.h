@@ -40,6 +40,7 @@ public: // User declarations
 	bool VerticalMode;		// 垂直顯示
     bool ShowPunc;          // 呈現標點與段落
     bool NoShowLgPunc;      // 不呈現偈頌的標點
+    bool NoShowAIPunc;      // 不呈現AI標點
     int LgType;             // 這是2016新的暫時功能, 設定偈頌呈現的方式, 0 為舊的方式用空格, 1 為非標準偈頌用 <p> 呈現編排
 
 	// 校勘格式
