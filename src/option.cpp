@@ -119,10 +119,10 @@ void __fastcall TfmOption::LoadFromSetting()
 
 	cbFootFontColor->Checked = Setting->UseFootFontColor;
 	cbFootFontSize->Checked = Setting->UseFootFontSize;
-
-    cbCSSFile->Checked = Setting->UseCSSFile;
-    edCSSFile->Text = Setting->CSSFileName;
 	*/
+
+	cbUseCSSFile->IsChecked = Setting->UseCSSFile;
+	edCSSFileName->Text = Setting->CSSFileName;
 
     // 缺字處理
 
@@ -311,10 +311,11 @@ void __fastcall TfmOption::SaveToSetting()
 
 	Setting->UseFootFontColor = cbFootFontColor->Checked;
 	Setting->UseFootFontSize = cbFootFontSize->Checked;
-
-	Setting->UseCSSFile = cbCSSFile->Checked;
-    Setting->CSSFileName = edCSSFile->Text;
 	*/
+
+	Setting->UseCSSFile = cbUseCSSFile->IsChecked;
+	Setting->CSSFileName = edCSSFileName->Text;
+
 
 	// 缺字處理
 

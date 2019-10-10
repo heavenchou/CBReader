@@ -14,6 +14,7 @@
 #include <FMX.Types.hpp>
 #include "main.h"
 #include "setting.h"
+#include <FMX.Edit.hpp>
 //---------------------------------------------------------------------------
 class TfmOption : public TForm
 {
@@ -47,6 +48,9 @@ __published:	// IDE-managed Components
 	TRadioButton *rbCBETACollation;
 	TRadioButton *rbOrigCollation;
 	TCheckBox *cbNoShowAIPunc;
+	TGroupBox *GroupBox5;
+	TCheckBox *cbUseCSSFile;
+	TEdit *edCSSFileName;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btOKClick(TObject *Sender);
 	void __fastcall btCancelClick(TObject *Sender);

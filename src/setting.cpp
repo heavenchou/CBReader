@@ -91,10 +91,10 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 	UseFootFontColor = false;	// 是否使用校勘的顏色
 	UseFootFontSize = false;		// 是否使用校勘的文字大小
 
-    UseCSSFile = false;     		// 使用 CSS 檔案
-    CSSFileName = "cbreader.css";	// CSS 檔名
+	UseCSSFile = false;     		// 使用 CSS 檔案
+	CSSFileName = "";				// CSS 檔名
 
-    // 缺字處理
+	// 缺字處理
 
 	GaijiUseUniExt = true;    // 是否使用 Unicode Ext
 	GaijiUseNormal = true;    // 是否使用通用字
@@ -217,6 +217,13 @@ void __fastcall CSetting::LoadFromFile(String sFile)
 	BookcasePath = IniFile->ReadString(Section, "BookcasePath", BookcasePath);
 	BookcaseFullPath = IniFile->ReadString(Section, "BookcaseFullPath", BookcaseFullPath);
 
+	// 自訂 CSS
+
+	Section = "FontFormat";
+
+	UseCSSFile  = IniFile->ReadBool(Section, "UseCSSFile"     , UseCSSFile );
+	CSSFileName = IniFile->ReadString(Section, "CSSFileName"  , CSSFileName);
+
 	// 其他
 
 	Section = "Misc";
@@ -283,6 +290,14 @@ void __fastcall CSetting::SaveToFile(String sFile)
 	//IniFile->WriteString(Section, "MyFullPath", MyFullPath);
 	IniFile->WriteString(Section, "BookcasePath", BookcasePath);
 	IniFile->WriteString(Section, "BookcaseFullPath", BookcaseFullPath);
+
+
+	// 自訂 CSS
+
+	Section = "FontFormat";
+
+	IniFile->WriteBool(Section, "UseCSSFile"     , UseCSSFile );
+	IniFile->WriteString(Section, "CSSFileName"  , CSSFileName);
 
 	// 其他
 

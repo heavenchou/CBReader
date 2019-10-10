@@ -157,7 +157,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"	<script src='";
 	sHtml += JSFile;
 	sHtml += u"'></script>\n"
-	"	<style>\n"
+	"	<style type=\"text/css\">\n"
 	"		@font-face {\n"
 	"			font-family: CBFont;\n"
 	"			src: local('Times New Roman'), local(MingLiU), local(細明體), local(PMingLiU), local(新細明體), local(NSimSun), local(SimSun), local('Songti TC');\n"
@@ -288,8 +288,17 @@ String __fastcall CCBXML::MakeHTMLHead()
 				  "		.note_add {display:inline;}\n"
 				  "		.note_star {display:inline;}\n"
 				  "		.note_star_removed {display:none;}\n";
+	sHtml += u"	</style>\n";
 
-	sHtml += u"	</style>\n</head>\n";
+	// 自訂 CSS
+	if(Setting->UseCSSFile)
+	{
+		sHtml += u"<link rel=stylesheet type=\"text/css\" href=\"";
+		sHtml += Setting->CSSFileName;
+		sHtml += u"\">\n";
+	}
+
+	sHtml += u"</head>\n";
 	sHtml += u"<body data-sutraname='" + SutraName
 		+ u"' data-juan='" + JuanNum
 		+ u"' data-totaljuan='" + TotalJuan + u"'";
@@ -3965,7 +3974,7 @@ String __fastcall CCBXML::GetVerInfo()
     //不管什麼版本, 都要列出版權宣告比較好
 	//if(Application->Title == u"CBReader")
 	{
-		sVerInfo += u"【原始資料】" + sSourceFrom + u"<br>\n";
+		sVerInfo += u"【資料說明】" + sSourceFrom + u"<br>\n";
 		sVerInfo += u"【版權宣告】詳細說明請參閱【<a href='http://www.cbeta.org/copyright.php' target='_blank'>中華電子佛典協會資料庫版權宣告</a>】<br>\n";
 	}
 	sVerInfo += u"</span><br>\n";
