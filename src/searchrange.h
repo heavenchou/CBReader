@@ -81,6 +81,7 @@ __published:	// IDE-managed Components
 	TTreeViewItem *TreeViewItem19;
 	TButton *btCheckAll;
 	TButton *btUnCheckAll;
+	TTreeViewItem *TreeViewItem39;
 	void __fastcall ListBoxItem1Click(TObject *Sender);
 	void __fastcall ListBoxItem2Click(TObject *Sender);
 	void __fastcall btOKClick(TObject *Sender);

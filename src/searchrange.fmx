@@ -488,6 +488,13 @@ object fmSearchRange: TfmSearchRange
           TabOrder = 13
           Text = 'L '#20094#38534#22823#34255#32147#65288#26032#25991#35920#29256#65289
         end
+        object TreeViewItem39: TTreeViewItem
+          IsChecked = False
+          IsExpanded = False
+          IsSelected = False
+          TabOrder = 22
+          Text = 'LC '#21570#28546#20315#23416#33879#20316#38598
+        end
         object TreeViewItem12: TTreeViewItem
           TextSettings.Font.Size = 16.000000000000000000
           IsChecked = False

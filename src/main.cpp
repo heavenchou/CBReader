@@ -727,7 +727,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 				+ sVol + u", No. " + sSutra + u", 卷/篇章" + sJuan;
 		Caption = sCaption;
 
-		// 將經名後面的 （上中下一二三......十）移除
+		// 將經名後面的 （上中下一二三......十）移除
 		sName = CMyCBUtil::CutNumberAfterSutraName(sName);
 		cbSearchThisSutra->Text = u"檢索本經：" + sName;
         cbSearchThisSutraChange(this);  // 設定檢索本經的相關資料
