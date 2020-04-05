@@ -214,7 +214,7 @@ void __fastcall TfmOption::LoadFromSetting()
 }
 
 //---------------------------------------------------------------------------
-// 由設定載入
+// 儲存至設定
 void __fastcall TfmOption::SaveToSetting()
 {
 	// 經文格式

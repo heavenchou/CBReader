@@ -127,7 +127,7 @@ __fastcall CSetting::CSetting(String sFile) // 建構函式
 	GaijiPath  = "gaiji-CB\\";
 	SDGifPath  = "sd-gif\\";		// 悉曇字圖檔的位置
 	RJGifPath  = "rj-gif\\";		// 蘭札字圖檔的位置
-	FigurePath = "Figures\\";
+	FigurePath = "figures\\";
 	//UserDataPath = fmMain->UserDataPath;   // 個人資料目錄
     SaveLastTocFileName = true;		// 是否儲存最後開啟的書目
     LastTocFileName = "00All.toc";

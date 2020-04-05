@@ -13,10 +13,10 @@ __fastcall CRendAttr::CRendAttr(String sStr)
 	NewStyle = u"";
 	RendList = new TStringList;
 
-	MarginLeft = 0;
-	TextIndent = 0;
-	Border = "";
-	IsInline = false;
+	//MarginLeft = 0;
+	//TextIndent = 0;
+	//Border = "";
+	//IsInline = false;
 
 	// 移除最前面的空格
 	while(Rend != u"" && *Rend.FirstChar() == u' ') Rend.Delete0(0,1);

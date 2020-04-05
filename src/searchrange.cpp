@@ -91,8 +91,8 @@ void __fastcall TfmSearchRange::BookSelect()
 			int iPos = sName.Pos0(" ");
 			String sBookId = sName.SubString0(0,iPos);
 			//fmMain->SearchEngine->BuildFileList->SearchThisBoook(sBookId);
-			fmMain->Bookcase->CBETA->SearchEngine_CB->BuildFileList->SearchThisBoook(sBookId);
-			fmMain->Bookcase->CBETA->SearchEngine_orig->BuildFileList->SearchThisBoook(sBookId);
+			fmMain->Bookcase->CBETA->SearchEngine_CB->BuildFileList->SearchThisBook(sBookId);
+			fmMain->Bookcase->CBETA->SearchEngine_orig->BuildFileList->SearchThisBook(sBookId);
 		}
 
 	}

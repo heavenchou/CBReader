@@ -65,6 +65,12 @@ void __fastcall CCatalog::LoadCatalog(String sFile)
             }
 		}
     }
+	
+	if(slCatalog) 
+	{
+		delete slCatalog;
+		slCatalog = 0;
+	}
 }
 // ---------------------------------------------------------------------------
 // 取得 Catalog 的編號, 傳回 -1 表示找不到

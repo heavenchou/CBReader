@@ -768,7 +768,7 @@ void __fastcall CHighlight::GetEveryWordInfo(void)
 // 移到下一個可以查詢的字
 // 例如查詢的字串是 "ABC XYA 如是，我聞"
 // 目前指標可能在空白或標點，要往下一個可查詢的字移到動
-System::WideChar * CHighlight::NextFindPoint(System::WideChar * pFindWord)
+System::WideChar * __fastcall CHighlight::NextFindPoint(System::WideChar * pFindWord)
 {
 	while(1)
 	{
@@ -790,7 +790,7 @@ System::WideChar * CHighlight::NextFindPoint(System::WideChar * pFindWord)
 }
 // ---------------------------------------------------------------------------
 // 分析一個 <span class="gaiji"....> 標記
-void CHighlight::AnalysisGiajiTag(System::WideChar ** pPoint, System::WideChar ** pDesPoint, System::WideChar ** pUniPoint, int * iDesLen, int * iUniLen)
+void __fastcall CHighlight::AnalysisGiajiTag(System::WideChar ** pPoint, System::WideChar ** pDesPoint, System::WideChar ** pUniPoint, int * iDesLen, int * iUniLen)
 {
 	// <span class="gaiji" data-des="[組字式]" data-uni="xx" data-nor="xx" data-noruni="xx">
 

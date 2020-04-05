@@ -190,6 +190,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		.juanname {color:#0000FF; font-weight: bold; font-size:24px;}\n"
 	"		.xu {color:#0000A0; font-size:21px;}\n"
 	"		.w {color:#0000A0; font-size:21px;}\n"
+	"		.div-orig {font-weight: bold;}\n"
 	"		.byline {color:#408080; font-size:21px;}\n"
 	"		.headname {color:#0000A0; font-weight: bold; font-size:24px;}\n"
 	"		.headname2 {color:#0000A0; font-weight: bold; font-size:24px;}\n"
@@ -238,7 +239,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 				  "		p.headname2 {display:block; margin-left:2em;}\n"    // head 標題
 				  "		p.headname3 {display:block; margin-left:3em;}\n"    // head 標題
 				  "		p.headname4 {display:block; margin-left:4em;}\n"    // head 標題
-				  "		p.byline {display:block; margin-left:4em;}\n"    // byline
+				  "		p.byline {display:block; text-align: right;}\n"    // byline
 				  "		table {border-style: solid;border-collapse: collapse;}\n"
 				  "		td {padding: 10px;}\n"
 				  "		span.line_space {display:none;}\n"     // 行首空格
@@ -497,7 +498,7 @@ String __fastcall CCBXML::tag_default(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	//String sXXX = GetAttr(Node, u"xxx");
-	sHtml = parseChild(Node); // 處理內容
+	sHtml += parseChild(Node); // 處理內容
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -743,7 +744,7 @@ String __fastcall CCBXML::tag_byline(_di_IXMLNode Node)
 
 	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
 
-	sHtml = parseChild(Node); // 處理內容
+	sHtml += parseChild(Node); // 處理內容
 
 	if(sNewStyle != "")
 	{
@@ -890,6 +891,14 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 			// 要用 div , 才不會有 span 包 p 的困境
 			sHtml += u"<div class='xu' data-tagname='div'" + sNewStyle + ">";
 	}
+	else if (DivType[DivCount] == u"orig")		// 原書資料
+	{
+		if(Setting->ShowLineFormat)
+			sHtml += u"<span class='div-orig' data-tagname='div'" + sNewStyle + ">";
+		else
+			// 要用 div , 才不會有 span 包 p 的困境
+			sHtml += u"<div class='div-orig' data-tagname='div'" + sNewStyle + ">";
+	}
 	else
 	{
 		if(Setting->ShowLineFormat)
@@ -920,6 +929,10 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 	{
 		sHtml += sEndTag;
 	}
+	else if(DivType[DivCount] == "orig")	// 原書資料
+	{
+		sHtml += sEndTag;
+	}
 	else
 	{
 		sHtml += sEndTag;
@@ -932,6 +945,7 @@ String __fastcall CCBXML::tag_div(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
+// <cb:docNumber>No. 2 [No. 1(1), Nos. 2, 4]</cb:docNumber>
 String __fastcall CCBXML::tag_docNumber(_di_IXMLNode Node)
 {
 	String sHtml = u"";
@@ -1084,7 +1098,7 @@ String __fastcall CCBXML::tag_foreign(_di_IXMLNode Node)
 // ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_form(_di_IXMLNode Node)
 {
-	String sHtml = "";
+	String sHtml = u"";
 	if(Setting->ShowLineFormat)
 	{
 		sHtml = u"<span data-tagname='p'>";
@@ -1100,10 +1114,10 @@ String __fastcall CCBXML::tag_form(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
-// <formula rend="vertical-align:super">(1)</formula>
+// <formula style="vertical-align:super">(1)</formula>
 // 轉成 <sup>(1)</sup>
 
-// <formula>S<hi rend="vertical-align:super">n</hi></formula>
+// <formula>S<hi style="vertical-align:super">n</hi></formula>
 // 轉成 S<sup>n</sup>
 
 // formula 或 hi , 誰有  rend="vertical-align:super" 就使用 <sup>...</sup>
@@ -1293,12 +1307,12 @@ String __fastcall CCBXML::tag_g(_di_IXMLNode Node)
 
 			if(sCBCodeType == u"SD")
 			{
-				sSDGifOrigFile = SerialPath + u"sd-gif/" + sCBCode.SubString0(2,2) + u"/"
+				sSDGifOrigFile = SerialPath + u"sd-gif/" + sCBCode.SubString0(3,2) + u"/"
 							+ sCBCode + u".gif";
 			}
 			else if(sCBCodeType == u"RJ")
 			{
-				sSDGifOrigFile = SerialPath + u"rj-gif/" + sCBCode.SubString0(2,2) + u"/"
+				sSDGifOrigFile = SerialPath + u"rj-gif/" + sCBCode.SubString0(3,2) + u"/"
 							+ sCBCode + u".gif";
 			}
 			sSDGifFile = ExpandFileName(sSDGifOrigFile);
@@ -1391,8 +1405,8 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 
 	if(sParentNodeName == u"list")
 	{
-			// list 的規則參考 list 的項目
-			sHtml += u"<span class='headname'" + sNewStyle + ">";
+		// list 的規則參考 list 的項目
+		sHtml += u"<span class='headname'" + sNewStyle + ">";
 	}
 	else
 	{
@@ -2931,7 +2945,7 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 String __fastcall CCBXML::tag_pb(_di_IXMLNode Node)
 {
 	String sHtml = u"";
-	sHtml = parseChild(Node); // 處理內容
+	sHtml += parseChild(Node); // 處理內容
 
 	return sHtml;
 }
@@ -3003,8 +3017,8 @@ String __fastcall CCBXML::tag_rdg(_di_IXMLNode Node)
 String __fastcall CCBXML::tag_ref(_di_IXMLNode Node)
 {
 	String sHtml = u"";
-	String sType= GetAttr(Node, u"type");
-	String sCRef= GetAttr(Node, u"cRef");
+	String sType = GetAttr(Node, u"type");
+	String sCRef = GetAttr(Node, u"cRef");
 
 	bool bHidePTS = false;  // 判斷是不是隱藏版的 PTS 標記
 	if(sType == u"PTS_hide") bHidePTS = true;
@@ -3423,7 +3437,7 @@ String __fastcall CCBXML::tag_tt(_di_IXMLNode Node)
 	// T54n2133A : <lb n="1194c17"/><p><cb:tt type="single-line"><cb:t lang="san-sd">
 	if(sType == u"single-line")	InTTNormal = true;
 
-	sHtml = parseChild(Node); // 處理內容
+	sHtml += parseChild(Node); // 處理內容
 
 	NextLine->FindNextLineEnd();
 	InTTNormal = false;
@@ -3455,11 +3469,15 @@ String __fastcall CCBXML::tag_unclear(_di_IXMLNode Node)
 	{
 		sHtml += u"<span class='guess4' title='本字為推測字，信心程度：低'>";
 	}
+	else
+	{
+		sHtml += u"<span title='未知的文字'>";
+	}
 
 	if(Node->HasChildNodes)
 		sHtml += parseChild(Node); // 處理內容
 	else
-		sHtml += u"<span title='未知的文字'>▆";
+		sHtml += u"▆";
 
 	sHtml += u"</span>";
 	return sHtml;
@@ -3975,7 +3993,7 @@ String __fastcall CCBXML::GetVerInfo()
 	//if(Application->Title == u"CBReader")
 	{
 		sVerInfo += u"【資料說明】" + sSourceFrom + u"<br>\n";
-		sVerInfo += u"【版權宣告】詳細說明請參閱【<a href='http://www.cbeta.org/copyright.php' target='_blank'>中華電子佛典協會資料庫版權宣告</a>】<br>\n";
+		sVerInfo += u"【版權宣告】詳細說明請參閱【<a href='https://www.cbeta.org/copyright.php' target='_blank'>中華電子佛典協會資料庫版權宣告</a>】<br>\n";
 	}
 	sVerInfo += u"</span><br>\n";
 

@@ -38,7 +38,7 @@ public: // User declarations
 
 	// 例如某字對應到真實的是組字 [金*本],
 	// pair 內容就是 '['位置及字串長度 5
-	map<int, pair<System::WideChar *, int> > PosToReal;  // Pos 轉不忽略標點的真實位置
+	map<int, pair<System::WideChar *, int> > PosToReal;  // Pos 轉成不忽略標點的真實位置
 
 
 	// 這三個是要塗色用的重要資料, 記錄每一個字對應了哪些定位, 連結, 塗色
@@ -74,10 +74,10 @@ public: // User declarations
 	// 移到下一個可以查詢的字
 	// 例如查詢的字串是 "ABC XYA 如是，我聞"
 	// 目前指標可能在空白或標點，要往下一個可查詢的字移到動
-	System::WideChar * NextFindPoint(System::WideChar * pFindWord);
+	System::WideChar * __fastcall NextFindPoint(System::WideChar * pFindWord);
 
 	// 分析一個 <span class="gaiji"....> 標記
-	void AnalysisGiajiTag(System::WideChar ** pPoint, System::WideChar ** pDesPoint, System::WideChar ** pUniPoint, int * iDesLen, int * iUniLen);
+	void __fastcall AnalysisGiajiTag(System::WideChar ** pPoint, System::WideChar ** pDesPoint, System::WideChar ** pUniPoint, int * iDesLen, int * iUniLen);
 	__fastcall CHighlight(TmyMonster * seSearchEngine);
 	__fastcall ~CHighlight();
 };

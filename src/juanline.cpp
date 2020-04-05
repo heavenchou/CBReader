@@ -174,9 +174,9 @@ String __fastcall CJuanLine::GetNormalField(String sField)
 	String::iterator it = sField.end();
 	if(iFieldLen > 1) sField = UnicodeString(it-1,1);
 	sField = sField.LowerCase();
+	if(sField == "0") return u"a";
 	it = sField.begin();
 	if(*it >= '0' && *it <= '9') *it = *it - '1' + 'a';
-	if(sField == "0") return u"a";
 	return sField;
 }
 // ---------------------------------------------------------------------------
