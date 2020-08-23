@@ -29,8 +29,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
     // 還有 fmAbout 的版本與日期資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.5.4.0";   // 末位 .1 是全西蓮, .2 是西蓮+CBETA
-	DebugString = u"Debug";     // debug 口令
+	Version = u"0.5.5.0";   // 末位 .1 是全西蓮, .2 是西蓮+CBETA
+	DebugString = u"Heaven";     // debug 口令
 	IsDebug = false;           // debug 變數
 
 	// 西蓮淨苑 SLReader 專用

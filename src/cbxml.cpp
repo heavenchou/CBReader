@@ -1113,7 +1113,10 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 // ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_figdesc(_di_IXMLNode Node)
 {
-	return u"";
+	String sHtml = u"（";
+	sHtml += parseChild(Node); // 處理內容
+	sHtml += "）";
+	return sHtml;
 }
 // ---------------------------------------------------------------------------
 // no.26 <foreign n="0442001" lang="pli" resp="Taisho" cb:place="foot">gabbhaseyy&amacron; punabhav&amacron;bhimbbatti.</foreign>
@@ -1399,18 +1402,51 @@ String __fastcall CCBXML::tag_graphic(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	String sURL = GetAttr(Node, "url");
-	if(sURL != "")
-	{
+	if(sURL != "") {
 		String sPicOrigFile = SerialPath + sURL.Delete0(0,3);
 		String sPicFile = ExpandFileName(sPicOrigFile);
 
 		sHtml += u"<img src='";
 		sHtml += sPicFile;
 		sHtml += u"'>";
+
+		// 以下放棄, 前一個文字因為 svg 圖檔無法被連結, 只能連出去
+		// 也就是文字的 <a name="xxx">TEXT</a> XXX 無法被使用
+        // 若要使用, 也要把 12pt 改成 16px
+
+		/*
+		if(sPicFile.SubString0(sPicFile.Length()-3,3) == "svg") {
+			// svg 圖檔
+			sHtml += GetSvgFile(sPicFile);
+		} else {
+			// 一般圖檔
+			sHtml += u"<img src='";
+			sHtml += sPicFile;
+			sHtml += u"'>";
+		}
+		*/
 	}
 	//sHtml = parseChild(Node); // 處理內容
 	return sHtml;
 }
+
+// 取得 svg 的內容
+String CCBXML::GetSvgFile(String sFile)
+{
+	TStringList * slSvg = new TStringList();
+	slSvg->LoadFromFile(sFile, TEncoding::UTF8);
+	for(int i=0; i<slSvg->Count; i++) {
+		if(slSvg->Strings[i].Pos0("<svg") < 0) {
+			// <svg 之前的內容先清掉
+			slSvg->Strings[i] = "";
+		} else {
+			break;
+        }
+	}
+    return slSvg->Text;
+
+}
+
 // ---------------------------------------------------------------------------
 // <head>
 String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
