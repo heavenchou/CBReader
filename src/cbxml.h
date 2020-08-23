@@ -103,6 +103,7 @@ private: // User declarations
 	String __fastcall tag_app(_di_IXMLNode Node);
 	String __fastcall tag_byline(_di_IXMLNode Node);
 	String __fastcall tag_biblScope(_di_IXMLNode Node);
+	String __fastcall tag_caesura(_di_IXMLNode Node);
 	String __fastcall tag_cell(_di_IXMLNode Node);
 	String __fastcall tag_div(_di_IXMLNode Node);
 	String __fastcall tag_docNumber(_di_IXMLNode Node);
