@@ -1113,9 +1113,9 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 // ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_figdesc(_di_IXMLNode Node)
 {
-	String sHtml = u"（";
+	String sHtml = u"<span class='figdesc'>（";
 	sHtml += parseChild(Node); // 處理內容
-	sHtml += "）";
+	sHtml += "）</span>";
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -1574,7 +1574,7 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 		else
 			InHead = false;
 
-		sHtml += u"</span>";
+		//sHtml += u"</span>";
 		if(Setting->ShowLineFormat)
 			sHtml += u"</span>";
 		else
@@ -2045,10 +2045,12 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 	//	sHtml += sSpace;
 	//else
 	{
-		if(Setting->ShowLineFormat)
-			sHtml += u"<span class='line_space'>" + sSpace + u"</span>";
-		else
-			sHtml += u"<span class='line_space' style='display:none'>" + sSpace + u"</span>";
+		if(sSpace != "") {
+			if(Setting->ShowLineFormat)
+				sHtml += u"<span class='line_space'>" + sSpace + u"</span>";
+			else
+				sHtml += u"<span class='line_space' style='display:none'>" + sSpace + u"</span>";
+        }
 	}
 
 	// 若有隔行對照, 則要將將下一行的印出來
