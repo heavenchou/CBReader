@@ -35,7 +35,7 @@ __fastcall CCBXML::CCBXML(String sFile, String sLink, CSetting * cSetting, Strin
 	LgInline = false;          // lg 的 place 是不是 inline?
 	LgMarginLeft = "";      // Lg 整段的位移
 	// L
-	LTagNum = 0;		    // <l> 出現的數字, 用來判斷要在普及版寫幾個空格
+	//LTagNum = 0;		    // <l> 出現的數字, 用來判斷要在普及版寫幾個空格
 	LMarginLeft = "";       // L 整段的位移
 
 	MarginLeft = "";		// 移位
@@ -142,6 +142,10 @@ String __fastcall CCBXML::MakeHTMLHead()
 	// 字型大小說明 : 主要為了用中文和等寬英文畫圖, 中文要 21px, 英文用 17.5px 才能對齊
 
 	String sJqueryFile = StringReplace(JSFile, u"cbreader.js", "jquery.min.js", TReplaceFlags() << rfReplaceAll << rfIgnoreCase);
+	String sSiddamFile = StringReplace(JSFile, u"cbreader.js", "font/Siddam.otf", TReplaceFlags() << rfReplaceAll << rfIgnoreCase);
+    // 底下一定要用 / 才能使用
+	sSiddamFile = StringReplace(sSiddamFile, u"\\", "/", TReplaceFlags() << rfReplaceAll << rfIgnoreCase);
+	String sRanjanaFile = StringReplace(sSiddamFile, u"siddam.otf", "Ranjana.otf", TReplaceFlags() << rfReplaceAll << rfIgnoreCase);
 	String sHtml = u"<!DOCTYPE html>\n"
 	"<html>\n"
 	"<head>\n"
@@ -167,6 +171,18 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"			unicode-range: U+2500-25ff;\n"
 	u"			src: local(MingLiU), local(細明體), local(NSimSun), local('Songti TC');\n"
 	"		}\n"
+	"		@font-face {\n"
+	"			font-family: siddam;\n"
+	"			src: local(siddam), url('";
+	sHtml += sSiddamFile;
+	sHtml += "');\n"
+	"		}\n"
+	"		@font-face {\n"
+	"			font-family: Ranjana;\n"
+	"			src: local(Ranjana), url('";
+	sHtml += sRanjanaFile;
+	sHtml += "');\n"
+	"		}\n"
 	"		body { background:#DDF1DC; font-weight: normal; line-height:26px; color:#000000; font-size:21px; font-family:CBFont;}\n"
 	"		#AIPuncRemind {color:#ffffff; background: #d80000;}\n"
 	"		a.SearchWord0 {color:#0000ff; background: #ffff66;}\n"
@@ -185,7 +201,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		.foreign	{font-family:'Times New Roman', 'Gandhari Unicode';}\n"
 	u"		.preformat	{font-family:細明體,MingLiU,NSimSun,'Songti TC'; font-size:21px;}\n"
 	"		.preformat .foreign	{font-family:'Courier New'; font-size:17.5px;}\n"
-	"       .gaiji {font-family:'Times New Roman','Hanazono Mincho B';}\n"
+	"		.gaiji {font-family:'Times New Roman','Hanazono Mincho B';}\n"
 	"		.juannum {color:#008000; font-size:21px;}\n"
 	"		.juanname {color:#0000FF; font-weight: bold; font-size:24px;}\n"
 	"		.xu {color:#0000A0; font-size:21px;}\n"
@@ -381,6 +397,7 @@ String __fastcall CCBXML::ParseNode(_di_IXMLNode Node)
 		else if (sTagName == u"app")		sHtml = tag_app(Node);
 		else if (sTagName == u"biblScope")	sHtml = tag_biblScope(Node);
 		else if (sTagName == u"byline")		sHtml = tag_byline(Node);
+		else if (sTagName == u"caesura")	sHtml = tag_caesura(Node);
 		else if (sTagName == u"cell")		sHtml = tag_cell(Node);
 		else if (sTagName == u"cb:div")		sHtml = tag_div(Node);
 		else if (sTagName == u"cb:docNumber")	sHtml = tag_docNumber(Node);
@@ -769,6 +786,42 @@ String __fastcall CCBXML::tag_byline(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
+// 2020/06 偈頌改成 <l>...<caesura/>...<caesura/>...</l>
+// <caesura/> , <caesura style="text-indent:1em;"/>
+// 預設空二格, 有 style 依 style 空格
+// 不依原書處理時，<l> 負責換行, <caesura> 為句中間隔
+String __fastcall CCBXML::tag_caesura(_di_IXMLNode Node)
+{
+	String sHtml = u"";
+
+	String sLTextIndent = "";	// caesura 要空的格
+
+	int iTextIndent = 0;
+
+	String sStyle = GetAttr(Node, u"style");
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+
+	if(myStyle->HasTextIndent)
+	{
+		iTextIndent = myStyle->TextIndent;
+	}
+	else
+	{
+		iTextIndent = 2;
+	}
+
+	sLTextIndent += String::StringOfChar(u'　', iTextIndent);
+	// l 本身要空的格
+	sHtml += sLTextIndent;
+
+	// -----------------------------------
+	// sHtml += parseChild(Node); // 處理內容
+	// -----------------------------------
+
+	delete myStyle;
+	return sHtml;
+}
+// ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_cell(_di_IXMLNode Node)
 {
 	String sHtml = u"";
@@ -1060,7 +1113,10 @@ String __fastcall CCBXML::tag_entry(_di_IXMLNode Node)
 // ---------------------------------------------------------------------------
 String __fastcall CCBXML::tag_figdesc(_di_IXMLNode Node)
 {
-	return u"";
+	String sHtml = u"<span class='figdesc'>（";
+	sHtml += parseChild(Node); // 處理內容
+	sHtml += "）</span>";
+	return sHtml;
 }
 // ---------------------------------------------------------------------------
 // no.26 <foreign n="0442001" lang="pli" resp="Taisho" cb:place="foot">gabbhaseyy&amacron; punabhav&amacron;bhimbbatti.</foreign>
@@ -1346,18 +1402,51 @@ String __fastcall CCBXML::tag_graphic(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	String sURL = GetAttr(Node, "url");
-	if(sURL != "")
-	{
+	if(sURL != "") {
 		String sPicOrigFile = SerialPath + sURL.Delete0(0,3);
 		String sPicFile = ExpandFileName(sPicOrigFile);
 
 		sHtml += u"<img src='";
 		sHtml += sPicFile;
 		sHtml += u"'>";
+
+		// 以下放棄, 前一個文字因為 svg 圖檔無法被連結, 只能連出去
+		// 也就是文字的 <a name="xxx">TEXT</a> XXX 無法被使用
+        // 若要使用, 也要把 12pt 改成 16px
+
+		/*
+		if(sPicFile.SubString0(sPicFile.Length()-3,3) == "svg") {
+			// svg 圖檔
+			sHtml += GetSvgFile(sPicFile);
+		} else {
+			// 一般圖檔
+			sHtml += u"<img src='";
+			sHtml += sPicFile;
+			sHtml += u"'>";
+		}
+		*/
 	}
 	//sHtml = parseChild(Node); // 處理內容
 	return sHtml;
 }
+
+// 取得 svg 的內容
+String CCBXML::GetSvgFile(String sFile)
+{
+	TStringList * slSvg = new TStringList();
+	slSvg->LoadFromFile(sFile, TEncoding::UTF8);
+	for(int i=0; i<slSvg->Count; i++) {
+		if(slSvg->Strings[i].Pos0("<svg") < 0) {
+			// <svg 之前的內容先清掉
+			slSvg->Strings[i] = "";
+		} else {
+			break;
+        }
+	}
+    return slSvg->Text;
+
+}
+
 // ---------------------------------------------------------------------------
 // <head>
 String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
@@ -1485,7 +1574,7 @@ String __fastcall CCBXML::tag_head(_di_IXMLNode Node)
 		else
 			InHead = false;
 
-		sHtml += u"</span>";
+		//sHtml += u"</span>";
 		if(Setting->ShowLineFormat)
 			sHtml += u"</span>";
 		else
@@ -1661,45 +1750,48 @@ String __fastcall CCBXML::tag_juan(_di_IXMLNode Node)
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
-// <lg><l>無上二足尊</l><l>照世大沙門</l>
+// <lg><l>無上二足尊<caesrua/>照世大沙門</l>  (2020/06 新的)
+// <lg><l>無上二足尊</l><l>照世大沙門</l>  (舊的)
 
-// <lg rend=... type=...>
-//   rend="margin-left:1;text-indent:0" : 表示整段偈誦都會在行首空一格
-//   type="normal" (預設): 第一個 <l> 不空格, 其餘 <l> 空二格, 有 rend 的 <l> 依 rend 處理.
-//   type="abnormal" : <l> 皆不空格, 有 rend 的 <l> 依 rend 處理.
+// <lg style=... type=...>
+//   style="margin-left:1;text-indent:0" : 表示整段偈誦都會在行首空一格
+
+//	 2020/06 沒有 type="normarl" 和 "abnormal" 了
+//   type="normal" (預設): 第一個 <l> 不空格, 其餘 <l> 空二格, 有 style 的 <l> 依 style 處理.
+//   type="abnormal" : <l> 皆不空格, 有 style 的 <l> 依 style 處理.
 
 //   若沒設 type , 一律預設為 normal ,
-//   若沒設 rend , type="normal" 時, 預設為 rend="margin-left:1",
-//                 type="abnormal" 時, 預設 rend="margin-left:0",
+//   若沒設 style , type="normal" 時, 預設為 style="margin-left:1",
+//                 type="abnormal" 時, 預設 style="margin-left:0",
 
-//   若 place="inline", 沒指定 rend , 且 <lg> 前面的文字不是空格時, 則自動加一個空格.
+//   若 place="inline", 沒指定 style , 且 <lg> 前面的文字不是空格時, 則自動加一個空格.
 
-//   <l> 的 rend 不論是 margin-left:1 或是 text-indent:1 , 一律當成 text-indent:1 處理. 前者是為了相容舊版的.
+//   <l> 的 style 不論是 margin-left:1 或是 text-indent:1 , 一律當成 text-indent:1 處理. 前者是為了相容舊版的.
+
+// 2020/06 最新 lg 空格參考 tag_lg 的說明, lg 的 margin-left 在段落模式要在 l 處理
 
 String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 
-	LTagNum++;					// 若是第一個, 只空一格
+	// LTagNum++;					// 若是第一個, 只空一格
 
-	LMarginLeft = "";           // l 整段要空的格
+	// LMarginLeft = "";           // l 整段要空的格
 	String sLTextIndent = "";	// l 開頭要空的格
 
 	int iMarginLeft = 0;
 	int iTextIndent = 0;
-	bool bHasRend = false;	// 若有 rend 就不使用預設的空格
+	//bool bHasRend = false;	// 若有 rend 就不使用預設的空格
 	// 檢查移位 <l rend="margin-left:1">
 
-	String sRend = GetAttr(Node, u"rend");
 	String sStyle = GetAttr(Node, u"style");
-	CRendAttr * myRend = new CRendAttr(sRend);
 	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 
 	if((myStyle->HasMarginLeft || myStyle->HasTextIndent)
-		&& !(!Setting->ShowPunc && LgNormal)      //若不秀標點且是標準格式, 就不依 rend
+		&& !(!Setting->ShowPunc && LgNormal)      //若不秀標點且是標準格式, 就不依 style
 		&& !(Setting->NoShowLgPunc && LgNormal))  //若在偈頌中且偈頌不秀新標
 	{
-		bHasRend = true;
+		//bHasRend = true;
 		iMarginLeft = myStyle->MarginLeft;
 		iTextIndent = myStyle->TextIndent;
 
@@ -1707,27 +1799,8 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 		//if(iMarginLeft)
 		//	LgMarginLeft += String::StringOfChar(u'　',myRend->MarginLeft);  // lg 整段要空的格
 	}
-	else
-	{
-		//   type="normal" (預設): 第一個 <l> 不空格, 其餘 <l> 空二格, 有 rend 的 <l> 依 rend 處理.
-		//   type="abnormal" : <l> 皆不空格, 有 rend 的 <l> 依 rend 處理.
 
-		if(LgNormal)
-		{
-			if(LTagNum == 1)
-			{
-				iMarginLeft = 0;
-				LMarginLeft = u"";
-			}
-			else
-			{
-				iMarginLeft = 2;
-				LMarginLeft = u"　　";
-			}
-		}
-	}
-
-	if(LTagNum == 1)
+	//if(LTagNum == 1)
 	{
 		//if(!Setting->CutLine)
 		{
@@ -1755,19 +1828,23 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 				// 就不折行. 不過這只限在 GA 及 GB, 因為舊的經文還是折行較好
 
 				// 也就是 【GA 或 GA 的非標準偈頌不折行】, 否則就折行
-				if(!(LgNormal == false && (BookId == u"GA" || BookId == u"GB")))
+				// if(!(LgNormal == false && (BookId == u"GA" || BookId == u"GB")))
 				{
 					// 偈頌折行
 					if(Setting->ShowLineFormat)
 						sHtml += u"<span class='para_br' data-tagname='br'></span>";	
 					else
 						sHtml += u"<br class='para_br' data-tagname='br'/>";
-					//sHtml += "<span class='para_space'>" + LgMarginLeft + "</span>";
+					
+					// lg 空格在段落模式時, 由 l 處理, 行模式才由 lb 處理
+					sHtml += "<span class='para_space'>" + LgMarginLeft + "</span>";
 				}
 
-				// 標準偈頌時, 整段的空格由 <l> 處理, 因為 <l> 會折行, 要折行後才能空
-				// 非標準偈頌, 則由 <lb> 去空
-				if(LgNormal) sHtml += LgMarginLeft;	// 整段偈頌要空的空格
+				// x 標準偈頌時, 整段的空格由 <l> 處理, 因為 <l> 會折行, 要折行後才能空
+				// x 非標準偈頌, 則由 <lb> 去空
+
+				// 因為 2020/06 不再區分有沒有 normal 了, 所以整段偈頌都要用 lb 去空
+				// if(LgNormal) sHtml += LgMarginLeft;	// 整段偈頌要空的空格
 			}
 		}
 	}
@@ -1780,9 +1857,8 @@ String __fastcall CCBXML::tag_l(_di_IXMLNode Node)
 	sHtml += parseChild(Node); // 處理內容
 	// -----------------------------------
 
-	LMarginLeft = u"";
+	// LMarginLeft = u"";
 
-	delete myRend;
 	delete myStyle;
 	return sHtml;
 }
@@ -1850,7 +1926,7 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 		NextLine->ThisLine = "";
 	}
 
-	LTagNum = 0;		// 還原 <l> 的數目, 要來判斷要不要折行或空格數目
+	//LTagNum = 0;		// 還原 <l> 的數目, 要來判斷要不要折行或空格數目
 
 	// 判斷要不要強迫切行
 	// <lb ed="X" n="0070b01" type="honorific"/><lb ed="R150" n="0706a17"/>御製序文。闡揚宗淨合一之旨。
@@ -1858,7 +1934,6 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 
 	bool bForceCutLine = false;		// 強迫切行
 	if(sType == u"honorific")	bForceCutLine = true;
-
 
 	// 判斷此行是不是空白行
 	bool bNoLineData = false;
@@ -1902,10 +1977,14 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 
 	// 原書格式會看到的行首空白
 	String sSpace;
-	if(LgNormal)
-		sSpace = MarginLeft;	// + LgMarginLeft + LMarginLeft; 這些留在 <l> 才空格
-	else
-		sSpace = MarginLeft + LgMarginLeft + LMarginLeft;
+	//if(LgNormal)
+	//	sSpace = MarginLeft;	// + LgMarginLeft + LMarginLeft; 這些留在 <l> 才空格
+	//else
+		// 行模式 LgMarginLeft 一律在 lb 處理了
+		// 因為 2020/06 已經沒有 abnormal 區別, 而 l 不一定在行首, 所以用 lb 處理
+		// 詳細見 tag_lg 的說明
+		sSpace = MarginLeft + LgMarginLeft; // + LMarginLeft;
+
 	{
 		if(InByline)				sSpace += u"　　　　";	// 譯者
 		if(FuWenCount && !bNoLineData)	sSpace += u"　";			// 附文
@@ -1966,10 +2045,12 @@ String __fastcall CCBXML::tag_lb(_di_IXMLNode Node)
 	//	sHtml += sSpace;
 	//else
 	{
-		if(Setting->ShowLineFormat)
-			sHtml += u"<span class='line_space'>" + sSpace + u"</span>";
-		else
-			sHtml += u"<span class='line_space' style='display:none'>" + sSpace + u"</span>";
+		if(sSpace != "") {
+			if(Setting->ShowLineFormat)
+				sHtml += u"<span class='line_space'>" + sSpace + u"</span>";
+			else
+				sHtml += u"<span class='line_space' style='display:none'>" + sSpace + u"</span>";
+        }
 	}
 
 	// 若有隔行對照, 則要將將下一行的印出來
@@ -2097,6 +2178,31 @@ String __fastcall CCBXML::tag_lem(_di_IXMLNode Node)
 	// 至於引用複製, 就要在原本行首的空格加上 <spane data-space="1"> 表示空一格, 到時再用引用複製來還原一個空格.
 */
 
+/*
+2020/06 之後最新的 lg 空格處理
+
+lg-m : lg 的 mragin-left
+標準 : lg type="normal" (default)
+非標 : lg type="abnormal"
+line : 原書行模式
+para : 段落模式
+
+2020/06 之前的 lg margin 的空格方式：
+
+標準 line : lg-m 在第一個 l 空 (不能在 lb 空, 因為 l 在 para 會換行, 空格會在 l 之前)
+標準 para : lg-m 在第一個 l 空 (不能在 lb 空, 因為 l 在 para 會換行, 空格會在 l 之前)
+非標 line : lg-m 在 lb 空 (para 看不到)
+非標 para : lg-m 用 p 段落處理 (line 看不到)
+
+========================================
+
+2020/06 沒有標準或非標準(abnormal) 的區別了
+
+標準 line : lg-m 在 lb 空 (para 看不到, 不能在 l 空, 因為 l 不一定在行首)
+標準 para : lg-m 在 l 空 (line 看不到)
+
+*/
+
 String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 {
 	String sHtml = u"";
@@ -2106,15 +2212,16 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	LgNormal = true;			// 預設值, 因為有些舊的 xml 沒有 <lg type=normal>
 	LgInline = false;      		// lg 的 place 是不是 inline?
 	LgMarginLeft = u"";			// lg 整段要空的格
-	LTagNum = 0;		        // 還原 <l> 的數目, 要來判斷要不要折行或空格數目
+	//LTagNum = 0;		        // 還原 <l> 的數目, 要來判斷要不要折行或空格數目
 
-	bool bHasRend = false;		// 先假設沒有 rend 屬性
+	bool bHasStyle = false;		// 先假設沒有 rend 屬性
 	String sLgTextIndent = u"";	// lg 開頭要空的格
 	bool bIsNote = false;       // 若 type 是 note1 or note2 , 則偈誦前後要加小括號
 
 	// 先處理 type 屬性
 
 	String sType = GetAttr(Node, u"type");
+	String sSubType = GetAttr(Node, u"subtype");
 	String sPlace = GetAttr(Node, "cb:place");
 	String sRend = GetAttr(Node, u"rend");
 	String sStyle = GetAttr(Node, u"style");
@@ -2122,11 +2229,11 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	CRendAttr * myRend = new CRendAttr(sRend);
 	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 
-	if(sType == u"normal") LgNormal = true;		// lg 的 type 是 normal
-	if(sType == u"abnormal") LgNormal = false;    // 因為舊版有 type=inline
-	if(sType == u"note1" || sType == u"note2")	// 在偈誦前後要加小括號
+	//if(sType == u"normal") LgNormal = true;		// lg 的 type 是 normal
+	//if(sType == u"abnormal") LgNormal = false;    // 因為舊版有 type=inline
+	if(sSubType == u"note1" || sSubType == u"note2")	// 在偈誦前後要加小括號
 	{
-		LgNormal = true;
+		//LgNormal = true;
 		bIsNote = true;
 	}
 
@@ -2136,7 +2243,7 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	if(sPlace == "inline")			// 行中段落加句點
 	{
 		LgInline = true;
-		LgNormal = false;
+		//LgNormal = false;
 	}
 
 	// 再處理 style 屬性
@@ -2145,10 +2252,10 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	int iTextIndent = 0;
 	// 檢查移位 <lg style="margin-left:1">
 	if((myStyle->HasMarginLeft || myStyle->HasTextIndent)
-		&& !(!Setting->ShowPunc && LgNormal)    //若不秀標點且是標準格式, 就不依 rend
-		&& !(Setting->NoShowLgPunc && LgNormal))     //若在偈頌中且偈頌不秀新標
+		&& !(!Setting->ShowPunc && LgNormal)    //若不秀標點且是標準格式, 就不依 style
+		&& !(Setting->NoShowLgPunc && LgNormal))     // 若在偈頌中且偈頌不秀新標
 	{
-		bHasRend = true;
+		bHasStyle = true;
 
 		iMarginLeft = myStyle->MarginLeft;
 		iTextIndent = myStyle->TextIndent;
@@ -2168,7 +2275,7 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	// 開頭要空的格
 	sLgTextIndent = String::StringOfChar(u'　',iMarginLeft + iTextIndent);
 
-	if(LgInline && LgMarginLeft == "" && !bHasRend)	// 即在行中, 又沒有空白, 前一個字也不是空白時, 就加上空白
+	if(LgInline && LgMarginLeft == "" && !bHasStyle)	// 即在行中, 又沒有空白, 前一個字也不是空白時, 就加上空白
 	{
 		// 檢查前一個字是不是空格?
 		// 先不管了, 一律加上空格 ????
@@ -2198,6 +2305,10 @@ String __fastcall CCBXML::tag_lg(_di_IXMLNode Node)
 	}
 	else
 	{
+		// ==============================================
+		// 沒有 abnormal 這種格式了, 所以底下不會再使用了
+		// ==============================================
+
 		// 如果是不依原書, 且不是 normal 偈頌, 且指定用段落的方式 (LgTYpe = 1), 則處理成 <p style="margin-left::2em;text-indent:xxem;"><lg class="lg"> 這種格式
 		if(iMarginLeft !=0 || iTextIndent != 0)
 		{

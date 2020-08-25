@@ -103,6 +103,7 @@ private: // User declarations
 	String __fastcall tag_app(_di_IXMLNode Node);
 	String __fastcall tag_byline(_di_IXMLNode Node);
 	String __fastcall tag_biblScope(_di_IXMLNode Node);
+	String __fastcall tag_caesura(_di_IXMLNode Node);
 	String __fastcall tag_cell(_di_IXMLNode Node);
 	String __fastcall tag_div(_di_IXMLNode Node);
 	String __fastcall tag_docNumber(_di_IXMLNode Node);
@@ -199,6 +200,7 @@ public: // User declarations
 
 	String SerialPath;      // 主要目錄, 要找圖檔位置用的
 
+	String __fastcall GetSvgFile(String sFile); // 取得 svg 的內容
 	void __fastcall GetInitialFromFileName();   // 由經名取得一切相關資訊
 
 	void __fastcall SaveToHTML(String sFile);	// 儲存至 HTML

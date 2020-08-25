@@ -184,7 +184,7 @@
         <AppEnableHighDPI>true</AppEnableHighDPI>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
         <VerInfo_Locale>1028</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.5.4.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2020;LegalTrademarks=Copyright (C) CBETA 1998-2020;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.5.4.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.5.5.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2020;LegalTrademarks=Copyright (C) CBETA 1998-2020;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.5.5.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
         <VerInfo_MinorVer>5</VerInfo_MinorVer>
@@ -194,19 +194,19 @@
         <DynamicRTL>false</DynamicRTL>
         <UsePackages>false</UsePackages>
         <LinkPackageStatics>rtl.lib;fmx.lib;xmlrtl.lib</LinkPackageStatics>
-        <VerInfo_Release>4</VerInfo_Release>
+        <VerInfo_Release>5</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1028</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.5.4.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2020;LegalTrademarks=Copyright (C) CBETA 1998-2020;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.5.4.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.5.5.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2020;LegalTrademarks=Copyright (C) CBETA 1998-2020;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.5.5.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
         <VerInfo_MinorVer>5</VerInfo_MinorVer>
         <VerInfo_Debug>true</VerInfo_Debug>
         <LinkPackageImports>rtl.bpi;fmx.bpi;xmlrtl.bpi</LinkPackageImports>
-        <VerInfo_Release>4</VerInfo_Release>
+        <VerInfo_Release>5</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <Defines>NDEBUG;$(Defines)</Defines>
@@ -234,11 +234,11 @@
         <DynamicRTL>false</DynamicRTL>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
         <VerInfo_MinorVer>5</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.5.4.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2020;LegalTrademarks=Copyright (C) CBETA 1998-2020;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.5.4.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.5.5.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2020;LegalTrademarks=Copyright (C) CBETA 1998-2020;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.5.5.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
         <Icon_MainIcon>..\image\CBETA ICON\cbeta.ico</Icon_MainIcon>
         <BCC_UseClassicCompiler>false</BCC_UseClassicCompiler>
         <BCC_InstructionSet>5</BCC_InstructionSet>
-        <VerInfo_Release>4</VerInfo_Release>
+        <VerInfo_Release>5</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
@@ -250,8 +250,8 @@
         <LinkPackageStatics>rtl.lib;fmx.lib;xmlrtl.lib</LinkPackageStatics>
         <VerInfo_MajorVer>0</VerInfo_MajorVer>
         <VerInfo_MinorVer>5</VerInfo_MinorVer>
-        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.5.4.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2020;LegalTrademarks=Copyright (C) CBETA 1998-2020;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.5.4.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
-        <VerInfo_Release>4</VerInfo_Release>
+        <VerInfo_Keys>CompanyName=CBETA;FileDescription=CBETA CBReader (念恩閱藏系統);FileVersion=0.5.5.0;InternalName=CBReader 2X;LegalCopyright=Copyright (C) Heaven Chou 2001-2020;LegalTrademarks=Copyright (C) CBETA 1998-2020;OriginalFilename=cbreader.exe;ProgramID=org.cbeta.cbreader;ProductName=CBETA CBReader;ProductVersion=0.5.5.0;Comments=歡迎非商業用途之傳播使用！</VerInfo_Keys>
+        <VerInfo_Release>5</VerInfo_Release>
     </PropertyGroup>
     <ItemGroup>
         <CppCompile Include="about.cpp">
@@ -516,11 +516,6 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployFile LocalName=".\OSX32\Debug\CBReader.entitlements" Configuration="Debug" Class="ProjectOSXEntitlements">
                     <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
@@ -535,6 +530,11 @@
                     <Platform Name="OSX32">
                         <RemoteDir>Assets\</RemoteDir>
                         <RemoteName>Logo44x44.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32250mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
