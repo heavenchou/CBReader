@@ -56,6 +56,8 @@ __published:	// IDE-managed Components
 	TEdit *edBookcasePath;
 	TLabel *Label2;
 	TLabel *lbMessage;
+	TCheckBox *cbUseChinaServer;
+	TLabel *Label1;
 	void __fastcall btUpdateClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall nhrCBRRequestCompleted(TObject * const Sender, IHTTPResponse * const AResponse);

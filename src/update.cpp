@@ -134,6 +134,13 @@ void __fastcall TfmUpdate::btUpdateClick(TObject *Sender)
 			{
 				sSource.Delete0(0,7);
 				sDest.Delete0(0,5);
+
+				// 使用中國大陸分站
+
+				if(cbUseChinaServer->IsChecked) {
+					sSource = StringReplace(sSource, "archive.cbeta.org", "cbetaonline.cn", TReplaceFlags() << rfReplaceAll << rfIgnoreCase);
+                }
+
 				if(fmMain->IsDebug)
 				{
 					TDialogService::ShowMessage(sSource);

@@ -3,7 +3,7 @@ object fmUpdate: TfmUpdate
   Top = 0
   Caption = #26356#26032
   ClientHeight = 297
-  ClientWidth = 558
+  ClientWidth = 550
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -15,17 +15,17 @@ object fmUpdate: TfmUpdate
     DataDetectorTypes = []
     ReadOnly = True
     Position.X = 32.000000000000000000
-    Position.Y = 40.000000000000000000
+    Position.Y = 24.000000000000000000
     Size.Width = 401.000000000000000000
-    Size.Height = 153.000000000000000000
+    Size.Height = 169.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    Viewport.Width = 397.000000000000000000
-    Viewport.Height = 149.000000000000000000
+    Viewport.Width = 401.000000000000000000
+    Viewport.Height = 169.000000000000000000
   end
   object btUpdate: TButton
     Position.X = 464.000000000000000000
-    Position.Y = 40.000000000000000000
+    Position.Y = 24.000000000000000000
     Size.Width = 65.000000000000000000
     Size.Height = 49.000000000000000000
     Size.PlatformDefault = False
@@ -68,6 +68,24 @@ object fmUpdate: TfmUpdate
     Text = '-'
     TabOrder = 6
   end
+  object cbUseChinaServer: TCheckBox
+    Position.X = 440.000000000000000000
+    Position.Y = 88.000000000000000000
+    Size.Width = 105.000000000000000000
+    Size.Height = 25.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 11
+    Text = #20013#22283#22823#38520#20998#31449
+  end
+  object Label1: TLabel
+    Position.X = 440.000000000000000000
+    Position.Y = 112.000000000000000000
+    Size.Width = 105.000000000000000000
+    Size.Height = 49.000000000000000000
+    Size.PlatformDefault = False
+    Text = #20351#29992#20013#22283#22823#38520#20998#31449#30340#20027#27231#36914#34892#26356#26032#12290
+    TabOrder = 12
+  end
   object NetHTTPClient: TNetHTTPClient
     Asynchronous = False
     ConnectionTimeout = 60000
@@ -75,8 +93,8 @@ object fmUpdate: TfmUpdate
     AllowCookies = True
     HandleRedirects = True
     UserAgent = 'Embarcadero URI Client/1.0'
-    Left = 496
-    Top = 88
+    Left = 512
+    Top = 200
   end
   object nhrCBR: TNetHTTPRequest
     Asynchronous = False
@@ -85,8 +103,8 @@ object fmUpdate: TfmUpdate
     Client = NetHTTPClient
     OnRequestCompleted = nhrCBRRequestCompleted
     OnRequestError = nhrCBRRequestError
-    Left = 496
-    Top = 224
+    Left = 456
+    Top = 240
   end
   object nhrDownload: TNetHTTPRequest
     Asynchronous = False
@@ -95,7 +113,7 @@ object fmUpdate: TfmUpdate
     Client = NetHTTPClient
     OnRequestCompleted = nhrDownloadRequestCompleted
     OnReceiveData = nhrDownloadReceiveData
-    Left = 496
-    Top = 136
+    Left = 456
+    Top = 184
   end
 end
