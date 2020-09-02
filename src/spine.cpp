@@ -87,9 +87,10 @@ int __fastcall CSpine::CBGetSpineIndexBySutraNumJuan(String sBookID,String sVol,
 					if(sJuan == "" || Juan->Strings[i].ToInt() == iJuan)
 						return i;
 			}
-			else if(sThisSutra > sMySutra)
-				// 經號超過了
-				return -1;
+			// 底下取消, 因為有些經號是 a 開頭, 因此經號不一定有順序
+			//else if(sThisSutra > sMySutra)
+			//	// 經號超過了
+			//	return -1;
 
 		}
 		else if(bFindBook)
@@ -115,8 +116,8 @@ String __fastcall CSpine::CBGetSutraNumFormat(String sSutraNum)
 
 	String sJPre = u"";
 	System::WideChar * wJPre = sSutraNum.FirstChar();
-	// 處理嘉興藏的 A, B經號
-	if(*wJPre == u'A' || *wJPre == u'B')
+	// 處理嘉興藏的 A, B經號, 以及 a 開頭的非正文典藉
+	if(*wJPre == u'A' || *wJPre == u'a' || *wJPre == u'B')
 	{
 		sJPre = *wJPre;
 		sSutraNum.Delete0(0,1);
