@@ -72,7 +72,14 @@ void __fastcall CStyleAttr::Analysis()
 			sMarginLeft = sMarginLeft.SubString0(12,iPos-12); // 取出數字
 			HasMarginLeft = true;
 		}
-		MarginLeft = sMarginLeft.ToIntDef(0);
+		// MarginLeft = sMarginLeft.ToIntDef(0);
+        // 因為可能有小數點，所以改用 ToDouble
+		try {
+			MarginLeft = sMarginLeft.ToDouble();
+		} catch (...) {
+			MarginLeft = 0;
+		}
+
 	}
 
 	// 如果有 sTextIndent:
@@ -83,7 +90,12 @@ void __fastcall CStyleAttr::Analysis()
 			sTextIndent = sTextIndent.SubString0(12,iPos-12);
 			HasTextIndent = true;
 		}
-		TextIndent = sTextIndent.ToIntDef(0);
+		//TextIndent = sTextIndent.ToIntDef(0);
+		try {
+			TextIndent = sTextIndent.ToDouble();
+		} catch (...) {
+			TextIndent = 0;
+		}
 	}
 }
 // ---------------------------------------------------------------------------

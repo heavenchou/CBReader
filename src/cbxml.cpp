@@ -1176,7 +1176,9 @@ String __fastcall CCBXML::tag_form(_di_IXMLNode Node)
 // <formula>S<hi style="vertical-align:super">n</hi></formula>
 // 轉成 S<sup>n</sup>
 
-// formula 或 hi , 誰有  rend="vertical-align:super" 就使用 <sup>...</sup>
+// formula 或 hi , 誰有  style="vertical-align:super" 就使用 <sup>...</sup>
+// style="vertical-align:sub" 則轉成 <sub>..</sub>
+
 String __fastcall CCBXML::tag_formula(_di_IXMLNode Node)
 {
 	String sHtml = u"";
@@ -1187,6 +1189,12 @@ String __fastcall CCBXML::tag_formula(_di_IXMLNode Node)
 		sHtml += u"<sup>";
 		sHtml += parseChild(Node); // 處理內容
 		sHtml += u"</sup>";
+	}
+	else if(sStyle.Pos0(u"vertical-align:sub")>=0)
+	{
+		sHtml += u"<sub>";
+		sHtml += parseChild(Node); // 處理內容
+		sHtml += u"</sub>";
 	}
 	else
 		sHtml += parseChild(Node); // 處理內容
@@ -3582,7 +3590,7 @@ String __fastcall CCBXML::tag_unclear(_di_IXMLNode Node)
 	}
 	else
 	{
-		sHtml += u"<span title='未知的文字'>";
+		sHtml += u"<span title='此處文字無法辨識'>";
 	}
 
 	if(Node->HasChildNodes)
