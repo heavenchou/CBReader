@@ -257,7 +257,15 @@ String __fastcall CCBXML::MakeHTMLHead()
 				  "		p.headname4 {display:block; margin-left:4em;}\n"    // head 標題
 				  "		p.byline {display:block; text-align: right;}\n"    // byline
 				  "		table {border-style: solid;border-collapse: collapse;}\n"
-				  "		td {padding: 10px;}\n"
+				  "		td {padding: 0.5em;}\n"
+				  "		td.pl-1 {padding-left: 1.5em;}\n"
+				  "		td.pl-2 {padding-left: 2.5em;}\n"
+				  "		td.pl-3 {padding-left: 3.5em;}\n"
+				  "		td.pl-4 {padding-left: 4.5em;}\n"
+				  "		td.pl-5 {padding-left: 5.5em;}\n"
+				  "		td.pl-6 {padding-left: 6.5em;}\n"
+				  "		td.pl-7 {padding-left: 7.5em;}\n"
+				  "		td.pl-8 {padding-left: 8.5em;}\n"
 				  "		span.line_space {display:none;}\n"     // 行首空格
 				  "		span.para_space {display:inline;}\n";     // 行首空格
 //				  "     table {display: table; line-height:20px; border-style: solid}\n"
@@ -832,8 +840,11 @@ String __fastcall CCBXML::tag_cell(_di_IXMLNode Node)
 	CRendAttr * myRend = new CRendAttr(sRend);
 	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
+	String sNewClass = myRend->NewClass + myStyle->NewStyle;
 	if(sNewStyle != u"")
 		sNewStyle = " style='" + sNewStyle + "'";
+	if(sNewClass != u"")
+		sNewClass = " class='" + sNewClass + "'";
 
 	CellNum++;        // cell 格式數量累加
 	String sColspan = u"";
@@ -859,30 +870,64 @@ String __fastcall CCBXML::tag_cell(_di_IXMLNode Node)
 	sHtml += sColspan;
 	sHtml += sRowspan;
 	sHtml += sNewStyle;
+	sHtml += sNewClass;
 	sHtml += u" data-tagname='td'>";
 
 	// 第一個空一格, 其它空三格
+	// 因為第一個 <cell> 之後通常會有 <lb>，所以空格要在 <lb> 之後
+	// 原本是
+	// ...<span class='line_space'>　</span>...
+	// ...<span class='linehead'>ZW01na003_p0027a11║</span>...
+	// 換成
+	// ...<span class='linehead'>ZW01na003_p0027a11║</span>
+	// <span class='line_space'>　</span>...
 
-	if(Setting->ShowLineFormat)
-		sHtml += u"<span class='line_space'>";
-	else
-		sHtml += u"<span class='line_space' style='display:none'>";
-	if(CellNum == 1)
-	{
-		sHtml += u"　";
+	String sCellSpace = "";
+
+	if(Setting->ShowLineFormat) {
+		sCellSpace += u"<span class='line_space'>";
+	} else {
+		sCellSpace += u"<span class='line_space' style='display:none'>";
 	}
-	else
-	{
-		sHtml += u"　　　";
+	if(CellNum == 1) {
+		sCellSpace += u"　";
+	} else {
+		sCellSpace += u"　　　";
 	}
+	// 若 class="pl-2"，就要加上 2 個空格
+	int iPos = sNewClass.Pos0("pl-");
+	if(iPos >= 0) {
+		String sPlNum = sNewClass.SubString0(iPos+3,2); // 先取二個
+		if(sPlNum.SubString0(1,1) == u" ") sPlNum = sPlNum.Delete0(1,1);
+		int iPlNum = sPlNum.ToIntDef(0);
+		sCellSpace += String::StringOfChar(u'　', iPlNum);
+    }
 
 	for(int i=0; i<OtherColspan; i++)
-		sHtml += u"　　　";                  //印出前一個 cell 應有的空格
+		sCellSpace += u"　　　";                  //印出前一個 cell 應有的空格
 
 	OtherColspan = iColspan;
-	sHtml += u"</span>";
+	sCellSpace += u"</span>";
 
-	sHtml += parseChild(Node); // 處理內容
+	String sChild = parseChild(Node); // 處理內容
+
+	// 第一個 cell 因為會在前一行行尾，所以要把 cell 空格移到行首後面
+	if(CellNum == 1) {
+		String sHead = "";
+		String sTail = sChild;
+		int iPos = sTail.Pos0(u"║</span>");
+
+		while(iPos >= 0) {
+			// sHead = .....║</span>
+			sHead += sTail.SubString0(0,iPos+8);
+			// sTail = 剩下的
+			sTail = sTail.SubString0(iPos+8,sTail.Length()-iPos-8);
+			iPos = sTail.Pos0(u"║</span>");
+		}
+		sChild = sHead + sCellSpace + sTail;
+		sCellSpace = "";
+	}
+    sHtml += sCellSpace + sChild;
 
 	if(Setting->ShowLineFormat)
 		sHtml += u"</span>";
@@ -1115,7 +1160,7 @@ String __fastcall CCBXML::tag_figdesc(_di_IXMLNode Node)
 {
 	String sHtml = u"<span class='figdesc'>（";
 	sHtml += parseChild(Node); // 處理內容
-	sHtml += "）</span>";
+	sHtml += u"）</span>";
 	return sHtml;
 }
 // ---------------------------------------------------------------------------
@@ -2854,6 +2899,17 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 		iTextIndent = myStyle->TextIndent;
 	}
 
+	// rend="text-center" 原書格式預設空四格
+	// rend="text-right" 原書格式預設空八格
+	if(myRend->Find("text-center"))
+	{
+		iTextIndent += 4;
+	}
+	else if(myRend->Find("text-right"))
+	{
+		iTextIndent += 8;
+	}
+
 	// 處理 inline
 	if(sPlace == u"inline")
 	{
@@ -3002,7 +3058,14 @@ String __fastcall CCBXML::tag_p(_di_IXMLNode Node)
 			iTextIndent++;
 			if(bHasLg) iTextIndent++;
 		}
-		MarginLeft += String::StringOfChar(u'　', iMarginLeft);
+		if(iMarginLeft >= 0)
+		{
+			MarginLeft += String::StringOfChar(u'　', iMarginLeft);
+		}
+		else
+		{
+			MarginLeft = MarginLeft.Delete0(0,iMarginLeft*-1);
+        }
 		String sSpace = "";
 		if(iMarginLeft + iTextIndent > 0)
 			sSpace = String::StringOfChar(u'　', iMarginLeft + iTextIndent);
@@ -3168,7 +3231,7 @@ String __fastcall CCBXML::tag_row(_di_IXMLNode Node)
 {
 	String sHtml = u"";
 	//String sXXX = GetAttr(Node, "xxx");
-    CellNum = 0;        // cell 格式數量歸 0
+	CellNum = 0;        // cell 格式數量歸 0
 	OtherColspan = 0;   // 因本 cell 佔 n 格以上, 所以和後面的 cell 要空 (n-1)*3 的空格, 此即記錄 n-1 的數字
 
 	if(Setting->ShowLineFormat)

@@ -1522,7 +1522,7 @@ object fmAbout: TfmAbout
       Size.Width = 273.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
-      Text = 'CBReader 2X V0.5.7.0        2020-11-15'
+      Text = 'CBReader 2X V0.5.9.0        2021-01-28'
       TabOrder = 6
     end
     object Label2: TLabel
@@ -1540,7 +1540,7 @@ object fmAbout: TfmAbout
       Size.Width = 273.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
-      Text = 'Copyright (C) CBETA 1998-2020'
+      Text = 'Copyright (C) CBETA 1998-2021'
       TabOrder = 4
     end
     object Label4: TLabel
@@ -1558,7 +1558,7 @@ object fmAbout: TfmAbout
       Size.Width = 273.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
-      Text = 'Copyright (C) Heaven Chou 2001-2020'
+      Text = 'Copyright (C) Heaven Chou 2001-2021'
       TabOrder = 2
     end
     object Label6: TLabel

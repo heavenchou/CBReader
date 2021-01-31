@@ -98,7 +98,7 @@ int __fastcall CCatalog::FindIndexBySutraNum(String sBook, int iVol, String sSut
 	for(int i=0; i<ID->Count; i++)
 	{
 		if(ID->Strings[i] == sBook && SutraNum->Strings[i] == sSutraNum)
-			if(Vol->Strings[i].ToInt() == iVol && iVol != 0)
+			if(Vol->Strings[i].ToInt() == iVol)
 				return i;
 	}
 	return -1;

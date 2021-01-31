@@ -94,7 +94,7 @@ int __fastcall CBookData::GetVolLen(String sBook)
 String __fastcall CBookData::GetNormalVolNumString(String sBook, String sVol)
 {
 	int iVol = sVol.ToIntDef(0);
-	if(iVol == 0) return u"";
+	//if(iVol == 0) return u"";
 	int iVolLen = GetVolLen(sBook); // 取得指定藏經的冊數位數, 例如大正藏是 2 位數
 	int iMyLen = sVol.Length();
 

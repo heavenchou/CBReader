@@ -33,7 +33,7 @@ String __fastcall CMyCBUtil::CutNumberAfterSutraName(String sName)
 		if(sName == u"日記（八）（含墨蹟、函札、法語、編後贅語）") return u"日記";
 
 		TRegEx *regex = new TRegEx();
-		sName = regex->Replace(sName, "（[上中下一二三四五六七八九十、]+）$", "");
+		sName = regex->Replace(sName, u"（[上中下一二三四五六七八九十、]+）$", "");
 	}
 	return sName;
 }

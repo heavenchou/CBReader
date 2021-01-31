@@ -29,8 +29,8 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
     // 還有 fmAbout 的版本與日期資料
 	Application->Title = u"CBReader";
 	ProgramTitle = u"CBETA 電子佛典 2018";
-	Version = u"0.5.7.0";   // 末位 .1 是全西蓮, .2 是西蓮+CBETA
-	DebugString = u"Heaven";     // debug 口令
+	Version = u"0.5.9.0";   // 末位 .1 是全西蓮, .2 是西蓮+CBETA
+	DebugString = u"Debug";     // debug 口令
 	IsDebug = false;           // debug 變數
 
 	// 西蓮淨苑 SLReader 專用
@@ -50,7 +50,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 		}
 		cbFindSutra_BookId->Items->Add(u"DA 道安法師著作全集");
 		cbFindSutra_BookId->Items->Add(u"ZY 智諭法師著作全集");
-		cbFindSutra_BookId->Items->Add(u"HM 惠敏法師蓮風集");
+		cbFindSutra_BookId->Items->Add(u"HM 惠敏法師著作集");
 		cbFindSutra_BookId->ItemIndex = 0;
 
 		if(IsAllSL)
@@ -60,7 +60,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 		}
 		cbGoSutra_BookId->Items->Add(u"DA 道安法師著作全集");
 		cbGoSutra_BookId->Items->Add(u"ZY 智諭法師著作全集");
-		cbGoSutra_BookId->Items->Add(u"HM 惠敏法師蓮風集");
+		cbGoSutra_BookId->Items->Add(u"HM 惠敏法師著作集");
 		cbGoSutra_BookId->ItemIndex = 0;
 
 		if(IsAllSL)
@@ -70,7 +70,7 @@ __fastcall TfmMain::TfmMain(TComponent* Owner) : TForm(Owner)
 		}
 		cbGoBook_BookId->Items->Add(u"DA 道安法師著作全集");
 		cbGoBook_BookId->Items->Add(u"ZY 智諭法師著作全集");
-		cbGoBook_BookId->Items->Add(u"HM 惠敏法師蓮風集");
+		cbGoBook_BookId->Items->Add(u"HM 惠敏法師著作集");
 		cbGoBook_BookId->ItemIndex = 0;
 
 		if(IsAllSL)
@@ -727,7 +727,7 @@ void __fastcall TfmMain::ShowCBXML(String sFile, bool bShowHighlight, TmyMonster
 				+ sVol + u", No. " + sSutra + u", 卷/篇章" + sJuan;
 		Caption = sCaption;
 
-		// 將經名後面的 （上中下一二三......十）移除
+		// 將經名後面的 （上中下一二三......十）移除
 		sName = CMyCBUtil::CutNumberAfterSutraName(sName);
 		cbSearchThisSutra->Text = u"檢索本經：" + sName;
         cbSearchThisSutraChange(this);  // 設定檢索本經的相關資料
@@ -1462,7 +1462,7 @@ void __fastcall TfmMain::btCopyClick(TObject *Sender)
 	}
 	catch(...)
 	{
-		TDialogService::ShowMessage("複製有問題");
+		TDialogService::ShowMessage(u"複製有問題");
 	}
 }
 //---------------------------------------------------------------------------
@@ -1481,7 +1481,7 @@ void __fastcall TfmMain::btCiteCopyClick(TObject *Sender)
 		}
 		catch(...)
 		{
-			TDialogService::ShowMessage("引用複製有問題");
+			TDialogService::ShowMessage(u"引用複製有問題");
 		}
 
 	}

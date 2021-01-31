@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------
 // 傳入這類字串
 // "no-marker border bold large"
-// 產生相對應的 style 內容
+// 產生相對應的 style 內容及 class 內容
 
 class CRendAttr
 {
@@ -18,6 +18,7 @@ public:
 
 	String Rend;
 	String NewStyle;   // 由 Rend 的內容自動產生相對應的 Style
+	String NewClass;   // 由 Rend 的內容自動產生相對應的 Class
 	TStringList * RendList; // 存放每一組 Rend
 	//int MarginLeft;
 	//int TextIndent;

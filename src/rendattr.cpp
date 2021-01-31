@@ -11,6 +11,7 @@ __fastcall CRendAttr::CRendAttr(String sStr)
 	// 初值
 	Rend = sStr;
 	NewStyle = u"";
+	NewClass = u"";
 	RendList = new TStringList;
 
 	//MarginLeft = 0;
@@ -69,6 +70,7 @@ void __fastcall CRendAttr::CreateStyle()
 	{
 		String sStr = RendList->Strings[i];
 
+		// 處理 Style
 		if(sStr == u"border")
 			NewStyle += u"border:1px black solid;";
 		else if(sStr == u"no-border")
@@ -85,6 +87,12 @@ void __fastcall CRendAttr::CreateStyle()
 			NewStyle += u"font-size:18pt;";
 		else if(sStr == u"circle-above")
 			NewStyle += u"text-emphasize:circle-above;";
+		else if(sStr == u"text-left")
+			NewStyle += u"text-align:left;";
+		else if(sStr == u"text-center")
+			NewStyle += u"text-align:center;";
+		else if(sStr == u"text-right")
+			NewStyle += u"text-align:right;";
 		else if(sStr == u"mingti" || sStr == u"songti")
 			// SimSun/NSimSun 簡體宋體
 			// Songti TC Mac 宋體
@@ -97,6 +105,12 @@ void __fastcall CRendAttr::CreateStyle()
 			// simhei 簡體黑體, Microsoft YaHei 微軟雅黑
 			// Heiti TC Mac 黑體
 			NewStyle += u"font-family:\"Times New Roman\",\"Microsoft JhengHei\",微軟正黑體,\"Microsoft YaHei\",simhei,\"Heiti TC\";";
+
+		// 處理成 Class
+
+		else if(sStr.SubString0(0,3) == u"pl-")
+            // pl-1 , pl-2 , .....
+			NewClass += sStr + " ";
     }
 }
 // ---------------------------------------------------------------------------
