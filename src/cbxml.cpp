@@ -2531,43 +2531,71 @@ String __fastcall CCBXML::tag_list(_di_IXMLNode Node)
 
 	// 如果是 <list rend="no-marker"> 要轉成 <ul style="list-style:none;">
 	String sRend = GetAttr(Node, "rend");
+	String sStyle = GetAttr(Node, u"style");
 	CRendAttr * myRend = new CRendAttr(sRend);
+	CStyleAttr * myStyle = new CStyleAttr(sStyle);
+
+	String sOldMarginLeft = MarginLeft;
+	String sTextIndentSpace = MarginLeft;	// 先設為原來的 MarginLeft
+
+	int iMarginLeft = 0;
+	int iTextIndent = 0;
+
+	if(sStyle != u"")
+	{
+		iMarginLeft = myStyle->MarginLeft;
+		iTextIndent = myStyle->TextIndent;
+
+		MarginLeft += String::StringOfChar(u'　',iMarginLeft);// 這是第二行之後要空的
+		sTextIndentSpace += String::StringOfChar(u'　',iMarginLeft + iTextIndent);
+	}
 
 	if(!bHasHead)
 	{
-		if(Setting->ShowLineFormat)
-		{
-			if(myRend->NewStyle != "")
-			{
-				sHtml += u"<span style='";
-				sHtml += myRend->NewStyle;
-				sHtml += u"' data-tagname='ul'>";
-			}
-			else
-				sHtml += u"<span data-tagname='ul'>";
-		}
-		else
-		{
-			if(myRend->NewStyle != "")
-			{
-				sHtml += u"<ul style='";
-				sHtml += myRend->NewStyle;
-				sHtml += u"' data-tagname='ul'>";
-			}
-			else
-				sHtml += u"<ul data-tagname='ul'>";
+		if(Setting->ShowLineFormat) {
+			sHtml += u"<span style='text-indent: ";
+			sHtml += String(iTextIndent);
+			sHtml += u"em;";
+			sHtml += myRend->NewStyle;
+			sHtml += myStyle->NewStyle;
+			sHtml += u"' data-margin-left='";
+			sHtml += String(iMarginLeft);
+			sHtml += u"em' data-tagname='ul'>";
+
+			sHtml += u"<span class='line_space'>";
+			sHtml += sTextIndentSpace;
+			sHtml += u"</span>";
+		} else {
+			sHtml += u"<ul style='text-indent: ";
+			sHtml += String(iTextIndent);
+			sHtml += u"em; margin-left: ";
+			sHtml += String(iMarginLeft);
+			sHtml += u"em;";
+			sHtml += myRend->NewStyle;
+			sHtml += myStyle->NewStyle;
+			sHtml += u"' data-margin-left='";
+			sHtml += String(iMarginLeft);
+			sHtml += u"em' data-tagname='ul'>";
+
+			sHtml += u"<span class='line_space' style='display:none'>";
+			sHtml += sTextIndentSpace;
+			sHtml += u"</span>";
 		}
 	}
 
 	sHtml += parseChild(Node); // 處理內容
 
-	if(Setting->ShowLineFormat)
+	if(Setting->ShowLineFormat) {
 		sHtml += u"</span>";
-	else
+	} else {
 		sHtml += u"</ul>";
+	}
 
 	ListCount--;
+	MarginLeft = sOldMarginLeft;
+
 	delete myRend;
+	delete myStyle;
 	return sHtml;
 }
 // ---------------------------------------------------------------------------

@@ -1519,10 +1519,10 @@ object fmAbout: TfmAbout
     object Label1: TLabel
       Position.X = 16.000000000000000000
       Position.Y = 16.000000000000000000
-      Size.Width = 273.000000000000000000
+      Size.Width = 281.000000000000000000
       Size.Height = 25.000000000000000000
       Size.PlatformDefault = False
-      Text = 'CBReader 2X V0.5.9.0        2021-01-28'
+      Text = 'CBReader 2X V0.6.0.0       2021-04-03'
       TabOrder = 6
     end
     object Label2: TLabel
