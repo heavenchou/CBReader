@@ -138,7 +138,7 @@ void __fastcall TfmUpdate::btUpdateClick(TObject *Sender)
 				// 使用中國大陸分站
 
 				if(cbUseChinaServer->IsChecked) {
-					sSource = StringReplace(sSource, "archive.cbeta.org", "cbetaonline.cn", TReplaceFlags() << rfReplaceAll << rfIgnoreCase);
+					sSource = StringReplace(sSource, "archive.cbeta.org/cbreader", "archive.cbetaonline.cn/download", TReplaceFlags() << rfReplaceAll << rfIgnoreCase);
                 }
 
 				if(fmMain->IsDebug)
