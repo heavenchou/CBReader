@@ -32,8 +32,8 @@ object fmSearchRange: TfmSearchRange
       DefaultItemStyles.ItemStyle = ''
       DefaultItemStyles.GroupHeaderStyle = ''
       DefaultItemStyles.GroupFooterStyle = ''
-      Viewport.Width = 145.000000000000000000
-      Viewport.Height = 624.000000000000000000
+      Viewport.Width = 149.000000000000000000
+      Viewport.Height = 628.000000000000000000
       object ListBoxItem1: TListBoxItem
         TextSettings.Font.Size = 16.000000000000000000
         StyledSettings = [Family, Style, FontColor, Other]
@@ -160,8 +160,8 @@ object fmSearchRange: TfmSearchRange
         StyleLookup = 'treeviewstyle'
         TabOrder = 0
         ShowCheckboxes = True
-        Viewport.Width = 391.000000000000000000
-        Viewport.Height = 624.000000000000000000
+        Viewport.Width = 395.000000000000000000
+        Viewport.Height = 628.000000000000000000
         object triBulei0: TTreeViewItem
           TextSettings.Font.Size = 16.000000000000000000
           IsChecked = False
@@ -374,8 +374,8 @@ object fmSearchRange: TfmSearchRange
         Size.PlatformDefault = False
         TabOrder = 0
         ShowCheckboxes = True
-        Viewport.Width = 391.000000000000000000
-        Viewport.Height = 624.000000000000000000
+        Viewport.Width = 395.000000000000000000
+        Viewport.Height = 628.000000000000000000
         object tviT: TTreeViewItem
           TextSettings.Font.Size = 16.000000000000000000
           IsChecked = False
@@ -526,13 +526,6 @@ object fmSearchRange: TfmSearchRange
           IsSelected = False
           TabOrder = 17
           Text = 'S '#23435#34255#36986#29645#65288#26032#25991#35920#29256#65289
-        end
-        object TreeViewItem41: TTreeViewItem
-          IsChecked = False
-          IsExpanded = False
-          IsSelected = False
-          TabOrder = 23
-          Text = 'TX '#22826#34395#22823#24107#20840#26360
         end
         object TreeViewItem16: TTreeViewItem
           TextSettings.Font.Size = 16.000000000000000000

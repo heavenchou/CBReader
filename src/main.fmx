@@ -72,8 +72,8 @@ object fmMain: TfmMain
             Size.Height = 551.000000000000000000
             Size.PlatformDefault = False
             TabOrder = 0
-            Viewport.Width = 229.000000000000000000
-            Viewport.Height = 547.000000000000000000
+            Viewport.Width = 233.000000000000000000
+            Viewport.Height = 551.000000000000000000
           end
           object Panel7: TPanel
             Align = Top
@@ -150,8 +150,8 @@ object fmMain: TfmMain
           Size.PlatformDefault = False
           TabOrder = 0
           Images = ImageList1
-          Viewport.Width = 277.000000000000000000
-          Viewport.Height = 482.000000000000000000
+          Viewport.Width = 281.000000000000000000
+          Viewport.Height = 486.000000000000000000
         end
         object Panel8: TPanel
           Align = Top
@@ -360,8 +360,7 @@ object fmMain: TfmMain
               'GA '#20013#22283#20315#23546#21490#24535#24409#21002
               'GB '#20013#22283#20315#23546#24535#21474#21002
               'Y '#21360#38918#27861#24107#20315#23416#33879#20316#38598
-              'LC '#21570#28546#20315#23416#33879#20316#38598
-              'TX '#22826#34395#22823#24107#20840#26360)
+              'LC '#21570#28546#20315#23416#33879#20316#38598)
             ItemIndex = 0
             Position.X = 72.000000000000000000
             Position.Y = 8.000000000000000000
@@ -424,8 +423,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgFindSutraCellDblClick
-          Viewport.Width = 277.000000000000000000
-          Viewport.Height = 300.000000000000000000
+          Viewport.Width = 281.000000000000000000
+          Viewport.Height = 325.000000000000000000
           object StringColumn2: TStringColumn
             Header = #34255
             Size.Width = 31.000000000000000000
@@ -657,8 +656,7 @@ object fmMain: TfmMain
               'GA '#20013#22283#20315#23546#21490#24535#24409#21002
               'GB '#20013#22283#20315#23546#24535#21474#21002
               'Y '#21360#38918#27861#24107#20315#23416#33879#20316#38598
-              'LC '#21570#28546#20315#23416#33879#20316#38598
-              'TX '#22826#34395#22823#24107#20840#26360)
+              'LC '#21570#28546#20315#23416#33879#20316#38598)
             ItemIndex = 0
             Position.X = 72.000000000000000000
             Position.Y = 48.000000000000000000
@@ -802,8 +800,7 @@ object fmMain: TfmMain
               'GA '#20013#22283#20315#23546#21490#24535#24409#21002
               'GB '#20013#22283#20315#23546#24535#21474#21002
               'Y '#21360#38918#27861#24107#20315#23416#33879#20316#38598
-              'LC '#21570#28546#20315#23416#33879#20316#38598
-              'TX '#22826#34395#22823#24107#20840#26360)
+              'LC '#21570#28546#20315#23416#33879#20316#38598)
             ItemIndex = 0
             Position.X = 72.000000000000000000
             Position.Y = 224.000000000000000000
@@ -980,8 +977,8 @@ object fmMain: TfmMain
           RowCount = 0
           Options = [ColumnResize, ColLines, RowLines, RowSelect, Tabs, Header, HeaderClick, AutoDisplacement]
           OnCellDblClick = sgTextSearchCellDblClick
-          Viewport.Width = 277.000000000000000000
-          Viewport.Height = 349.000000000000000000
+          Viewport.Width = 281.000000000000000000
+          Viewport.Height = 374.000000000000000000
           object StringColumn17: TStringColumn
             Header = #31558#25976
             Size.Width = 49.000000000000000000
