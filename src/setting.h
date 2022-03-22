@@ -160,8 +160,8 @@ public: // User declarations
 	int NearNum;				// 全文檢索 Near 的字距
 	int BeforeNum;				// 全文檢索 Before 的字距
 	int MaxSearchNum;			// 輸出最多的筆數, 0 表示不設限
-    bool OverSearchWarn; 		// 超出全文檢索檔案數的限制時, 是否提出警告?
-    bool RMPunctuationWarn; 	// 移除使用者輸入檢索字串中的標點時，是否提出警告訊息？
+    //bool OverSearchWarn; 		// 超出全文檢索檔案數的限制時, 是否提出警告?
+    //bool RMPunctuationWarn; 	// 移除使用者輸入檢索字串中的標點時，是否提出警告訊息？
 
     // 外部連結的資料
 

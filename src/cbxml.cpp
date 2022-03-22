@@ -201,7 +201,7 @@ String __fastcall CCBXML::MakeHTMLHead()
 	"		.foreign	{font-family:'Times New Roman', 'Gandhari Unicode';}\n"
 	u"		.preformat	{font-family:細明體,MingLiU,NSimSun,'Songti TC'; font-size:21px;}\n"
 	"		.preformat .foreign	{font-family:'Courier New'; font-size:17.5px;}\n"
-	"		.gaiji {font-family:'Times New Roman','Hanazono Mincho B';}\n"
+	"		.gaiji {font-family:'Times New Roman','Hanazono Mincho A','Hanazono Mincho B','Hanazono Mincho C';}\n"
 	"		.juannum {color:#008000; font-size:21px;}\n"
 	"		.juanname {color:#0000FF; font-weight: bold; font-size:24px;}\n"
 	"		.xu {color:#0000A0; font-size:21px;}\n"
@@ -759,7 +759,7 @@ String __fastcall CCBXML::tag_biblScope(_di_IXMLNode Node)
 String __fastcall CCBXML::tag_byline(_di_IXMLNode Node)
 {
 	String sHtml = u"";
-	if(ListCount == 0) InByline = true;  // ???? 和底下 InByline 不太一樣
+	if(ListCount == 0) InByline = true;
 
 	String sRend = GetAttr(Node, u"rend");
 	String sStyle = GetAttr(Node, u"style");
@@ -840,7 +840,7 @@ String __fastcall CCBXML::tag_cell(_di_IXMLNode Node)
 	CRendAttr * myRend = new CRendAttr(sRend);
 	CStyleAttr * myStyle = new CStyleAttr(sStyle);
 	String sNewStyle = myRend->NewStyle + myStyle->NewStyle;
-	String sNewClass = myRend->NewClass + myStyle->NewStyle;
+	String sNewClass = myRend->NewClass;
 	if(sNewStyle != u"")
 		sNewStyle = " style='" + sNewStyle + "'";
 	if(sNewClass != u"")
@@ -2228,7 +2228,7 @@ String __fastcall CCBXML::tag_lem(_di_IXMLNode Node)
 	// 原本整段的空格是用空格. 例如 : <lg rend="margin-left:1"> , 2014 之前的版本是每一行前面都加上一個空格. 不過折行就不會空格了.
 	// 2016 就改成用段落 <p class="lg" style="margin-left:1em;"> , 因此每一行前面就不用加空格.
 	// 不過因此 copy 再貼在純文字, 就會少了行首的空格.
-	// 至於引用複製, 就要在原本行首的空格加上 <spane data-space="1"> 表示空一格, 到時再用引用複製來還原一個空格.
+	// 至於引用複製, 就要在原本行首的空格加上 <span data-space="1"> 表示空一格, 到時再用引用複製來還原一個空格.
 */
 
 /*
@@ -2727,7 +2727,14 @@ p5 :<note n="0836001" resp="#resp2" type="add" target="#nkr_note_editor_0836001"
 	String sType = GetAttr(Node, u"type");
 	String sPlace = GetAttr(Node, u"place");
 	String sId = GetAttr(Node, u"n");
+	String sRend = GetAttr(Node, "rend");
 	String sIdNum = u"";	// 0001001a 取得 1a
+
+	// rend="hide" 直接取消處理, 目前只出現在 Y 和 TX
+
+	if(sRend == "hide") {
+        return "";
+	}
 
 	// 沒有 Type 的情況
 
